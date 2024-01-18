@@ -6,4 +6,4 @@ function MyPage() {
     )
 }
 
-export default MyPage()
+export default MyPage

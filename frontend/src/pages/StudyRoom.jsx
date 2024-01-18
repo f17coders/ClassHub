@@ -6,4 +6,4 @@ function StudyRoom() {
     )
 }
 
-export default StudyRoom()
+export default StudyRoom
