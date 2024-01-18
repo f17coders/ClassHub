@@ -1,9 +1,14 @@
 import { Container, Nav, Navbar } from "react-bootstrap"
+import Button from 'react-bootstrap/Button'
 import MainLogo from './../assets/MainLogo.png'
+import { useState } from "react"
+import LoginModal from "./LoginModal"
 
 function NavbarComponent() {
+	const [modalShow, setModalShow] = useState(false)
+
 	return (
-		<Navbar bg="light" variant="light">
+		<Navbar style={{backgroundColor:'white'}}>
 			<Container>
 				<Navbar.Brand href="/">
 					<img
@@ -18,6 +23,8 @@ function NavbarComponent() {
 					<Nav.Link href="/studyroom">Study Room</Nav.Link>
 				</Nav>
 			</Container>
+			<Button onClick={() => setModalShow(true)}>Login</Button>
+			<LoginModal show={modalShow} onHide={() => setModalShow(false)}/>
 		</Navbar>
 	)
 }

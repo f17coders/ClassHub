@@ -1,20 +1,32 @@
 import LectureCard from "./../LectureCard"
+import Grid from '@mui/material/Grid'
 import img1 from './../../assets/Lecture/Lecture1.png'
 
 
-function Recommend() {
+const lectureTitle = [
+    '배워서 바로 쓰는 SQL 쿼리', 
+    'Arm 아키텍쳐: 가상화',
+    '두가지 DB를 활용한 서버개발을 통해 백엔드 취업하기',
+    '1/31 김영한님 온라인 밋업 Live',
+    '딥러닝 이론 + PyTorch 실무 완전 정복'
+]
+
+function Recommend(props) {
     return (
-        <div style={{margin: "auto"}}>
+        <div style={{margin: "auto", width: "80%", marginTop: "50px"}}>
             <div style={{textAlign:"center", margin: "10px"}}>
-                <p style={{fontWeight: "800", fontSize:"2em"}}>스프링 강의 Best 5</p>
+                <p style={{fontWeight: "800", fontSize:"2em"}}>{props.title}</p>
             </div>
-            <div style={{display: 'flex', justifyContent:'space-around'}}>
-                <LectureCard img={img1}/>
-                <LectureCard img={img1}/>
-                <LectureCard img={img1}/>
-                <LectureCard img={img1}/>
-                <LectureCard img={img1}/>
-            </div> 
+            <Grid container spacing={{ sm:2, md:3 }} justifyContent="center" alignItems="center">
+                {
+                    lectureTitle.map((item, i) => (
+                        <Grid item md={4} lg={2} key={i}>
+                            <LectureCard img={img1} title={item} />
+                        </Grid>
+                        
+                    ))
+                }
+            </Grid> 
         </div>
     )
 }
