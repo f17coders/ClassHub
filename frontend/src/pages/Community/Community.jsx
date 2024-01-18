@@ -1,5 +1,4 @@
-import {Container, Row, Col, Stack, Pagination, Form, InputGroup, ToggleButton, ButtonGroup } from 'react-bootstrap';
-import Button from '@mui/material/Button';
+import {Container, Stack, Button, ToggleButton, ToggleButtonGroup, TextField, Grid, Pagination} from '@mui/material';
 import { useState } from 'react'
 import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -8,70 +7,75 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import TodayIcon from '@mui/icons-material/Today';
+import React from 'react';
 
 function Community() {
     const [checked, setChecked] = useState(false);
     const navigate = useNavigate();
 
+    const [formats, setFormats] = useState(() => ['bold', 'italic']);
+
+    const handleFormat = (event, newFormats) => {
+      setFormats(newFormats);
+    };
+
     return(
         <div>
-            <Container className="p-4">
-                <InputGroup className="mb-3 p-2">
-                    <Form.Control
-                      placeholder="궁금한 질문을 검색해보세요"
-                      aria-label="질문 검색"
-                      aria-describedby="basic-addon2"
-                    />
-                    <Button variant="outline-primary">🔍검색</Button>
-                </InputGroup>
-                
-                <Row className="d-flex align-items-center p-2">
-                    <Col xs="auto">태그로 검색하기</Col>
-                    <Col>
-                        <InputGroup>
-                            <Form.Control
-                            placeholder="궁금한 질문을 검색해보세요"
-                            aria-label="궁금한 질문을 검색해보세요"
-                            aria-describedby="basic-addon2"
-                            />
-                            <Button variant="outline-primary">🔍검색</Button>
-                        </InputGroup>
-                    </Col>
-                    <Col>
-                        <ToggleButton
-                            id="toggle-check"
-                            type="checkbox"
-                            variant="outline-primary"
-                            checked={checked}
-                            value="1"
-                            onChange={(e) => setChecked(e.currentTarget.checked)}
-                            >
-                            Spring
+            <Container>
+              <Stack direction="row" spacing={2} sx={{ margin: 1, padding: 1 }}>
+                  <TextField sx={{width:"90%"}} id="outlined-basic" label="궁금한 질문을 검색해보세요" variant="outlined" />
+                  <Button variant="contained" sx={{width:"10%"}}>🔍검색</Button>
+              </Stack>
+              
+    
+                <Stack justifyContent="space-around" direction="row" spacing={2} sx={{ margin: 1, padding: 1 }}>
+                    <Grid alignItems="center" justifyContent="center">태그로 검색하기</Grid>
+                    <Grid>
+                      <TextField id="outlined-basic" label="# 태그로 검색해보세요" variant="outlined"/>
+                      <Button variant="contained">🔍검색</Button>
+                    </Grid>
+                    
+              
+                      <ToggleButtonGroup
+                        value={formats}
+                        onChange={handleFormat}
+                        aria-label="text formatting"
+                      >
+                        <ToggleButton value="bold" aria-label="bold">
+                          Vue.js
                         </ToggleButton>
-                    </Col>
-                </Row>
+                        <ToggleButton value="italic" aria-label="italic">
+                          Spring Boot
+                        </ToggleButton>
+                        <ToggleButton value="underlined" aria-label="underlined">
+                          Spring
+                        </ToggleButton>
+                      </ToggleButtonGroup>
+                </Stack>
 
-                <Row>
-                  <Col>
+                <Stack justifyContent="space-between" direction="row" spacing={2} sx={{ margin: 1, padding: 1 }}>
+                  <Grid>
                     <Button startIcon={<ExpandMoreIcon/>}>최신순</Button>
                     <Button startIcon={<ExpandMoreIcon/>}>인기순</Button>
-                  </Col>
-                  <Col className="text-end">
-                    <Button variant="contained">글 작성하기</Button>                
-                  </Col>
-                </Row>
+                  </Grid>
+                  <Grid>
+                    <Button variant="contained" onClick={() => { navigate(`/community/write`);}}>글 작성하기</Button>                
+                  </Grid>
+                </Stack>
+
+              
                 <hr/>
 
                 {/* 글 목록 */}
-                <Stack className="mt-3" gap={1}>
+                <Stack gap={1}>
 
                   {/* 글 목록 한개 */}
-                  <div className="px-4" onClick={() => { navigate(`/community/detail`); }}>
+                  <div onClick={() => { navigate(`/community/detail`); }}>
                     <h4>비주얼 스튜디오에 파이썬이 안들어갑니다.</h4>
                     <p>다른 강의에서 배웠던 건 자동으로 파이썬이 들어가있었는데 이번에 새로 파일을 만들 때마다 파이썬이 안들어갑니다. 
                     고수님들 도와주세요</p>
                     {/* 해시태그 */}
-                    <div className='mb-3'>
+                    <div>
                         <Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#Python</Button>
                         <Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#VSCode</Button>
                     </div>
@@ -108,12 +112,12 @@ function Community() {
                   </div>
 
                   {/* 글 목록 한개 */}
-                  <div className="px-4" onClick={() => { navigate(`/community/detail`); }}>
+                  <div onClick={() => { navigate(`/community/detail`); }}>
                     <h4>비주얼 스튜디오에 파이썬이 안들어갑니다.</h4>
                     <p>다른 강의에서 배웠던 건 자동으로 파이썬이 들어가있었는데 이번에 새로 파일을 만들 때마다 파이썬이 안들어갑니다. 
                     고수님들 도와주세요</p>
                     {/* 해시태그 */}
-                    <div className='mb-3'>
+                    <div>
                         <Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#Python</Button>
                         <Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#VSCode</Button>
                     </div>
@@ -150,12 +154,12 @@ function Community() {
                   </div>
 
                   {/* 글 목록 한개 */}
-                  <div className="px-4" onClick={() => { navigate(`/community/detail`); }}>
+                  <div onClick={() => { navigate(`/community/detail`); }}>
                     <h4>비주얼 스튜디오에 파이썬이 안들어갑니다.</h4>
                     <p>다른 강의에서 배웠던 건 자동으로 파이썬이 들어가있었는데 이번에 새로 파일을 만들 때마다 파이썬이 안들어갑니다. 
                     고수님들 도와주세요</p>
                     {/* 해시태그 */}
-                    <div className='mb-3'>
+                    <div>
                         <Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#Python</Button>
                         <Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#VSCode</Button>
                     </div>
@@ -190,21 +194,12 @@ function Community() {
                     </div>
                     <hr/>
                   </div>
-                   
                 </Stack>
 
                 {/* 페이지네이션 */}
-                <Pagination className="d-flex justify-content-center">
-                  <Pagination.First />
-                  <Pagination.Prev />
-                  <Pagination.Item active>{1}</Pagination.Item>
-                  <Pagination.Item>{2}</Pagination.Item>
-                  <Pagination.Item>{3}</Pagination.Item>
-                  <Pagination.Item>{4}</Pagination.Item>
-                  <Pagination.Item>{5}</Pagination.Item>
-                  <Pagination.Next />
-                  <Pagination.Last />
-                </Pagination>
+                <Stack spacing={2} alignItems="center">
+                  <Pagination count={5} color="primary" />
+                </Stack>
 
             </Container>
         </div>
