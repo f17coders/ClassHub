@@ -1,13 +1,13 @@
 import {Stack, Container, Button, Typography, TextField, Autocomplete } from '@mui/material';
 
-export default function CommunityWrite(){
+export default function CommunityModify(){
 
     return(
         <div>
             <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', marginTop: '40px'}}>
                 <Stack style={{width: "80%"}}>
                     <Typography variant="h4" fontWeight="bold">
-                        글 작성하기
+                        글 수정하기
                     </Typography>
 
                     {/* 제목 */}
@@ -59,7 +59,7 @@ export default function CommunityWrite(){
                         />
                     </div>
 
-                    <Button style={{marginTop: '20px'}} variant="contained">등록</Button>
+                    <Button style={{marginTop: '20px'}} variant="contained">수정</Button>
                 </Stack>
             </Container>
         </div>
