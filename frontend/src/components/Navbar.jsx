@@ -1,12 +1,36 @@
+import { useState } from 'react'
 import Appbar from '@mui/material/AppBar'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import { Link } from 'react-router-dom'
 import MainLogo from './../assets/MainLogo.png'
+import MenuIcon from '@mui/icons-material/Menu'
+import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
+import LoginModal from './LoginModal'
 
+const pages = [
+	{name : 'Lecture', url: 'lecture'}, 
+	{name : 'Community', url: 'community'}, 
+	{name : 'Study Room', url: 'studyroom'}
+]
 
 function NavbarComponent() {
+	const [anchorElNav, setAnchorElNav] = useState(null);
+  
+	const handleOpenNavMenu = (event) => {
+	  setAnchorElNav(event.currentTarget);
+	};
+	const handleCloseNavMenu = () => {
+	  setAnchorElNav(null);
+	};
+
+	const [ open, setOpen ] = useState(false)
+	const ModalOpen = () => setOpen(true)
+	const ModalClose = () => setOpen(false)
+  
 	return (
 		<Appbar
 			position='static'
@@ -15,14 +39,13 @@ function NavbarComponent() {
 				padding: '10px 0px'
 			}}
 		>
-			
 			<Grid container alignItems="center">
 				<Grid item xs={1}></Grid>
 				<Grid item xs={8} sx={{ display: 'flex', alignItems:'center'}}>
-					<Link to='/'>
-						<img src={MainLogo} alt='HOME' style={{ width: '200px', marginRight: '20px' }}></img>
-					</Link>
-					<Box sx={{display: {xs:'none', md:'flex'}}}>
+					<Box sx={{display: {xs:'none', md:'flex'}, alignItems:'center'}}>
+						<Link to='/'>
+							<img src={MainLogo} alt='HOME' style={{ width: '200px', marginRight: '20px' }}></img>
+						</Link>
 						<Link to='/lecture'>
 							<Button>Lecture</Button>
 						</Link>
@@ -33,16 +56,62 @@ function NavbarComponent() {
 							<Button>Study Room</Button>
 						</Link>
 					</Box>
-					
+
+					<Box sx={{display: {xs:'flex', md:'none'}, alignItems:'center'}}>
+						<IconButton
+							size="large"
+							aria-label="account of current user"
+							aria-controls="menu-appbar"
+							aria-haspopup="true"
+							onClick={handleOpenNavMenu}
+							color="inherit"
+							>
+							<MenuIcon />
+						</IconButton>
+						<Link to='/'>
+							<img src={MainLogo} alt='HOME' style={{ width: '200px', marginRight: '20px' }}></img>
+						</Link>
+						<Menu
+							id="menu-appbar"
+							anchorEl={anchorElNav}
+							anchorOrigin={{
+								vertical: 'bottom',
+								horizontal: 'left',
+							}}
+							keepMounted
+							transformOrigin={{
+								vertical: 'top',
+								horizontal: 'left',
+							}}
+							open={Boolean(anchorElNav)}
+							onClose={handleCloseNavMenu}
+							sx={{
+								display: { xs: 'block', md: 'none' },
+							}}
+							>
+							{pages.map((page) => (
+								<MenuItem key={page.url} onClick={handleCloseNavMenu}>
+									<Link to={'/' + page.url}>
+										<Button>{page.name}</Button>
+									</Link>
+								</MenuItem>
+							))}
+						</Menu>
+					</Box>
 				</Grid>
-				
+				<Grid item xs={1}>
+					<Button onClick={ModalOpen}>Login</Button>
+				</Grid>
 			</Grid>
+			<LoginModal open={open} onClose={ModalClose}/>
 		</Appbar>
 	)
 }
 export default NavbarComponent
 
 
+
+// 처음에 bootstrap 쓸 때
 
 // import { Container, Nav, Navbar } from "react-bootstrap"
 // import Button from 'react-bootstrap/Button'
