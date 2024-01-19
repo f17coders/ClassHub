@@ -1,11 +1,11 @@
-import {Container, Stack, Button, ToggleButton, ToggleButtonGroup, TextField, Grid, Pagination} from '@mui/material';
+import {Tooltip, Container, Stack, Button, TextField, Grid, Pagination, FormGroup, FormControlLabel, Checkbox, FormControl} from '@mui/material';
 import { useState } from 'react'
 import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import PersonIcon from '@mui/icons-material/Person';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import TodayIcon from '@mui/icons-material/Today';
 import React from 'react';
 
@@ -22,52 +22,60 @@ function Community() {
     return(
         <div>
             <Container>
-              <Stack direction="row" spacing={2} sx={{ margin: 1, padding: 1 }}>
-                  <TextField sx={{width:"90%"}} id="outlined-basic" label="궁금한 질문을 검색해보세요" variant="outlined" />
-                  <Button variant="contained" sx={{width:"10%"}}>🔍검색</Button>
+              <Stack direction="row" spacing={1} sx={{ margin: 1, padding: 1, mt: 3 }}>
+                  <TextField size="small" sx={{width:"90%"}} id="outlined-basic" label="궁금한 질문을 검색해보세요" variant="outlined" />
+                  <Button variant="contained">🔍검색</Button>
               </Stack>
               
     
-                <Stack justifyContent="space-around" direction="row" spacing={2} sx={{ margin: 1, padding: 1 }}>
-                    <Grid alignItems="center" justifyContent="center">태그로 검색하기</Grid>
-                    <Grid>
-                      <TextField id="outlined-basic" label="# 태그로 검색해보세요" variant="outlined"/>
+                <Stack useFlexGap flexWrap="wrap" alignItems="center"  justifyContent="flex-start" direction="row" spacing={1} sx={{ margin: 1, padding: 1 }}>
+                    <Grid alignItems="center" justifyContent="center" sx={{mr:2}}>태그로 검색하기</Grid>
+                    <Stack direction="row" spacing={1}>
+                      <TextField size="small" id="outlined-basic" label="# 태그로 검색해보세요" variant="outlined"/>
                       <Button variant="contained">🔍검색</Button>
-                    </Grid>
+                    </Stack>
+
+                    {/* <FormControl component="div"> */}
+                    <FormGroup row>
+                      <FormControlLabel control={<Checkbox />} label="Spring" 
+                      sx={{
+                        bgcolor: 'background.paper',
+                        boxShadow: 1,
+                        border: 1,  
+                        borderColor: 'primary.main',
+                        borderRadius: 2,
+                        mx: 1,
+                        display: 'flex',
+                        pr:2
+                      }} />
+                      <FormControlLabel control={<Checkbox />} label="Vue.js" 
+                      sx={{
+                        bgcolor: 'background.paper',
+                        boxShadow: 1,
+                        border: 1,  
+                        borderColor: 'primary.main',
+                        borderRadius: 2,
+                        mx: 1,
+                        display: 'flex',
+                        pr:2
+                      }} />
+                    </FormGroup>
+                    {/* </FormControl> */}
                     
-              
-                      <ToggleButtonGroup
-                        value={formats}
-                        onChange={handleFormat}
-                        aria-label="text formatting"
-                      >
-                        <ToggleButton value="bold" aria-label="bold">
-                          Vue.js
-                        </ToggleButton>
-                        <ToggleButton value="italic" aria-label="italic">
-                          Spring Boot
-                        </ToggleButton>
-                        <ToggleButton value="underlined" aria-label="underlined">
-                          Spring
-                        </ToggleButton>
-                      </ToggleButtonGroup>
                 </Stack>
 
-                <Stack justifyContent="space-between" direction="row" spacing={2} sx={{ margin: 1, padding: 1 }}>
-                  <Grid>
+                <Stack sx={{ margin: 1, padding: 1 }} justifyContent="space-between" direction="row" >
+                  <Stack direction="row" sx={{justifyContent: "flex-end"}}>
                     <Button startIcon={<ExpandMoreIcon/>}>최신순</Button>
                     <Button startIcon={<ExpandMoreIcon/>}>인기순</Button>
-                  </Grid>
-                  <Grid>
-                    <Button variant="contained" onClick={() => { navigate(`/community/write`);}}>글 작성하기</Button>                
-                  </Grid>
+                  </Stack>
+                  <Button variant="contained" onClick={() => { navigate(`/community/write`);}}>글 작성하기</Button>               
                 </Stack>
-
               
                 <hr/>
 
                 {/* 글 목록 */}
-                <Stack gap={1}>
+                <Stack sx={{ margin: 1, padding: 1 }} gap={1}>
 
                   {/* 글 목록 한개 */}
                   <div onClick={() => { navigate(`/community/detail`); }}>
@@ -80,34 +88,43 @@ function Community() {
                         <Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#VSCode</Button>
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-                      <div>
-                        <span>
-                        <InsertEmoticonIcon/>
-                        </span>
-                        <span>김싸피 </span>
-                        <span>
-                          <TodayIcon/>
-                        </span>
-                        <span>2024.01.12</span>
+                    <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+                      {/* 작성자, 작성일자 부분 */}
+                      <div style={{ display: 'flex' }}>
+                        <div style={{marginRight: '1em'}}>
+                          <Tooltip title="작성자">
+                            <PersonIcon/> 김싸피
+                          </Tooltip>
+                        </div>
+                        <div style={{marginRight: '1em'}}>
+                          <Tooltip title="작성일자">
+                            <TodayIcon/> 2024.01.12
+                          </Tooltip>
+                        </div>
                       </div>
+                      {/* 좋아요, 댓글, 스크랩 부분 */}
                       <div style={{ marginLeft: 'auto' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
                           <div style={{marginRight: '1em'}}>
-                            <FavoriteBorderIcon/>
-                            <span>20</span>
+                            <Tooltip title="좋아요">
+                              <FavoriteBorderIcon/> <span>20</span>
+                            </Tooltip>
                           </div>
                           <div style={{marginRight: '1em'}}>
-                            <ChatBubbleOutlineIcon/>
-                            <span>20</span>
+                            <Tooltip sx={{marginRight: '1rem'}} title="댓글">
+                              <ChatBubbleOutlineIcon/> <span>20</span>
+                            </Tooltip>
                           </div>
                           <div style={{marginRight: '1em'}}>
-                            <BookmarkBorderIcon/>
-                            <span>20</span>
+                            <Tooltip sx={{marginRight: '1rem'}} title="스크랩">
+                              <BookmarkBorderIcon/> <span>20</span>
+                            </Tooltip>
                           </div>
+                          
                         </div>
                       </div>
                     </div>
+
                     <hr/>
                   </div>
 
@@ -122,34 +139,43 @@ function Community() {
                         <Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#VSCode</Button>
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-                      <div>
-                        <span>
-                        <InsertEmoticonIcon/>
-                        </span>
-                        <span>김싸피 </span>
-                        <span>
-                          <TodayIcon/>
-                        </span>
-                        <span>2024.01.12</span>
+                    <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+                      {/* 작성자, 작성일자 부분 */}
+                      <div style={{ display: 'flex' }}>
+                        <div style={{marginRight: '1em'}}>
+                          <Tooltip title="작성자">
+                            <PersonIcon/> 김싸피
+                          </Tooltip>
+                        </div>
+                        <div style={{marginRight: '1em'}}>
+                          <Tooltip title="작성일자">
+                            <TodayIcon/> 2024.01.12
+                          </Tooltip>
+                        </div>
                       </div>
+                      {/* 좋아요, 댓글, 스크랩 부분 */}
                       <div style={{ marginLeft: 'auto' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
                           <div style={{marginRight: '1em'}}>
-                            <FavoriteBorderIcon/>
-                            <span>20</span>
+                            <Tooltip title="좋아요">
+                              <FavoriteBorderIcon/> <span>20</span>
+                            </Tooltip>
                           </div>
                           <div style={{marginRight: '1em'}}>
-                            <ChatBubbleOutlineIcon/>
-                            <span>20</span>
+                            <Tooltip sx={{marginRight: '1rem'}} title="댓글">
+                              <ChatBubbleOutlineIcon/> <span>20</span>
+                            </Tooltip>
                           </div>
                           <div style={{marginRight: '1em'}}>
-                            <BookmarkBorderIcon/>
-                            <span>20</span>
+                            <Tooltip sx={{marginRight: '1rem'}} title="스크랩">
+                              <BookmarkBorderIcon/> <span>20</span>
+                            </Tooltip>
                           </div>
+                          
                         </div>
                       </div>
                     </div>
+
                     <hr/>
                   </div>
 
@@ -164,34 +190,43 @@ function Community() {
                         <Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#VSCode</Button>
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-                      <div>
-                        <span>
-                        <InsertEmoticonIcon/>
-                        </span>
-                        <span>김싸피 </span>
-                        <span>
-                          <TodayIcon/>
-                        </span>
-                        <span>2024.01.12</span>
+                    <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+                      {/* 작성자, 작성일자 부분 */}
+                      <div style={{ display: 'flex' }}>
+                        <div style={{marginRight: '1em'}}>
+                          <Tooltip title="작성자">
+                            <PersonIcon/> 김싸피
+                          </Tooltip>
+                        </div>
+                        <div style={{marginRight: '1em'}}>
+                          <Tooltip title="작성일자">
+                            <TodayIcon/> 2024.01.12
+                          </Tooltip>
+                        </div>
                       </div>
+                      {/* 좋아요, 댓글, 스크랩 부분 */}
                       <div style={{ marginLeft: 'auto' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
                           <div style={{marginRight: '1em'}}>
-                            <FavoriteBorderIcon/>
-                            <span>20</span>
+                            <Tooltip title="좋아요">
+                              <FavoriteBorderIcon/> <span>20</span>
+                            </Tooltip>
                           </div>
                           <div style={{marginRight: '1em'}}>
-                            <ChatBubbleOutlineIcon/>
-                            <span>20</span>
+                            <Tooltip sx={{marginRight: '1rem'}} title="댓글">
+                              <ChatBubbleOutlineIcon/> <span>20</span>
+                            </Tooltip>
                           </div>
                           <div style={{marginRight: '1em'}}>
-                            <BookmarkBorderIcon/>
-                            <span>20</span>
+                            <Tooltip sx={{marginRight: '1rem'}} title="스크랩">
+                              <BookmarkBorderIcon/> <span>20</span>
+                            </Tooltip>
                           </div>
+                          
                         </div>
                       </div>
                     </div>
+
                     <hr/>
                   </div>
                 </Stack>
