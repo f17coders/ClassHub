@@ -12,25 +12,26 @@ import MenuItem from '@mui/material/MenuItem'
 import LoginModal from './LoginModal'
 
 const pages = [
-	{name : 'Lecture', url: 'lecture'}, 
-	{name : 'Community', url: 'community'}, 
-	{name : 'Study Room', url: 'studyroom'}
+	{ name: 'Lecture', url: 'lecture' },
+	{ name: 'Community', url: 'community' },
+	{ name: 'Study Room', url: 'studyroom' }
 ]
 
 function NavbarComponent() {
-	const [anchorElNav, setAnchorElNav] = useState(null);
-  
+	const [anchorElNav, setAnchorElNav] = useState(null)
+	const [isLogin, setLogin] = useState(false)
+
 	const handleOpenNavMenu = (event) => {
-	  setAnchorElNav(event.currentTarget);
+		setAnchorElNav(event.currentTarget);
 	};
 	const handleCloseNavMenu = () => {
-	  setAnchorElNav(null);
+		setAnchorElNav(null);
 	};
 
-	const [ open, setOpen ] = useState(false)
+	const [open, setOpen] = useState(false)
 	const ModalOpen = () => setOpen(true)
 	const ModalClose = () => setOpen(false)
-  
+
 	return (
 		<Appbar
 			position='static'
@@ -41,8 +42,8 @@ function NavbarComponent() {
 		>
 			<Grid container alignItems="center">
 				<Grid item xs={1}></Grid>
-				<Grid item xs={8} sx={{ display: 'flex', alignItems:'center'}}>
-					<Box sx={{display: {xs:'none', md:'flex'}, alignItems:'center'}}>
+				<Grid item xs={9} sx={{ display: 'flex', alignItems: 'center' }}>
+					<Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
 						<Link to='/'>
 							<img src={MainLogo} alt='HOME' style={{ width: '200px', marginRight: '20px' }}></img>
 						</Link>
@@ -57,7 +58,7 @@ function NavbarComponent() {
 						</Link>
 					</Box>
 
-					<Box sx={{display: {xs:'flex', md:'none'}, alignItems:'center'}}>
+					<Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center' }}>
 						<IconButton
 							size="large"
 							aria-label="account of current user"
@@ -65,10 +66,10 @@ function NavbarComponent() {
 							aria-haspopup="true"
 							onClick={handleOpenNavMenu}
 							color="inherit"
-							>
+						>
 							<MenuIcon />
 						</IconButton>
-						<Link to='/'>
+						<Link to='/' >
 							<img src={MainLogo} alt='HOME' style={{ width: '200px', marginRight: '20px' }}></img>
 						</Link>
 						<Menu
@@ -88,7 +89,7 @@ function NavbarComponent() {
 							sx={{
 								display: { xs: 'block', md: 'none' },
 							}}
-							>
+						>
 							{pages.map((page) => (
 								<MenuItem key={page.url} onClick={handleCloseNavMenu}>
 									<Link to={'/' + page.url}>
@@ -100,10 +101,20 @@ function NavbarComponent() {
 					</Box>
 				</Grid>
 				<Grid item xs={1}>
-					<Button onClick={ModalOpen}>Login</Button>
+					{
+						isLogin == false ? (
+							<Button onClick={ModalOpen}>Login</Button>
+						) : ( 
+							<Link to="/mypage">
+								<Button>My Page</Button>
+							</Link>
+						)
+					}
 				</Grid>
 			</Grid>
-			<LoginModal open={open} onClose={ModalClose}/>
+			{/* 로그인테스트용 */}
+			{/* <Button onClick={() => setLogin(true)}>로그인전환</Button> */}
+			<LoginModal open={open} onClose={ModalClose} />
 		</Appbar>
 	)
 }
