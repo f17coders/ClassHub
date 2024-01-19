@@ -10,6 +10,7 @@ import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import LoginModal from './LoginModal'
+import { useSelector } from 'react-redux'
 
 const pages = [
 	{ name: 'Lecture', url: 'lecture' },
@@ -19,7 +20,7 @@ const pages = [
 
 function NavbarComponent() {
 	const [anchorElNav, setAnchorElNav] = useState(null)
-	const [isLogin, setLogin] = useState(false)
+	let isLogin = useSelector((state) => state.isLogin)
 
 	const handleOpenNavMenu = (event) => {
 		setAnchorElNav(event.currentTarget);
@@ -45,7 +46,7 @@ function NavbarComponent() {
 				<Grid item xs={9} sx={{ display: 'flex', alignItems: 'center' }}>
 					<Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
 						<Link to='/'>
-							<img src={MainLogo} alt='HOME' style={{ width: '200px', marginRight: '20px' }}></img>
+							<img src={MainLogo} alt='HOME' style={{ width: '230px', marginRight: '20px' }}></img>
 						</Link>
 						<Link to='/lecture'>
 							<Button>Lecture</Button>
@@ -112,8 +113,6 @@ function NavbarComponent() {
 					}
 				</Grid>
 			</Grid>
-			{/* 로그인테스트용 */}
-			{/* <Button onClick={() => setLogin(true)}>로그인전환</Button> */}
 			<LoginModal open={open} onClose={ModalClose} />
 		</Appbar>
 	)

@@ -1,49 +1,51 @@
-// import Card from 'react-bootstrap/Card'
-// import Button from 'react-bootstrap/Button'
-
-
-// function LectureCard(props) {
-// 	return (
-// 		<Card style={{ width: '16em', margin: '5px' }}>
-// 			<Card.Img variant="top" src={ props.img }/>
-// 			<Card.Body>
-// 				<Card.Title>제목</Card.Title>
-// 				<Card.Text>
-// 					데이터가 업서요 나중에 데이터 받으면 props.content 이런식으로 할 수 있지 않을까
-// 				</Card.Text>
-// 				<Button variant="primary">강의 보러가기</Button>
-// 			</Card.Body>
-// 		</Card>
-// 	)
-// }
-
-// export default LectureCard
-
 import * as React from 'react'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
-
+import {useState} from 'react'
 
 function LectureCard(props) {
+	const [hover, setHover] = useState(false)
+	const hoverStyle = {
+		height: 340,
+		cursor: hover ? 'pointer' : 'none',
+		boxShadow: hover ? "0px 4px 8px 0px rgba(0, 0, 0, 0.2)" : 'none' 
+	}
+
 	return (
-		<Card style={{ height: 300}}>
+		<Card 
+			style={hoverStyle} 
+			onClick={()=> console.log('상세페이지로!')}
+			onMouseEnter={() => setHover(true)}
+			onMouseLeave={() => setHover(false)}
+		>
 			<CardMedia
 				sx={{ height: 140 }}
 				image={props.img}
 				title="lecture image"
 			/>
-			<CardContent>
-				<Typography gutterBottom variant="h7" component="div">
+			<CardContent style={{padding: '13px'}}>
+				<div style={{display:'flex', flexDirection:'column', justifyContent:'space-between'}}>
+					<div style={{height: '70px'}}>
+						<p style={{fontWeight:'700', fontSize:'1.1em'}}>{props.title}</p>
+					</div>
+					<div>
+						<p style={{marginBottom: '5px'}}>강의자<br/>⭐⭐⭐⭐⭐</p>
+					</div>
+					<div>
+						<Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#VSCode</Button>
+					</div>
+					
+				</div>
+				{/* <Typography gutterBottom variant="h7" component="div">
 					{props.title}
 				</Typography>
 				<Typography variant="body2" color="text.secondary">
 					강의 상세 정보가 들어가는 곳입니다
-				</Typography>
+				</Typography> */}
 			</CardContent>
-			<Button size="small">더 알아보기</Button>
+			
 		</Card>
 	)
 }
