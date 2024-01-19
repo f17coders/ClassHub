@@ -13,14 +13,14 @@ const lectureTitle = [
 
 function Recommend(props) {
     return (
-        <div style={{margin: "auto", width: "80%", marginTop: "50px"}}>
+        <div style={{margin: "auto", width: "90%", marginTop: "50px"}}>
             <div style={{textAlign:"center", margin: "10px"}}>
                 <p style={{fontWeight: "800", fontSize:"2em"}}>{props.title}</p>
             </div>
-            <Grid container spacing={{ sm:2, md:3 }} justifyContent="center" alignItems="center">
+            <Grid container spacing={{ sm:1, md:2 }} justifyContent="center" alignItems="center">
                 {
                     lectureTitle.map((item, i) => (
-                        <Grid item md={4} lg={2} key={i}>
+                        <Grid item xs={6} sm={4} md={3} lg={2} key={i}>
                             <LectureCard img={img1} title={item} />
                         </Grid>
                         
