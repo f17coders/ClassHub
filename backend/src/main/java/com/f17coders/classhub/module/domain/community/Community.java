@@ -25,7 +25,7 @@ public class Community extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "community_id")
-    private int communityId;
+    private int id;
 
     @Column(length = 300)
     @NotBlank(message = "제목은 필수 입니다!")
