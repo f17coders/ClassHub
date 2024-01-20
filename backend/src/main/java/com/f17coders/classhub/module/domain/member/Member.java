@@ -95,11 +95,6 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Community> communityList = new ArrayList<>(); // 작성한 커뮤니티 게시글
 
-    public void putCommunity(Community community) {  // 연관 관계 편의 메서드
-        community.setMember(this);
-        this.getCommunityList().add(community);
-    }
-
     // Member - Comment 연관 관계
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Comment> commentList = new ArrayList<>();
@@ -108,25 +103,15 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<CommunityLike> communityLikeList = new ArrayList<>();
 
-    public void putComment(CommunityLike communityLike) {  // 연관 관계 편의 메서드
-        communityLike.setMember(this);
-        this.getCommunityLikeList().add(communityLike);
-    }
-
     // Member - CommunityScrap 연관 관계
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<CommunityScrap> communityScrapList = new ArrayList<>();
-
-    public void putComment(CommunityScrap communityScrap) {  // 연관 관계 편의 메서드
-        communityScrap.setMember(this);
-        this.getCommunityScrapList().add(communityScrap);
-    }
 
     // Member - MemberTag 연관 관계
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<MemberTag> memberTagList = new ArrayList<>();
 
-    public void putComment(MemberTag memberTag) {  // 연관 관계 편의 메서드
+    public void putMemberTag(MemberTag memberTag) {  // 연관 관계 편의 메서드
         memberTag.setMember(this);
         this.getMemberTagList().add(memberTag);
     }

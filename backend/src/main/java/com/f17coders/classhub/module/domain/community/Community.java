@@ -46,6 +46,11 @@ public class Community extends BaseEntity {
     @Setter
     private Member member;
 
+    public void putMember(Member member){  // 연관 관계 편의 메서드
+        this.member = member;
+        member.getCommunityList().add(this);
+    }
+
     // Community - Comment 연관 관계
     @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>(); // 좋아요한 강의 목록
@@ -53,11 +58,6 @@ public class Community extends BaseEntity {
     // Community - CommunityLike 연관 관계
     @OneToMany(mappedBy = "community", fetch = FetchType.LAZY)
     private List<CommunityLike> communityLikeList = new ArrayList<>(); // 좋아요한 강의 목록
-
-    public void putCommunity(CommunityLike communityLike) {  // 연관 관계 편의 메서드
-        communityLike.setCommunity(this);
-        this.getCommunityLikeList().add(communityLike);
-    }
 
     // Community - CommunityScrap 연관 관계
     @OneToMany(mappedBy = "community", fetch = FetchType.LAZY)
