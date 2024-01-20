@@ -1,8 +1,11 @@
 package com.f17coders.classhub.module.domain.community.service;
 
 import com.f17coders.classhub.global.exception.BaseExceptionHandler;
+import com.f17coders.classhub.module.domain.comment.Comment;
+import com.f17coders.classhub.module.domain.comment.dto.response.CommentDetailRes;
+import com.f17coders.classhub.module.domain.comment.service.CommentService;
 import com.f17coders.classhub.module.domain.community.Community;
-import com.f17coders.classhub.module.domain.community.dto.request.CommunityCreateReq;
+import com.f17coders.classhub.module.domain.community.dto.request.CommunityRegisterReq;
 import com.f17coders.classhub.module.domain.community.dto.request.CommunityUpdateReq;
 import com.f17coders.classhub.module.domain.community.dto.response.CommunityListDetailRes;
 import com.f17coders.classhub.module.domain.community.dto.response.CommunityListRes;
@@ -24,46 +27,53 @@ import java.util.List;
 public class CommunityServiceImpl implements CommunityService {
     private final CommunityRepository communityRepository;
 
+    private final CommentService commentService;
+
+    private final String LATEST = "latest";     // 최신순
+    private final String LIKE = "like";     // 인기순
+
     @Override
-    public int registerCommunity(CommunityCreateReq communityCreateReq, Member member) throws BaseExceptionHandler, IOException {
-        String title = communityCreateReq.title();
-        String content = communityCreateReq.content();
-        String tagList = communityCreateReq.tagList();
+    public int registerCommunity(CommunityRegisterReq communityRegisterReq, Member member) throws BaseExceptionHandler, IOException {
+        String title = communityRegisterReq.title();
+        String content = communityRegisterReq.content();
+        String tagList = communityRegisterReq.tagList();
 
         List<CommunityTag> communityTagList = new ArrayList<>();
 
         Community community = Community.createCommunity(title, content, communityTagList, member);
         communityRepository.save(community);
 
-        return community.getId();
+        return community.getCommunityId();
     }
 
     @Override
-    public CommunityReadRes readCommunity(int id, Member member) throws BaseExceptionHandler, IOException {
-        Community community = communityRepository.findById(id);
+    public CommunityReadRes readCommunity(int communityId, Member member) throws BaseExceptionHandler, IOException {
+        Community community = communityRepository.findCommunityByCommunityIdFetchJoinComment(communityId);
+
+        List<CommentDetailRes> commentDetailResList = getCommentListRes(community);
 
         return CommunityReadRes.builder()
                 .title(community.getTitle())
                 .content(community.getContent())
-                .memberNickname("Member Nickname")   // TODO : 시큐리티 적용 후 member.getNickname()으로 변경 필요
-                .tagList(List.of("Tag1", "Tag2"))   // TODO : Tag 구현 후 수정 필요
-                .commentList(List.of("Tag1", "Tag2"))   // TODO : Comment 구현 후 수정 필요
-                .canUpdate(true)   // TODO : 시큐리티 적용 후 수정 필요
-                .canLike(true)   // TODO : 시큐리티 적용 후 수정 필요
-                .canScrap(true)   // TODO : 시큐리티 적용 후 수정 필요
+                .memberNickname("Member Nickname")   // TODO : 시큐리티 적용 후 변경
+                .tagList(List.of("Tag1", "Tag2"))   // TODO : Tag 구현 후 수정
+                .commentList(commentDetailResList)
+                .canUpdate(true)   // TODO : 시큐리티 적용 후 수정
+                .canLike(true)   // TODO : 시큐리티 적용 후 수정
+                .canScrap(true)   // TODO : 시큐리티 적용 후 수정
                 .createdAt(community.getCreatedAt())
                 .build();
     }
 
     @Override
-    public CommunityListRes getCommunityList() throws BaseExceptionHandler, IOException {
+    public CommunityListRes getCommunityList(String order, String tags, String keyword) throws BaseExceptionHandler, IOException {
         List<Community> communityList = communityRepository.findAll();
 
         List<CommunityListDetailRes> communityListDetailResList = new ArrayList<>();
 
         for (Community community : communityList) {
             CommunityListDetailRes communityListDetailRes = CommunityListDetailRes.builder()
-                    .communityId(community.getId())
+                    .communityId(community.getCommunityId())
                     .title(community.getTitle())
                     .content(community.getContent())
                     .memberNickname("Nickname")
@@ -78,31 +88,48 @@ public class CommunityServiceImpl implements CommunityService {
         }
 
         return CommunityListRes.builder()
-                .communityListDetailResList(communityListDetailResList)
+                .communityList(communityListDetailResList)
                 .build();
     }
 
     @Override
-    public int updateCommunity(int id, CommunityUpdateReq communityUpdateReq, Member member) throws BaseExceptionHandler, IOException {
+    public void updateCommunity(int id, CommunityUpdateReq communityUpdateReq, Member member) throws BaseExceptionHandler, IOException {
         String title = communityUpdateReq.title();
         String content = communityUpdateReq.content();
         String tagList = communityUpdateReq.tagList();
 
         List<CommunityTag> communityTagList = new ArrayList<>();
 
-        Community community = communityRepository.findById(id);
+        Community community = communityRepository.findByCommunityId(id);
         community.setTitle(title);
         community.setContent(content);
         community.setCommunityTagList(communityTagList);
 
         communityRepository.save(community);
-
-        return community.getId();
     }
 
     @Override
     public void deleteCommunity(int communityId, Member member) throws BaseExceptionHandler, IOException {
-        Community community = communityRepository.findById(communityId);
+        Community community = communityRepository.findByCommunityId(communityId);
         communityRepository.delete(community);
+    }
+
+    private static List<CommentDetailRes> getCommentListRes(Community community) {
+        List<CommentDetailRes> commentListDetailResList = new ArrayList<>();
+
+        for (Comment comment : community.getCommentList()) {
+            CommentDetailRes commentDetailRes = CommentDetailRes.builder()
+                    .commentId(comment.getCommentId())
+                    .content(comment.getContent())
+                    .memberNickname("memberNickname")   // TODO : 시큐리티 적용 후 변경
+                    .memberProfileImg("member profileImg")  // TODO : 시큐리티 적용 후 변경
+                    .canUpdate(true)  // TODO : 시큐리티 적용 후 변경
+                    .createdAt(comment.getCreatedAt())
+                    .build();
+
+            commentListDetailResList.add(commentDetailRes);
+        }
+
+        return commentListDetailResList;
     }
 }

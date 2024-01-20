@@ -2,7 +2,7 @@ package com.f17coders.classhub.module.domain.community.controller;
 
 import com.f17coders.classhub.global.api.response.BaseResponse;
 import com.f17coders.classhub.global.exception.code.SuccessCode;
-import com.f17coders.classhub.module.domain.community.dto.request.CommunityCreateReq;
+import com.f17coders.classhub.module.domain.community.dto.request.CommunityRegisterReq;
 import com.f17coders.classhub.module.domain.community.dto.request.CommunityUpdateReq;
 import com.f17coders.classhub.module.domain.community.dto.response.CommunityListRes;
 import com.f17coders.classhub.module.domain.community.dto.response.CommunityReadRes;
@@ -25,8 +25,8 @@ public class CommunityController {
 
     @Operation(summary = "게시글 등록")
     @PostMapping("/v1")
-    public ResponseEntity<BaseResponse<Integer>> registerCommunity(@RequestBody CommunityCreateReq communityCreateReq, Member member) throws IOException {
-        int communityId = communityService.registerCommunity(communityCreateReq, member);
+    public ResponseEntity<BaseResponse<Integer>> registerCommunity(@RequestBody CommunityRegisterReq communityRegisterReq, Member member) throws IOException {
+        int communityId = communityService.registerCommunity(communityRegisterReq, member);
 
         return BaseResponse.success(SuccessCode.INSERT_SUCCESS, communityId);
     }
@@ -41,16 +41,19 @@ public class CommunityController {
 
     @Operation(summary = "게시글 목록 조회 - 검색, 필터링 포함")
     @GetMapping("/v0")
-    public ResponseEntity<BaseResponse<CommunityListRes>> getCommunityList() throws IOException {
-        CommunityListRes communityList = communityService.getCommunityList();
+    public ResponseEntity<BaseResponse<CommunityListRes>> getCommunityList(
+            @RequestParam(value="order", required = false, defaultValue = "latest") String order,
+            @RequestParam(value="tags", required = false) String tags,
+            @RequestParam(value="keyword", required = false) String keyword) throws IOException {
+        CommunityListRes communityList = communityService.getCommunityList(order, tags, keyword);
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, communityList);
     }
 
     @Operation(summary = "게시글 수정")
-    @PostMapping("/v1/{communityId}")
+    @PatchMapping("/v1/{communityId}")
     public ResponseEntity<BaseResponse<Integer>> updateCommunity(@PathVariable("communityId") int communityId, @RequestBody CommunityUpdateReq communityUpdateReq, Member member) throws IOException {
-        communityId = communityService.updateCommunity(communityId, communityUpdateReq, member);
+        communityService.updateCommunity(communityId, communityUpdateReq, member);
 
         return BaseResponse.success(SuccessCode.UPDATE_SUCCESS, communityId);
     }

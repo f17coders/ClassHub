@@ -29,10 +29,20 @@ public class Comment extends BaseEntity {
     @Setter
     private Member member;
 
+    public void putMember(Member member){   // 연관 관계 편의 메서드
+        this.member = member;
+        member.getCommentList().add(this);
+    }
+
     // Comment - Community 연관 관계
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "community_id")
     @Setter
     private Community community;
+
+    public void putCommunity(Community community){   // 연관 관계 편의 메서드
+        this.community = community;
+        community.getCommentList().add(this);
+    }
 }
 

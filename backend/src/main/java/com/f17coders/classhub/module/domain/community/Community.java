@@ -25,7 +25,7 @@ public class Community extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "community_id")
-    private int id;
+    private int communityId;
 
     @Column(length = 300)
     @NotBlank(message = "제목은 필수 입니다!")
@@ -47,13 +47,8 @@ public class Community extends BaseEntity {
     private Member member;
 
     // Community - Comment 연관 관계
-    @OneToMany(mappedBy = "community", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> commentList = new ArrayList<>(); // 좋아요한 강의 목록
-
-    public void putCommunity(Comment comment) {  // 연관 관계 편의 메서드
-        comment.setCommunity(this);
-        this.getCommentList().add(comment);
-    }
 
     // Community - CommunityLike 연관 관계
     @OneToMany(mappedBy = "community", fetch = FetchType.LAZY)

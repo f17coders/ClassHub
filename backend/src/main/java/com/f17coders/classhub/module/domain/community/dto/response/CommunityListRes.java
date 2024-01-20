@@ -6,6 +6,6 @@ import java.util.List;
 
 @Builder
 public record CommunityListRes(
-        List<CommunityListDetailRes> communityListDetailResList
+        List<CommunityListDetailRes> communityList
 ) {
 }

@@ -2,9 +2,13 @@ package com.f17coders.classhub.module.domain.community.repository;
 
 import com.f17coders.classhub.module.domain.community.Community;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.UUID;
 
 public interface CommunityRepository extends JpaRepository<Community, UUID>, CommunityRepositoryCustom {
-    Community findById(int id);
+    Community findByCommunityId(int communityId);
+
+    @Query("select c from Community c left join fetch c.commentList where c.communityId = :communityId")
+    Community findCommunityByCommunityIdFetchJoinComment(int communityId);
 }

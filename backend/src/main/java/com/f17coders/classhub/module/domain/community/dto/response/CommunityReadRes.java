@@ -1,6 +1,6 @@
 package com.f17coders.classhub.module.domain.community.dto.response;
 
-import com.f17coders.classhub.module.domain.comment.Comment;
+import com.f17coders.classhub.module.domain.comment.dto.response.CommentDetailRes;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -12,7 +12,7 @@ public record CommunityReadRes(
         String content,
         String memberNickname,
         List<String> tagList,
-        List<String> commentList,
+        List<CommentDetailRes> commentList,
         int viewCount,
         int commentCount,
         boolean canUpdate,
