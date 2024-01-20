@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
     Comment findByCommentId(int commentId);
+
+    int countCommentByCommunity_CommunityId(int communityId);
 }

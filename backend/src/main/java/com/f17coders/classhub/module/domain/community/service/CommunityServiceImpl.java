@@ -3,7 +3,7 @@ package com.f17coders.classhub.module.domain.community.service;
 import com.f17coders.classhub.global.exception.BaseExceptionHandler;
 import com.f17coders.classhub.module.domain.comment.Comment;
 import com.f17coders.classhub.module.domain.comment.dto.response.CommentDetailRes;
-import com.f17coders.classhub.module.domain.comment.service.CommentService;
+import com.f17coders.classhub.module.domain.comment.repository.CommentRepository;
 import com.f17coders.classhub.module.domain.community.Community;
 import com.f17coders.classhub.module.domain.community.dto.request.CommunityRegisterReq;
 import com.f17coders.classhub.module.domain.community.dto.request.CommunityUpdateReq;
@@ -11,6 +11,7 @@ import com.f17coders.classhub.module.domain.community.dto.response.CommunityList
 import com.f17coders.classhub.module.domain.community.dto.response.CommunityListRes;
 import com.f17coders.classhub.module.domain.community.dto.response.CommunityReadRes;
 import com.f17coders.classhub.module.domain.community.repository.CommunityRepository;
+import com.f17coders.classhub.module.domain.communityLike.repository.CommunityLikeRepository;
 import com.f17coders.classhub.module.domain.communityTag.CommunityTag;
 import com.f17coders.classhub.module.domain.member.Member;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +27,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommunityServiceImpl implements CommunityService {
     private final CommunityRepository communityRepository;
-
-    private final CommentService commentService;
+    private final CommunityLikeRepository communityLikeRepository;
+    private final CommentRepository commentRepository;
 
     private final String LATEST = "latest";     // 최신순
     private final String LIKE = "like";     // 인기순
@@ -74,13 +75,15 @@ public class CommunityServiceImpl implements CommunityService {
         List<CommunityListDetailRes> communityListDetailResList = new ArrayList<>();
 
         for (Community community : communityList) {
+            int communityId = community.getCommunityId();
+
             CommunityListDetailRes communityListDetailRes = CommunityListDetailRes.builder()
-                    .communityId(community.getCommunityId())
+                    .communityId(communityId)
                     .title(community.getTitle())
                     .content(community.getContent())
                     .memberNickname("Nickname")
-                    .commentCount(0)    // TODO : comment 구현 후 수정
-                    .likeCount(0)   // TODO : like 구현 후 수정
+                    .commentCount(commentRepository.countCommentByCommunity_CommunityId(communityId))   // TODO : N + 1 문제 해결 필요
+                    .likeCount(communityLikeRepository.countCommunityLikeByCommunity_CommunityId(communityId))   // TODO : N + 1 문제 해결 필요
                     .scrapCount(0)  // TODO : scrap 구현 후 수정
                     .tagList(List.of("Tag1", "Tag2"))   // TODO : Tag 구현 후 수정 필요
                     .createdAt(community.getCreatedAt())

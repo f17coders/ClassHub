@@ -56,15 +56,15 @@ public class Community extends BaseEntity {
     private List<Comment> commentList = new ArrayList<>(); // 좋아요한 강의 목록
 
     // Community - CommunityLike 연관 관계
-    @OneToMany(mappedBy = "community", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommunityLike> communityLikeList = new ArrayList<>(); // 좋아요한 강의 목록
 
     // Community - CommunityScrap 연관 관계
-    @OneToMany(mappedBy = "community", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommunityScrap> communityScrapList = new ArrayList<>(); // 좋아요한 강의 목록
 
     // Community - CommunityTag 연관 관계
-    @OneToMany(mappedBy = "community", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommunityTag> communityTagList = new ArrayList<>(); // 좋아요한 강의 목록
 
     public void putCommunity(CommunityTag communityTag) {  // 연관 관계 편의 메서드

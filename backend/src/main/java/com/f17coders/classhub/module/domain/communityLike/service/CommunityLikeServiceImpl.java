@@ -22,6 +22,7 @@ public class CommunityLikeServiceImpl implements CommunityLikeService{
         Community community = communityRepository.findByCommunityId(communityId);
 
         CommunityLike communityLike = CommunityLike.createCommunityLike(community, null);   // TODO : 시큐리티 적용 후 member로 변경
+        communityLikeRepository.save(communityLike);
 
         communityLike.putCommunity(community);
 //        communityLike.putMember(member);   // TODO : 시큐리티 적용 후 주석 헤재
