@@ -7,4 +7,7 @@ import java.io.IOException;
 
 public interface CommunityLikeService {
     void likeCommunity(int communityId, Member member) throws BaseExceptionHandler, IOException;
+
+    void unlikeCommunity(int communityId, Member member) throws BaseExceptionHandler, IOException;
+
 }

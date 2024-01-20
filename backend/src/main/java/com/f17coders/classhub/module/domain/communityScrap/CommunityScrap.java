@@ -29,5 +29,20 @@ public class CommunityScrap extends BaseEntity {
     @JoinColumn(name = "community_id")
     @Setter
     private Community community;
+
+    public void putCommunity(Community community){   // 연관 관계 편의 메서드
+        this.community = community;
+        community.getCommunityScrapList().add(this);
+    }
+
+    // 생성 메서드
+    public static CommunityScrap createCommunityScrap(Community community, Member member){
+        CommunityScrap communityScrap = new CommunityScrap();
+
+        communityScrap.setCommunity(community);
+        communityScrap.setMember(member);
+
+        return communityScrap;
+    }
 }
 

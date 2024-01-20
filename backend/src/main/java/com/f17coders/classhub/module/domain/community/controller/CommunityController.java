@@ -8,6 +8,7 @@ import com.f17coders.classhub.module.domain.community.dto.response.CommunityList
 import com.f17coders.classhub.module.domain.community.dto.response.CommunityReadRes;
 import com.f17coders.classhub.module.domain.community.service.CommunityService;
 import com.f17coders.classhub.module.domain.communityLike.service.CommunityLikeService;
+import com.f17coders.classhub.module.domain.communityScrap.service.CommunityScrapService;
 import com.f17coders.classhub.module.domain.member.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,6 +25,7 @@ import java.io.IOException;
 public class CommunityController {
     private final CommunityService communityService;
     private final CommunityLikeService communityLikeService;
+    private final CommunityScrapService communityScrapService;
 
     @Operation(summary = "게시글 등록")
     @PostMapping("/v1")
@@ -74,5 +76,29 @@ public class CommunityController {
         communityLikeService.likeCommunity(communityId, member);
 
         return BaseResponse.success(SuccessCode.INSERT_SUCCESS, communityId);
+    }
+
+    @Operation(summary = "게시글 좋아요 취소")      // TODO : 테스트 필요
+    @DeleteMapping("/v1/unlikes/{communityId}")
+    public ResponseEntity<BaseResponse<Integer>> unlikeCommunity(@PathVariable("communityId") int communityId, Member member) throws IOException {
+        communityLikeService.unlikeCommunity(communityId, member);
+
+        return BaseResponse.success(SuccessCode.DELETE_SUCCESS, communityId);
+    }
+
+    @Operation(summary = "게시글 스크랩")
+    @PostMapping("/v1/scrap/{communityId}")
+    public ResponseEntity<BaseResponse<Integer>> scrapCommunity(@PathVariable("communityId") int communityId, Member member) throws IOException {
+        communityScrapService.scrapCommunity(communityId, member);
+
+        return BaseResponse.success(SuccessCode.INSERT_SUCCESS, communityId);
+    }
+
+    @Operation(summary = "게시글 스크랩 취소")      // TODO : 테스트 필요
+    @DeleteMapping("/v1/unscrap/{communityId}")
+    public ResponseEntity<BaseResponse<Integer>> unlscrapCommunity(@PathVariable("communityId") int communityId, Member member) throws IOException {
+        communityScrapService.unscrapCommunity(communityId, member);
+
+        return BaseResponse.success(SuccessCode.DELETE_SUCCESS, communityId);
     }
 }

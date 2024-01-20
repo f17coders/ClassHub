@@ -12,6 +12,7 @@ import com.f17coders.classhub.module.domain.community.dto.response.CommunityList
 import com.f17coders.classhub.module.domain.community.dto.response.CommunityReadRes;
 import com.f17coders.classhub.module.domain.community.repository.CommunityRepository;
 import com.f17coders.classhub.module.domain.communityLike.repository.CommunityLikeRepository;
+import com.f17coders.classhub.module.domain.communityScrap.repository.CommunityScrapRepository;
 import com.f17coders.classhub.module.domain.communityTag.CommunityTag;
 import com.f17coders.classhub.module.domain.member.Member;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class CommunityServiceImpl implements CommunityService {
     private final CommunityRepository communityRepository;
     private final CommunityLikeRepository communityLikeRepository;
     private final CommentRepository commentRepository;
+    private final CommunityScrapRepository communityScrapRepository;
 
     private final String LATEST = "latest";     // 최신순
     private final String LIKE = "like";     // 인기순
@@ -82,9 +84,9 @@ public class CommunityServiceImpl implements CommunityService {
                     .title(community.getTitle())
                     .content(community.getContent())
                     .memberNickname("Nickname")
-                    .commentCount(commentRepository.countCommentByCommunity_CommunityId(communityId))   // TODO : N + 1 문제 해결 필요
-                    .likeCount(communityLikeRepository.countCommunityLikeByCommunity_CommunityId(communityId))   // TODO : N + 1 문제 해결 필요
-                    .scrapCount(0)  // TODO : scrap 구현 후 수정
+                    .commentCount(commentRepository.countByCommunity_CommunityId(communityId))   // TODO : N + 1 문제 해결 필요
+                    .likeCount(communityLikeRepository.countByCommunity_CommunityId(communityId))   // TODO : N + 1 문제 해결 필요
+                    .scrapCount(communityScrapRepository.countByCommunity_CommunityId(communityId))   // TODO : N + 1 문제 해결 필요
                     .tagList(List.of("Tag1", "Tag2"))   // TODO : Tag 구현 후 수정 필요
                     .createdAt(community.getCreatedAt())
                     .build();

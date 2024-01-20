@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CommunityLikeRepository extends JpaRepository<CommunityLike, Integer> {
-    int countCommunityLikeByCommunity_CommunityId(int communityId);
+    CommunityLike findByCommunity_CommunityIdAndMember_MemberId(int communityId, int memberId);
+    int countByCommunity_CommunityId(int communityId);
 }

@@ -27,4 +27,11 @@ public class CommunityLikeServiceImpl implements CommunityLikeService{
         communityLike.putCommunity(community);
 //        communityLike.putMember(member);   // TODO : 시큐리티 적용 후 주석 헤재
     }
+
+    @Override
+    public void unlikeCommunity(int communityId, Member member) throws BaseExceptionHandler, IOException {
+        CommunityLike communityLike = communityLikeRepository.findByCommunity_CommunityIdAndMember_MemberId(communityId, member.getMemberId());
+
+        communityLikeRepository.delete(communityLike);
+    }
 }
