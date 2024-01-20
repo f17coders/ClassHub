@@ -43,6 +43,8 @@ public class CommunityServiceImpl implements CommunityService {
         Community community = Community.createCommunity(title, content, communityTagList, member);
         communityRepository.save(community);
 
+//        community.putMember(member);  // TODO : 시큐리티 구현 후 활성화
+
         return community.getCommunityId();
     }
 

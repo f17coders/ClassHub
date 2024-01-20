@@ -9,6 +9,6 @@ import java.util.UUID;
 public interface CommunityRepository extends JpaRepository<Community, UUID>, CommunityRepositoryCustom {
     Community findByCommunityId(int communityId);
 
-    @Query("select c from Community c left join fetch c.commentList where c.communityId = :communityId")
-    Community findCommunityByCommunityIdFetchJoinComment(int communityId);
+//    @Query("select c from Community c left join fetch c.commentList where c.communityId = :communityId")
+//    Community findCommunityByCommunityIdFetchJoinComment(int communityId);    //    QueryDsl 으로 해당 메서드 대체
 }
