@@ -79,9 +79,9 @@ public class CommunityServiceImpl implements CommunityService {
                     .title(community.getTitle())
                     .content(community.getContent())
                     .memberNickname("Nickname")
-                    .commentCount(0)
-                    .likeCount(0)
-                    .scrapCount(0)
+                    .commentCount(0)    // TODO : comment 구현 후 수정
+                    .likeCount(0)   // TODO : like 구현 후 수정
+                    .scrapCount(0)  // TODO : scrap 구현 후 수정
                     .tagList(List.of("Tag1", "Tag2"))   // TODO : Tag 구현 후 수정 필요
                     .createdAt(community.getCreatedAt())
                     .build();

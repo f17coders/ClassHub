@@ -63,11 +63,6 @@ public class Community extends BaseEntity {
     @OneToMany(mappedBy = "community", fetch = FetchType.LAZY)
     private List<CommunityScrap> communityScrapList = new ArrayList<>(); // 좋아요한 강의 목록
 
-    public void putCommunity(CommunityScrap communityScrap) {  // 연관 관계 편의 메서드
-        communityScrap.setCommunity(this);
-        this.getCommunityScrapList().add(communityScrap);
-    }
-
     // Community - CommunityTag 연관 관계
     @OneToMany(mappedBy = "community", fetch = FetchType.LAZY)
     private List<CommunityTag> communityTagList = new ArrayList<>(); // 좋아요한 강의 목록

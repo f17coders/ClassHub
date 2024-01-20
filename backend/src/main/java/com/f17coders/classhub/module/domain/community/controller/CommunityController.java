@@ -7,6 +7,7 @@ import com.f17coders.classhub.module.domain.community.dto.request.CommunityUpdat
 import com.f17coders.classhub.module.domain.community.dto.response.CommunityListRes;
 import com.f17coders.classhub.module.domain.community.dto.response.CommunityReadRes;
 import com.f17coders.classhub.module.domain.community.service.CommunityService;
+import com.f17coders.classhub.module.domain.communityLike.service.CommunityLikeService;
 import com.f17coders.classhub.module.domain.member.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,6 +23,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class CommunityController {
     private final CommunityService communityService;
+    private final CommunityLikeService communityLikeService;
 
     @Operation(summary = "게시글 등록")
     @PostMapping("/v1")
@@ -64,5 +66,13 @@ public class CommunityController {
         communityService.deleteCommunity(communityId, member);
 
         return BaseResponse.success(SuccessCode.DELETE_SUCCESS, communityId);
+    }
+
+    @Operation(summary = "게시글 좋아요")
+    @PostMapping("/v1/likes/{communityId}")
+    public ResponseEntity<BaseResponse<Integer>> likeCommunity(@PathVariable("communityId") int communityId, Member member) throws IOException {
+        communityLikeService.likeCommunity(communityId, member);
+
+        return BaseResponse.success(SuccessCode.INSERT_SUCCESS, communityId);
     }
 }

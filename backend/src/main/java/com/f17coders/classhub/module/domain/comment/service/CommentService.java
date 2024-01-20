@@ -10,7 +10,7 @@ import java.io.IOException;
 public interface CommentService {
     int registerComment(int communityId, CommentRegisterReq commentRegisterReq, Member member) throws BaseExceptionHandler, IOException;
 
-    void updateComment(int commentId, CommentUpdateReq commentUpdateReq, Member member);
+    void updateComment(int commentId, CommentUpdateReq commentUpdateReq, Member member) throws BaseExceptionHandler, IOException;
 
-    void deleteComment(int commentId, Member member);
+    void deleteComment(int commentId, Member member) throws BaseExceptionHandler, IOException;
 }
