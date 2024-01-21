@@ -73,7 +73,7 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public CommunityListRes getCommunityList(String order, String tags, String keyword, Pageable pageable) throws BaseExceptionHandler, IOException {
+    public CommunityListRes getCommunityList(String tags, String keyword, Pageable pageable) throws BaseExceptionHandler, IOException {
         Page<Community> communityPage = communityRepository.findAll(pageable);
 
         List<CommunityListDetailRes> communityListDetailResList = new ArrayList<>();

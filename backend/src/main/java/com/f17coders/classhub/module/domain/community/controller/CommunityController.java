@@ -47,12 +47,11 @@ public class CommunityController {
     @Operation(summary = "게시글 목록 조회 - 검색, 필터링 포함")
     @GetMapping("/v0")
     public ResponseEntity<BaseResponse<CommunityListRes>> getCommunityList(
-            @RequestParam(value="order", required = false, defaultValue = "latest") String order,
             @RequestParam(value="tags", required = false) String tags,
             @RequestParam(value="keyword", required = false) String keyword,
             Pageable pageable
             ) throws IOException {
-        CommunityListRes communityList = communityService.getCommunityList(order, tags, keyword, pageable);
+        CommunityListRes communityList = communityService.getCommunityList(tags, keyword, pageable);
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, communityList);
     }

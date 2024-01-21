@@ -15,7 +15,7 @@ public interface CommunityService {
 
     CommunityReadRes readCommunity(int id, Member member) throws BaseExceptionHandler, IOException;
 
-    CommunityListRes getCommunityList(String order, String tags, String keyword, Pageable pageable) throws BaseExceptionHandler, IOException;
+    CommunityListRes getCommunityList(String tags, String keyword, Pageable pageable) throws BaseExceptionHandler, IOException;
 
     void updateCommunity(int id, CommunityUpdateReq communityUpdateReq, Member member) throws BaseExceptionHandler, IOException;
 
