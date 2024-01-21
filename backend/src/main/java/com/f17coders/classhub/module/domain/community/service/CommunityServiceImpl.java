@@ -17,6 +17,8 @@ import com.f17coders.classhub.module.domain.communityTag.CommunityTag;
 import com.f17coders.classhub.module.domain.member.Member;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -71,12 +73,12 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public CommunityListRes getCommunityList(String order, String tags, String keyword) throws BaseExceptionHandler, IOException {
-        List<Community> communityList = communityRepository.findAll();
+    public CommunityListRes getCommunityList(String order, String tags, String keyword, Pageable pageable) throws BaseExceptionHandler, IOException {
+        Page<Community> communityPage = communityRepository.findAll(pageable);
 
         List<CommunityListDetailRes> communityListDetailResList = new ArrayList<>();
 
-        for (Community community : communityList) {
+        for (Community community : communityPage) {
             int communityId = community.getCommunityId();
 
             CommunityListDetailRes communityListDetailRes = CommunityListDetailRes.builder()
@@ -96,6 +98,7 @@ public class CommunityServiceImpl implements CommunityService {
 
         return CommunityListRes.builder()
                 .communityList(communityListDetailResList)
+                .totalPages(communityPage.getTotalPages())
                 .build();
     }
 

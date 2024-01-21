@@ -13,6 +13,7 @@ import com.f17coders.classhub.module.domain.member.Member;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,8 +49,10 @@ public class CommunityController {
     public ResponseEntity<BaseResponse<CommunityListRes>> getCommunityList(
             @RequestParam(value="order", required = false, defaultValue = "latest") String order,
             @RequestParam(value="tags", required = false) String tags,
-            @RequestParam(value="keyword", required = false) String keyword) throws IOException {
-        CommunityListRes communityList = communityService.getCommunityList(order, tags, keyword);
+            @RequestParam(value="keyword", required = false) String keyword,
+            Pageable pageable
+            ) throws IOException {
+        CommunityListRes communityList = communityService.getCommunityList(order, tags, keyword, pageable);
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, communityList);
     }
