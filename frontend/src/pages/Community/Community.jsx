@@ -1,4 +1,4 @@
-import {Tooltip, Container, Stack, Button, TextField, Grid, Pagination, FormGroup, FormControlLabel, Checkbox, FormControl} from '@mui/material';
+import {Tooltip, Container, Stack, Button, TextField, Grid, Pagination, Chip} from '@mui/material';
 import { useState } from 'react'
 import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -10,13 +10,10 @@ import TodayIcon from '@mui/icons-material/Today';
 import React from 'react';
 
 function Community() {
-    const [checked, setChecked] = useState(false);
     const navigate = useNavigate();
 
-    const [formats, setFormats] = useState(() => ['bold', 'italic']);
-
-    const handleFormat = (event, newFormats) => {
-      setFormats(newFormats);
+    const handleClick = () => {
+      console.info('You clicked the Chip.');
     };
 
     return(
@@ -35,33 +32,13 @@ function Community() {
                       <Button variant="contained">🔍검색</Button>
                     </Stack>
 
-                    {/* <FormControl component="div"> */}
-                    <FormGroup row>
-                      <FormControlLabel control={<Checkbox />} label="Spring" 
-                      sx={{
-                        bgcolor: 'background.paper',
-                        boxShadow: 1,
-                        border: 1,  
-                        borderColor: 'primary.main',
-                        borderRadius: 2,
-                        mx: 1,
-                        display: 'flex',
-                        pr:2
-                      }} />
-                      <FormControlLabel control={<Checkbox />} label="Vue.js" 
-                      sx={{
-                        bgcolor: 'background.paper',
-                        boxShadow: 1,
-                        border: 1,  
-                        borderColor: 'primary.main',
-                        borderRadius: 2,
-                        mx: 1,
-                        display: 'flex',
-                        pr:2
-                      }} />
-                    </FormGroup>
-                    {/* </FormControl> */}
-                    
+                    {/* 해시태그 */}
+                    <Stack direction="row" spacing={1}>
+                      <Button size="medium" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#Python</Button>
+                      <Button size="medium" variant="outlined" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#VSCode</Button>
+                      <Button size="medium" variant="outlined" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#Spring Boot</Button>
+                    </Stack>
+
                 </Stack>
 
                 <Stack sx={{ margin: 1, padding: 1 }} justifyContent="space-between" direction="row" >
@@ -83,10 +60,10 @@ function Community() {
                     <p>다른 강의에서 배웠던 건 자동으로 파이썬이 들어가있었는데 이번에 새로 파일을 만들 때마다 파이썬이 안들어갑니다. 
                     고수님들 도와주세요</p>
                     {/* 해시태그 */}
-                    <div>
+                    <Stack direction="row" spacing={1}>
                         <Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#Python</Button>
                         <Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#VSCode</Button>
-                    </div>
+                    </Stack>
 
                     <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
                       {/* 작성자, 작성일자 부분 */}
