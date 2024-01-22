@@ -7,6 +7,9 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import CommunityWrite from './pages/Community/CommunityWrite'
 import StudyRoom from './pages/StudyRoom/StudyRoom'
+import StudyRoomRecruit from './pages/StudyRoom/StudyRoomRecruit'
+import StudyRoomParticipating from './pages/StudyRoom/StudyRoomParticipating'
+import StudyRoomPrivateMessage from './pages/StudyRoom/StudyRoomPrivateMessage'
 
 function App() {
 
@@ -19,7 +22,11 @@ function App() {
           <Route path='/community' element={<Community/>} />
           <Route path="/community/detail" element={<CommunityDetail/>}/>
           <Route path="/community/write" element={<CommunityWrite/>}/>
-          <Route path="/studyroom" element={<StudyRoom/>}/>
+          <Route path="/studyroom" element={<StudyRoom/>}>
+            <Route path="recruit" element={<StudyRoomRecruit />} />
+            <Route path="participating" element={<StudyRoomParticipating />} />
+            <Route path="message" element={<StudyRoomPrivateMessage />} />
+          </Route>
           <Route path='*' element={<div>없는 페이지에요</div>}/>
         </Routes>
       </div>
