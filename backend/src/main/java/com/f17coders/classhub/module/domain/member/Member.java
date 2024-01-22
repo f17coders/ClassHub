@@ -44,6 +44,7 @@ public class Member extends BaseEntity {
     private String profileImage;
 
     @Setter
+    @Column(columnDefinition = "TINYINT", length = 1)
     private Boolean isWithdrawn = false;
 
     @Column(length = 80, unique = true)
@@ -55,41 +56,42 @@ public class Member extends BaseEntity {
     @Setter
     private Integer jobId;
 
-    // Member - review 연관 관계
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<Review> reviewList = new ArrayList<>(); // 작성한 커뮤니티 게시글
-
-    public void putReview(Review review) {  // 연관 관계 편의 메서드
-        review.setMember(this);
-        this.getReviewList().add(review);
-    }
-
-    // Member - LectureBuy 연관 관계
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<LectureBuy> lectureBuyList = new ArrayList<>(); // 구매한 강의 목록
-
-    public void putLectureBuy(LectureBuy lectureBuy) {  // 연관 관계 편의 메서드
-        lectureBuy.setMember(this);
-        this.getLectureBuyList().add(lectureBuy);
-    }
-
-    // Member - LectureLike 연관 관계
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<LectureLike> lectureLikeList = new ArrayList<>(); // 좋아요한 강의 목록
-
-    public void putLectureLike(LectureLike lectureLike) {  // 연관 관계 편의 메서드
-        lectureLike.setMember(this);
-        this.getLectureLikeList().add(lectureLike);
-    }
-
-    // Member - StudyMember 연관 관계
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<StudyMember> studyMemberList = new ArrayList<>(); // 참여한 스터디룸 목록
-
-    public void putStudyMember(StudyMember studyMember) {  // 연관 관계 편의 메서드
-        studyMember.setMember(this);
-        this.getStudyMemberList().add(studyMember);
-    }
+//    TODO : 단방향 연관 관계로 우선 설정 후 필요에 의해서 양방향으로 연관 관계 설정 + 연관 관계 편의 메서드의 위치는 로직에 따라 Many쪽에 있을 수도 있고 One쪽에 있을 수도 있으니 변경 가능
+//    // Member - review 연관 관계
+//    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+//    private List<Review> reviewList = new ArrayList<>(); // 작성한 커뮤니티 게시글
+//
+//    public void putReview(Review review) {  // 연관 관계 편의 메서드
+//        review.setMember(this);
+//        this.getReviewList().add(review);
+//    }
+//
+//    // Member - LectureBuy 연관 관계
+//    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+//    private List<LectureBuy> lectureBuyList = new ArrayList<>(); // 구매한 강의 목록
+//
+//    public void putLectureBuy(LectureBuy lectureBuy) {  // 연관 관계 편의 메서드
+//        lectureBuy.setMember(this);
+//        this.getLectureBuyList().add(lectureBuy);
+//    }
+//
+//    // Member - LectureLike 연관 관계
+//    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+//    private List<LectureLike> lectureLikeList = new ArrayList<>(); // 좋아요한 강의 목록
+//
+//    public void putLectureLike(LectureLike lectureLike) {  // 연관 관계 편의 메서드
+//        lectureLike.setMember(this);
+//        this.getLectureLikeList().add(lectureLike);
+//    }
+//
+//    // Member - StudyMember 연관 관계
+//    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+//    private List<StudyMember> studyMemberList = new ArrayList<>(); // 참여한 스터디룸 목록
+//
+//    public void putStudyMember(StudyMember studyMember) {  // 연관 관계 편의 메서드
+//        studyMember.setMember(this);
+//        this.getStudyMemberList().add(studyMember);
+//    }
 
     // Member - Community 연관 관계
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)

@@ -36,27 +36,29 @@ public class Study extends BaseEntity {
 
     private Integer enter_code;
 
-    // Study - StudyMember 연관 관계
-    @OneToMany(mappedBy = "study", fetch = FetchType.LAZY)
-    private List<StudyMember> studyMemberList = new ArrayList<>(); // 좋아요한 강의 목록
-
-    public void putStudyMember(StudyMember studyMember) {  // 연관 관계 편의 메서드
-        studyMember.setStudy(this);
-        this.getStudyMemberList().add(studyMember);
-    }
+//    TODO : 단방향 연관 관계로 우선 설정 후 필요에 의해서 양방향으로 연관 관계 설정 + 연관 관계 편의 메서드의 위치는 로직에 따라 Many쪽에 있을 수도 있고 One쪽에 있을 수도 있으니 변경 가능
+//    // Study - StudyMember 연관 관계
+//    @OneToMany(mappedBy = "study", fetch = FetchType.LAZY)
+//    private List<StudyMember> studyMemberList = new ArrayList<>(); // 좋아요한 강의 목록
+//
+//    public void putStudyMember(StudyMember studyMember) {  // 연관 관계 편의 메서드
+//        studyMember.setStudy(this);
+//        this.getStudyMemberList().add(studyMember);
+//    }
 
     // Study - Lecture 연관 관계
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lecture_id")
     private Lecture lecture;
 
-    // Study - StudyTag 연관 관계
-    @OneToMany(mappedBy = "study", fetch = FetchType.LAZY)
-    private List<StudyTag> studyTagList = new ArrayList<>(); // 좋아요한 강의 목록
-
-    public void putStudyTag(StudyTag studyTag) {  // 연관 관계 편의 메서드
-        studyTag.setStudy(this);
-        this.getStudyTagList().add(studyTag);
-    }
+    //    TODO : 단방향 연관 관계로 우선 설정 후 필요에 의해서 양방향으로 연관 관계 설정 + 연관 관계 편의 메서드의 위치는 로직에 따라 Many쪽에 있을 수도 있고 One쪽에 있을 수도 있으니 변경 가능
+//    // Study - StudyTag 연관 관계
+//    @OneToMany(mappedBy = "study", fetch = FetchType.LAZY)
+//    private List<StudyTag> studyTagList = new ArrayList<>(); // 좋아요한 강의 목록
+//
+//    public void putStudyTag(StudyTag studyTag) {  // 연관 관계 편의 메서드
+//        studyTag.setStudy(this);
+//        this.getStudyTagList().add(studyTag);
+//    }
 }
 

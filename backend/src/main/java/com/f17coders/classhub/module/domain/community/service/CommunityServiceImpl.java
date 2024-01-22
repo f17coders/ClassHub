@@ -68,7 +68,7 @@ public class CommunityServiceImpl implements CommunityService {
                 .canUpdate(true)   // TODO : 시큐리티 적용 후 수정
                 .canLike(true)   // TODO : 시큐리티 적용 후 수정
                 .canScrap(true)   // TODO : 시큐리티 적용 후 수정
-                .createdAt(community.getCreatedAt())
+                .createdAt(community.getCreateTime())
                 .build();
     }
 
@@ -90,7 +90,7 @@ public class CommunityServiceImpl implements CommunityService {
                     .likeCount(communityLikeRepository.countByCommunity_CommunityId(communityId))   // TODO : N + 1 문제 해결 필요
                     .scrapCount(communityScrapRepository.countByCommunity_CommunityId(communityId))   // TODO : N + 1 문제 해결 필요
                     .tagList(List.of("Tag1", "Tag2"))   // TODO : Tag 구현 후 수정 필요
-                    .createdAt(community.getCreatedAt())
+                    .createdAt(community.getCreateTime())
                     .build();
 
             communityListDetailResList.add(communityListDetailRes);
@@ -134,7 +134,7 @@ public class CommunityServiceImpl implements CommunityService {
                     .memberNickname("memberNickname")   // TODO : 시큐리티 적용 후 변경
                     .memberProfileImg("member profileImg")  // TODO : 시큐리티 적용 후 변경
                     .canUpdate(true)  // TODO : 시큐리티 적용 후 변경
-                    .createdAt(comment.getCreatedAt())
+                    .createdAt(comment.getCreateTime())
                     .build();
 
             commentListDetailResList.add(commentDetailRes);

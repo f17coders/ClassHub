@@ -1,6 +1,7 @@
 package com.f17coders.classhub.module.domain.lecture;
 
 import com.f17coders.classhub.module.domain.BaseEntity;
+import com.f17coders.classhub.module.domain.category.Category;
 import com.f17coders.classhub.module.domain.lectureBuy.LectureBuy;
 import com.f17coders.classhub.module.domain.lectureLike.LectureLike;
 import com.f17coders.classhub.module.domain.lectureTag.LectureTag;
@@ -32,9 +33,6 @@ public class Lecture extends BaseEntity {
 
     @Column(columnDefinition="TEXT")
     private String image;
-
-    @Enumerated(EnumType.STRING)
-    private Category category;
 
     @Enumerated(EnumType.STRING)
     private Level level;
@@ -78,40 +76,45 @@ public class Lecture extends BaseEntity {
     @Column(length = 300)
     private String gpt_review_bad;
 
-    // Lecture - review 연관 관계
-    @OneToMany(mappedBy = "lecture", fetch = FetchType.LAZY)
-    private List<Review> reviewList = new ArrayList<>();
+    // Lecture - Category 연관 관계
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
-    public void putReview(Review review) {  // 연관 관계 편의 메서드
-        review.setLecture(this);
-        this.getReviewList().add(review);
-    }
-
-    // Lecture - LectureBuy 연관 관계
-    @OneToMany(mappedBy = "lecture", fetch = FetchType.LAZY)
-    private List<LectureBuy> lectureBuyList = new ArrayList<>();
-
-    public void putLectureBuy(LectureBuy lectureBuy) {  // 연관 관계 편의 메서드
-        lectureBuy.setLecture(this);
-        this.getLectureBuyList().add(lectureBuy);
-    }
-
-    // Lecture - LectureLike 연관 관계
-    @OneToMany(mappedBy = "lecture", fetch = FetchType.LAZY)
-    private List<LectureLike> lectureLikeList = new ArrayList<>();
-
-    public void putLectureLike(LectureLike lectureLike) {  // 연관 관계 편의 메서드
-        lectureLike.setLecture(this);
-        this.getLectureLikeList().add(lectureLike);
-    }
-
-    // Lecture - LectureTag 연관 관계
-    @OneToMany(mappedBy = "lecture", fetch = FetchType.LAZY)
-    private List<LectureTag> lectureTagList = new ArrayList<>();
-
-    public void putLectureTag(LectureTag lectureTag) {  // 연관 관계 편의 메서드
-        lectureTag.setLecture(this);
-        this.getLectureTagList().add(lectureTag);
-    }
+//    TODO : 단방향 연관 관계로 우선 설정 후 필요에 의해서 양방향으로 연관 관계 설정 + 연관 관계 편의 메서드의 위치는 로직에 따라 Many쪽에 있을 수도 있고 One쪽에 있을 수도 있으니 변경 가능//    // Lecture - review 연관 관계
+//    @OneToMany(mappedBy = "lecture", fetch = FetchType.LAZY)
+//    private List<Review> reviewList = new ArrayList<>();
+//
+//    public void putReview(Review review) {  // 연관 관계 편의 메서드
+//        review.setLecture(this);
+//        this.getReviewList().add(review);
+//    }
+//
+//    // Lecture - LectureBuy 연관 관계
+//    @OneToMany(mappedBy = "lecture", fetch = FetchType.LAZY)
+//    private List<LectureBuy> lectureBuyList = new ArrayList<>();
+//
+//    public void putLectureBuy(LectureBuy lectureBuy) {  // 연관 관계 편의 메서드
+//        lectureBuy.setLecture(this);
+//        this.getLectureBuyList().add(lectureBuy);
+//    }
+//
+//    // Lecture - LectureLike 연관 관계
+//    @OneToMany(mappedBy = "lecture", fetch = FetchType.LAZY)
+//    private List<LectureLike> lectureLikeList = new ArrayList<>();
+//
+//    public void putLectureLike(LectureLike lectureLike) {  // 연관 관계 편의 메서드
+//        lectureLike.setLecture(this);
+//        this.getLectureLikeList().add(lectureLike);
+//    }
+//
+//    // Lecture - LectureTag 연관 관계
+//    @OneToMany(mappedBy = "lecture", fetch = FetchType.LAZY)
+//    private List<LectureTag> lectureTagList = new ArrayList<>();
+//
+//    public void putLectureTag(LectureTag lectureTag) {  // 연관 관계 편의 메서드
+//        lectureTag.setLecture(this);
+//        this.getLectureTagList().add(lectureTag);
+//    }
 }
 
