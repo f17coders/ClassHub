@@ -3,6 +3,7 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardMedia from '@mui/material/CardMedia'
 import Button from '@mui/material/Button'
+import Rating from '@mui/material/Rating'
 import {useState} from 'react'
 
 function LectureCard(props) {
@@ -10,11 +11,12 @@ function LectureCard(props) {
 	const hoverStyle = {
 		height: 340,
 		cursor: hover ? 'pointer' : 'none',
-		boxShadow: hover ? "0px 4px 8px 0px rgba(0, 0, 0, 0.2)" : 'none' 
+		boxShadow: hover ? "0px 4px 8px 0px rgba(0, 0, 0, 0.2)" : 'none' ,
 	}
 
 	return (
 		<Card 
+			variant="outlined"
 			style={hoverStyle} 
 			onClick={()=> console.log('상세페이지로!')}
 			onMouseEnter={() => setHover(true)}
@@ -31,7 +33,7 @@ function LectureCard(props) {
 						<p style={{fontWeight:'700', fontSize:'1.1em'}}>{props.title}</p>
 					</div>
 					<div>
-						<p style={{marginBottom: '5px'}}>강의자<br/>⭐⭐⭐⭐⭐</p>
+						<p style={{marginBottom: '5px'}}>강의자<br/><Rating value={4} readOnly></Rating></p>
 					</div>
 					<div>
 						<Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#VSCode</Button>
