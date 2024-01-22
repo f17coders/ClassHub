@@ -23,7 +23,6 @@ function Recommend(props) {
                         <Grid item xs={6} sm={4} md={3} lg={2} key={i}>
                             <LectureCard img={img1} title={item} />
                         </Grid>
-                        
                     ))
                 }
             </Grid> 
