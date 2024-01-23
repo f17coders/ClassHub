@@ -7,6 +7,7 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import IconButton from '@mui/material/IconButton'
 
+// 홈페이지 메인 배너
 
 function Banner() {
 	const [activeItemIndex, setActiveItemIndex] = useState(0)

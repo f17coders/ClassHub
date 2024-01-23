@@ -12,12 +12,23 @@ import StudyRoomParticipating from './pages/StudyRoom/StudyRoomParticipating'
 import StudyRoomPrivateMessage from './pages/StudyRoom/StudyRoomPrivateMessage'
 import Lecture from './pages/Lecture/Lecture'
 import LectureDetail from './pages/Lecture/LectureDetail'
+import MyPage from './pages/MyPage/MyPage'
+import MyPageLecture from './pages/MyPage/MyPageLecture'
+import MyPageLike from './pages/MyPage/MyPageLike'
+import MyPageCommunity from './pages/MyPage/MyPageCommunity'
+import MyPageEdit from './pages/MyPage/MyPageEdit'
+import {createTheme, ThemeProvider} from '@mui/material'
 
+const theme = createTheme({
+  typography: {
+    fontFamily: 'inherit'
+  }
+})
 
 function App() {
 
   return (
-    <div>
+    <ThemeProvider theme={theme}>
       <Navbar/>
       <div style={{minHeight: '550px'}}>
         <Routes>
@@ -32,11 +43,18 @@ function App() {
             <Route path="participating" element={<StudyRoomParticipating />} />
             <Route path="message" element={<StudyRoomPrivateMessage />} />
           </Route>
+          <Route path='/mypage' element={<MyPage/>}>
+            <Route index element={<MyPageLecture/>} />
+            <Route path='lecture' element={<MyPageLecture/>} />
+            <Route path='like' element={<MyPageLike/>} />
+            <Route path='community' element={<MyPageCommunity/>} />
+            <Route path='edit' element={<MyPageEdit/>} />
+          </Route>
           <Route path='*' element={<div>없는 페이지에요</div>}/>
         </Routes>
       </div>
       <Footer/>
-    </div>
+    </ThemeProvider>
   )
 }
 export default App

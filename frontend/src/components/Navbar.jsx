@@ -11,6 +11,7 @@ import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import LoginModal from './LoginModal'
 import { useSelector } from 'react-redux'
+import profile from './../assets/Profile.png'
 
 const pages = [
 	{ name: 'Lecture', url: 'lecture' },
@@ -107,7 +108,9 @@ function NavbarComponent() {
 							<Button onClick={ModalOpen}>Login</Button>
 						) : ( 
 							<Link to="/mypage">
-								<Button>My Page</Button>
+								<IconButton>
+									<img src={profile} alt="profile" style={{width: '40px', borderRadius:'70%'}} />
+								</IconButton>
 							</Link>
 						)
 					}

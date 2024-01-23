@@ -2,7 +2,7 @@ import { configureStore, createSlice } from '@reduxjs/toolkit'
 
 let isLogin = createSlice({
 	name: 'isLogin',
-	initialState: false
+	initialState: true
 })
 
 export default configureStore({

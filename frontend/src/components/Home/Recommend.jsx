@@ -2,6 +2,7 @@ import LectureCard from "./../LectureCard"
 import Grid from '@mui/material/Grid'
 import img1 from './../../assets/Lecture/Lecture1.png'
 
+// 홈페이지에서 강의 추천
 
 const lectureTitle = [
     '배워서 바로 쓰는 SQL 쿼리', 
