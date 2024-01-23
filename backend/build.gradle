@@ -44,6 +44,8 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	implementation group: 'org.javassist', name: 'javassist', version: '3.15.0-GA'
 
+	// db
+	implementation 'org.mariadb.jdbc:mariadb-java-client'
 }
 
 
