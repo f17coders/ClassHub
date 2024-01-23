@@ -1,36 +1,39 @@
 import React from 'react';
-import {Button, Modal, Stack, TextField, Autocomplete, Box, Typography, Container, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, createFilterOptions} from '@mui/material';
+import {ToggleButton, Button, Modal, Stack, TextField, Autocomplete, Box, Typography, Container, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, createFilterOptions} from '@mui/material';
 
 
 const filter = createFilterOptions();
 
 const style = {
     position: 'absolute',
-    top: '50%',
+    top: '45%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    width: 600,
+    maxHeight: '80vh', // 최대 높이
+    overflowY: 'auto',  // 수직 스크롤 적용
     bgcolor: 'background.paper',
     border: '1px solid #000',
     boxShadow: 24,
     p: 4,
   };
 
-export default function StudyRoomCreateModal({ open, handleClose }){
+export default function StudyRoomCreateModal({ studyCreate, studyCreateClose }){
     const [value, setValue] = React.useState(null);
-
+    const [selected1, setSelected1] = React.useState(false); //공개 버튼 선택
+    const [selected2, setSelected2] = React.useState(false); //비공개 버튼 선택
 
     return(
         <div>
             <Modal
-                open={open}
-                onClose={handleClose}
+                open={studyCreate}
+                onClose={studyCreateClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Container sx={style} style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', marginTop: '40px'}}>
+              <Container sx={style} style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', marginTop: '40px'}}>
                 <Stack style={{width: "80%"}}>
-                    <Typography variant="h4" fontWeight="bold">
+                    <Typography variant="h5" fontWeight="bold" >
                         스터디 만들기
                     </Typography>
 
@@ -38,12 +41,13 @@ export default function StudyRoomCreateModal({ open, handleClose }){
                     <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
                             <p>스터디명</p>
-                            <p >10자 이내로 작성하세요</p>
+                            <p>10자 이내로 작성하세요</p>
                        </div>
                         <TextField
                           required
                           id="outlined-required"
                           label="스터디명을 입력하세요"
+                          size='small'
                           sx = {{width: '100%'}}
                         /> 
                     </div>
@@ -57,6 +61,7 @@ export default function StudyRoomCreateModal({ open, handleClose }){
                           required
                           id="outlined-required"
                           label="최대인원을 설정하세요"
+                          size='small'
                           sx = {{width: '100%'}}
                         /> 
                     </div>
@@ -73,6 +78,7 @@ export default function StudyRoomCreateModal({ open, handleClose }){
                           rows={2}
                           id="outlined-required"
                           label="설명을 입력하세요"
+                          size='small'
                           sx = {{width: '100%'}}
                         />
                     </div>
@@ -86,9 +92,10 @@ export default function StudyRoomCreateModal({ open, handleClose }){
                         <Autocomplete
                           multiple
                           id="tags-outlined"
+                          size='small'
                           options={top100Films}
                           getOptionLabel={(option) => option.title}
-                          defaultValue={[top100Films[1]]}
+                          // defaultValue={[top100Films[1]]}
                           filterSelectedOptions
                           renderInput={(params) => (
                             <TextField
@@ -101,10 +108,36 @@ export default function StudyRoomCreateModal({ open, handleClose }){
 
                     {/* 공개여부 */}
                     <div>
-                        <p>공개여부</p>
+                        <p style={{ marginTop: '20px'}}>공개여부</p>
                         <Stack direction="row" justifyContent="space-around">
-                            <Button sx={{borderRadius: '20px', width: '45%'}} variant="contained">공개</Button>
-                            <Button sx={{borderRadius: '20px', width: '45%'}} variant="contained">비공개</Button>
+                          <ToggleButton
+                            color="primary"
+                            value="public-room"
+                            selected={selected1}
+                            onChange={() => {
+                              setSelected1(!selected1);
+                              setSelected2(false); // 비공개 버튼을 선택해제
+                            }}
+                            sx={{borderRadius: '20px', width: '45%'}}
+                          >
+                            공개
+                          </ToggleButton>
+
+                          <ToggleButton
+                            color="primary"
+                            value="private-room"
+                            selected={selected2}
+                            onChange={() => {
+                              setSelected2(!selected2);
+                              setSelected1(false); // 공개 버튼을 선택해제
+                            }}
+                            sx={{borderRadius: '20px', width: '45%'}}
+                          >
+                            비공개
+                          </ToggleButton>
+
+                            {/* <Button sx={{borderRadius: '20px', width: '45%'}} variant="outlined">공개</Button> */}
+                            {/* <Button sx={{borderRadius: '20px', width: '45%'}} variant="outlined">비공개</Button> */}
                         </Stack>
                         
                     </div>
@@ -116,6 +149,7 @@ export default function StudyRoomCreateModal({ open, handleClose }){
                         </div>
                         
                         <Autocomplete
+                            size='small'
                             value={value}
                             onChange={(event, newValue) => {
                               if (typeof newValue === 'string') {
@@ -166,7 +200,7 @@ export default function StudyRoomCreateModal({ open, handleClose }){
                             renderOption={(props, option) => <li {...props}>{option.title}</li>}
                             freeSolo
                             renderInput={(params) => (
-                              <TextField {...params} label="목표강의를 연결하세요" />
+                              <TextField {...params} label="목표강의를 연결하세요"/>
                             )}
                         />
                     </div>
@@ -175,16 +209,7 @@ export default function StudyRoomCreateModal({ open, handleClose }){
                     {/* 등록버튼 */}
                     <Button style={{marginTop: '20px'}} variant="contained">등록</Button>
                 </Stack>
-            </Container>
-
-
-
-                {/* <Box sx={style}>
-                    <div>스터디 만들기</div>
-                    <div>
-                    스터디명
-                    </div>
-                </Box> */}
+              </Container>
             </Modal>
         </div>
     )
