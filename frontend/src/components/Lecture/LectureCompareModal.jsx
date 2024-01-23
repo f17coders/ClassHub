@@ -1,9 +1,9 @@
-import Grid from '@mui/material/Grid'
 import Modal from '@mui/material/Modal'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 
-// Modal창 스타일
+// 강의 비교 Modal창
+
 const style = {
 	position: 'absolute',
 	top: '50%',

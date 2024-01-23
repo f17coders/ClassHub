@@ -4,6 +4,7 @@ import CompareElement from './CompareElement'
 import { useState } from 'react'
 import LectureCompareModal from './LectureCompareModal'
 
+// 강의 비교하는 컴포넌트
 
 
 function LectureCompare() {

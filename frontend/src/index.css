@@ -1,9 +1,19 @@
+/* @font-face {
+  font-family: "Pretendard-Regular";
+  font-weight: normal;
+  src: url("./fonts/Pretendard-Regular.otf") format("truetype");
+}
+
+body {
+  font-family: "Pretendard-Regular";
+}   */
+
 @font-face {
-    font-family: "Pretendard-Regular";
-    font-weight: normal;
-    src: url("./fonts/Pretendard-Regular.otf") format("truetype");
-  }
-  
-  body {
-    font-family: "Pretendard-Regular";
-  }
+  font-family: "nexon-Regular";
+  font-weight: normal;
+  src: url("./fonts/Nexon_Medium.otf") format("truetype");
+}
+
+body {
+  font-family: "nexon-Regular";
+}

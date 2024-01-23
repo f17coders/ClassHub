@@ -1,5 +1,6 @@
 import { Checkbox, FormControlLabel, Divider } from "@mui/material"
 
+// 강의 검색 체크박스로 하는거 모음
 
 function LectureCheck() {
 

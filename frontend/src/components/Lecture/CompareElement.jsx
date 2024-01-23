@@ -1,6 +1,8 @@
 import BalanceIcon from '@mui/icons-material/Balance'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 
+// 강의 비교에 들어가는 아이콘
+
 function CompareElement() {
 	return (
 		<div  style={{ position: 'relative' }}>

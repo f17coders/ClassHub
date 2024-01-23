@@ -2,6 +2,7 @@ import * as React from 'react'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 
+// 홈페이지 강의 검색창
 
 function Search() {
 	return (

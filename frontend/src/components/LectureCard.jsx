@@ -5,14 +5,21 @@ import CardMedia from '@mui/material/CardMedia'
 import Button from '@mui/material/Button'
 import Rating from '@mui/material/Rating'
 import {useState} from 'react'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import IconButton from '@mui/material/IconButton'
+import BalanceIcon from '@mui/icons-material/Balance'
 
 function LectureCard(props) {
 	const [hover, setHover] = useState(false)
 	const hoverStyle = {
+		position:'relative',
 		height: 340,
 		cursor: hover ? 'pointer' : 'none',
 		boxShadow: hover ? "0px 4px 8px 0px rgba(0, 0, 0, 0.2)" : 'none' ,
 	}
+	const [like, setLike] = useState(false)
+	const toggleLike = () => setLike(!like)
 
 	return (
 		<Card 
@@ -38,16 +45,43 @@ function LectureCard(props) {
 					<div>
 						<Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#VSCode</Button>
 					</div>
-					
 				</div>
-				{/* <Typography gutterBottom variant="h7" component="div">
-					{props.title}
-				</Typography>
-				<Typography variant="body2" color="text.secondary">
-					강의 상세 정보가 들어가는 곳입니다
-				</Typography> */}
 			</CardContent>
-			
+			{
+				hover == true ? (
+					<div
+						style={{
+							position:'absolute',
+							top: 0, 
+							backgroundColor:'rgba(128, 128, 128, 0.9)', 
+							width:'100%', 
+							height:'100%', 
+							color:'white',
+							padding:'30px',
+							display:'flex',
+							flexDirection:'column'
+						}}
+					>
+						<p style={{fontWeight:'700', fontSize:'1.3em'}}>{props.title}</p>
+						<div style={{height:'50%'}}>
+							<p>수강기간<br/>한줄 설명<br/>강의 총 시간<br/>난이도</p>
+						</div>
+						<div style={{height:'20%'}}>
+							<Button size="small" sx={{ backgroundColor:'black', color:'white', borderRadius: '20px', marginRight: '0.5em'}}>#VSCode</Button>
+						</div>
+						<div style={{marginLeft:'55%'}}>
+							<IconButton size='small' onClick={toggleLike} sx={{color:'white'}}>
+								{
+									like ? (<FavoriteIcon/>) : (<FavoriteBorderIcon/>)
+								}
+							</IconButton>
+							<IconButton size='small' sx={{color:'white'}}>
+								<BalanceIcon/>
+							</IconButton>
+						</div>
+					</div>
+				) : null
+			}
 		</Card>
 	)
 }
