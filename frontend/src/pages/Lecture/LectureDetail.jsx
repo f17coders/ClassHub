@@ -8,7 +8,10 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider';
+import axios from 'axios'
+import { Button } from '@mui/material'
 
+axios.defaults.withCredentials = true;
 
 
 const reviews = ['강의 집중이 너무 잘되고, 프로그램 관점이 아닌 시스템~', '좀 별로네요']
@@ -24,13 +27,23 @@ function LectureDetail() {
 	const handleChange2 = (event, newValue) => {
     setValue2(newValue)
   }
-	
+	const [htmlString, setHtmlString] = useState(``)
 	return (
 		<div>
 			<Container style={{display:'flex', padding:'20px'}}>
 				<img src={img1} alt="강의 이미지" style={{width:'300px', height:'250px'}}/>
 				<div style={{padding:'30px', width:'50%'}}>
+					{/* 가져와지긴하는데 html형식으로만 나옴 */}
+					{/* <div dangerouslySetInnerHTML={{ __html: htmlString }}></div> */}
 					<p>카테고리<br/>강의명<br/>가격 할인률<br/>평점<br/>강사명<br/>해시태그<br/>바로가기 링크</p>
+					<Button onClick={() => {
+                axios.get('/classhub/data/udemy/htmlFiles/1.html?authuser=2')
+                .then((data)=> {
+										setHtmlString(data.data)
+                    console.log(typeof htmlString)
+                })
+            }}>더보기</Button>
+					
 				</div>
 				<div style={{ position: 'relative' }}>
 					<IconButton size='small' onClick={toggleLike} sx={{position: 'absolute', bottom: 20 }}>

@@ -19,10 +19,11 @@ function CompareElement() {
 				<BalanceIcon />
 			</div>
 			<HighlightOffIcon
+				fontSize='small'
 				style={{
 					position: 'absolute',
-					top: -5,
-					right: -5,
+					top: 0,
+					right: 0,
 				}}
 			/>
 		</div>
