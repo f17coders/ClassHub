@@ -1,19 +1,40 @@
-import {Tooltip, Container, Stack, Button, TextField, Grid, Pagination, Chip} from '@mui/material';
+import { Container, Stack, Button, TextField, Grid, Pagination } from '@mui/material';
 import { useState } from 'react'
 import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import PersonIcon from '@mui/icons-material/Person';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
-import TodayIcon from '@mui/icons-material/Today';
 import React from 'react';
+import CommunityPostList from '../../components/Community/CommunityPostList';
+
+const data = [
+  { title: 'Maven과 Gradle의 차이가 뭔가요?', description: 'Spring Boot 실행 시 Maven과 Gradle의 차이점이 뭔가요?', hashtag: ['#SPRING BOOT', '#SPRING'], writer: '정싸피', regdate: '2024.01.23', likes: 50, comments: 2, bookmarks: 20 },
+  { title: '비주얼 스튜디오에 파이썬이 안들어갑니다.', description: '다른 강의에서 배웠던 건 자동으로 파이썬이 들어가있었는데 이번에 새로 파일을 만들 때마다 파이썬이 안들어갑니다. 고수님들 도와주세요',
+  hashtag: ['#PYTHON', '#VSCODE'], writer: '김싸피', regdate: '2024.01.23', likes: 20, comments: 2, bookmarks: 20 },
+  { title: '비주얼 스튜디오에 파이썬이 안들어갑니다.', description: '다른 강의에서 배웠던 건 자동으로 파이썬이 들어가있었는데 이번에 새로 파일을 만들 때마다 파이썬이 안들어갑니다. 고수님들 도와주세요',
+  hashtag: ['#PYTHON', '#VSCODE'], writer: '김싸피', regdate: '2024.01.23', likes: 40, comments: 2, bookmarks: 20 },
+  { title: '비주얼 스튜디오에 파이썬이 안들어갑니다.', description: '다른 강의에서 배웠던 건 자동으로 파이썬이 들어가있었는데 이번에 새로 파일을 만들 때마다 파이썬이 안들어갑니다. 고수님들 도와주세요',
+  hashtag: ['#PYTHON', '#VSCODE'], writer: '김싸피', regdate: '2024.01.23', likes: 1, comments: 2, bookmarks: 20 },
+  { title: '비주얼 스튜디오에 파이썬이 안들어갑니다.', description: '다른 강의에서 배웠던 건 자동으로 파이썬이 들어가있었는데 이번에 새로 파일을 만들 때마다 파이썬이 안들어갑니다. 고수님들 도와주세요',
+  hashtag: ['#PYTHON', '#VSCODE'], writer: '김싸피', regdate: '2024.01.23', likes: 0, comments: 2, bookmarks: 20 },
+];
 
 function Community() {
     const navigate = useNavigate();
 
-    const handleClick = () => {
-      console.info('You clicked the Chip.');
+    // 현재 페이지를 나타내는 state
+    const [currentPage, setCurrentPage] = useState(1);
+    // 페이지 당 항목 수
+    const itemsPerPage = 5;
+
+    // 현재 페이지에 해당하는 항목만 가져오는 함수
+    const getCurrentItems = () => {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      return data.slice(startIndex, endIndex).map((post, index) => (
+        <CommunityPostList
+          key={index}
+          post={post}
+        />
+      ));
     };
 
     return(
@@ -53,164 +74,17 @@ function Community() {
 
                 {/* 글 목록 */}
                 <Stack sx={{ margin: 1, padding: 1 }} gap={1}>
-
-                  {/* 글 목록 한개 */}
-                  <div onClick={() => { navigate(`/community/detail`); }}>
-                    <h4>비주얼 스튜디오에 파이썬이 안들어갑니다.</h4>
-                    <p>다른 강의에서 배웠던 건 자동으로 파이썬이 들어가있었는데 이번에 새로 파일을 만들 때마다 파이썬이 안들어갑니다. 
-                    고수님들 도와주세요</p>
-                    {/* 해시태그 */}
-                    <Stack direction="row" spacing={1}>
-                        <Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#Python</Button>
-                        <Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#VSCode</Button>
-                    </Stack>
-
-                    <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-                      {/* 작성자, 작성일자 부분 */}
-                      <div style={{ display: 'flex' }}>
-                        <div style={{marginRight: '1em'}}>
-                          <Tooltip title="작성자">
-                            <PersonIcon/> 김싸피
-                          </Tooltip>
-                        </div>
-                        <div style={{marginRight: '1em'}}>
-                          <Tooltip title="작성일자">
-                            <TodayIcon/> 2024.01.12
-                          </Tooltip>
-                        </div>
-                      </div>
-                      {/* 좋아요, 댓글, 스크랩 부분 */}
-                      <div style={{ marginLeft: 'auto' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                          <div style={{marginRight: '1em'}}>
-                            <Tooltip title="좋아요">
-                              <FavoriteBorderIcon/> <span>20</span>
-                            </Tooltip>
-                          </div>
-                          <div style={{marginRight: '1em'}}>
-                            <Tooltip sx={{marginRight: '1rem'}} title="댓글">
-                              <ChatBubbleOutlineIcon/> <span>20</span>
-                            </Tooltip>
-                          </div>
-                          <div style={{marginRight: '1em'}}>
-                            <Tooltip sx={{marginRight: '1rem'}} title="스크랩">
-                              <BookmarkBorderIcon/> <span>20</span>
-                            </Tooltip>
-                          </div>
-                          
-                        </div>
-                      </div>
-                    </div>
-
-                    <hr/>
-                  </div>
-
-                  {/* 글 목록 한개 */}
-                  <div onClick={() => { navigate(`/community/detail`); }}>
-                    <h4>비주얼 스튜디오에 파이썬이 안들어갑니다.</h4>
-                    <p>다른 강의에서 배웠던 건 자동으로 파이썬이 들어가있었는데 이번에 새로 파일을 만들 때마다 파이썬이 안들어갑니다. 
-                    고수님들 도와주세요</p>
-                    {/* 해시태그 */}
-                    <div>
-                        <Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#Python</Button>
-                        <Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#VSCode</Button>
-                    </div>
-
-                    <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-                      {/* 작성자, 작성일자 부분 */}
-                      <div style={{ display: 'flex' }}>
-                        <div style={{marginRight: '1em'}}>
-                          <Tooltip title="작성자">
-                            <PersonIcon/> 김싸피
-                          </Tooltip>
-                        </div>
-                        <div style={{marginRight: '1em'}}>
-                          <Tooltip title="작성일자">
-                            <TodayIcon/> 2024.01.12
-                          </Tooltip>
-                        </div>
-                      </div>
-                      {/* 좋아요, 댓글, 스크랩 부분 */}
-                      <div style={{ marginLeft: 'auto' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                          <div style={{marginRight: '1em'}}>
-                            <Tooltip title="좋아요">
-                              <FavoriteBorderIcon/> <span>20</span>
-                            </Tooltip>
-                          </div>
-                          <div style={{marginRight: '1em'}}>
-                            <Tooltip sx={{marginRight: '1rem'}} title="댓글">
-                              <ChatBubbleOutlineIcon/> <span>20</span>
-                            </Tooltip>
-                          </div>
-                          <div style={{marginRight: '1em'}}>
-                            <Tooltip sx={{marginRight: '1rem'}} title="스크랩">
-                              <BookmarkBorderIcon/> <span>20</span>
-                            </Tooltip>
-                          </div>
-                          
-                        </div>
-                      </div>
-                    </div>
-
-                    <hr/>
-                  </div>
-
-                  {/* 글 목록 한개 */}
-                  <div onClick={() => { navigate(`/community/detail`); }}>
-                    <h4>비주얼 스튜디오에 파이썬이 안들어갑니다.</h4>
-                    <p>다른 강의에서 배웠던 건 자동으로 파이썬이 들어가있었는데 이번에 새로 파일을 만들 때마다 파이썬이 안들어갑니다. 
-                    고수님들 도와주세요</p>
-                    {/* 해시태그 */}
-                    <div>
-                        <Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#Python</Button>
-                        <Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#VSCode</Button>
-                    </div>
-
-                    <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
-                      {/* 작성자, 작성일자 부분 */}
-                      <div style={{ display: 'flex' }}>
-                        <div style={{marginRight: '1em'}}>
-                          <Tooltip title="작성자">
-                            <PersonIcon/> 김싸피
-                          </Tooltip>
-                        </div>
-                        <div style={{marginRight: '1em'}}>
-                          <Tooltip title="작성일자">
-                            <TodayIcon/> 2024.01.12
-                          </Tooltip>
-                        </div>
-                      </div>
-                      {/* 좋아요, 댓글, 스크랩 부분 */}
-                      <div style={{ marginLeft: 'auto' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-                          <div style={{marginRight: '1em'}}>
-                            <Tooltip title="좋아요">
-                              <FavoriteBorderIcon/> <span>20</span>
-                            </Tooltip>
-                          </div>
-                          <div style={{marginRight: '1em'}}>
-                            <Tooltip sx={{marginRight: '1rem'}} title="댓글">
-                              <ChatBubbleOutlineIcon/> <span>20</span>
-                            </Tooltip>
-                          </div>
-                          <div style={{marginRight: '1em'}}>
-                            <Tooltip sx={{marginRight: '1rem'}} title="스크랩">
-                              <BookmarkBorderIcon/> <span>20</span>
-                            </Tooltip>
-                          </div>
-                          
-                        </div>
-                      </div>
-                    </div>
-
-                    <hr/>
-                  </div>
+                  {getCurrentItems()}
                 </Stack>
 
                 {/* 페이지네이션 */}
-                <Stack spacing={2} alignItems="center">
-                  <Pagination count={5} color="primary" />
+                <Stack sx={{ mx: 'auto' }}>
+                  <Pagination
+                      count={Math.ceil(10 / itemsPerPage)} // 전체 페이지 수
+                      color="primary"
+                      page={currentPage}
+                      onChange={(event, value) => setCurrentPage(value)}
+                    />
                 </Stack>
 
             </Container>

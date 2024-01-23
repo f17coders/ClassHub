@@ -11,7 +11,7 @@ import PrivateMessageList from "../../components/StudyRoom/PrivateMessageList";
 import ParticipatingRoomList from "../../components/StudyRoom/ParticipatingRoomList";
 
 
-// 사이드바 메뉴
+
 const data = [
   { icon: <People />, label: 'JAVA의 신이 될거야', date: 'Jan 22, 2024' },
   { icon: <Dns />, label: 'Database', date: 'Jan 19, 2024' },

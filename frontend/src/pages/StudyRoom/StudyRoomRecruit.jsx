@@ -1,19 +1,23 @@
 import React, {useState} from 'react';
 import { styled } from '@mui/material/styles';
-import {TextField, Button, Chip, Stack, Box,List,ListItem,ListItemButton, ListItemText,ListItemIcon,ListItemSecondaryAction, IconButton,Avatar,Grid,Typography,Divider, FormGroup,FormControlLabel, Checkbox, Tooltip, Paper} from '@mui/material'
-
-import FolderIcon from '@mui/icons-material/Folder';
-import ChatIcon from '@mui/icons-material/Chat';
-import LoginIcon from '@mui/icons-material/Login';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import {Pagination, TextField, Button, Stack, Box,List,ListItemButton,Grid,Typography,Divider} from '@mui/material'
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import StudyRoomCreateModal from '../../components/StudyRoom/StudyRoomCreateModal';
-import { fontWeight } from '@mui/system';
+import StudyRoomRecruitList from '../../components/StudyRoom/StudyRoomRecruitList';
 
+// 스터디 공고 데이터
+const data = [
+  { title: 'JAVA 초급자 스터디 구해요', hashtag: ['#JAVA','#초급'] , state: '모집중', isPublic: true, description: '안녕하세요 JAVA 초급자 스터디원 모집합니다. 시간이나 장소는 같이 협의해보도록 해요~ 문의사항 있으신 분은 1:1 대화 주시면 답장 드릴게요!', totalCount: 10, nowCount: 2 },
+  { title: '스프링 마스터 하실분', hashtag: ['#SPRING','#중급'] , state: '모집중', isPublic: true, description: '안녕하세요 JAVA 초급자 스터디원 모집합니다. 시간이나 장소는 같이 협의해보도록 해요~ 문의사항 있으신 분은 1:1 대화 주시면 답장 드릴게요!', totalCount: 10, nowCount: 5 },
+  { title: 'React 초급자 모여라', hashtag: ['#REACT','#초급'] , state: '모집완료', isPublic: true, description: '안녕하세요 JAVA 초급자 스터디원 모집합니다. 시간이나 장소는 같이 협의해보도록 해요~ 문의사항 있으신 분은 1:1 대화 주시면 답장 드릴게요!', totalCount: 3, nowCount: 2 },
+  { title: 'CS 뿌시기', hashtag: ['#CS','#초급'] , state: '모집완료', isPublic: false, description: '안녕하세요 JAVA 초급자 스터디원 모집합니다. 시간이나 장소는 같이 협의해보도록 해요~ 문의사항 있으신 분은 1:1 대화 주시면 답장 드릴게요!', totalCount: 5, nowCount: 2 },
+  { title: '기술면접 준비방', hashtag: ['#면접','#초급'] , state: '모집중', isPublic: true, description: '안녕하세요 JAVA 초급자 스터디원 모집합니다. 시간이나 장소는 같이 협의해보도록 해요~ 문의사항 있으신 분은 1:1 대화 주시면 답장 드릴게요!', totalCount: 5, nowCount: 2 },
+  { title: 'JAVA 중급자 스터디 구해요', hashtag: ['#JAVA','#중급'] , state: '모집중', isPublic: false, description: '안녕하세요 JAVA 초급자 스터디원 모집합니다. 시간이나 장소는 같이 협의해보도록 해요~ 문의사항 있으신 분은 1:1 대화 주시면 답장 드릴게요!', totalCount: 10, nowCount: 2 },
+];
 
 function generate(element) {
-    return [0, 1, 2, 3, 4, 5,6 ,7, 8, 9, 10].map((value) =>
+    return [0, 1, 2, 3, 4, 5,6 ,7].map((value) =>
       React.cloneElement(element, {
         key: value,
       }),
@@ -26,136 +30,97 @@ function generate(element) {
 
 // 스터디 모집하는 페이지
 export default function StudyRoomRecruit(){
-    const [secondary, setSecondary] = React.useState(false);
 
     const [selectedIndex, setSelectedIndex] = React.useState(0);
-
     const handleListItemClick = (event, index) => {
       setSelectedIndex(index);
     };
 
-    const [open, setOpen] = useState(false);
-
-    const handleOpen = () => {
-      setOpen(true);
+    // 스터디 만들기 모달 오픈
+    const [studyCreate, SetStudyCreate] = useState(false);
+    const studyCreateOpen = () => {
+      SetStudyCreate(true);
     };
-  
-    const handleClose = () => {
-      setOpen(false);
+    const studyCreateClose = () => {
+      SetStudyCreate(false);
+    };
+
+    // 현재 페이지를 나타내는 state
+    const [currentPage, setCurrentPage] = useState(1);
+    // 페이지 당 항목 수
+    const itemsPerPage = 5;
+
+    // 현재 페이지에 해당하는 항목만 가져오는 함수
+    const getCurrentItems = () => {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      return data.slice(startIndex, endIndex).map((study, index) => (
+        <StudyRoomRecruitList
+          key={index}
+          study={study}
+        />
+      ));
     };
 
     return(
-        <Box sx={{ display: 'flex' }}>
-            <List sx={{ maxWidth: 128, width: "100%"}} component="nav">
-                <ListItemButton
-                  selected={selectedIndex === 0}
-                  onClick={(event) => handleListItemClick(event, 0)}
-                >
-                  전체
-                </ListItemButton>
-                <ListItemButton
-                  selected={selectedIndex === 1}
-                  onClick={(event) => handleListItemClick(event, 1)}
-                >
-                  모집중
-                </ListItemButton>
-                <ListItemButton
-                  selected={selectedIndex === 2}
-                  onClick={(event) => handleListItemClick(event, 2)}
-                >
-                  모집완료
-                </ListItemButton>
-            </List>
-            <Divider />
+      <Box sx={{ display: 'flex' }}>
+        <List sx={{ maxWidth: 128, width: "100%"}} component="nav">
+          <Typography sx={{display: 'flex', justifyContent: 'center', py:1}} variant='h6' fontWeight='bold'>
+            스터디 모집
+          </Typography>
+          <ListItemButton
+            selected={selectedIndex === 0}
+            onClick={(event) => handleListItemClick(event, 0)}
+            sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+            >
+              전체
+          </ListItemButton>
+          <ListItemButton
+            selected={selectedIndex === 1}
+            onClick={(event) => handleListItemClick(event, 1)}
+            sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+          >
+            모집중
+          </ListItemButton>
+          <ListItemButton
+            selected={selectedIndex === 2}
+            onClick={(event) => handleListItemClick(event, 2)}
+            sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+          >
+            모집완료
+          </ListItemButton>
+        </List>
+        <Divider />
 
-        <Grid container spacing={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Grid container sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start',height: '100vh' }}>
 
-          <Grid item width={"90%"} >
+          <Grid item sx={{width: '90%'}} >
             {/* 검색기능 */}
-            <Stack direction="row" spacing={1} sx={{ margin: 1, padding: 1, mt: 3 }}>
+            <Stack direction="row" spacing={1} margin={1} padding={1}>
               <TextField size="small" sx={{width:"70%"}} id="outlined-basic" label="원하는 스터디를 검색해보세요!" variant="outlined" />
               <Button variant="contained" >검색</Button>
-              <Button onClick={handleOpen} variant="contained" color="success" sx={{width:"20%"}}>스터디 만들기</Button>
+              <Button onClick={studyCreateOpen} variant="contained" color="success" sx={{width:"20%"}}>스터디 만들기</Button>
             </Stack>
             
             {/* StudyRoomCreateModal 컴포넌트를 사용하여 모달을 렌더링 */}
-            <StudyRoomCreateModal open={open} handleClose={handleClose} />
+            <StudyRoomCreateModal studyCreate={studyCreate} studyCreateClose={studyCreateClose} />
 
-            <Demo>
-              <List>
-                {generate(
-                    <ListItemButton>
-                  <ListItem
-                    // secondaryAction={
-                    //     <ListItemSecondaryAction style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    //         <Tooltip title="1:1 대화하기">
-                    //             <IconButton edge="end" aria-label="1:1 대화">
-                    //                 <ChatIcon />
-                    //             </IconButton>
-                    //         </Tooltip>
-                            
-                    //         <Tooltip title="참여신청">
-                    //             <IconButton edge="end" aria-label="참여신청">
-                    //                 <LoginIcon />
-                    //             </IconButton>
-                    //         </Tooltip>
-                    //     </ListItemSecondaryAction>
-                        
-                    // }
-                  >
-
-                    <div>
-                        <Stack direction="row" spacing={1}>
-                            <h5 style={{fontWeight: "bold"}}>JAVA 초급자 스터디 구해요</h5>
-                            <Chip label="모집중" color="error" size='small'/>
-                            <Tooltip title="참여코드 인증 필요">
-                                <LockIcon/>
-                            </Tooltip>
-                            <Typography>3/10</Typography>
-                            
-                        </Stack>
-                        <Stack  direction="row">
-                        <p>안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요</p>
-                        </Stack>
-                        
-                        <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'space-around' }}>
-                            <Stack direction="row" spacing={1} marginTop={1} marginBottom={1}>
-                                <Chip label="#JAVA" color="primary" size='small'/>
-                                <Chip label="#초급" color="primary" size='small' />
-                            </Stack>
-
-                            <Stack  direction="row">
-                                <Tooltip title="1:1 대화하기">
-                                    <IconButton edge="end" aria-label="1:1 대화">
-                                        <ChatIcon />
-                                    </IconButton>
-                                </Tooltip>
-
-                                <Tooltip title="참여신청">
-                                    <IconButton edge="end" aria-label="참여신청">
-                                        <LoginIcon />
-                                    </IconButton>
-                                </Tooltip>
-                            </Stack>
-                        </div>
-                        
-                        
-                    </div>
-                        
-                    
-                        
-                    
-                    
-                    </ListItem>
-                </ListItemButton>
-                  
-                )}
-              </List>
+            {/* 스터디 모집 공고 리스트 */}
+            <Demo sx={{height: '100vh'}}>
+              {getCurrentItems()}
             </Demo>
             
           </Grid>
-          
+          {/* 페이지네이션 */}
+          <Stack sx={{ mx: 'auto' }}>
+            <Pagination
+                count={Math.ceil(10 / itemsPerPage)} // 전체 페이지 수
+                color="primary"
+                page={currentPage}
+                onChange={(event, value) => setCurrentPage(value)}
+              />
+          </Stack>
         </Grid>
-        </Box>
+      </Box>
     )
 }

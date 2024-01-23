@@ -13,9 +13,9 @@ import ImageIcon from '@mui/icons-material/Image';
 // 사이드바 메뉴
 const data = [
     { id: 1, icon: <People />, label: '자바의 신이 될거야', date: 'Jan 22, 2024' },
-    { id: 2, icon: <Dns />, label: 'Database', date: 'Jan 19, 2024' },
-    { id: 3, icon: <PermMedia />, label: 'Storage', date: 'Jan 12, 2024' },
-    { id: 4, icon: <Public />, label: 'Hosting', date: 'Jan 2, 2024' },
+    { id: 2, icon: <Dns />, label: '스프링을 공부해봐요', date: 'Jan 19, 2024' },
+    { id: 3, icon: <PermMedia />, label: 'CS 뿌시기', date: 'Jan 12, 2024' },
+    { id: 4, icon: <Public />, label: '기술면접 준비방', date: 'Jan 2, 2024' },
   ];
 
 export default function ParticipatingRoomList(){
@@ -74,7 +74,7 @@ export default function ParticipatingRoomList(){
                     </Avatar>
                   </ListItemAvatar>
                   <ListItemText primary={item.label} secondary={item.date}
-                  primaryTypographyProps={{ fontSize: 13, fontWeight: 'medium' }} />
+                  primaryTypographyProps={{ fontSize: 12, fontWeight: 'medium' }} />
                 </ListItem>
                 <Divider/>
                   

@@ -39,6 +39,8 @@ function App() {
           <Route path="/community/detail" element={<CommunityDetail/>}/>
           <Route path="/community/write" element={<CommunityWrite/>}/>
           <Route path="/studyroom" element={<StudyRoom/>}>
+            {/* /studyroom/recruit가 기본으로 열리도록 설정 */}
+            <Route index element={<StudyRoomRecruit />} />
             <Route path="recruit" element={<StudyRoomRecruit />} />
             <Route path="participating" element={<StudyRoomParticipating />} />
             <Route path="message" element={<StudyRoomPrivateMessage />} />

@@ -10,10 +10,12 @@ import ImageIcon from '@mui/icons-material/Image';
 
 // 사이드바 메뉴
 const data = [
-    { icon: <People />, label: 'Authentication', date: 'Jan 22, 2024' },
-    { icon: <Dns />, label: 'Database', date: 'Jan 19, 2024' },
-    { icon: <PermMedia />, label: 'Storage', date: 'Jan 12, 2024' },
-    { icon: <Public />, label: 'Hosting', date: 'Jan 2, 2024' },
+    { icon: <People />, label: '정유경', date: 'Jan 22, 2024' },
+    { icon: <Dns />, label: '김예지', date: 'Jan 19, 2024' },
+    { icon: <PermMedia />, label: '정승환', date: 'Jan 12, 2024' },
+    { icon: <Public />, label: '하동준', date: 'Jan 2, 2024' },
+    { icon: <Public />, label: '남수진', date: 'Jan 2, 2024' },
+    { icon: <Public />, label: '김지현', date: 'Jan 2, 2024' },
   ];
 
 export default function PrivateMessageList(){
@@ -76,7 +78,7 @@ export default function PrivateMessageList(){
                           </Avatar>
                         </ListItemAvatar>
                         <ListItemText primary={item.label} secondary={item.date}
-                        primaryTypographyProps={{ fontSize: 13, fontWeight: 'medium' }} />
+                        primaryTypographyProps={{ fontSize: 12, fontWeight: 'medium' }} />
                       </ListItem>
                       <Divider/>
 
