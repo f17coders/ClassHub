@@ -53,23 +53,23 @@ function LectureCard(props) {
 						style={{
 							position:'absolute',
 							top: 0, 
-							backgroundColor:'rgba(128, 128, 128, 0.9)', 
+							backgroundColor:'rgba(29, 35, 100, 0.9)', 
 							width:'100%', 
 							height:'100%', 
 							color:'white',
-							padding:'30px',
+							padding:'15px',
 							display:'flex',
 							flexDirection:'column'
 						}}
 					>
 						<p style={{fontWeight:'700', fontSize:'1.3em'}}>{props.title}</p>
-						<div style={{height:'50%'}}>
+						<div style={{height:'70%'}}>
 							<p>수강기간<br/>한줄 설명<br/>강의 총 시간<br/>난이도</p>
 						</div>
 						<div style={{height:'20%'}}>
-							<Button size="small" sx={{ backgroundColor:'black', color:'white', borderRadius: '20px', marginRight: '0.5em'}}>#VSCode</Button>
+							<Button size="small" sx={{ backgroundColor:'RGB(83, 96, 245)', color:'white', borderRadius: '20px', marginRight: '0.5em'}}>#VSCode</Button>
 						</div>
-						<div style={{marginLeft:'55%'}}>
+						<div style={{marginLeft:'50%'}}>
 							<IconButton size='small' onClick={toggleLike} sx={{color:'white'}}>
 								{
 									like ? (<FavoriteIcon/>) : (<FavoriteBorderIcon/>)

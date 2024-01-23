@@ -14,8 +14,8 @@ import img1 from './../../assets/Lecture/Lecture2.png'
 // Grid container sx={{ width: '90%', margin: 'auto', minHeight: '500px', marginTop: '20px' }}
 function Lecture() {
 	return (
-		// <Container>
-			<Grid container sx={{ width: '90%', margin: 'auto', minHeight: '500px', marginTop: '20px' }}>
+		<Container>
+			<Grid container sx={{ margin: 'auto', minHeight: '500px', marginTop: '20px' }}>
 				<Grid item xs={5} sm={4} md={2} sx={{ borderRight: "1px solid grey", paddingRight:'30px'}}>
 					<h1>전체 강의</h1>
 					<Box>
@@ -89,7 +89,7 @@ function Lecture() {
 				</Grid>
 			</Grid>
 			
-		// </Container>
+		</Container>
 	)
 }
 
