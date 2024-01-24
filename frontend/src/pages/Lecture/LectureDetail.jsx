@@ -27,22 +27,32 @@ function LectureDetail() {
 	const handleChange2 = (event, newValue) => {
     setValue2(newValue)
   }
-	const [htmlString, setHtmlString] = useState(``)
+	const [htmlString, setHtmlString] = useState('')
+	const fetchHtmlString = () => {
+		axios.get('https://storage.googleapis.com/classhub/data/udemy/htmlFiles/1.html',{
+			headers: {
+				'Access-Control-Allow-Origin': 'http://localhost:5173'
+			}})
+		.then((res) => {
+			console.log(res)
+			setHtmlString(res.data)
+			console.log(htmlString)
+		})
+		.catch((err)=> {
+			console.log(err)
+		})
+	}
+
 	return (
 		<div>
 			<Container style={{display:'flex', padding:'20px'}}>
 				<img src={img1} alt="강의 이미지" style={{width:'300px', height:'250px'}}/>
 				<div style={{padding:'30px', width:'50%'}}>
 					{/* 가져와지긴하는데 html형식으로만 나옴 */}
-					{/* <div dangerouslySetInnerHTML={{ __html: htmlString }}></div> */}
+					
+					<div dangerouslySetInnerHTML={{ __html: `<pre>${htmlString}</pre>` }}></div>
 					<p>카테고리<br/>강의명<br/>가격 할인률<br/>평점<br/>강사명<br/>해시태그<br/>바로가기 링크</p>
-					<Button onClick={() => {
-                axios.get('/classhub/data/udemy/htmlFiles/1.html?authuser=2')
-                .then((data)=> {
-										setHtmlString(data.data)
-                    console.log(typeof htmlString)
-                })
-            }}>더보기</Button>
+					<Button onClick={fetchHtmlString}>더보기</Button>
 					
 				</div>
 				<div style={{ position: 'relative' }}>

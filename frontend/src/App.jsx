@@ -19,6 +19,7 @@ import MyPageCommunity from './pages/MyPage/MyPageCommunity'
 import MyPageEdit from './pages/MyPage/MyPageEdit'
 import {createTheme, ThemeProvider} from '@mui/material'
 
+
 const theme = createTheme({
   typography: {
     fontFamily: 'inherit'

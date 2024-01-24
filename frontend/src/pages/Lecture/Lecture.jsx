@@ -25,7 +25,7 @@ function Lecture() {
 						<LectureCheck />
 					</Box>
 				</Grid>
-				<Grid item xs={7} sm={8} md={10}>
+				<Grid item xs={6} sm={7} md={9} sx={{marginLeft:'30px'}}>
 					<div style={{ display:'flex' , justifyContent:'space-between', alignItems:'center'}}>
 						<h3>전체 강의 / 백엔드</h3>
 						<div style={{ width: '40%', display:'flex'}}>
