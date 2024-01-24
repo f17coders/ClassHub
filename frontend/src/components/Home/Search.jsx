@@ -1,6 +1,7 @@
 import * as React from 'react'
 import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import SearchIcon from '@mui/icons-material/Search'
 
 // 홈페이지 강의 검색창
 
@@ -13,7 +14,7 @@ function Search() {
 				multiline
 				style={{ flex: '70%', margin: 5}}
 			/>
-			<Button variant="contained" style={{margin:7}}>🔍검색</Button>
+		<IconButton style={{ margin: 5 }}><SearchIcon fontSize='large' /></IconButton>
 		</div>
 	)
 }

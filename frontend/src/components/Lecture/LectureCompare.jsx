@@ -4,9 +4,11 @@ import { useState } from 'react'
 import LectureCompareModal from './LectureCompareModal'
 import BalanceIcon from '@mui/icons-material/Balance'
 import IconButton from '@mui/material/IconButton'
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from '@mui/icons-material/Add'
+import Tooltip from '@mui/material/Tooltip'
 import { useSelector, useDispatch } from 'react-redux'
-import {deleteElement} from './../../store/store.js'
+import { deleteElement } from './../../store/store.js'
+
 // 강의 비교하는 컴포넌트
 
 function LectureCompare() {
@@ -15,7 +17,7 @@ function LectureCompare() {
 	const ModalOpen = () => setOpen(true)
 	const ModalClose = () => setOpen(false)
 
-	// 강의 비교 갯수 및 항목
+	// 비교하고싶은 강의 store에서 불러오기
 	let compareLectures = useSelector((state) => state.compareLectures)
 	let dispatch = useDispatch()
 
@@ -25,9 +27,9 @@ function LectureCompare() {
 			<div style={{ width: '100%', height: '100px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 					{compareLectures.map((item, idx) => (
-						<div key={idx}  onClick={() => dispatch(deleteElement(idx))}>
-							<CompareElement/>
-						</div>	
+						<div key={idx} onClick={() => dispatch(deleteElement(idx))}>
+							<CompareElement title={item.title} />
+						</div>
 					))}
 					{Array(3 - compareLectures.length).fill().map((_, idx) => (
 						<NoneElement key={idx} />
@@ -41,10 +43,10 @@ function LectureCompare() {
 }
 
 
-function CompareElement() {
+function CompareElement(props) {
 	return (
 		<div
-		  style={{ 
+			style={{
 				position: 'relative',
 			}}
 		>
@@ -57,9 +59,11 @@ function CompareElement() {
 					justifyContent: 'center',
 					alignItems: 'center'
 				}}>
-				<IconButton>
-					<BalanceIcon />
-				</IconButton>
+				<Tooltip placement="top" title={props.title}>
+					<IconButton>
+						<BalanceIcon />
+					</IconButton>
+				</Tooltip>
 			</div>
 		</div>
 	)
@@ -68,7 +72,7 @@ function CompareElement() {
 function NoneElement() {
 	return (
 		<div
-		  style={{ 
+			style={{
 				position: 'relative',
 			}}
 		>

@@ -8,7 +8,7 @@ let isLogin = createSlice({
 // 비교를 원하는 강의들
 let compareLectures = createSlice({
 	name: 'compareLectures',
-	initialState: [{title:' 강의비교'},{title:'새로운강의추가'}], 
+	initialState: [], 
 	reducers: {
 		addElement(state, action){
 			return [...state, action.payload]
