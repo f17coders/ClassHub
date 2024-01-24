@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +31,8 @@ public class CommunityLikeServiceImpl implements CommunityLikeService{
 
     @Override
     public void unlikeCommunity(int communityId, Member member) throws BaseExceptionHandler, IOException {
-        CommunityLike communityLike = communityLikeRepository.findByCommunity_CommunityIdAndMember_MemberId(communityId, member.getMemberId());
+//        CommunityLike communityLike = communityLikeRepository.findByCommunity_CommunityIdAndMember_MemberId(communityId, member.getMemberId());     // TODO : 시큐리티 적용 후 주석 해제
+        CommunityLike communityLike = communityLikeRepository.findFirstByCommunity_CommunityId(communityId);// TODO : 시큐리티 적용 후 삭제
 
         communityLikeRepository.delete(communityLike);
     }

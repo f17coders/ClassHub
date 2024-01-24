@@ -8,6 +8,7 @@ import java.util.List;
 
 @Builder
 public record CommunityReadRes(
+        int communityId,
         String title,
         String content,
         String memberNickname,

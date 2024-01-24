@@ -60,6 +60,7 @@ public class CommunityServiceImpl implements CommunityService {
         List<CommentDetailRes> commentDetailResList = getCommentListRes(community);
 
         return CommunityReadRes.builder()
+                .communityId(communityId)
                 .title(community.getTitle())
                 .content(community.getContent())
                 .memberNickname("Member Nickname")   // TODO : 시큐리티 적용 후 변경
@@ -113,7 +114,7 @@ public class CommunityServiceImpl implements CommunityService {
         Community community = communityRepository.findByCommunityId(id);
         community.setTitle(title);
         community.setContent(content);
-        community.setCommunityTagList(communityTagList);
+//        community.setCommunityTagList(communityTagList);  // TODO : Tag 작업 후 변경 필요
 
         communityRepository.save(community);
     }
