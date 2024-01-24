@@ -30,16 +30,16 @@ public class CommunityController {
 
     @Operation(summary = "게시글 등록")
     @PostMapping("/v1")
-    public ResponseEntity<BaseResponse<Integer>> registerCommunity(@RequestBody CommunityRegisterReq communityRegisterReq, Member member) throws IOException {
-        int communityId = communityService.registerCommunity(communityRegisterReq, member);
+    public ResponseEntity<BaseResponse<Integer>> registerCommunity(@RequestBody CommunityRegisterReq communityRegisterReq) throws IOException {
+        int communityId = communityService.registerCommunity(communityRegisterReq, null);
 
         return BaseResponse.success(SuccessCode.INSERT_SUCCESS, communityId);
     }
 
     @Operation(summary = "게시글 상세 조회")
     @GetMapping("/v0/details/{communityId}")
-    public ResponseEntity<BaseResponse<CommunityReadRes>> readCommunity(@PathVariable("communityId") int communityId, Member member) throws IOException {
-        CommunityReadRes communityReadRes = communityService.readCommunity(communityId, member);
+    public ResponseEntity<BaseResponse<CommunityReadRes>> readCommunity(@PathVariable("communityId") int communityId) throws IOException {
+        CommunityReadRes communityReadRes = communityService.readCommunity(communityId, null);
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, communityReadRes);
     }
@@ -58,48 +58,48 @@ public class CommunityController {
 
     @Operation(summary = "게시글 수정")
     @PatchMapping("/v1/{communityId}")
-    public ResponseEntity<BaseResponse<Integer>> updateCommunity(@PathVariable("communityId") int communityId, @RequestBody CommunityUpdateReq communityUpdateReq, Member member) throws IOException {
-        communityService.updateCommunity(communityId, communityUpdateReq, member);
+    public ResponseEntity<BaseResponse<Integer>> updateCommunity(@PathVariable("communityId") int communityId, @RequestBody CommunityUpdateReq communityUpdateReq) throws IOException {
+        communityService.updateCommunity(communityId, communityUpdateReq, null);
 
         return BaseResponse.success(SuccessCode.UPDATE_SUCCESS, communityId);
     }
 
     @Operation(summary = "게시글 삭제")
     @DeleteMapping("/v1/{communityId}")
-    public ResponseEntity<BaseResponse<Integer>> deleteCommunity(@PathVariable("communityId") int communityId, Member member) throws IOException {
-        communityService.deleteCommunity(communityId, member);
+    public ResponseEntity<BaseResponse<Integer>> deleteCommunity(@PathVariable("communityId") int communityId) throws IOException {
+        communityService.deleteCommunity(communityId, null);
 
         return BaseResponse.success(SuccessCode.DELETE_SUCCESS, communityId);
     }
 
     @Operation(summary = "게시글 좋아요")
     @PostMapping("/v1/likes/{communityId}")
-    public ResponseEntity<BaseResponse<Integer>> likeCommunity(@PathVariable("communityId") int communityId, Member member) throws IOException {
-        communityLikeService.likeCommunity(communityId, member);
+    public ResponseEntity<BaseResponse<Integer>> likeCommunity(@PathVariable("communityId") int communityId) throws IOException {
+        communityLikeService.likeCommunity(communityId, null);
 
         return BaseResponse.success(SuccessCode.INSERT_SUCCESS, communityId);
     }
 
     @Operation(summary = "게시글 좋아요 취소")      // TODO : 테스트 필요
     @DeleteMapping("/v1/unlikes/{communityId}")
-    public ResponseEntity<BaseResponse<Integer>> unlikeCommunity(@PathVariable("communityId") int communityId, Member member) throws IOException {
-        communityLikeService.unlikeCommunity(communityId, member);
+    public ResponseEntity<BaseResponse<Integer>> unlikeCommunity(@PathVariable("communityId") int communityId) throws IOException {
+        communityLikeService.unlikeCommunity(communityId, null);
 
         return BaseResponse.success(SuccessCode.DELETE_SUCCESS, communityId);
     }
 
     @Operation(summary = "게시글 스크랩")
     @PostMapping("/v1/scrap/{communityId}")
-    public ResponseEntity<BaseResponse<Integer>> scrapCommunity(@PathVariable("communityId") int communityId, Member member) throws IOException {
-        communityScrapService.scrapCommunity(communityId, member);
+    public ResponseEntity<BaseResponse<Integer>> scrapCommunity(@PathVariable("communityId") int communityId) throws IOException {
+        communityScrapService.scrapCommunity(communityId, null);
 
         return BaseResponse.success(SuccessCode.INSERT_SUCCESS, communityId);
     }
 
     @Operation(summary = "게시글 스크랩 취소")      // TODO : 테스트 필요
     @DeleteMapping("/v1/unscrap/{communityId}")
-    public ResponseEntity<BaseResponse<Integer>> unlscrapCommunity(@PathVariable("communityId") int communityId, Member member) throws IOException {
-        communityScrapService.unscrapCommunity(communityId, member);
+    public ResponseEntity<BaseResponse<Integer>> unlscrapCommunity(@PathVariable("communityId") int communityId) throws IOException {
+        communityScrapService.unscrapCommunity(communityId, null);
 
         return BaseResponse.success(SuccessCode.DELETE_SUCCESS, communityId);
     }
