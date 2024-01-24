@@ -3,6 +3,7 @@ package com.f17coders.classhub.module.domain.communityScrap.service;
 import com.f17coders.classhub.global.exception.BaseExceptionHandler;
 import com.f17coders.classhub.module.domain.community.Community;
 import com.f17coders.classhub.module.domain.community.repository.CommunityRepository;
+import com.f17coders.classhub.module.domain.communityLike.CommunityLike;
 import com.f17coders.classhub.module.domain.communityScrap.CommunityScrap;
 import com.f17coders.classhub.module.domain.communityScrap.repository.CommunityScrapRepository;
 import com.f17coders.classhub.module.domain.member.Member;
@@ -30,7 +31,8 @@ public class CommunityScrapServiceImpl implements CommunityScrapService {
 
     @Override
     public void unscrapCommunity(int communityId, Member member) throws BaseExceptionHandler, IOException {
-        CommunityScrap communityScrap = communityScrapRepository.findByCommunity_CommunityIdAndMember_MemberId(communityId, member.getMemberId());
+//        CommunityScrap communityScrap = communityScrapRepository.findByCommunity_CommunityIdAndMember_MemberId(communityId, member.getMemberId());     // TODO : 시큐리티 적용 후 주석 해제
+        CommunityScrap communityScrap = communityScrapRepository.findFirstByCommunity_CommunityId(communityId);// TODO : 시큐리티 적용 후 삭제
 
         communityScrapRepository.delete(communityScrap);
     }

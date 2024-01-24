@@ -1,14 +1,11 @@
 package com.f17coders.classhub.module.domain.community.repository;
 
-import com.f17coders.classhub.module.domain.comment.QComment;
 import com.f17coders.classhub.module.domain.community.Community;
-import com.f17coders.classhub.module.domain.community.QCommunity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import org.springframework.data.jpa.repository.Query;
 
-import static com.f17coders.classhub.module.domain.comment.QComment.*;
-import static com.f17coders.classhub.module.domain.community.QCommunity.*;
+import static com.f17coders.classhub.module.domain.comment.QComment.comment;
+import static com.f17coders.classhub.module.domain.community.QCommunity.community;
 
 public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
     private final JPAQueryFactory queryFactory;
@@ -21,7 +18,7 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
     public Community findCommunityByCommunityIdFetchJoinComment(int communityId) {
         return queryFactory
                 .selectFrom(community)
-                .join(community.commentList, comment).fetchJoin()
+                .leftJoin(community.commentList, comment).fetchJoin()
                 .where(community.communityId.eq(communityId))
                 .fetchOne();
     }
