@@ -7,12 +7,14 @@ import com.f17coders.classhub.module.domain.comment.dto.request.CommentUpdateReq
 import com.f17coders.classhub.module.domain.comment.service.CommentService;
 import com.f17coders.classhub.module.domain.member.Member;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
+@Tag(name = "comment", description = "댓글 API")
 @RestController
 @RequestMapping("/comments")
 @RequiredArgsConstructor

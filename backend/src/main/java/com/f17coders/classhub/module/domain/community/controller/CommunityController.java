@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
-@Tag(name = "community", description = "커뮤니티 API")
+@Tag(name = "community", description = "커뮤니티 API - Member, Tag 관련 아직 적용 안 되어있음")
 @RestController
 @RequestMapping("/communities")
 @RequiredArgsConstructor
@@ -44,13 +44,13 @@ public class CommunityController {
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, communityReadRes);
     }
 
-    @Operation(summary = "게시글 목록 조회 - 검색, 필터링 포함")
+    @Operation(summary = "게시글 목록 조회 - 검색, 필터링 아직 적용 안 됨")
     @GetMapping("/v0")
     public ResponseEntity<BaseResponse<CommunityListRes>> getCommunityList(
             @RequestParam(value="tags", required = false) String tags,
             @RequestParam(value="keyword", required = false) String keyword,
             Pageable pageable
-            ) throws IOException {
+    ) throws IOException {
         CommunityListRes communityList = communityService.getCommunityList(tags, keyword, pageable);
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, communityList);
