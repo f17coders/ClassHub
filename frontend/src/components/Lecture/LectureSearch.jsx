@@ -69,7 +69,7 @@ export default function LimitTags() {
 						</Grid>
 						<Grid item style={{ marginLeft: '40px' }}>
 							{
-								Tags.slice(0,5).map((item, idx) => {
+								Tags.slice(0,3).map((item, idx) => {
 									return (
 										<ToggleButton
 											key={idx}
@@ -111,7 +111,7 @@ export default function LimitTags() {
 						</Grid>
 						<Grid item style={{ marginLeft: '40px' }}>
 							{
-								Tags.slice(0,5).map((item, idx) => {
+								Tags.slice(0,3).map((item, idx) => {
 									return (
 										<ToggleButton
 											key={idx}
@@ -134,7 +134,7 @@ export default function LimitTags() {
 						<Box style={{height:'40px', overflow:'hidden', flexWrap:'nowrap', display:'flex'}}>
 							<Grid item >
 								{
-									Tags.slice(5).map((item, idx) => {
+									Tags.slice(3).map((item, idx) => {
 										return (
 											<ToggleButton
 												key={idx}

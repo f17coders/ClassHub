@@ -62,79 +62,79 @@ export default function StudyRoom() {
 
     return(
         <Container height={"100vh"}>
-          <Grid container height="100vh" width="100%">
+          <Grid container  width="100%">
             {/* <Hidden smUp>
             </Hidden> */}
 
-          <Hidden smDown>
-            <Box sx={{ display: 'flex' }}>
-              <ThemeProvider
-                theme={createTheme({
-                  components: {
-                    MuiListItemButton: {
-                      defaultProps: {
-                        disableTouchRipple: true,
+            <Hidden smDown>
+              <Box sx={{ display: 'flex' }}>
+                <ThemeProvider
+                  theme={createTheme({
+                    components: {
+                      MuiListItemButton: {
+                        defaultProps: {
+                          disableTouchRipple: true,
+                        },
                       },
                     },
-                  },
-                  palette: {
-                    mode: 'dark',
-                    primary: { main: 'rgb(102, 157, 246)' },
-                    background: { paper: 'rgb(5, 30, 52)' },
-                  },
-                })}
-              >
-              <Paper elevation={0} sx={{ maxWidth: 256 }}>
-                <FireNav component="nav" disablePadding>
-                  <ListItem component="div" disablePadding>
+                    palette: {
+                      mode: 'dark',
+                      primary: { main: 'rgb(102, 157, 246)' },
+                      background: { paper: 'rgb(5, 30, 52)' },
+                    },
+                  })}
+                >
+                <Paper elevation={0} sx={{ maxWidth: 256 }}>
+                  <FireNav component="nav" disablePadding>
+                    <ListItem component="div" disablePadding>
 
-                    {/* 모집하기 버튼 */}
-                    <ListItemButton selected={selectedIndex === 0}
-                      onClick={(event) =>{
-                        handleListItemClick(event, 0)
-                        navigate('recruit');
-                      }}
-                      sx={{ height: 56,
-                        backgroundColor: selectedIndex === 0 ? 'pink' : null,
-                      }}>
-
-                      <ListItemIcon>
-                        <Home color="white"/>
-                      </ListItemIcon>
-                      <ListItemText
-                        primary="모집하기"
-                        primaryTypographyProps={{
-                          color: 'white',
-                          fontWeight: 'medium',
-                          fontSize: '16px',
-                          variant: 'body2',
+                      {/* 모집하기 버튼 */}
+                      <ListItemButton selected={selectedIndex === 0}
+                        onClick={(event) =>{
+                          handleListItemClick(event, 0)
+                          navigate('recruit');
                         }}
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                      
-                  <Divider />
-                  {/* 참여중인 스터디 목록 */}
-                  <ParticipatingRoomList selected={selectedIndex} onClick={handleListItemClick}/>
-                      
-                  <Divider />
-                  {/* 1:1 개인 메시지 */}
-                  <PrivateMessageList/>
-                      
-                </FireNav>
-              </Paper>
-            </ThemeProvider>
-          </Box>
-          </Hidden>
+                        sx={{ height: 56,
+                          backgroundColor: selectedIndex === 0 ? 'pink' : null,
+                        }}>
+
+                        <ListItemIcon>
+                          <Home color="white"/>
+                        </ListItemIcon>
+                        <ListItemText
+                          primary="모집하기"
+                          primaryTypographyProps={{
+                            color: 'white',
+                            fontWeight: 'medium',
+                            fontSize: '16px',
+                            variant: 'body2',
+                          }}
+                        />
+                      </ListItemButton>
+                    </ListItem>
+                        
+                    <Divider />
+                    {/* 참여중인 스터디 목록 */}
+                    <ParticipatingRoomList selected={selectedIndex} onClick={handleListItemClick}/>
+                        
+                    <Divider />
+                    {/* 1:1 개인 메시지 */}
+                    <PrivateMessageList/>
+                        
+                  </FireNav>
+                </Paper>
+              </ThemeProvider>
+            </Box>
+            </Hidden>
             
 
             
             {/* contentArea */}
-            <Grid item backgroundColor="theme.palette.background.paper" height="100vh" xs={12} sm>
+            <Grid item backgroundColor="theme.palette.background.paper"  xs={12} sm>
                 <Outlet/>
             </Grid>
 
-        </Grid>
+          </Grid>
         </Container>
         
     )

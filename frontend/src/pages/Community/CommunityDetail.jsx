@@ -10,9 +10,13 @@ import { useFormControl } from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormHelperText from '@mui/material/FormHelperText';
 import IconButton from '@mui/material/IconButton';
-
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import SendIcon from '@mui/icons-material/Send';
+import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
 
 export default function CommunityDetail(){
+    const navigate = useNavigate();
 
     const typographyRef = useRef(null);
     const text = `제가 비쥬얼 스튜디오에 파이썬 넣을라고 하거든요?
@@ -82,12 +86,17 @@ export default function CommunityDetail(){
                                             <BookmarkBorderIcon/>
                                         </IconButton>
                                     </Tooltip>
+                                    <Tooltip title="수정">
+                                        <IconButton onClick={() => {navigate(`/community/modify`);}} aria-label="수정">
+                                            <EditIcon/>
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Tooltip title="삭제">
+                                        <IconButton aria-label="삭제">
+                                            <DeleteIcon/>
+                                        </IconButton>
+                                    </Tooltip>
                                     
-                                </div>
-
-                                <div justifyContent="center">
-                                    <Button size="small">수정</Button>
-                                    <Button size="small" style={{color: 'red'}}>삭제</Button>
                                 </div>
                             </Stack>
                         </Stack>
@@ -107,7 +116,11 @@ export default function CommunityDetail(){
                         <form noValidate autoComplete="off">
                           <FormControl size="small" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
                             <OutlinedInput sx={{width: "100%", marginRight: '10px'}} placeholder="댓글을 입력하세요" />
-                            <Button variant="contained">등록</Button>
+                            <Tooltip title="등록">
+                                <IconButton aria-label="등록">
+                                    <SendIcon/>
+                                </IconButton>
+                            </Tooltip>
                           </FormControl>
                         </form>
                     </div>

@@ -1,5 +1,5 @@
 import Grid from '@mui/material/Grid'
-import CommunityPostList from '../../components/Community/CommunityPostList'
+import CommunityPostList from '../../components/Community/CommunityList'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'

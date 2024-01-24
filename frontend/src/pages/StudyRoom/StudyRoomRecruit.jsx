@@ -1,14 +1,16 @@
 import React, {useState} from 'react';
 import { styled } from '@mui/material/styles';
-import {Pagination, TextField, Button, Stack, Box,List,ListItemButton,Grid,Typography,Divider} from '@mui/material'
+import {Pagination, TextField, Button, Stack, Box,List,ListItemButton,Grid,Typography,Divider, IconButton, Tooltip} from '@mui/material'
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import SearchIcon from '@mui/icons-material/Search'
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import StudyRoomCreateModal from '../../components/StudyRoom/StudyRoomCreateModal';
 import StudyRoomRecruitList from '../../components/StudyRoom/StudyRoomRecruitList';
 
 // 스터디 공고 데이터
 const data = [
-  { title: 'JAVA 초급자 스터디 구해요', hashtag: ['#JAVA','#초급'] , state: '모집중', isPublic: true, description: '안녕하세요 JAVA 초급자 스터디원 모집합니다. 시간이나 장소는 같이 협의해보도록 해요~ 문의사항 있으신 분은 1:1 대화 주시면 답장 드릴게요!', totalCount: 10, nowCount: 2 },
+  { title: 'JAVA 초급자 스터디 구해요', hashtag: ['#JAVA','#초급'] , state: '모집중', isPublic: false, description: '안녕하세요 JAVA 초급자 스터디원 모집합니다. 시간이나 장소는 같이 협의해보도록 해요~ 문의사항 있으신 분은 1:1 대화 주시면 답장 드릴게요!', totalCount: 10, nowCount: 2 },
   { title: '스프링 마스터 하실분', hashtag: ['#SPRING','#중급'] , state: '모집중', isPublic: true, description: '안녕하세요 JAVA 초급자 스터디원 모집합니다. 시간이나 장소는 같이 협의해보도록 해요~ 문의사항 있으신 분은 1:1 대화 주시면 답장 드릴게요!', totalCount: 10, nowCount: 5 },
   { title: 'React 초급자 모여라', hashtag: ['#REACT','#초급'] , state: '모집완료', isPublic: true, description: '안녕하세요 JAVA 초급자 스터디원 모집합니다. 시간이나 장소는 같이 협의해보도록 해요~ 문의사항 있으신 분은 1:1 대화 주시면 답장 드릴게요!', totalCount: 3, nowCount: 2 },
   { title: 'CS 뿌시기', hashtag: ['#CS','#초급'] , state: '모집완료', isPublic: false, description: '안녕하세요 JAVA 초급자 스터디원 모집합니다. 시간이나 장소는 같이 협의해보도록 해요~ 문의사항 있으신 분은 1:1 대화 주시면 답장 드릴게요!', totalCount: 5, nowCount: 2 },
@@ -54,7 +56,15 @@ export default function StudyRoomRecruit(){
     const getCurrentItems = () => {
       const startIndex = (currentPage - 1) * itemsPerPage;
       const endIndex = startIndex + itemsPerPage;
-      return data.slice(startIndex, endIndex).map((study, index) => (
+
+      // 선택된 인덱스에 따라 모집 상태를 필터링
+      const filteredData = selectedIndex === 1
+      ? data.filter(study => study.state === '모집중')
+      : selectedIndex === 2
+        ? data.filter(study => study.state === '모집완료')
+        : data;
+
+      return filteredData.slice(startIndex, endIndex).map((study, index) => (
         <StudyRoomRecruitList
           key={index}
           study={study}
@@ -64,6 +74,7 @@ export default function StudyRoomRecruit(){
 
     return(
       <Box sx={{ display: 'flex' }}>
+        {/* 사이드바 메뉴 */}
         <List sx={{ maxWidth: 128, width: "100%"}} component="nav">
           <Typography sx={{display: 'flex', justifyContent: 'center', py:1}} variant='h6' fontWeight='bold'>
             스터디 모집
@@ -92,34 +103,53 @@ export default function StudyRoomRecruit(){
         </List>
         <Divider />
 
-        <Grid container sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start',height: '100vh' }}>
+        {/* 스터디 목록 */}
+        <Grid container sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
 
           <Grid item sx={{width: '90%'}} >
             {/* 검색기능 */}
             <Stack direction="row" spacing={1} margin={1} padding={1}>
-              <TextField size="small" sx={{width:"70%"}} id="outlined-basic" label="원하는 스터디를 검색해보세요!" variant="outlined" />
-              <Button variant="contained" >검색</Button>
-              <Button onClick={studyCreateOpen} variant="contained" color="success" sx={{width:"20%"}}>스터디 만들기</Button>
+              <TextField size="small" sx={{width:"100%"}} id="outlined-basic" label="원하는 스터디를 검색해보세요!" variant="outlined" />
+              {/* 검색 버튼 */}
+              <Tooltip title="검색">
+                <IconButton style={{ margin: 2 }}>
+                  <SearchIcon fontSize='medium'/>
+                </IconButton>
+              </Tooltip>
+              {/* 스터디 만들기 버튼 */}
+              <Tooltip title="스터디 만들기">
+                <IconButton style={{ margin: 2 }} onClick={studyCreateOpen}>
+                  <GroupAddIcon fontSize='medium'/>
+                  </IconButton>
+              </Tooltip>
             </Stack>
             
             {/* StudyRoomCreateModal 컴포넌트를 사용하여 모달을 렌더링 */}
             <StudyRoomCreateModal studyCreate={studyCreate} studyCreateClose={studyCreateClose} />
 
             {/* 스터디 모집 공고 리스트 */}
-            <Demo sx={{height: '100vh'}}>
+            <Demo>
               {getCurrentItems()}
             </Demo>
-            
+            {/* 페이지네이션 */}
+            <Stack sx={{
+                mx: 'auto',
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'static', 
+                bottom: 0, // 화면 하단에 고정
+                padding: 2, // 원하는 패딩값 지정
+                zIndex: 1, // 다른 요소 위에 표시하기 위해 zIndex 사용
+              }}>
+              <Pagination
+                  count={Math.ceil(10 / itemsPerPage)} // 전체 페이지 수
+                  color="primary"
+                  page={currentPage}
+                  onChange={(event, value) => setCurrentPage(value)}
+                />
+            </Stack>
           </Grid>
-          {/* 페이지네이션 */}
-          <Stack sx={{ mx: 'auto' }}>
-            <Pagination
-                count={Math.ceil(10 / itemsPerPage)} // 전체 페이지 수
-                color="primary"
-                page={currentPage}
-                onChange={(event, value) => setCurrentPage(value)}
-              />
-          </Stack>
+          
         </Grid>
       </Box>
     )

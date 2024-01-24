@@ -1,9 +1,13 @@
-import { Container, Stack, Button, TextField, Grid, Pagination } from '@mui/material';
-import { useState } from 'react'
+import { Container, Stack, Button, TextField, Grid, Pagination, IconButton, Tooltip, Divider } from '@mui/material';
+import { useState, useEffect } from 'react'
 import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CreateIcon from '@mui/icons-material/Create';
 import React from 'react';
-import CommunityPostList from '../../components/Community/CommunityPostList';
+import CommunityList from '../../components/Community/CommunityList';
+import CommunitySearch from '../../components/Community/CommunitySearch';
+import CommunityListAlignment from '../../components/Community/CommunityListAlignment';
+import axios from 'axios';
 
 const data = [
   { title: 'Maven과 Gradle의 차이가 뭔가요?', description: 'Spring Boot 실행 시 Maven과 Gradle의 차이점이 뭔가요?', hashtag: ['#SPRING BOOT', '#SPRING'], writer: '정싸피', regdate: '2024.01.23', likes: 50, comments: 2, bookmarks: 20 },
@@ -17,7 +21,28 @@ const data = [
   hashtag: ['#PYTHON', '#VSCODE'], writer: '김싸피', regdate: '2024.01.23', likes: 0, comments: 2, bookmarks: 20 },
 ];
 
+// async function getData() {
+//   try {
+//     //응답 성공
+//     const response = await axios.get('http://i10a810.p.ssafy.io:4000/communities/v0?page=0&size=2&sort=createTime,desc');
+//     console.log(response);
+//   } catch (error) {
+//     //응답 실패
+//     console.error(error);
+//   }
+// }
+
 function Community() {
+  // useEffect(() => {
+  //   async function fetchdata() {
+  //     const { data } = await axios.get(
+  //       '/communities/v0',
+  //     );
+  //     console.log(data);
+  //   }
+  //   fetchdata();
+  // }, []);
+
     const navigate = useNavigate();
 
     // 현재 페이지를 나타내는 state
@@ -30,7 +55,7 @@ function Community() {
       const startIndex = (currentPage - 1) * itemsPerPage;
       const endIndex = startIndex + itemsPerPage;
       return data.slice(startIndex, endIndex).map((post, index) => (
-        <CommunityPostList
+        <CommunityList
           key={index}
           post={post}
         />
@@ -38,57 +63,49 @@ function Community() {
     };
 
     return(
-        <div>
-            <Container>
-              <Stack direction="row" spacing={1} sx={{ margin: 1, padding: 1, mt: 3 }}>
-                  <TextField size="small" sx={{width:"90%"}} id="outlined-basic" label="궁금한 질문을 검색해보세요" variant="outlined" />
-                  <Button variant="contained">🔍검색</Button>
-              </Stack>
-              
-    
-                <Stack useFlexGap flexWrap="wrap" alignItems="center"  justifyContent="flex-start" direction="row" spacing={1} sx={{ margin: 1, padding: 1 }}>
-                    <Grid alignItems="center" justifyContent="center" sx={{mr:2}}>태그로 검색하기</Grid>
-                    <Stack direction="row" spacing={1}>
-                      <TextField size="small" id="outlined-basic" label="# 태그로 검색해보세요" variant="outlined"/>
-                      <Button variant="contained">🔍검색</Button>
-                    </Stack>
+      <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start'}}>
+        <Stack style={{width: "80%"}}>
+          {/* 검색바 */}
+          <CommunitySearch/>
 
-                    {/* 해시태그 */}
-                    <Stack direction="row" spacing={1}>
-                      <Button size="medium" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#Python</Button>
-                      <Button size="medium" variant="outlined" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#VSCode</Button>
-                      <Button size="medium" variant="outlined" sx={{ borderRadius: '20px', marginRight: '0.5em'}}>#Spring Boot</Button>
-                    </Stack>
+          <Stack sx={{ mx: 3, px: 1 }} justifyContent="space-between" direction="row" >
+            {/* 정렬 기능 컴포넌트 */}
+            <CommunityListAlignment sx={{width:"90%"}}/>
+            {/* 글 작성하기 버튼 */}
+            <Tooltip title="게시물 작성하기">
+              <IconButton style={{ margin: 5 }} onClick={() => { navigate(`/community/write`);}}>
+                <CreateIcon/>
+              </IconButton>
+            </Tooltip>
+            {/* <Button sx={{width:"10%"}} variant="contained" onClick={() => { navigate(`/community/write`);}}>글 작성하기</Button>                */}
+          </Stack>
 
-                </Stack>
+          {/* <hr/> */}
+          {/* 글 목록 */}
+          <Container sx={{ margin: 1, padding: 1 }} gap={1}>
+            {getCurrentItems()}
+          </Container>
 
-                <Stack sx={{ margin: 1, padding: 1 }} justifyContent="space-between" direction="row" >
-                  <Stack direction="row" sx={{justifyContent: "flex-end"}}>
-                    <Button startIcon={<ExpandMoreIcon/>}>최신순</Button>
-                    <Button startIcon={<ExpandMoreIcon/>}>인기순</Button>
-                  </Stack>
-                  <Button variant="contained" onClick={() => { navigate(`/community/write`);}}>글 작성하기</Button>               
-                </Stack>
-              
-                <hr/>
-
-                {/* 글 목록 */}
-                <Stack sx={{ margin: 1, padding: 1 }} gap={1}>
-                  {getCurrentItems()}
-                </Stack>
-
-                {/* 페이지네이션 */}
-                <Stack sx={{ mx: 'auto' }}>
-                  <Pagination
-                      count={Math.ceil(10 / itemsPerPage)} // 전체 페이지 수
-                      color="primary"
-                      page={currentPage}
-                      onChange={(event, value) => setCurrentPage(value)}
-                    />
-                </Stack>
-
-            </Container>
-        </div>
+          {/* 페이지네이션 */}
+          <Stack sx={{
+              mx: 'auto',
+              justifyContent: 'center',
+              alignItems: 'center',
+              position: 'static', 
+              bottom: 0, // 화면 하단에 고정
+              backgroundColor: 'white',
+              padding: 2, // 원하는 패딩값 지정
+              zIndex: 1, // 다른 요소 위에 표시하기 위해 zIndex 사용
+            }}>
+            <Pagination
+                count={Math.ceil(10 / itemsPerPage)} // 전체 페이지 수
+                color="primary"
+                page={currentPage}
+                onChange={(event, value) => setCurrentPage(value)}
+              />
+          </Stack>
+        </Stack>
+      </Container>
     )
 }
 

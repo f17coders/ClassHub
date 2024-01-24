@@ -3,6 +3,7 @@ import { ListItemButton, ListItem, Stack, Chip, Tooltip, IconButton, Typography 
 import ChatIcon from '@mui/icons-material/Chat';
 import LoginIcon from '@mui/icons-material/Login';
 import LockIcon from '@mui/icons-material/Lock';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
 import StudyRoomEnterCodeModal from './StudyRoomEnterCodeModal';
 
 export default function StudyRoomRecruitList({ study }){
@@ -15,19 +16,24 @@ export default function StudyRoomRecruitList({ study }){
       SetStudyEnter(false);
     };
 
+    const [status, setStatus] = useState(false) //방 공개여부
+
     return(
         <ListItemButton>
             <ListItem>
               <Stack>
-                <Stack direction="row" spacing={1} sx={{ width: '600px', display: 'flex', justifyContent: 'space-between', alignItems: 'space-around' }}>
+                <Stack direction="row" spacing={1} sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'space-around' }}>
                   <h5 style={{ fontWeight: "bold" }}>{study.title}</h5>
                   <Stack direction="row" spacing={1}>
-                    <Chip label={study.state} color="error" size='small' />
-                    {study.isPublic && (
+                    {study.isPublic == false && (
                       <Tooltip title="참여코드 인증 필요">
-                        <LockIcon />
+                          <LockIcon/>
                       </Tooltip>
                     )}
+                    {
+                      study.state == '모집중'? <Chip label={study.state} color="success" size='small' /> : <Chip label={study.state} color="error" size='small' />
+                    }
+
                     <Typography>{`${study.nowCount}/${study.totalCount}`}</Typography>
                   </Stack>
                 </Stack>
@@ -51,7 +57,8 @@ export default function StudyRoomRecruitList({ study }){
                     </Tooltip>
                     
                     <Tooltip title="참여신청">
-                      <IconButton edge="end" aria-label="참여신청" onClick={studyEnterOpen}>
+                      <IconButton edge="end" aria-label="참여신청" 
+                        onClick={ study.isPublic? null : studyEnterOpen}>
                         <LoginIcon />
                       </IconButton>
                     </Tooltip>

@@ -6,6 +6,7 @@ import CommunityDetail from './pages/Community/CommunityDetail'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import CommunityWrite from './pages/Community/CommunityWrite'
+import CommunityModify from './pages/Community/CommunityModify'
 import StudyRoom from './pages/StudyRoom/StudyRoom'
 import StudyRoomRecruit from './pages/StudyRoom/StudyRoomRecruit'
 import StudyRoomParticipating from './pages/StudyRoom/StudyRoomParticipating'
@@ -39,6 +40,7 @@ function App() {
           <Route path='/community' element={<Community/>} />
           <Route path="/community/detail" element={<CommunityDetail/>}/>
           <Route path="/community/write" element={<CommunityWrite/>}/>
+          <Route path="/community/modify" element={<CommunityModify/>}/>
           <Route path="/studyroom" element={<StudyRoom/>}>
             {/* /studyroom/recruit가 기본으로 열리도록 설정 */}
             <Route index element={<StudyRoomRecruit />} />

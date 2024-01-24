@@ -48,7 +48,7 @@ export default function CommunityWrite(){
                           id="tags-outlined"
                           options={top100Films}
                           getOptionLabel={(option) => option.title}
-                          defaultValue={[top100Films[1]]}
+                          // defaultValue={[top100Films[1]]}
                           filterSelectedOptions
                           renderInput={(params) => (
                             <TextField

@@ -70,14 +70,14 @@ function LectureCard(props) {
 							<Button size="small" sx={{ backgroundColor:'RGB(83, 96, 245)', color:'white', borderRadius: '20px', marginRight: '0.5em'}}>#VSCode</Button>
 						</div>
 						<div style={{marginLeft:'50%'}}>
-							<IconButton size='small' onClick={toggleLike} sx={{color:'white'}}>
-								{
-									like ? (<FavoriteIcon/>) : (<FavoriteBorderIcon/>)
-								}
-							</IconButton>
-							<IconButton size='small' sx={{color:'white'}}>
-								<BalanceIcon/>
-							</IconButton>
+								<IconButton size='small' onClick={toggleLike} sx={{color:'white'}}>
+									{
+										like ? (<FavoriteIcon/>) : (<FavoriteBorderIcon/>)
+									}
+								</IconButton>
+								<IconButton size='small' sx={{color:'white'}}>
+									<BalanceIcon/>
+								</IconButton>
 						</div>
 					</div>
 				) : null
