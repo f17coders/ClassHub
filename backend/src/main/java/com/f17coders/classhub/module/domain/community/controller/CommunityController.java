@@ -23,6 +23,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/communities")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class CommunityController {
     private final CommunityService communityService;
     private final CommunityLikeService communityLikeService;

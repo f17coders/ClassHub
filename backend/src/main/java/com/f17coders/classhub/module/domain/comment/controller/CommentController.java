@@ -18,6 +18,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/comments")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class CommentController {
     private final CommentService commentService;
 
