@@ -3,16 +3,16 @@ package com.f17coders.classhub.module.domain.study;
 import com.f17coders.classhub.module.domain.BaseEntity;
 import com.f17coders.classhub.module.domain.communityTag.CommunityTag;
 import com.f17coders.classhub.module.domain.lecture.Lecture;
+import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.studyMember.StudyMember;
 import com.f17coders.classhub.module.domain.studyTag.StudyTag;
+import com.f17coders.classhub.module.domain.tag.Tag;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Getter
 @Entity
@@ -32,33 +32,63 @@ public class Study extends BaseEntity {
     @Column(length = 1000)
     private String description;
 
-    private Byte is_public;
+    @Column(name="is_public", columnDefinition = "tinyint(1)")
+    private boolean isPublic;
 
-    private Integer enter_code;
+    private Integer enterCode;
 
-//    TODO : 단방향 연관 관계로 우선 설정 후 필요에 의해서 양방향으로 연관 관계 설정 + 연관 관계 편의 메서드의 위치는 로직에 따라 Many쪽에 있을 수도 있고 One쪽에 있을 수도 있으니 변경 가능
-//    // Study - StudyMember 연관 관계
-//    @OneToMany(mappedBy = "study", fetch = FetchType.LAZY)
-//    private List<StudyMember> studyMemberList = new ArrayList<>(); // 좋아요한 강의 목록
-//
-//    public void putStudyMember(StudyMember studyMember) {  // 연관 관계 편의 메서드
-//        studyMember.setStudy(this);
-//        this.getStudyMemberList().add(studyMember);
-//    }
+    // Study - StudyMember 연관 관계, Study에 참여 중인 Member list
+    @OneToMany(mappedBy = "study", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudyMember> studyMemberList = new ArrayList<>();
+
+    // study - tag 연관 관계, Study에 있는 tag list
+    @OneToMany(mappedBy = "study", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudyTag> studyTagList = new ArrayList<>();
 
     // Study - Lecture 연관 관계
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lecture_id")
     private Lecture lecture;
 
-    //    TODO : 단방향 연관 관계로 우선 설정 후 필요에 의해서 양방향으로 연관 관계 설정 + 연관 관계 편의 메서드의 위치는 로직에 따라 Many쪽에 있을 수도 있고 One쪽에 있을 수도 있으니 변경 가능
-//    // Study - StudyTag 연관 관계
-//    @OneToMany(mappedBy = "study", fetch = FetchType.LAZY)
-//    private List<StudyTag> studyTagList = new ArrayList<>(); // 좋아요한 강의 목록
+    // Study - 스터디장 관계
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "study_reader_id")
+    private Member studyReader;
+
+    // studyReader 만드는중
+//    public void putStudyReader(Member studyReader) {
+//        if(this.studyReader != null ) {
 //
-//    public void putStudyTag(StudyTag studyTag) {  // 연관 관계 편의 메서드
-//        studyTag.setStudy(this);
-//        this.getStudyTagList().add(studyTag);
+//        }
+//        this.member.g
 //    }
+
+
+    public static Study createStudy(String title, Integer capacity, String description, boolean isPublic,
+                                    Lecture lecture, Member studyReader) {
+        Study study = new Study();
+
+        study.setTitle(title);
+        study.setCapacity(capacity);
+        study.setDescription(description);
+        study.setPublic(isPublic);
+        study.setLecture(lecture);
+//        study.setStudyReader(studyReader);
+
+        if(!isPublic) {
+            study.setEnterCode(makeEnterCode());
+        }
+        return study;
+    }
+
+    // 랜덤 숫자 생성 함수
+    private static int makeEnterCode() {
+        // Random 객체 생성
+        Random random = new Random();
+
+        // 100000부터 999999까지의 범위에서 랜덤 숫자 생성
+        int randNum = random.nextInt(900000) + 100000;
+        return randNum;
+    }
 }
 

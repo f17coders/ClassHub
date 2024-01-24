@@ -1,4 +1,4 @@
-.yml
+*.yml
 
 # Created by https://www.toptal.com/developers/gitignore/api/redis,java,intellij,intellij+all,intellij+iml,react,macos,windows,pycharm+all,pycharm+iml,jetbrains+all,jetbrains+iml,jetbrains
 # Edit at https://www.toptal.com/developers/gitignore?templates=redis,java,intellij,intellij+all,intellij+iml,react,macos,windows,pycharm+all,pycharm+iml,jetbrains+all,jetbrains+iml,jetbrains

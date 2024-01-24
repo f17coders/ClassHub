@@ -29,4 +29,21 @@ public class StudyTag extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tag_id")
     private Tag tag;
+
+    public void putStudy(Study study) {
+        if(this.study != null ) {
+            this.study.getStudyTagList().remove(this);
+        }
+        this.study = study;
+        study.getStudyTagList().add(this);
+    }
+
+    public static StudyTag createStudyTag(Tag tag) {
+        StudyTag studyTag = new StudyTag();
+
+        studyTag.setTag(tag);
+
+        return studyTag;
+    }
+
 }
