@@ -1,14 +1,9 @@
 package com.f17coders.classhub.module.domain.study.dto.response;
 
 import com.f17coders.classhub.module.domain.lecture.Lecture;
-import com.f17coders.classhub.module.domain.study.Study;
-import com.f17coders.classhub.module.domain.studyTag.StudyTag;
 import com.f17coders.classhub.module.domain.tag.Tag;
-import com.f17coders.classhub.module.domain.tag.response.TagRes;
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 

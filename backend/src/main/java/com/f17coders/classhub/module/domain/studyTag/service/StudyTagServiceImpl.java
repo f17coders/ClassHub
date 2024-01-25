@@ -6,7 +6,6 @@ import com.f17coders.classhub.module.domain.study.repository.StudyRepository;
 import com.f17coders.classhub.module.domain.studyTag.StudyTag;
 import com.f17coders.classhub.module.domain.studyTag.repository.StudyTagRepository;
 import com.f17coders.classhub.module.domain.tag.Tag;
-import com.f17coders.classhub.module.domain.tag.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
