@@ -14,6 +14,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import SendIcon from '@mui/icons-material/Send';
 import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
+import CommunityReply from '../../components/Community/CommunityReply';
 
 export default function CommunityDetail(){
     const navigate = useNavigate();
@@ -107,26 +108,7 @@ export default function CommunityDetail(){
                     </div>
 
                     {/* 댓글 */}
-                    <div>
-                        <ChatIcon/> 댓글 2
-                    </div>
-
-                    {/* 댓글 입력창 */}
-                    <div style={{ marginTop: '20px'}}>
-                        <form noValidate autoComplete="off">
-                          <FormControl size="small" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-                            <OutlinedInput sx={{width: "100%", marginRight: '10px'}} placeholder="댓글을 입력하세요" />
-                            <Tooltip title="등록">
-                                <IconButton aria-label="등록">
-                                    <SendIcon/>
-                                </IconButton>
-                            </Tooltip>
-                          </FormControl>
-                        </form>
-                    </div>
-
-                    {/* 댓글 한 개 */}
-
+                    <CommunityReply/>
                 </Stack>
             </Container>
         </div>
