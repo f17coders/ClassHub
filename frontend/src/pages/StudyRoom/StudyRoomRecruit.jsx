@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { styled } from '@mui/material/styles';
-import {Pagination, TextField, Button, Stack, Box,List,ListItemButton,Grid,Typography,Divider, IconButton, Tooltip} from '@mui/material'
+import {Backdrop, Alert, Pagination, TextField, Button, Stack, Box,List,ListItemButton,Grid,Typography,Divider, IconButton, Tooltip} from '@mui/material'
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import SearchIcon from '@mui/icons-material/Search'
@@ -38,14 +38,38 @@ export default function StudyRoomRecruit(){
       setSelectedIndex(index);
     };
 
-    // 스터디 만들기 모달 오픈
+    // StudyRoomCreateModal이 열렸는지 여부를 관리하는 state
     const [studyCreate, SetStudyCreate] = useState(false);
+    // 모달이 열리면서 등록 성공 여부를 받아올 state
+    const [registerSuccess, setRegisterSuccess] = useState(false);
+
+    // StudyRoomCreateModal이 열릴 때 실행되는 콜백 함수
     const studyCreateOpen = () => {
       SetStudyCreate(true);
+      setRegisterSuccess(false); //모달 열릴때마다 초기화
     };
+
+    // 등록 성공 시 실행할 로직 또는 alert를 표시
+    const onRegisterSuccess = () => {
+      setRegisterSuccess(true);
+      studyCreateClose(); // 등록이 성공하면 모달 닫기
+      handleOpenSuccessAlert(); //성공 alert창 표시
+    };
+
+    // StudyRoomCreateModal이 닫힐 때 실행되는 콜백 함수
     const studyCreateClose = () => {
       SetStudyCreate(false);
     };
+
+    // 성공 alert창 용
+	  const [openSuccessAlert, setOpenSuccessAlert] = React.useState(false);
+    const handleCloseSuccessAlert = () => {
+      setOpenSuccessAlert(false);
+    };
+    const handleOpenSuccessAlert = () => {
+      setOpenSuccessAlert(true);
+    };
+
 
     // 현재 페이지를 나타내는 state
     const [currentPage, setCurrentPage] = useState(1);
@@ -125,7 +149,15 @@ export default function StudyRoomRecruit(){
             </Stack>
             
             {/* StudyRoomCreateModal 컴포넌트를 사용하여 모달을 렌더링 */}
-            <StudyRoomCreateModal studyCreate={studyCreate} studyCreateClose={studyCreateClose} />
+            <StudyRoomCreateModal studyCreate={studyCreate} studyCreateClose={studyCreateClose} onRegisterSuccess={onRegisterSuccess} />
+            {/* 등록 성공 알림 창 렌더링 */}
+            <Backdrop
+              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={openSuccessAlert}
+              onClick={handleCloseSuccessAlert}
+            >
+              <Alert severity="success">등록이 완료되었습니다!</Alert>
+            </Backdrop>
 
             {/* 스터디 모집 공고 리스트 */}
             <Demo>
