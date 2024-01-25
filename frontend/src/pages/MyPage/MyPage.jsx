@@ -4,6 +4,7 @@ import profileImg from './../../assets/Profile.png'
 import {useState} from 'react'
 import { Outlet, Link } from 'react-router-dom'
 
+// 마이페이지 전체 틀
 
 function MyPage() {
 	const linkStyle = {
@@ -22,10 +23,13 @@ function MyPage() {
 	return (
 		<Container>
 			<Grid container>
+				{/* 내 프로필 이미지, 이름, 목표직무가 들어가는 곳 */}
 				<Grid item xs={5} md={3} sx={{ display: 'flex', justifyContent: 'center', padding: '30px', flexDirection: 'column' }}>
 					<img style={{ width: '70%', borderRadius: '70%', margin:'auto' }} src={profileImg} alt="Profile Image" />
 					<p style={{ marginTop:'10px', marginBottom:'5px', textAlign: 'center', fontWeight: '800', fontSize: '1.7em' }}>망글곰님<br />마이페이지</p>
 					<p style={{ textAlign: 'center', fontWeight: '600', color: 'grey' }}>BackEnd</p>
+
+					{/* 마이페이지 메뉴 */}
 					<div style={{display:'flex', flexDirection:'column', alignItems:'center', marginTop:'30px'}}>
 						{
 							tabItem.map((item, idx) => (
@@ -34,6 +38,7 @@ function MyPage() {
 						}
 					</div>
 				</Grid>
+				{/* 마이페이지 내용이 들어가는 곳 */}
 				<Grid item xs={7} md={9} sx={{marginTop:'30px', padding:'20px'}}>
 					<Outlet/>
 				</Grid>

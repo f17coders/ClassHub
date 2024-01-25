@@ -21,27 +21,20 @@ const data = [
   hashtag: ['#PYTHON', '#VSCODE'], writer: '김싸피', regdate: '2024.01.23', likes: 0, comments: 2, bookmarks: 20 },
 ];
 
-// async function getData() {
-//   try {
-//     //응답 성공
-//     const response = await axios.get('http://i10a810.p.ssafy.io:4000/communities/v0?page=0&size=2&sort=createTime,desc');
-//     console.log(response);
-//   } catch (error) {
-//     //응답 실패
-//     console.error(error);
-//   }
-// }
-
 function Community() {
-  // useEffect(() => {
-  //   async function fetchdata() {
-  //     const { data } = await axios.get(
-  //       '/communities/v0',
-  //     );
-  //     console.log(data);
-  //   }
-  //   fetchdata();
-  // }, []);
+  // 전체 글
+  const [articles, setArticles] = useState([])
+
+  // 전체 글 조회(임시주소)
+	useEffect(() => {
+    axios.get('http://i10a810.p.ssafy.io:4000/communities/v0?page=0&size=2&sort=createTime,desc')
+    .then((response)=> {
+        console.log(response.data.result.communityList)
+        let copy = [...articles, ...response.data.result.communityList]
+        setArticles(copy)   // 조회한 글 저장
+    })
+    .catch((err) => console.log(err))
+  }, [])
 
     const navigate = useNavigate();
 
@@ -54,7 +47,7 @@ function Community() {
     const getCurrentItems = () => {
       const startIndex = (currentPage - 1) * itemsPerPage;
       const endIndex = startIndex + itemsPerPage;
-      return data.slice(startIndex, endIndex).map((post, index) => (
+      return articles.slice(startIndex, endIndex).map((post, index) => (
         <CommunityList
           key={index}
           post={post}

@@ -22,8 +22,8 @@ function LectureCompare() {
 	let dispatch = useDispatch()
 
 	return (
-		<Container sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', padding: '10px' }}>
-			<p>강의 비교</p>
+		<Container sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', padding:'10px'}}>
+			<p style={{fontSize:'1.2em', fontWeight:'600', marginBottom:'10px'}}>강의 비교</p>
 			<div style={{ width: '100%', height: '100px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 				<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 					{compareLectures.map((item, idx) => (

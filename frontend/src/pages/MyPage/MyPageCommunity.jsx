@@ -5,6 +5,8 @@ import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
 import {useState} from 'react'
 
+// 마이페이지 - 내 커뮤니티 창
+
 const data = [
   { title: 'Maven과 Gradle의 차이가 뭔가요?', description: 'Spring Boot 실행 시 Maven과 Gradle의 차이점이 뭔가요?', hashtag: ['#SPRING BOOT', '#SPRING'], writer: '정싸피', regdate: '2024.01.23', likes: 50, comments: 2, bookmarks: 20 },
   {

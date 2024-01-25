@@ -5,8 +5,9 @@ import Rating from '@mui/material/Rating'
 import { useSelector, useDispatch } from 'react-redux'
 import { deleteElement } from './../../store/store.js'
 
-// 강의 비교 Modal창
 
+
+// 강의 비교 Modal창
 const style = {
 	position: 'absolute',
 	top: '50%',
@@ -47,6 +48,8 @@ function LectureCompareModal(props) {
     )
 }
 
+
+// 각각 강의의 정보 띄우는 컴포넌트
 function LectureCompareModalElement(props) {
     return(
         <div style={{margin:'5px', border:'1px solid grey', width:'260px', padding:'10px', display:'flex', flexDirection:'column', alignItems:'center'}}>

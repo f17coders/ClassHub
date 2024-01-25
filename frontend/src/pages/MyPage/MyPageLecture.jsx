@@ -4,7 +4,10 @@ import {useState} from 'react'
 import LectureCard from './../../components/LectureCard'
 import lectureImg from './../../assets/Lecture/Lecture3.png'
 
+// 마이페이지 - 내가 수강하는 강의 보기 
+
 function MyPageLecture() {
+  // 계정연동 여부 관련 변수
   const [connected, setConnected] = useState(false)
   const changeConnect = () => {
     setConnected(!connected)
@@ -23,6 +26,7 @@ function MyPageLecture() {
         
       </Grid>
       {
+        // 만약 연동되어있지 않다면, 가려주자
         connected === false ? (
         <div style={{backgroundColor: 'rgba(128, 128, 128, 0.9)', position:'absolute', top:70, width:'100%', height:'100%'}}>
           <p style={{marginTop:'20%', textAlign:'center', color:'white', fontSize:'3em'}}>계정을 연동해주세요</p>

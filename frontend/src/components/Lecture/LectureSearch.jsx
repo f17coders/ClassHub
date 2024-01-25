@@ -16,12 +16,12 @@ import { useState } from 'react'
 
 // 강의 검색창 (+ 태그 선택까지)
 
-
 export default function LimitTags() {
 
-	// 태그 검색
+	// 태그 검색 -> 불러와야함
 	const Tags = ['프론트엔드', '백엔드', '게임개발','데이터', '다른', 'adfadfafd', '태그들','데이터', '다른', '추가', '태그들','데이터', '다른', '추가', '태그들','데이터', '다른', '추가', '태그들','데이터', '다른', '추가', '태그들','데이터', '다른', '추가', '태그들', '데이터', '다른', '추가', '태그들', '다른', '추가', '태그들', '다른', '추가', '태그들']
 
+	// 호버 버튼용변수들
 	const [selectedButtons, setSelectedButtons] = useState([])
 	const handleButtonClick = (value) => {
 		if (selectedButtons.includes(value)) {
@@ -30,12 +30,13 @@ export default function LimitTags() {
 			setSelectedButtons([...selectedButtons, value]);
 		}
 	}
+	// 추가 태그 보기 위한 변수들
 	const [add, setAdd] = useState(false)
 	const toggleAdd = function () {
 		setAdd(!add)
 	}
 
-	// 버튼
+	// (해시태그 이외의) 버튼들
 	const levels = ['입문', '초급', '중급이상', '모든 수준']
 	const sites = ['인프런', '유데미', '구름 에듀']
 
@@ -49,6 +50,7 @@ export default function LimitTags() {
 	return (
 		<div>
 			{
+				// 추가로 안봤을 때
 				add == false ? (
 					<Grid container>
 						{/* 태그로 검색 */}
@@ -159,11 +161,12 @@ export default function LimitTags() {
 			}
 
 
-
+			{/* 해시태그 제외 나머지 버튼들 */}
 			<Grid container style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 				<Grid item xs={9}>
 					<Grid container>
 						<Grid item>
+							{/* 난이도 */}
 							{
 								levels.map((item, idx) => {
 									return (
@@ -184,6 +187,7 @@ export default function LimitTags() {
 						</Grid>
 						<Divider orientation="vertical" variant="middle" flexItem />
 						<Grid item style={{ marginLeft: '40px' }}>
+							{/* 사이트 */}
 							{
 								sites.map((item, idx) => {
 									return (
@@ -204,16 +208,14 @@ export default function LimitTags() {
 						</Grid>
 					</Grid>
 				</Grid>
-
+				{/* 정렬 */}
 				<Grid item sx={{ marginRight: '20px' }}>
 					<FormControl sx={{ minWidth: '170px' }} fullWidth size='small'>
-						<InputLabel id="demo-simple-select-label">정렬하기</InputLabel>
 						<Select
-							labelId="demo-simple-select-label"
-							id="demo-simple-select"
-							value={sort}
-							label="sort"
+							defaultValue={'최신순'}
 							onChange={handleSort}
+							inputProps={{ 'aria-label': 'Without label' }}
+							sx={{color:'grey'}}
 						>
 							<MenuItem value='최신순'>최신순</MenuItem>
 							<MenuItem value='가격순'>가격순</MenuItem>

@@ -2,7 +2,7 @@ import img1 from './../../assets/Lecture/Lecture3.png'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import Container from '@mui/material/Container'
-import {useState} from 'react'
+import { useState } from 'react'
 import IconButton from '@mui/material/IconButton'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
@@ -10,62 +10,72 @@ import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider';
 import axios from 'axios'
 import { Button } from '@mui/material'
+import LectureDetailReviews from '../../components/Lecture/LectureDetailReviews'
 
-axios.defaults.withCredentials = true;
-
+// 강의의 상세 내용이 들어가는 페이지 입니다.
 
 const reviews = ['강의 집중이 너무 잘되고, 프로그램 관점이 아닌 시스템~', '좀 별로네요']
 
 function LectureDetail() {
+	// 강의 좋아요 누르기
 	const [like, setLike] = useState(false)
 	const toggleLike = () => setLike(!like)
+	
+	// 리뷰 요약 탭 제어
 	const [value, setValue] = useState(0)
-  const handleChange = (event, newValue) => {
-    setValue(newValue)
-  }
+	const handleChange = (event, newValue) => {
+		setValue(newValue)
+	}
+
+	// 상세 내용 탭 제어 
 	const [value2, setValue2] = useState(0)
 	const handleChange2 = (event, newValue) => {
-    setValue2(newValue)
-  }
+		setValue2(newValue)
+	}
+
+	// 상세내용 HTML 띄우는 용
 	const [htmlString, setHtmlString] = useState('')
 	const fetchHtmlString = () => {
-		axios.get('https://storage.googleapis.com/classhub/data/udemy/htmlFiles/1.html',{
+		axios.get('https://storage.googleapis.com/classhub/data/udemy/htmlFiles/1.html', {
 			headers: {
 				'Access-Control-Allow-Origin': 'http://localhost:5173'
-			}})
-		.then((res) => {
-			console.log(res)
-			setHtmlString(res.data)
-			console.log(htmlString)
+			}
 		})
-		.catch((err)=> {
-			console.log(err)
-		})
+			.then((res) => {
+				console.log(res)
+				setHtmlString(res.data)
+				console.log(htmlString)
+			})
+			.catch((err) => {
+				console.log(err)
+			})
 	}
 
 	return (
 		<div>
-			<Container style={{display:'flex', padding:'20px'}}>
-				<img src={img1} alt="강의 이미지" style={{width:'300px', height:'250px'}}/>
-				<div style={{padding:'30px', width:'50%'}}>
+			{/* 대강적인 내용 */}
+			<Container style={{ display: 'flex', padding: '20px' }}>
+				<img src={img1} alt="강의 이미지" style={{ width: '300px', height: '250px' }} />
+				<div style={{ padding: '30px', width: '50%' }}>
 					{/* 가져와지긴하는데 html형식으로만 나옴 */}
-					
 					<div dangerouslySetInnerHTML={{ __html: `<pre>${htmlString}</pre>` }}></div>
-					<p>카테고리<br/>강의명<br/>가격 할인률<br/>평점<br/>강사명<br/>해시태그<br/>바로가기 링크</p>
+					<p>카테고리<br />강의명<br />가격 할인률<br />평점<br />강사명<br />해시태그<br />바로가기 링크</p>
 					<Button onClick={fetchHtmlString}>더보기</Button>
-					
+
 				</div>
 				<div style={{ position: 'relative' }}>
-					<IconButton size='small' onClick={toggleLike} sx={{position: 'absolute', bottom: 20 }}>
+					{/* 좋아요버튼 */}
+					<IconButton size='small' onClick={toggleLike} sx={{ position: 'absolute', bottom: 20 }}>
 						{
-							like ? (<FavoriteIcon/>) : (<FavoriteBorderIcon/>)
+							like ? (<FavoriteIcon />) : (<FavoriteBorderIcon />)
 						}
 					</IconButton>
 				</div>
 			</Container>
-			<Divider sx={{bgcolor:'lightgrey'}} />
+			<Divider sx={{ bgcolor: 'lightgrey' }} />
 
-			<Container sx={{marginTop: '20px'}}>
+			{/* GPT강의요약 */}
+			<Container sx={{ marginTop: '20px' }}>
 				<p>🤖GPT로 리뷰를 한 줄로 요약했어요</p>
 				<Box sx={{ width: '100%' }}>
 					<Tabs
@@ -75,14 +85,15 @@ function LectureDetail() {
 						<Tab value={0} label="높은 평점 요약" />
 						<Tab value={1} label="낮은 평점 요약" />
 					</Tabs>
-					<div style={{marginTop:"20px"}}>
+					<div style={{ marginTop: "20px" }}>
 						{reviews[value]}
 					</div>
-    		</Box>
+				</Box>
 			</Container>
-			<Divider variant="middle" sx={{bgcolor:'lightgrey', marginTop:'40px'}}/>
+			<Divider variant="middle" sx={{ bgcolor: 'lightgrey', marginTop: '40px' }} />
+			{/* 강의 상세내용 */}
 			<Container>
-				<Box sx={{ width: '100%', marginTop:'10px' }}>
+				<Box sx={{ width: '100%', marginTop: '10px' }}>
 					<Tabs
 						value={value2}
 						onChange={handleChange2}
@@ -91,18 +102,21 @@ function LectureDetail() {
 						<Tab value={1} label="커리큘럼" />
 						<Tab value={2} label="리뷰" />
 					</Tabs>
-					<div style={{marginTop:"20px"}}>
+					<div style={{ marginTop: "20px" }}>
 						{
-							value2 == 0 ? (<Content1/>) : null
+							// 상세내용
+							value2 == 0 ? (<Content1 />) : null
 						}
 						{
-							value2 == 1 ? (<Content2/>) : null
+							// 커리큘럼
+							value2 == 1 ? (<Content2 />) : null
 						}
 						{
-							value2 == 2 ? (<Content3/>) : null
+							// 리뷰
+							value2 == 2 ? (<LectureDetailReviews />) : null
 						}
 					</div>
-    		</Box>
+				</Box>
 			</Container>
 		</div>
 	)
@@ -132,14 +146,6 @@ function Content2() {
 		<div>
 			<h3>커리큘럼</h3>
 			<p>커리큘럼 내용이 들어갑니다</p>
-		</div>
-	)
-}
-
-function Content3() {
-	return (
-		<div>
-			<p>리뷰들이 들어갑니다</p>
 		</div>
 	)
 }

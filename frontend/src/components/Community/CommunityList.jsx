@@ -16,10 +16,10 @@ export default function CommunityPostList({post}){
             {/* 글 목록 한개 */}
             <div onClick={() => { navigate(`/community/detail`); }}>
               <h5 style={{fontWeight: 'bold'}}>{post.title}</h5>
-              <p>{post.description}</p>
+              <p>{post.content}</p>
               {/* 해시태그 */}
               <Stack direction="row" spacing={1}>
-                  {post.hashtag.map((tag, tagIndex) => (
+                  {post.tagList.map((tag, tagIndex) => (
                   <Button key={tagIndex} label={tag} size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}} >
                       {tag}
                   </Button>
@@ -31,12 +31,17 @@ export default function CommunityPostList({post}){
                 <div style={{ display: 'flex' }}>
                   <div style={{marginRight: '1em'}}>
                     <Tooltip title="작성자">
-                      <PersonIcon/> {post.writer}
+                      <div>
+                        <PersonIcon/>
+                        {post.memberNickname}
+                      </div>
                     </Tooltip>
                   </div>
                   <div style={{marginRight: '1em'}}>
                     <Tooltip title="작성일자">
-                      <TodayIcon/> {post.regdate}
+                      <div>
+                        <TodayIcon/> {post.createdAt}
+                      </div>
                     </Tooltip>
                   </div>
                 </div>
@@ -45,17 +50,23 @@ export default function CommunityPostList({post}){
                   <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
                     <div style={{marginRight: '1em'}}>
                       <Tooltip title="좋아요">
-                        <FavoriteBorderIcon/> <span>{post.likes}</span>
+                        <div>
+                          <FavoriteBorderIcon/> <span>{post.likeCount}</span>
+                        </div>
                       </Tooltip>
                     </div>
                     <div style={{marginRight: '1em'}}>
                       <Tooltip sx={{marginRight: '1rem'}} title="댓글">
-                        <ChatBubbleOutlineIcon/> <span>{post.comments}</span>
+                        <div>
+                          <ChatBubbleOutlineIcon/> <span>{post.commentCount}</span>
+                        </div>
                       </Tooltip>
                     </div>
                     <div style={{marginRight: '1em'}}>
                       <Tooltip sx={{marginRight: '1rem'}} title="스크랩">
-                        <BookmarkBorderIcon/> <span>{post.bookmarks}</span>
+                        <div>
+                          <BookmarkBorderIcon/> <span>{post.scrapCount}</span>
+                        </div>
                       </Tooltip>
                     </div>
                     
