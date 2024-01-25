@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "vite"
+    "start": "vite --host i10a810.p.ssafy.io --port 5173"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",
