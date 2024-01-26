@@ -8,46 +8,54 @@ import CommunityList from '../../components/Community/CommunityList';
 import CommunitySearch from '../../components/Community/CommunitySearch';
 import CommunityListAlignment from '../../components/Community/CommunityListAlignment';
 import axios from 'axios';
-
-const data = [
-  { title: 'Maven과 Gradle의 차이가 뭔가요?', description: 'Spring Boot 실행 시 Maven과 Gradle의 차이점이 뭔가요?', hashtag: ['#SPRING BOOT', '#SPRING'], writer: '정싸피', regdate: '2024.01.23', likes: 50, comments: 2, bookmarks: 20 },
-  { title: '비주얼 스튜디오에 파이썬이 안들어갑니다.', description: '다른 강의에서 배웠던 건 자동으로 파이썬이 들어가있었는데 이번에 새로 파일을 만들 때마다 파이썬이 안들어갑니다. 고수님들 도와주세요',
-  hashtag: ['#PYTHON', '#VSCODE'], writer: '김싸피', regdate: '2024.01.23', likes: 20, comments: 2, bookmarks: 20 },
-  { title: '비주얼 스튜디오에 파이썬이 안들어갑니다.', description: '다른 강의에서 배웠던 건 자동으로 파이썬이 들어가있었는데 이번에 새로 파일을 만들 때마다 파이썬이 안들어갑니다. 고수님들 도와주세요',
-  hashtag: ['#PYTHON', '#VSCODE'], writer: '김싸피', regdate: '2024.01.23', likes: 40, comments: 2, bookmarks: 20 },
-  { title: '비주얼 스튜디오에 파이썬이 안들어갑니다.', description: '다른 강의에서 배웠던 건 자동으로 파이썬이 들어가있었는데 이번에 새로 파일을 만들 때마다 파이썬이 안들어갑니다. 고수님들 도와주세요',
-  hashtag: ['#PYTHON', '#VSCODE'], writer: '김싸피', regdate: '2024.01.23', likes: 1, comments: 2, bookmarks: 20 },
-  { title: '비주얼 스튜디오에 파이썬이 안들어갑니다.', description: '다른 강의에서 배웠던 건 자동으로 파이썬이 들어가있었는데 이번에 새로 파일을 만들 때마다 파이썬이 안들어갑니다. 고수님들 도와주세요',
-  hashtag: ['#PYTHON', '#VSCODE'], writer: '김싸피', regdate: '2024.01.23', likes: 0, comments: 2, bookmarks: 20 },
-];
+import { useSelector, useDispatch } from "react-redux"
 
 function Community() {
+  // let community = useSelector((state) => state.community)
+	// let dispatch = useDispatch()
+
+
   // 전체 글
   const [articles, setArticles] = useState([])
+  // 현재 페이지를 나타내는 state
+  const [currentPage, setCurrentPage] = useState(1);
+  // 페이지 당 항목 수
+  const itemsPerPage = 4;
+  //전체 페이지 수
+  const [totalPages, setTotalPages] = useState(1);
+  // 정렬 기준
+  const [alignList, setAlignList] = useState('createTime,desc');
 
-  // 전체 글 조회(임시주소)
+  // 전체 글 조회
 	useEffect(() => {
-    axios.get('http://i10a810.p.ssafy.io:4000/communities/v0?page=0&size=2&sort=createTime,desc')
+    axios.get(`http://i10a810.p.ssafy.io:4000/communities/v0?page=${currentPage-1}&size=${itemsPerPage}&sort=${alignList}`)
     .then((response)=> {
         console.log(response.data.result.communityList)
-        let copy = [...articles, ...response.data.result.communityList]
-        setArticles(copy)   // 조회한 글 저장
+        // let copy = [...articles, ...response.data.result.communityList]
+        setArticles(response.data.result.communityList)   // 조회한 글 저장
+
+        console.log("현재페이지: "+currentPage)
+        setCurrentPage(currentPage)
+
+        let totalPages = response.data.result.totalPages;
+        console.log("전체페이지 수: "+totalPages)
+        setTotalPages(totalPages)
+
+        console.log("페이지 당 항목 수: " + itemsPerPage)
+        
+        setAlignList(alignList)
+        console.log(alignList)
     })
     .catch((err) => console.log(err))
-  }, [])
+  }, [currentPage, alignList]) //현재 페이지가 변경되거나 정렬조건 바꼈을 때 실행
 
     const navigate = useNavigate();
 
-    // 현재 페이지를 나타내는 state
-    const [currentPage, setCurrentPage] = useState(1);
-    // 페이지 당 항목 수
-    const itemsPerPage = 5;
+    
 
     // 현재 페이지에 해당하는 항목만 가져오는 함수
     const getCurrentItems = () => {
-      const startIndex = (currentPage - 1) * itemsPerPage;
-      const endIndex = startIndex + itemsPerPage;
-      return articles.slice(startIndex, endIndex).map((post, index) => (
+      return articles.map((post, index) => (
         <CommunityList
           key={index}
           post={post}
@@ -61,16 +69,19 @@ function Community() {
           {/* 검색바 */}
           <CommunitySearch/>
 
-          <Stack sx={{ mx: 3, px: 1 }} justifyContent="space-between" direction="row" >
+          <Stack sx={{ mx: 3, px: 1, justifyContent: "space-between" }}  direction="row" >
             {/* 정렬 기능 컴포넌트 */}
-            <CommunityListAlignment sx={{width:"90%"}}/>
+            <Stack direction="row" sx={{width:"90%"}}>
+              <Button onClick={() => {console.log("최신순 clicked"); setAlignList("createTime,desc")}} startIcon={<ExpandMoreIcon/>}>최신순</Button>
+              <Button onClick={() => {console.log("인기순 clicked");setAlignList("likeCount,desc")}} startIcon={<ExpandMoreIcon/>}>인기순</Button>
+            </Stack>
+            {/* <CommunityListAlignment sx={{width:"90%"}}/> */}
             {/* 글 작성하기 버튼 */}
             <Tooltip title="게시물 작성하기">
               <IconButton style={{ margin: 5 }} onClick={() => { navigate(`/community/write`);}}>
                 <CreateIcon/>
               </IconButton>
             </Tooltip>
-            {/* <Button sx={{width:"10%"}} variant="contained" onClick={() => { navigate(`/community/write`);}}>글 작성하기</Button>                */}
           </Stack>
 
           {/* <hr/> */}
@@ -91,7 +102,7 @@ function Community() {
               zIndex: 1, // 다른 요소 위에 표시하기 위해 zIndex 사용
             }}>
             <Pagination
-                count={Math.ceil(10 / itemsPerPage)} // 전체 페이지 수
+                count={totalPages} // 전체 페이지 수
                 color="primary"
                 page={currentPage}
                 onChange={(event, value) => setCurrentPage(value)}

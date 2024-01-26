@@ -11,17 +11,18 @@ import React from 'react';
 export default function CommunityPostList({post}){
     const navigate = useNavigate();
 
+
     return(
         <>
             {/* 글 목록 한개 */}
-            <div onClick={() => { navigate(`/community/detail`); }}>
+            <div onClick={() => { navigate(`/community/detail/${post.communityId}`); }}>
               <h5 style={{fontWeight: 'bold'}}>{post.title}</h5>
               <p>{post.content}</p>
               {/* 해시태그 */}
               <Stack direction="row" spacing={1}>
                   {post.tagList.map((tag, tagIndex) => (
                   <Button key={tagIndex} label={tag} size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}} >
-                      {tag}
+                      #{tag}
                   </Button>
                   ))}
               </Stack>

@@ -1,6 +1,29 @@
 import {Stack, Container, Button, Typography, TextField, Autocomplete } from '@mui/material';
+import { useState } from 'react';
+import axios from 'axios';
 
 export default function CommunityWrite(){
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [tagList, setTagList] = useState([]);
+
+
+    // 글 등록
+    const CommunityPost = () => {
+    const concatenatedTag = tagList.map(tag => tag.title).join(',');
+
+      axios.post(`http://i10a810.p.ssafy.io:4000/communities/v1`,{
+        "title": title,
+        "content": content,
+        "tagList": concatenatedTag
+      })
+      .then(()=> {
+        console.log('게시물 등록완료')
+        console.log(concatenatedTag)
+
+      })
+      .catch((err) => console.log(err))
+    };
 
     return(
         <div>
@@ -18,6 +41,8 @@ export default function CommunityWrite(){
                        </div>
                         <TextField
                           required
+                          value={title}
+                          onChange={(e) => setTitle(e.target.value)}
                           id="outlined-required"
                           label="제목을 입력하세요"
                           sx = {{width: '100%'}}
@@ -34,6 +59,8 @@ export default function CommunityWrite(){
                           required
                           multiline
                           rows={4}
+                          value={content}
+                          onChange={(e) => setContent(e.target.value)}
                           id="outlined-required"
                           label="내용을 입력하세요"
                           sx = {{width: '100%'}}
@@ -48,7 +75,8 @@ export default function CommunityWrite(){
                           id="tags-outlined"
                           options={top100Films}
                           getOptionLabel={(option) => option.title}
-                          // defaultValue={[top100Films[1]]}
+                          value={tagList.title}
+                          onChange={(event, newValue) => setTagList(newValue)}
                           filterSelectedOptions
                           renderInput={(params) => (
                             <TextField
@@ -58,8 +86,7 @@ export default function CommunityWrite(){
                           )}
                         />
                     </div>
-
-                    <Button style={{marginTop: '20px'}} variant="contained">등록</Button>
+                    <Button onClick={CommunityPost} style={{marginTop: '20px'}} variant="contained">등록</Button>
                 </Stack>
             </Container>
         </div>
@@ -68,34 +95,7 @@ export default function CommunityWrite(){
 
 
 const top100Films = [
-    { title: 'Spring Boot' },
-    { title: 'Vue.js' },
-    { title: 'React.js' },
-    { title: 'VSCode' },
-    { title: 'IntelliJ' },
-    { title: 'Git' },
-    { title: 'Spring Boot' },
-    { title: 'Vue.js' },
-    { title: 'React.js' },
-    { title: 'VSCode' },
-    { title: 'IntelliJ' },
-    { title: 'Git' },
-    { title: 'Spring Boot' },
-    { title: 'Vue.js' },
-    { title: 'React.js' },
-    { title: 'VSCode' },
-    { title: 'IntelliJ' },
-    { title: 'Git' },
-    { title: 'Spring Boot' },
-    { title: 'Vue.js' },
-    { title: 'React.js' },
-    { title: 'VSCode' },
-    { title: 'IntelliJ' },
-    { title: 'Git' },
-    { title: 'Spring Boot' },
-    { title: 'Vue.js' },
-    { title: 'React.js' },
-    { title: 'VSCode' },
-    { title: 'IntelliJ' },
-    { title: 'Git' },
-  ];
+  { title: 'Spring Boot', id: 1 },
+  { title: 'Vue.js', id: 2 },
+  { title: 'React.js', id: 3 },
+];

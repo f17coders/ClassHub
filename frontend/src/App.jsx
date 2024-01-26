@@ -38,7 +38,7 @@ function App() {
           <Route path='/lecture' element={<Lecture/>}/>
           <Route path='/lecture/detail' element={<LectureDetail/>}/>
           <Route path='/community' element={<Community/>} />
-          <Route path="/community/detail" element={<CommunityDetail/>}/>
+          <Route path="/community/detail/:communityId" element={<CommunityDetail/>}/>
           <Route path="/community/write" element={<CommunityWrite/>}/>
           <Route path="/community/modify" element={<CommunityModify/>}/>
           <Route path="/studyroom" element={<StudyRoom/>}>

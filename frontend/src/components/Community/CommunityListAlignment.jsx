@@ -8,8 +8,8 @@ export default function CommunityListAlignment(){
 
     return(
         <Stack direction="row" sx={{justifyContent: "flex-end"}}>
-            <Button startIcon={<ExpandMoreIcon/>}>최신순</Button>
-            <Button startIcon={<ExpandMoreIcon/>}>인기순</Button>
+            <Button onClick={() =>{setAlignList('createTime,desc')}} startIcon={<ExpandMoreIcon/>}>최신순</Button>
+            <Button onClick={() => {setAlignList('likeCount,desc')}} startIcon={<ExpandMoreIcon/>}>인기순</Button>
         </Stack>
     )
 }
