@@ -654,4 +654,11 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
+# data
+data/**/list/*
+data/**/page/*
+data/**/html_files/*
+data/**/nohup*
+data/**/*.csv
+
 # End of https://www.toptal.com/developers/gitignore/api/gradle
