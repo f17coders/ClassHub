@@ -17,7 +17,6 @@ export default function StudyRoomRecruitList({ study }){
     };
 
     const [status, setStatus] = useState(false) //방 공개여부
-
     return(
         <ListItemButton>
             <ListItem>
@@ -31,10 +30,10 @@ export default function StudyRoomRecruitList({ study }){
                       </Tooltip>
                     )}
                     {
-                      study.state == '모집중'? <Chip label={study.state} color="success" size='small' /> : <Chip label={study.state} color="error" size='small' />
+                      study.capacity > study.currentMembers ? <Chip label='모집중' color="success" size='small' /> : <Chip label='모집완료' color="error" size='small' />
                     }
 
-                    <Typography>{`${study.nowCount}/${study.totalCount}`}</Typography>
+                    <Typography>{`${study.currentMembers}/${study.capacity}`}</Typography>
                   </Stack>
                 </Stack>
                     
@@ -44,9 +43,10 @@ export default function StudyRoomRecruitList({ study }){
                     
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'space-around' }}>
                   <Stack direction="row" spacing={1} my={1}>
-                    {study.hashtag.map((tag, tagIndex) => (
+                    { study.tagList ? (study.tagList.map((tag, tagIndex) => (
                       <Chip key={tagIndex} label={tag} color="primary" size='small' />
-                    ))}
+                    ))) : null
+                  }
                   </Stack>
                     
                   <Stack direction="row">

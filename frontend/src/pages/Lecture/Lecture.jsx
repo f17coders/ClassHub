@@ -6,23 +6,22 @@ import IconButton from '@mui/material/IconButton'
 import SearchIcon from '@mui/icons-material/Search'
 import Pagination from '@mui/material/Pagination'
 import Stack from '@mui/material/Stack'
-import { useEffect, useState } from 'react'
 import LectureSearch from './../../components/Lecture/LectureSearch'
 import LectureCard from './../../components/LectureCard'
 import img1 from './../../assets/Lecture/Lecture2.png'
-import axios from 'axios'
+import CompareButton from './../../components/CompareButton'
 
 // 강의 전체 조회 창
 function Lecture() {
 	return (
 		<Container>
 			<Grid container sx={{ margin: 'auto', minHeight: '500px', marginTop: '20px' }}>
-				{/* 오른쪽 사이드 바 */}
+				{/* 왼쪽 사이드 바 */}
 				<Grid item xs={5} sm={4} md={2} sx={{ borderRight: "1px solid lightgrey", paddingRight:'0px'}}>
-					<Box sx={{marginTop:'30px'}}>
+					{/* <Box sx={{marginTop:'30px'}}> */}
 						{/* 강의 비교 */}
-						<LectureCompare/>
-					</Box>
+						{/* <LectureCompare/>
+					</Box> */}
 					<Box>
 						{/* 강의 카테고리 체크 */}
 						<LectureCheck />
@@ -96,6 +95,7 @@ function Lecture() {
 						</Stack>
 					</Box>
 				</Grid>
+				<CompareButton />
 			</Grid>
 			
 		</Container>

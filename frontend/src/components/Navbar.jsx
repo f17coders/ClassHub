@@ -18,11 +18,14 @@ const pages = [
 	{ name: 'Community', url: 'community' },
 	{ name: 'Study Room', url: 'studyroom' }
 ]
+// navbar
 
 function NavbarComponent() {
-	const [anchorElNav, setAnchorElNav] = useState(null)
+	// 로그인 체크용
 	let isLogin = useSelector((state) => state.isLogin)
 
+	// 화면 줄었을 때 리스트용
+	const [anchorElNav, setAnchorElNav] = useState(null)
 	const handleOpenNavMenu = (event) => {
 		setAnchorElNav(event.currentTarget);
 	};
@@ -30,9 +33,32 @@ function NavbarComponent() {
 		setAnchorElNav(null);
 	};
 
+	// 모달용
 	const [open, setOpen] = useState(false)
 	const ModalOpen = () => setOpen(true)
 	const ModalClose = () => setOpen(false)
+
+	// 메뉴 + 호버링용 변수들
+	const [activeIndex, setActiveIndex] = useState(null);
+  const handleMouseEnter = (index) => {
+		setActiveIndex(index);
+	}
+	const handleMouseLeave = () => {
+		setActiveIndex(null);
+	}
+	const navItem = [
+		{link:'/lecture', name:'강의'},
+		{link:'/community', name:'커뮤니티'},
+		{link:'/studyroom', name:'스터디룸'},
+	]
+	const linkStyle = {
+		textDecoration: 'none',
+		color:'black',
+		fontSize: '1.3em',
+		fontWeight:'700',
+		transition: 'font-size 0.3s ease'
+	}
+
 
 	return (
 		<Appbar
@@ -47,9 +73,23 @@ function NavbarComponent() {
 				<Grid item xs={9} sx={{ display: 'flex', alignItems: 'center' }}>
 					<Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
 						<Link to='/'>
-							<img src={MainLogo} alt='HOME' style={{ width: '230px', marginRight: '20px' }}></img>
+							<img src={MainLogo} alt='HOME' style={{ width: '220px', marginRight: '20px' }}></img>
 						</Link>
-						<Link to='/lecture'>
+							{
+								navItem.map((item, idx) => (
+									<div key={idx} style={{margin: '0px 15px'}}>
+										<Link to={item.link} 
+											style={idx == activeIndex ? {...linkStyle, color:'RGB(83, 96, 245)'} : linkStyle } 
+											onMouseEnter={() => handleMouseEnter(idx)} 
+											onMouseLeave={handleMouseLeave}
+											onClick={() => handleClick(idx)}
+										>
+											{item.name}
+										</Link>
+									</div>
+								))
+							}
+						{/* <Link to='/lecture'>
 							<Button>Lecture</Button>
 						</Link>
 						<Link to='/community'>
@@ -57,7 +97,7 @@ function NavbarComponent() {
 						</Link>
 						<Link to='/studyroom'>
 							<Button>Study Room</Button>
-						</Link>
+						</Link> */}
 					</Box>
 
 					<Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center' }}>

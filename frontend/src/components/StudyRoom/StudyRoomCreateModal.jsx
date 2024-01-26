@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, Backdrop,  ToggleButton, Button, Modal, Stack, TextField, Autocomplete, Box, Typography, Container, createFilterOptions} from '@mui/material';
+import axios from 'axios';
 
 const filter = createFilterOptions();
 
@@ -33,6 +34,23 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
     const [studyDescriptionError, setStudyDescriptionError] = useState(false);
     const [studyTagError, setStudyTagError] = useState(false);
 
+    // 생성 함수
+    const createStudyRoom = function() {
+      axios.post('http://i10a810.p.ssafy.io:4000/studies/v1',{
+        'title' : studyName,
+        'capacity' : studyPersonnel,
+        'lectureId': 1,
+        'isPublic' : true,
+        'description' : studyDescription,
+        'tagList' : ['...studyTag']
+      })
+      .then((res) => {
+        console.log(res)
+        onRegisterSuccess()
+      })
+      .catch((err) => console.log(err))
+    }
+    
     // 스터디명 유효성 검사
     const handleStudyNameCheck = (event) => {
       const input = event.target.value;
@@ -393,7 +411,8 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
                       } 
                       // 모든 유효성 검사에서 에러가 없을 경우
                       else {
-                        onRegisterSuccess(); // 부모 컴포넌트에 등록 성공을 알림
+                        createStudyRoom()
+                        // onRegisterSuccess(); // 부모 컴포넌트에 등록 성공을 알림
                       }
                     }}>등록</Button>
 

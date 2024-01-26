@@ -28,8 +28,8 @@ function MyPageLecture() {
       {
         // 만약 연동되어있지 않다면, 가려주자
         connected === false ? (
-        <div style={{backgroundColor: 'rgba(128, 128, 128, 0.9)', position:'absolute', top:70, width:'100%', height:'100%'}}>
-          <p style={{marginTop:'20%', textAlign:'center', color:'white', fontSize:'3em'}}>계정을 연동해주세요</p>
+        <div style={{backgroundColor: 'rgba(128, 128, 128, 0.95)', position:'absolute', top:70, width:'100%', height:'100%'}}>
+          <p style={{marginTop:'20%', textAlign:'center', color:'white', fontSize:'2em'}}>계정을 연동해주세요</p>
         </div>
         ) : null
       } 

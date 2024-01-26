@@ -3,7 +3,6 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Rating from '@mui/material/Rating'
 import { useSelector, useDispatch } from 'react-redux'
-import { deleteElement } from './../../store/store.js'
 
 
 
@@ -27,7 +26,6 @@ const style = {
 function LectureCompareModal(props) {
     // 비교하고싶은 강의 store에서 불러오기
 	let compareLectures = useSelector((state) => state.compareLectures)
-	let dispatch = useDispatch()
 
     return(
         <Modal

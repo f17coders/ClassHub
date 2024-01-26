@@ -66,7 +66,7 @@ function LectureCard(props) {
 	let compareLectures = useSelector((state) => state.compareLectures)
 	function addCart() {
 		if (compareLectures.length < 3) {
-			dispatch(addElement({ title: props.title }))
+			dispatch(addElement(props))
 			handleClick()
 		} else {
 			handleOpenAlert()
