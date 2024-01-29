@@ -16,7 +16,7 @@ public record LectureReadRes(
 	int priceSale,
 	int totalTime,
 	String curriculum,
-	String categoryId,
+	int categoryId,
 	String categoryName,
 	List<String> tagList,
 	int lectureLikeCount,

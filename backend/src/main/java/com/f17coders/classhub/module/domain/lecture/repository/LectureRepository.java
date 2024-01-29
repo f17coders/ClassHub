@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface LectureRepository extends JpaRepository<Lecture, Integer> {
 
+	Lecture findByLectureId(int lectureId);
 }
