@@ -5,7 +5,9 @@ import lombok.Builder;
 import java.util.List;
 
 @Builder
-public record StudyListRes (
-    List<StudyListDetailRes> studyList,
+public record StudyListRes(
+    List<StudyListDetailTagRes> studyList,
     int totalPages
-){}
+) {
+
+}

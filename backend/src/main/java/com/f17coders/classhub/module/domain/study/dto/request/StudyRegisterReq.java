@@ -11,11 +11,13 @@ public record StudyRegisterReq(
     String title,
 
     @Max(value = 10)
-    Integer capacity,
-    Integer lectureId,
+    int capacity,
+    int lectureId,
 
     boolean isPublic,
 
     String description,
     List<Integer> tagList
-) {}
+) {
+
+}

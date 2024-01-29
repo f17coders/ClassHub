@@ -15,6 +15,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyTag extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "study_tag_id")
@@ -31,7 +32,7 @@ public class StudyTag extends BaseEntity {
     private Tag tag;
 
     public void putStudy(Study study) {
-        if(this.study != null ) {
+        if (this.study != null) {
             this.study.getStudyTagList().remove(this);
         }
         this.study = study;

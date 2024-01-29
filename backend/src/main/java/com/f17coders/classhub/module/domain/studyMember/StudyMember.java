@@ -17,6 +17,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudyMember extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "study_member_id")
@@ -34,7 +35,7 @@ public class StudyMember extends BaseEntity {
 
     public void putStudy(Study study) {
 
-        if(this.study != null) {
+        if (this.study != null) {
             this.study.getStudyMemberList().remove(this);
         }
         this.study = study;
@@ -55,7 +56,6 @@ public class StudyMember extends BaseEntity {
 
         return studyMember;
     }
-
 
 
 }

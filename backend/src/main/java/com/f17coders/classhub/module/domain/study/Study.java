@@ -19,6 +19,7 @@ import java.util.Random;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Study extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "study_id")
@@ -32,7 +33,7 @@ public class Study extends BaseEntity {
     @Column(length = 1000)
     private String description;
 
-    @Column(name="is_public", columnDefinition = "tinyint(1)")
+    @Column(name = "is_public", columnDefinition = "tinyint(1)")
     private boolean isPublic;
 
     private Integer enterCode;
@@ -42,7 +43,7 @@ public class Study extends BaseEntity {
     private List<StudyMember> studyMemberList = new ArrayList<>();
 
     // study - tag 연관 관계, Study에 있는 tag list
-    @OneToMany(mappedBy = "study", fetch=FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "study", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StudyTag> studyTagList = new ArrayList<>();
 
     // Study - Lecture 연관 관계
@@ -64,8 +65,9 @@ public class Study extends BaseEntity {
 //    }
 
 
-    public static Study createStudy(String title, Integer capacity, String description, boolean isPublic,
-                                    Lecture lecture, Member studyReader) {
+    public static Study createStudy(String title, Integer capacity, String description,
+        boolean isPublic,
+        Lecture lecture, Member studyReader) {
         Study study = new Study();
 
         study.setTitle(title);
@@ -73,9 +75,9 @@ public class Study extends BaseEntity {
         study.setDescription(description);
         study.setPublic(isPublic);
         study.setLecture(lecture);
-//        study.setStudyReader(studyReader);
+        study.setStudyReader(studyReader);
 
-        if(!isPublic) {
+        if (!isPublic) {
             study.setEnterCode(makeEnterCode());
         }
         return study;
