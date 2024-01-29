@@ -5,7 +5,7 @@ import storageSession from 'redux-persist/lib/storage/session';
 // 로그인 된 상태인지 확인용
 let isLogin = createSlice({
   name: 'isLogin',
-  initialState: false
+  initialState: true
 });
 
 // 강의 비교용
@@ -21,7 +21,20 @@ let compareLectures = createSlice({
     }
   }
 });
-export let { addElement, deleteElement } = compareLectures.actions;
+export let { addElement, deleteElement } = compareLectures.actions
+
+
+// 선택된 강의 카테고리 저장
+let selectedCategory = createSlice({
+  name:'selectedCategory',
+  initialState: '전체',
+  reducers: {
+    changeCategory(state, action) {
+      return action.payload
+    }
+  }
+})
+export let {changeCategory} = selectedCategory.actions
 
 // storage 저장용
 const persistConfig = {
@@ -33,7 +46,8 @@ const persistedReducer = persistReducer(
   persistConfig,
   combineReducers({
     isLogin: isLogin.reducer,
-    compareLectures: compareLectures.reducer
+    compareLectures: compareLectures.reducer,
+    selectedCategory: selectedCategory.reducer
   })
 );
 

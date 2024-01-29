@@ -94,7 +94,6 @@ export default function StudyRoomRecruit() {
     //   : selectedIndex === 2
     //     ? data.filter(study => {study.capaity <= study.currentMembers})
     //     : data;
-    console.log(filteredData)
     return filteredData.map((study, index) => (
       <StudyRoomRecruitList
         key={index}

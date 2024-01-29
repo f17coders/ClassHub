@@ -36,7 +36,7 @@ function App() {
         <Routes>
           <Route path='/' Component={Home} />
           <Route path='/lecture' element={<Lecture/>}/>
-          <Route path='/lecture/detail' element={<LectureDetail/>}/>
+          <Route path='/lecture/detail/:lectureId' element={<LectureDetail/>}/>
           <Route path='/community' element={<Community/>} />
           <Route path="/community/detail/:communityId" element={<CommunityDetail/>}/>
           <Route path="/community/write" element={<CommunityWrite/>}/>

@@ -18,7 +18,7 @@ function MyPageCommunity() {
   }
   return (
     <div>
-      <h1>내 커뮤니티</h1>
+      <h2>내 커뮤니티</h2>
       <Box sx={{ width: '100%', marginTop: '10px' }}>
         <Tabs
           value={value}

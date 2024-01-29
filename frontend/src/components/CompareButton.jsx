@@ -1,12 +1,14 @@
 import Fab from '@mui/material/Fab'
 import AddIcon from '@mui/icons-material/Add'
-import { Tooltip, Button, Dialog, Slide } from '@mui/material'
-import { useSelector } from 'react-redux'
-import {useState, forwardRef} from 'react'
+import { Tooltip, Button, Dialog, Slide, Container } from '@mui/material'
+import { useSelector, useDispatch } from 'react-redux'
+import { useState, forwardRef } from 'react'
 import DialogContent from '@mui/material/DialogContent'
 import LectureCompare from './Lecture/LectureCompare'
 
-// 모달(dialog) 트랜지션
+
+
+// 모달(dialog) 트랜지션용
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="left" ref={ref} {...props} />;
 });
@@ -15,7 +17,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 // 강의 비교 버튼(화면 하단에 있는거)
 function CompareButton() {
   // 비교하고싶은 강의 store에서 불러오기
-	let compareLectures = useSelector((state) => state.compareLectures)
+  let compareLectures = useSelector((state) => state.compareLectures)
 
   // 창 열고 닫고 제어용
   const [open, setOpen] = useState(false)
@@ -27,7 +29,7 @@ function CompareButton() {
   }
 
   return (
-    <div style={{position:'fixed', bottom:'30px', right:'30px'}}>
+    <div style={{ position: 'fixed', bottom: '30px', right: '30px' }}>
       <Tooltip title='강의 비교하기'>
         <Fab color="primary" onClick={handleClickOpen}>
           {
@@ -41,9 +43,11 @@ function CompareButton() {
         TransitionComponent={Transition}
         keepMounted
         onClose={handleClose}
+        fullWidth
+        maxWidth='md'
       >
-        <DialogContent sx={{width:'400px', height:'500px'}}>
-          <LectureCompare/>
+        <DialogContent>
+          <LectureCompare />
         </DialogContent>
       </Dialog>
     </div>

@@ -8,7 +8,7 @@ import Tooltip, { tooltipClasses } from '@mui/material/Tooltip'
 import { styled } from '@mui/material/styles'
 import { useSelector, useDispatch } from 'react-redux'
 import { addElement } from './../store/store.js'
-
+import { useNavigate } from 'react-router-dom'
 
 // tooltip에 스타일 주기
 const LightTooltip = styled(({ className, ...props }) => (
@@ -23,6 +23,7 @@ const LightTooltip = styled(({ className, ...props }) => (
 }))
 
 function LectureCard(props) {
+	const navigate = useNavigate()
 	// 비교 강의 추가할때 쓰는 변수
 	let dispatch = useDispatch()
 
@@ -39,6 +40,11 @@ function LectureCard(props) {
 	const [like, setLike] = useState(false)
 	const toggleLike = () => setLike(!like)
 
+
+	// 디테일 페이지로 가기
+	const goDetail = function() {
+		navigate(`/lecture/detail/1`)
+	}
 
 	// snackbar용 병수
 	const [open, setOpen] = useState(false)
@@ -71,9 +77,6 @@ function LectureCard(props) {
 		} else {
 			handleOpenAlert()
 		}
-			
-
-		
 	}
 
 	return (
@@ -116,11 +119,11 @@ function LectureCard(props) {
 							flexDirection: 'column'
 						}}
 					>
-						<p style={{ fontWeight: '700', fontSize: '1.3em' }}>{props.title}</p>
-						<div style={{ height: '70%' }}>
+						<p style={{ fontWeight: '700', fontSize: '1.3em' }} onClick={goDetail}>{props.title}</p>
+						<div style={{ height: '70%' }} onClick={goDetail}>
 							<p>수강기간<br />한줄 설명<br />강의 총 시간<br />난이도</p>
 						</div>
-						<div style={{ height: '20%' }}>
+						<div style={{ height: '20%' }} onClick={goDetail}>
 							<Button size="small" sx={{ backgroundColor: 'RGB(83, 96, 245)', color: 'white', borderRadius: '20px', marginRight: '0.5em' }}>#VSCode</Button>
 						</div>
 						<div style={{ marginLeft: '75%', display: 'flex', flexDirection: 'column' }}>

@@ -33,7 +33,7 @@ function NavbarComponent() {
 		setAnchorElNav(null);
 	};
 
-	// 모달용
+	// 로그인 모달용
 	const [open, setOpen] = useState(false)
 	const ModalOpen = () => setOpen(true)
 	const ModalClose = () => setOpen(false)

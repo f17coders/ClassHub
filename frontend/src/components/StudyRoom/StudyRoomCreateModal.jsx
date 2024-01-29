@@ -36,13 +36,16 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
 
     // 생성 함수
     const createStudyRoom = function() {
-      axios.post('http://i10a810.p.ssafy.io:4000/studies/v1',{
-        'title' : studyName,
-        'capacity' : studyPersonnel,
-        'lectureId': 1,
-        'isPublic' : true,
-        'description' : studyDescription,
-        'tagList' : ['...studyTag']
+      axios.post('http://i10a810.p.ssafy.io:4000/studies/v1',
+      {
+        "title": studyName,
+        "capacity": studyPersonnel,
+        "lectureId": 0,
+        "isPublic": true,
+        "description": "string",
+        "tagList": [
+          0
+        ]
       })
       .then((res) => {
         console.log(res)

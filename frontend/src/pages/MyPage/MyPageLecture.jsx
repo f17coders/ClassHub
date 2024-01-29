@@ -15,7 +15,7 @@ function MyPageLecture() {
   return(
     <div style={{position:'relative'}}>
       <div style={{display:'flex', justifyContent:'space-between'}}>
-        <h1>내가 수강중인 강의</h1>
+        <h2>내가 수강중인 강의</h2>
         <Button color="secondary" style={{marginRight:'50px', fontSize:'1.3em'}} onClick={() => changeConnect()} >연동하기</Button>
       </div>
       <Grid container spacing={2} padding={3}>

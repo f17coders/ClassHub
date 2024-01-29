@@ -6,7 +6,7 @@ function MyPageLike() {
   return(
     <div>
       <div style={{display:'flex', justifyContent:'space-between'}}>
-        <h1>내가 찜한 강의</h1>
+        <h2>내가 찜한 강의</h2>
       </div>
       <Grid container spacing={2} padding={3}>
         <Grid item xs={3}><LectureCard img={lectureImg} title='찜한 강의'/></Grid>
