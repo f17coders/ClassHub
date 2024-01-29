@@ -18,15 +18,20 @@ const style = {
     p: 4,
   };
 
-export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, onRegisterSuccess }){
+export default function StudyRoomModifyModal({ studyModify, studyModifyClose, onModifySuccess }){
     const [value, setValue] = React.useState(null);
     const [selected1, setSelected1] = React.useState(true); //공개 버튼 선택
     const [selected2, setSelected2] = React.useState(false); //비공개 버튼 선택
     
+    // const [studyId, setStudyId] = useState(0); //스터디 ID
+
     const [studyName, setStudyName] = useState(''); //스터디명
     const [studyPersonnel, setStudyPersonnel] = useState(10); //스터디 정원
     const [studyDescription, setStudyDescription] = useState(''); //스터디 설명
     const [studyTag, setStudyTag] = useState([]); //스터디 태그
+
+    // const [studyPublic, setStudyPublic] = useState(true); //스터디 공개여부
+    // const [studyMember, setStudyMember] = useState([]); //스터디 참여멤버
 
     // 유효성 검사 변수
     const [studyNameError, setStudyNameError] = useState(false);
@@ -34,15 +39,17 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
     const [studyDescriptionError, setStudyDescriptionError] = useState(false);
     const [studyTagError, setStudyTagError] = useState(false);
 
-    // 생성 함수
-    const createStudyRoom = function() {
-      axios.post('http://i10a810.p.ssafy.io:4000/studies/v1',{
+    // 스터디룸 수정 함수
+    const modifyStudyRoom = function() {
+      axios.patch('http://i10a810.p.ssafy.io:4000/studies/v1',{
+        'studyId': studyId,
         'title' : studyName,
         'capacity' : studyPersonnel,
         'lectureId': 1,
-        'isPublic' : true,
+        'isPublic' : studyPublic,
         'description' : studyDescription,
-        'tagList' : ['...studyTag']
+        'tagList' : ['...studyTag'],
+        'studyMember' : ['...studyMember']
       })
       .then((res) => {
         console.log(res)
@@ -142,7 +149,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
               <Container sx={style} style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', marginTop: '40px'}}>
                 <Stack style={{width: "80%"}}>
                     <Typography variant="h5" fontWeight="bold" >
-                        스터디 만들기
+                        스터디 수정
                     </Typography>
 
                     {/* 제목 */}

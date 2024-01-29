@@ -20,13 +20,13 @@ import axios from 'axios'
 //   { title: 'JAVA 중급자 스터디 구해요', hashtag: ['#JAVA', '#중급'], state: '모집중', isPublic: false, description: '안녕하세요 JAVA 초급자 스터디원 모집합니다. 시간이나 장소는 같이 협의해보도록 해요~ 문의사항 있으신 분은 1:1 대화 주시면 답장 드릴게요!', totalCount: 10, nowCount: 2 },
 // ];
 
-function generate(element) {
-  return [0, 1, 2, 3, 4, 5, 6, 7].map((value) =>
-    React.cloneElement(element, {
-      key: value,
-    }),
-  );
-}
+// function generate(element) {
+//   return [0, 1, 2, 3, 4, 5, 6, 7].map((value) =>
+//     React.cloneElement(element, {
+//       key: value,
+//     }),
+//   );
+// }
 
 const Demo = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,

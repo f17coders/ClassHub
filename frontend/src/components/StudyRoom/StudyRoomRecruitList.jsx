@@ -20,8 +20,8 @@ export default function StudyRoomRecruitList({ study }){
     return(
         <ListItemButton>
             <ListItem>
-              <Stack>
-                <Stack direction="row" spacing={1} sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'space-around' }}>
+              <Stack sx={{width: '100%'}}>
+                <Stack direction="row" spacing={1} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'space-around' }}>
                   <h5 style={{ fontWeight: "bold" }}>{study.title}</h5>
                   <Stack direction="row" spacing={1}>
                     {study.isPublic == false && (
