@@ -13,21 +13,16 @@ import lombok.Setter;
 @Setter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Review extends BaseEntity {
+public class SiteReview extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "review_id")
-    private int reviewId;
+    @Column(name = "site_review_id")
+    private int siteReviewId;
 
     private Float score;
 
     @Column(length = 1000)
     private String content;
-
-    // Review - Member 연관 관계 매핑
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
 
     // Review - Lecture 연관 관계 매핑
     @ManyToOne(fetch = FetchType.LAZY)

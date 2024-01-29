@@ -55,8 +55,7 @@ public class Lecture extends BaseEntity {
     private Float site_review_rating;
     private Integer site_review_count;
     private Integer site_student_count;
-    private Integer site_like_count;
-    private Long review_sum;
+    private Float review_sum;
     private Integer review_count;
 
     private Integer total_time;
