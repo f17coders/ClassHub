@@ -5,6 +5,7 @@ import com.f17coders.classhub.module.domain.lecture.Lecture;
 import com.f17coders.classhub.module.domain.lecture.dto.response.LectureReadRes;
 import com.f17coders.classhub.module.domain.lecture.repository.LectureRepository;
 import com.f17coders.classhub.module.domain.tag.Tag;
+import jakarta.validation.constraints.Null;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +32,10 @@ public class LectureServiceImpl implements LectureService {
 //			log.error("e 발생 review");
 			reviewRating = 0;
 		}
-		int combinedRatingCount = getCombinedRatingCount(lecture.getSiteReviewCount(),
-			lecture.getReviewCount());
-		float combinedRating = (lecture.getSiteReviewRating() + reviewRating) / 2;
+
+//		int combinedRatingCount = getCombinedRatingCount(lecture.getSiteReviewCount(),
+//			lecture.getReviewCount());
+//		float combinedRating = (lecture.getSiteReviewRating() + reviewRating) / 2;
 
 		// tag repo 구현 이전까지는 더미를 반환
 		List<String> tempTagList = new ArrayList<>();
@@ -56,8 +58,8 @@ public class LectureServiceImpl implements LectureService {
 			.categoryName(lecture.getCategory().getCategoryName())
 			.tagList(tempTagList) // 가라에요 수정 필요!
 			.lectureLikeCount(Integer.valueOf(30)) // 가라에요 수정 필요!
-			.combinedRating(combinedRating)
-			.combinedRatingCount(combinedRatingCount)
+			.combinedRating(Float.valueOf(3.8f))
+			.combinedRatingCount(Integer.valueOf(38))
 			.reviewRating(reviewRating)
 			.siteReviewRating(lecture.getSiteReviewRating())
 			.siteReviewCount(lecture.getSiteReviewCount())
@@ -71,7 +73,15 @@ public class LectureServiceImpl implements LectureService {
 	}
 
 	// 둘 다 null 허용이니 검사를 해줘야할까요?
-	public int getCombinedRatingCount(int siteReviewCount, int reviewCount) {
-		return siteReviewCount + reviewCount;
-	}
+//	public int getCombinedRatingCount(Integer siteReviewCount, Integer reviewCount) {
+//		if (siteReviewCount== null && siteReviewCount== null) {
+//			siteReviewCount = Integer.valueOf(0);
+//		} else if (reviewCount) {
+//
+//		}
+//		reviewCount == null) {
+//			return
+//		}
+//		return siteReviewCount + reviewCount;
+//	}
 }
