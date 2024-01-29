@@ -9,25 +9,6 @@ import StudyRoomCreateModal from '../../components/StudyRoom/StudyRoomCreateModa
 import StudyRoomRecruitList from '../../components/StudyRoom/StudyRoomRecruitList';
 import axios from 'axios'
 
-
-// 스터디 공고 데이터
-// const data = [
-//   { title: 'JAVA 초급자 스터디 구해요', hashtag: ['#JAVA', '#초급'], state: '모집중', isPublic: false, description: '안녕하세요 JAVA 초급자 스터디원 모집합니다. 시간이나 장소는 같이 협의해보도록 해요~ 문의사항 있으신 분은 1:1 대화 주시면 답장 드릴게요!', totalCount: 10, nowCount: 2 },
-//   { title: '스프링 마스터 하실분', hashtag: ['#SPRING', '#중급'], state: '모집중', isPublic: true, description: '안녕하세요 JAVA 초급자 스터디원 모집합니다. 시간이나 장소는 같이 협의해보도록 해요~ 문의사항 있으신 분은 1:1 대화 주시면 답장 드릴게요!', totalCount: 10, nowCount: 5 },
-//   { title: 'React 초급자 모여라', hashtag: ['#REACT', '#초급'], state: '모집완료', isPublic: true, description: '안녕하세요 JAVA 초급자 스터디원 모집합니다. 시간이나 장소는 같이 협의해보도록 해요~ 문의사항 있으신 분은 1:1 대화 주시면 답장 드릴게요!', totalCount: 3, nowCount: 2 },
-//   { title: 'CS 뿌시기', hashtag: ['#CS', '#초급'], state: '모집완료', isPublic: false, description: '안녕하세요 JAVA 초급자 스터디원 모집합니다. 시간이나 장소는 같이 협의해보도록 해요~ 문의사항 있으신 분은 1:1 대화 주시면 답장 드릴게요!', totalCount: 5, nowCount: 2 },
-//   { title: '기술면접 준비방', hashtag: ['#면접', '#초급'], state: '모집중', isPublic: true, description: '안녕하세요 JAVA 초급자 스터디원 모집합니다. 시간이나 장소는 같이 협의해보도록 해요~ 문의사항 있으신 분은 1:1 대화 주시면 답장 드릴게요!', totalCount: 5, nowCount: 2 },
-//   { title: 'JAVA 중급자 스터디 구해요', hashtag: ['#JAVA', '#중급'], state: '모집중', isPublic: false, description: '안녕하세요 JAVA 초급자 스터디원 모집합니다. 시간이나 장소는 같이 협의해보도록 해요~ 문의사항 있으신 분은 1:1 대화 주시면 답장 드릴게요!', totalCount: 10, nowCount: 2 },
-// ];
-
-// function generate(element) {
-//   return [0, 1, 2, 3, 4, 5, 6, 7].map((value) =>
-//     React.cloneElement(element, {
-//       key: value,
-//     }),
-//   );
-// }
-
 const Demo = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
 }));
@@ -182,7 +163,7 @@ export default function StudyRoomRecruit() {
             open={openSuccessAlert}
             onClick={handleCloseSuccessAlert}
           >
-            <Alert severity="success">등록이 완료되었습니다!</Alert>
+            <Alert severity="success" onClose={() => {}}>등록이 완료되었습니다!</Alert>
           </Backdrop>
 
           {/* 스터디 모집 공고 리스트 */}

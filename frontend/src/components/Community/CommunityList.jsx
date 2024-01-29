@@ -7,17 +7,23 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import TodayIcon from '@mui/icons-material/Today';
 import React from 'react';
+import DOMPurify from "dompurify";
 
 export default function CommunityPostList({post}){
     const navigate = useNavigate();
 
+    // HTML 태그를 제거하여 텍스트로 변환하는 함수
+    const removeHTMLTags = (html) => {
+      const purifiedText = DOMPurify.sanitize(html, { ALLOWED_TAGS: [] });
+      return purifiedText;
+    };
 
     return(
         <>
             {/* 글 목록 한개 */}
             <div onClick={() => { navigate(`/community/detail/${post.communityId}`); }}>
               <h5 style={{fontWeight: 'bold'}}>{post.title}</h5>
-              <p>{post.content}</p>
+              <p>{removeHTMLTags(post.content)}</p>
               {/* 해시태그 */}
               <Stack direction="row" spacing={1}>
                   {post.tagList.map((tag, tagIndex) => (

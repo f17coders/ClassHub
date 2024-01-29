@@ -40,7 +40,7 @@ function App() {
           <Route path='/community' element={<Community/>} />
           <Route path="/community/detail/:communityId" element={<CommunityDetail/>}/>
           <Route path="/community/write" element={<CommunityWrite/>}/>
-          <Route path="/community/modify" element={<CommunityModify/>}/>
+          <Route path="/community/modify/:communityId" element={<CommunityModify/>}/>
           <Route path="/studyroom" element={<StudyRoom/>}>
             {/* /studyroom/recruit가 기본으로 열리도록 설정 */}
             <Route index element={<StudyRoomRecruit />} />

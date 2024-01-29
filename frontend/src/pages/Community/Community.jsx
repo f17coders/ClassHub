@@ -11,9 +11,6 @@ import axios from 'axios';
 import { useSelector, useDispatch } from "react-redux"
 
 function Community() {
-  // let community = useSelector((state) => state.community)
-	// let dispatch = useDispatch()
-
 
   // 전체 글
   const [articles, setArticles] = useState([])
