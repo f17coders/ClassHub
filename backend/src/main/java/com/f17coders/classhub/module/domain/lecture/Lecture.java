@@ -20,65 +20,66 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Lecture extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "lecture_id")
-    private int lectureId;
 
-    @Column(length = 40)
-    private String site_lecture_id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "lecture_id")
+	private int lectureId;
 
-    @Column(length = 300)
-    private String name;
+	@Column(length = 40)
+	private String siteLectureId;
 
-    @Column(columnDefinition="TEXT")
-    private String image;
+	@Column(length = 300)
+	private String name;
 
-    @Enumerated(EnumType.STRING)
-    private Level level;
+	@Column(columnDefinition = "TEXT")
+	private String image;
 
-    @Enumerated(EnumType.STRING)
-    private SiteType siteType;
+	@Enumerated(EnumType.STRING)
+	private Level level;
 
-    private Integer price_original;
-    private Integer price_sale;
+	@Enumerated(EnumType.STRING)
+	private SiteType siteType;
 
-    @Column(columnDefinition="TEXT")
-    private String summary;
+	private Integer priceOriginal;
+	private Integer priceSale;
 
-    @Column(columnDefinition="TEXT")
-    private String description_summary;
+	@Column(columnDefinition = "TEXT")
+	private String summary;
 
-    @Column(length = 150)
-    private String description_detail;
+	@Column(columnDefinition = "TEXT")
+	private String descriptionSummary;
 
-    private Float site_review_rating;
-    private Integer site_review_count;
-    private Integer site_student_count;
-    private Float review_sum;
-    private Integer review_count;
+	@Column(length = 150)
+	private String descriptionDetail;
 
-    private Integer total_time;
+	private Float siteReviewRating;
+	private Integer siteReviewCount;
+	private Integer siteStudentCount;
+	private Float reviewSum;
+	private Integer reviewCount;
 
-    @Column(columnDefinition="JSON")
-    private String curriculum;
+	private Integer totalTime;
 
-    @Column(length = 40)
-    private String instructor;
+	@Column(columnDefinition = "JSON")
+	private String curriculum;
 
-    @Column(columnDefinition="TEXT")
-    private String site_link;
+	@Column(length = 300)
+	private String instructor;
 
-    @Column(length = 300)
-    private String gpt_review_good;
+	@Column(columnDefinition = "TEXT")
+	private String siteLink;
 
-    @Column(length = 300)
-    private String gpt_review_bad;
+	@Column(length = 300)
+	private String gptReviewGood;
 
-    // Lecture - Category 연관 관계
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
+	@Column(length = 300)
+	private String gptReviewBad;
+
+	// Lecture - Category 연관 관계
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "category_id")
+	private Category category;
 
 //    TODO : 단방향 연관 관계로 우선 설정 후 필요에 의해서 양방향으로 연관 관계 설정 + 연관 관계 편의 메서드의 위치는 로직에 따라 Many쪽에 있을 수도 있고 One쪽에 있을 수도 있으니 변경 가능//    // Lecture - review 연관 관계
 //    @OneToMany(mappedBy = "lecture", fetch = FetchType.LAZY)
