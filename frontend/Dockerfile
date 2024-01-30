@@ -7,8 +7,9 @@ COPY . ./
 RUN npm run build
 
 ## 2. React를 Nginx로 Serve
+FROM nginx:latest
 RUN rm -rf /etc/nginx/conf.d
-COPY nginx /etc/nginx
+COPY ./nginx.conf /etc/nginx/conf.d
 # Expose port 80
 EXPOSE 80
 # Volumn 추가
