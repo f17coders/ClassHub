@@ -1,4 +1,4 @@
-import {Tooltip, Autocomplete, Typography, Stack, Container, Button, Backdrop, Alert} from '@mui/material';
+import {Tooltip, Autocomplete, Typography, Stack, Container, Button, Backdrop, Alert, Dialog, DialogActions, DialogTitle} from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import PersonIcon from '@mui/icons-material/Person';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -13,12 +13,6 @@ import {Routes, Route, Link, useNavigate, Outlet, useParams} from 'react-router-
 import CommunityReply from '../../components/Community/CommunityReply';
 import axios from 'axios';
 import DOMPurify from "dompurify";
-import CommunityModify from './CommunityModify';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 
 
 export default function CommunityDetail(){
@@ -181,7 +175,7 @@ export default function CommunityDetail(){
                                           <Button onClick={handleClose}>아니오</Button>
                                           <Button onClick={() => {handleClose(); handleOpenAlert();}} autoFocus>예</Button>
                                         </DialogActions>
-                                      </Dialog>
+                                    </Dialog>
 
                                     {/* 삭제 Alert창 */}
                                     <Backdrop

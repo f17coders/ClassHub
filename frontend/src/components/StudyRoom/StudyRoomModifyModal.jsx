@@ -53,7 +53,7 @@ export default function StudyRoomModifyModal({ studyModify, studyModifyClose, on
       })
       .then((res) => {
         console.log(res)
-        onRegisterSuccess()
+        onModifySuccess()
       })
       .catch((err) => console.log(err))
     }
@@ -123,7 +123,7 @@ export default function StudyRoomModifyModal({ studyModify, studyModifyClose, on
     
     useEffect(() => {
       // 모달이 열릴 때 값 초기화
-      if (studyCreate) {
+      if (studyModify) {
         setValue(null);
         setSelected1(true);
         setSelected2(false);
@@ -136,13 +136,13 @@ export default function StudyRoomModifyModal({ studyModify, studyModifyClose, on
         setStudyDescriptionError(false);
         setStudyTagError(false);
       }
-    }, [studyCreate]);
+    }, [studyModify]);
 
     return(
         <div>
             <Modal
-                open={studyCreate}
-                onClose={studyCreateClose}
+                open={studyModify}
+                onClose={studyModifyClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
@@ -402,7 +402,7 @@ export default function StudyRoomModifyModal({ studyModify, studyModifyClose, on
                         />
                     </div>
 
-                    {/* 등록버튼 */}
+                    {/* 수정버튼 */}
                     <Button style={{marginTop: '20px'}} variant="contained" onClick={() => { 
 
                       // 모든 유효성 검사 결과 확인
@@ -419,7 +419,7 @@ export default function StudyRoomModifyModal({ studyModify, studyModifyClose, on
                         createStudyRoom()
                         // onRegisterSuccess(); // 부모 컴포넌트에 등록 성공을 알림
                       }
-                    }}>등록</Button>
+                    }}>수정</Button>
 
                     
                 </Stack>

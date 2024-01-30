@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { ListItemButton, ListItem, Stack, Chip, Tooltip, IconButton, Typography } from '@mui/material';
+import { ListItemButton, ListItem, Stack, Chip, Tooltip, Button, IconButton, Typography, Dialog, DialogActions, DialogTitle } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
 import LoginIcon from '@mui/icons-material/Login';
 import LockIcon from '@mui/icons-material/Lock';
@@ -15,6 +15,16 @@ export default function StudyRoomRecruitList({study}){
     const studyEnterClose = () => {
       SetStudyEnter(false);
     };
+
+    //참여확인 dialog 오픈
+    const [openDialog, setOpenDialog] = useState(false); //dialog 열림 여부
+    const handleOpenDialog = () => {
+      setOpenDialog(true);
+    }
+    const handleCloseDialog = () => {
+      setOpenDialog(false);
+    }
+
 
     const [status, setStatus] = useState(false) //방 공개여부
     return(
@@ -58,10 +68,23 @@ export default function StudyRoomRecruitList({study}){
                     
                     <Tooltip title="참여신청">
                       <IconButton edge="end" aria-label="참여신청" 
-                        onClick={ study.isPublic? null : studyEnterOpen}>
+                        onClick={ 
+                          study.isPublic? handleOpenDialog : studyEnterOpen
+                          }>
                         <LoginIcon />
                       </IconButton>
                     </Tooltip>
+                    
+                    {/* 참여확인 Dialog창 */}
+                    <Dialog open={openDialog}>
+                      <DialogTitle>{"참여하시겠습니까?"}</DialogTitle>
+                      <DialogActions>
+                        <Button onClick={handleCloseDialog}>아니오</Button>
+                        <Button onClick={() => {handleCloseDialog(); 
+                        // 여기에 해당하는 스터디룸으로 입장하는 코드 추가
+                        }} autoFocus>예</Button>
+                      </DialogActions>
+                    </Dialog>
                     
                     {/* StudyRoomEnterCodeModal 컴포넌트를 사용하여 모달을 렌더링 */}
                     <StudyRoomEnterCodeModal studyEnter={studyEnter} studyEnterClose={studyEnterClose} />

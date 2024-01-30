@@ -8,9 +8,43 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import SendIcon from '@mui/icons-material/Send';
 import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
-
+import axios from 'axios';
 
 export default function CommunityReply({detailData}){
+  const navigate = useNavigate();
+  const [content, setContent] = useState('');
+
+  const createReply = () => {
+    // 댓글 생성 함수
+      axios.post(`http://i10a810.p.ssafy.io:4000/comments/v1/${detailData.communityId}`,
+      {
+        "communityId": detailData.communityId,
+        "content": content,
+      })
+      .then((res) => {
+        console.log(res)
+        navigate(`/community/detail/${detailData.communityId}`)
+        window.location.reload(); //페이지 새로고침
+      })
+      .catch((err) => console.log(err))
+    
+  }
+
+  const deleteReply = () => {
+    // 댓글 삭제 함수
+      axios.delete(`http://i10a810.p.ssafy.io:4000/comments/v1/${commentId}`,
+      {
+        "commentId": commentId,
+      })
+      .then((res) => {
+        console.log(res)
+        navigate(`/community/detail/${detailData.communityId}`)
+        window.location.reload(); //페이지 새로고침
+      })
+      .catch((err) => console.log(err))
+    
+  }
+    
 
     return(
         <div>
@@ -23,9 +57,14 @@ export default function CommunityReply({detailData}){
             <div style={{ marginTop: '20px'}}>
                 <form noValidate autoComplete="off">
                   <FormControl size="small" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-                    <OutlinedInput sx={{width: "100%", marginRight: '10px'}} placeholder="댓글을 입력하세요" />
+                    <OutlinedInput 
+                    sx={{width: "100%", marginRight: '10px'}} 
+                    placeholder="댓글을 입력하세요" 
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    />
                     <Tooltip title="등록">
-                        <IconButton aria-label="등록">
+                        <IconButton onClick={() => {createReply(); }}>
                             <SendIcon/>
                         </IconButton>
                     </Tooltip>
@@ -59,7 +98,7 @@ export default function CommunityReply({detailData}){
                     }
                   />
                     <Tooltip title="삭제">
-                        <IconButton aria-label="삭제">
+                        <IconButton onClick={() => {deleteReply(); }}>
                             <DeleteIcon/>
                         </IconButton>
                     </Tooltip>

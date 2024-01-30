@@ -20,7 +20,7 @@ export default function StudyRoomRecruit() {
 	useEffect(() => {
     axios.get('http://i10a810.p.ssafy.io:4000/studies/v1')
     .then((response)=> {
-        // console.log(response.data.result.studyList)
+        console.log(response.data.result.studyList)
         setData(response.data.result.studyList)
         // console.log(data)
     })
@@ -108,7 +108,7 @@ export default function StudyRoomRecruit() {
   return (
     <Box sx={{ display: 'flex' }}>
       {/* 사이드바 메뉴 */}
-      <List sx={{ maxWidth: 128, width: "100%" }} component="nav">
+      <List sx={{ width: "30%" }} component="nav">
         <Typography sx={{ display: 'flex', justifyContent: 'center', py: 1 }} variant='h6' fontWeight='bold'>
           스터디 모집
         </Typography>

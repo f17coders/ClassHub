@@ -1,15 +1,10 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useParams } from "react-router-dom";
 import { styled } from '@mui/material/styles';
-import {TextField, Button, Stack, Box,List,ListItemButton,Grid,Typography,Divider, Paper} from '@mui/material'
-
-
-function generate(element) {
-    return [0, 1, 2, 3, 4, 5,6 ,7].map((value) =>
-      React.cloneElement(element, {
-        key: value,
-      }),
-    );
-  }
+import { Backdrop, Alert, Pagination, TextField, Button, Stack, Box, List, ListItemButton, Grid, Typography, Divider, IconButton, Tooltip } from '@mui/material'
+import axios from 'axios'
+import StudyRoomModifyModal from '../../components/StudyRoom/StudyRoomModifyModal';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
   
   const Demo = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
@@ -17,52 +12,122 @@ function generate(element) {
 
 // 참여중인 스터디 상세 페이지
 export default function StudyRoomParticipating(){
-    const [selectedIndex, setSelectedIndex] = React.useState(0);
-    const handleListItemClick = (event, index) => {
-      setSelectedIndex(index);
-    };
+ const { studyId } = useParams();
+
+  const [data, setData] = useState([])
+  // 스터디룸 ID로 상세정보 가져오기
+	useEffect(() => {
+    axios.get(`http://i10a810.p.ssafy.io:4000/studies/v1/detail/${studyId}`)
+    .then((response)=> {
+        console.log(response.data.result)
+        setData(response.data.result)
+        // console.log(data)
+    })
+    .catch((err) => console.log(err))
+  }, [studyId])
+
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const handleListItemClick = (event, index) => {
+    setSelectedIndex(index);
+  };
+
+  // StudyRoomModifyModal이 열렸는지 여부를 관리하는 state
+  const [studyModify, SetStudyModify] = useState(false);
+  // 모달이 열리면서 등록 성공 여부를 받아올 state
+  const [modifySuccess, setModifySuccess] = useState(false);
+
+  // StudyRoomModifyModal이 열릴 때 실행되는 콜백 함수
+  const studyModifyOpen = () => {
+    console.log('수정 모달 오픈')
+    SetStudyModify(true);
+    setModifySuccess(false); //모달 열릴때마다 초기화
+  };
+
+  // 등록 성공 시 실행할 로직 또는 alert를 표시
+  const onModifySuccess = () => {
+    setModifySuccess(true);
+    studyModifyClose(); // 등록이 성공하면 모달 닫기
+    handleOpenSuccessAlert(); //성공 alert창 표시
+  };
+
+  // StudyRoomModifyModal이 닫힐 때 실행되는 콜백 함수
+  const studyModifyClose = () => {
+    SetStudyModify(false);
+  };
+
+  // 성공 alert창 용
+  const [openSuccessAlert, setOpenSuccessAlert] = React.useState(false);
+  const handleCloseSuccessAlert = () => {
+    setOpenSuccessAlert(false);
+  };
+  const handleOpenSuccessAlert = () => {
+    setOpenSuccessAlert(true);
+  };
+
 
     return(
-        <Box sx={{ display: 'flex' }}>
-        <List sx={{ maxWidth: 128, width: "100%"}} component="nav">
-          <Typography sx={{display: 'flex', justifyContent: 'center', alignContent:'center', p:1}} variant='h6' fontWeight='bold'>
-            자바의 신이 될거야
+      <Box sx={{ display: 'flex',  height: '100%' }}>
+      {/* 사이드바 메뉴 */}
+      <List sx={{ width: "30%", justifyContent:'space-between', alignContent:'space-between', position: 'relative', display: 'flex', flexDirection: 'column' }} component="nav">
+        <Stack>
+          {/* 스터디 이름 */}
+          <Typography sx={{ display: 'flex', justifyContent: 'center', py: 1 }} variant='h6' fontWeight='bold'>
+            {data.title}
           </Typography>
           <ListItemButton
             selected={selectedIndex === 0}
             onClick={(event) => handleListItemClick(event, 0)}
             sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-            >
-              공지사항
+          >
+             공지사항
           </ListItemButton>
           <ListItemButton
             selected={selectedIndex === 1}
             onClick={(event) => handleListItemClick(event, 1)}
             sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
           >
-            학습인증
+            잡담방
           </ListItemButton>
           <ListItemButton
             selected={selectedIndex === 2}
             onClick={(event) => handleListItemClick(event, 2)}
             sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
           >
-            잡담방
+            학습인증
           </ListItemButton>
-        </List>
-        <Divider />
+          {/* 메뉴 추가 */}
+          <ListItemButton sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <AddCircleOutlineIcon/>
+          </ListItemButton>
+        </Stack>
+        
 
-        <Grid container sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start',height: '100vh' }}>
+        <Stack sx={{ width: "100%", bottom: 0 }}>
+          <Button>초대코드 복사</Button>
+          <Button onClick={studyModifyOpen}>정보 수정</Button>
+          <Button sx={{color: 'red'}}>탈퇴하기</Button>
+        </Stack>
+        
+      </List>
+      <Divider />
 
-          <Grid item sx={{width: '90%'}} >
-            {/* 검색기능 */}
-            <Stack direction="row" spacing={1} margin={1} padding={1}>
-              <TextField size="small" sx={{width:"70%"}} id="outlined-basic" label="원하는 스터디를 검색해보세요!" variant="outlined" />
-              <Button variant="contained" >검색</Button>
-              <Button variant="contained" color="success" sx={{width:"20%"}}>스터디 만들기</Button>
-            </Stack>
-          </Grid>
+      {/* StudyRoomModifyModal 컴포넌트를 사용하여 모달을 렌더링 */}
+      <StudyRoomModifyModal studyModify={studyModify} studyModifyClose={studyModifyClose} onModifySuccess={onModifySuccess} />
+
+      {/* 스터디 목록 */}
+      <Grid container sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+
+        <Grid item sx={{ width: '90%' }} >
+          {/* 스터디 모집 공고 리스트 */}
+          <Demo>
+            {/* {
+              data.length > 0 ? getCurrentItems() : null
+            } */}
+          </Demo>
+         
         </Grid>
-      </Box>
+
+      </Grid>
+    </Box>
     )
 }

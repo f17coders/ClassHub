@@ -10,7 +10,7 @@ import ImageIcon from '@mui/icons-material/Image';
 
 
 
-// 사이드바 메뉴
+// 참여중인 스터디 목록 데이터 -> API에서 받아올것!
 const data = [
     { id: 1, icon: <People />, label: '자바의 신이 될거야', date: 'Jan 22, 2024' },
     { id: 2, icon: <Dns />, label: '스프링을 공부해봐요', date: 'Jan 19, 2024' },
@@ -18,6 +18,7 @@ const data = [
     { id: 4, icon: <Public />, label: '기술면접 준비방', date: 'Jan 2, 2024' },
   ];
 
+// 내가 참여중인 스터디 목록 조회(왼쪽 사이드메뉴에서)
 export default function ParticipatingRoomList(){
         // 사이드바 메뉴 열기
         const [open, setOpen] = React.useState(true);
@@ -64,7 +65,7 @@ export default function ParticipatingRoomList(){
               key={item.label}
               sx={{ width: '100%', maxWidth: 360 }}
               onClick={() => {
-                navigate('participating')
+                navigate(`participating/${item.id}`)
             }}
               >
                 <ListItem sx={{ py: 0, minHeight: 32, color: 'rgba(255,255,255,.8)' }}>
