@@ -16,7 +16,6 @@ import LectureDetailReviews from '../../components/Lecture/LectureDetailReviews'
 
 // 강의의 상세 내용이 들어가는 페이지 입니다.
 
-const reviews = ['강의 집중이 너무 잘되고, 프로그램 관점이 아닌 시스템~', '좀 별로네요']
 function LectureDetail() {
 	// id가져오기
 	const { lectureId } = useParams()
@@ -75,22 +74,29 @@ function LectureDetail() {
 					<div>
 						<Container style={{ display: 'flex', padding: '20px' }}>
 							<img src={img1} alt="강의 이미지" style={{ width: '300px', height: '250px' }} />
-							<div style={{ padding: '30px', width: '50%' }}>
-								<p>{lecture.lectureName}</p>
-								<p>카테고리: {lecture.categoryName}<br />가격: {lecture.priceOriginal}<br />할인가격: {lecture.priceSale}<br />강사명: {lecture.instructor}</p>
-								<div>
-									<Rating defaultValue={lecture.combinedRating}  precision={0.5} readOnly/>
-									<>{`(${lecture.combinedRatingCount})`}</>
+							<div style={{ padding: '10px', marginLeft:'20px', width: '60%' }}>
+								<div style={{height:'85%'}}>
+									<p style={{fontSize:'1.5em', fontWeight:800}}>{lecture.lectureName}</p>
+									<p>카테고리: {lecture.categoryName}<br />가격: {lecture.priceOriginal}<br />할인가격: {lecture.priceSale}<br />강사명: {lecture.instructor}</p>
+								</div>
+								<div style={{display:'flex', justifyContent:'space-between'}}>
+									<div>
+										<Rating defaultValue={lecture.combinedRating} precision={0.5} readOnly />
+										<>{`(${lecture.combinedRating}) 총 ${lecture.combinedRatingCount}개의 수강평 `}</>
+									</div>
+									
+									<div>
+										{/* 좋아요버튼 */}
+										<IconButton size='small' onClick={toggleLike}>
+											{
+												like ? (<FavoriteIcon />) : (<FavoriteBorderIcon />)
+											}
+										</IconButton>
+										{like ? lecture.lectureLikeCount + 1 : lecture.lectureLikeCount}
+									</div>
 								</div>
 							</div>
-							<div style={{ position: 'relative' }}>
-								{/* 좋아요버튼 */}
-								<IconButton size='small' onClick={toggleLike} sx={{ position: 'absolute', bottom: 20 }}>
-									{
-										like ? (<FavoriteIcon />) : (<FavoriteBorderIcon />)
-									}
-								</IconButton>
-							</div>
+
 						</Container>
 						<Divider sx={{ bgcolor: 'lightgrey' }} />
 
@@ -106,7 +112,9 @@ function LectureDetail() {
 									<Tab value={1} label="낮은 평점 요약" />
 								</Tabs>
 								<div style={{ marginTop: "20px" }}>
-									{reviews[value]}
+									{
+										value == 0 ? lecture.gptReviewGood : lecture.gptReviewBad
+									}
 								</div>
 							</Box>
 						</Container>
@@ -125,51 +133,54 @@ function LectureDetail() {
 								<div style={{ marginTop: "20px" }}>
 									{
 										// 상세내용
-										value2 == 0 ? (<Content1 />) : null
+										value2 == 0 ? (<Content1 lecture={lecture} />) : null
 									}
 									{
 										// 커리큘럼
-										value2 == 1 ? (<Content2 />) : null
+										value2 == 1 ? (<Content2 lecture={lecture} />) : null
 									}
 									{
 										// 리뷰
-										value2 == 2 ? (<LectureDetailReviews />) : null
+										value2 == 2 ? (<LectureDetailReviews lecture={lecture} />) : null
 									}
 								</div>
 							</Box>
 						</Container>
 					</div>
-
 				)
 			}
 		</div >
 	)
 }
 
-function Content1() {
+function Content1(props) {
+	const lecture = props.lecture
 	return (
 		<div>
 			<div>
 				<h3>한 줄 소개</h3>
-				<p>백엔드 개발자를 위한 스프링 부트 끝판왕!</p>
+				<p>{lecture.summary}</p>
 			</div>
 			<div>
 				<h3>배울 내용 요약</h3>
-				<p>요약 내용</p>
+				<p>{lecture.descriptionSummary}</p>
 			</div>
 			<div>
-				<h3>강의 소개</h3>
-				<p>스프링 부트를 코드를 통해 쉬우면서도 깊이있게 이해하고 싶은 백엔드 개발자 및 취업 준비행을 위한 강의입니다.</p>
+				<h3>강의 상세 정보</h3>
+				<p>{lecture.descriptionDetail}</p>
 			</div>
 		</div>
 	)
 }
 
-function Content2() {
+function Content2(props) {
+	const lecture = props.lecture
 	return (
 		<div>
 			<h3>커리큘럼</h3>
 			<p>커리큘럼 내용이 들어갑니다</p>
+			<p>{`커리큘럼 총 시간: ${lecture.totalTime}`}</p>
+			<p>{`커리큘럼: ${lecture.curriculum}`}</p>
 		</div>
 	)
 }

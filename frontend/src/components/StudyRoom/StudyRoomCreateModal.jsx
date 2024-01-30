@@ -38,13 +38,12 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
     const createStudyRoom = function() {
       axios.post('http://i10a810.p.ssafy.io:4000/studies/v1',
       {
-        "title": studyName,
-        "capacity": studyPersonnel,
-        "lectureId": 0,
+        "title": "스터디룸 생성",
+        "capacity": 10,
         "isPublic": true,
-        "description": "string",
+        "description": "스터디룸 설명",
         "tagList": [
-          0
+            0
         ]
       })
       .then((res) => {

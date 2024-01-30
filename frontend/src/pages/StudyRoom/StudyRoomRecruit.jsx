@@ -94,12 +94,15 @@ export default function StudyRoomRecruit() {
     //   : selectedIndex === 2
     //     ? data.filter(study => {study.capaity <= study.currentMembers})
     //     : data;
-    return filteredData.map((study, index) => (
+    return filteredData.map((study, index) => 
+      // console.log(study)
+    (
       <StudyRoomRecruitList
         key={index}
         study={study}
       />
-    ));
+    )
+    );
   };
 
   return (

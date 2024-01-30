@@ -6,7 +6,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import StudyRoomEnterCodeModal from './StudyRoomEnterCodeModal';
 
-export default function StudyRoomRecruitList({ study }){
+export default function StudyRoomRecruitList({study}){
     // 스터디 입장하기 모달 오픈
     const [studyEnter, SetStudyEnter] = useState(false);
     const studyEnterOpen = () => {
@@ -44,7 +44,7 @@ export default function StudyRoomRecruitList({ study }){
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'space-around' }}>
                   <Stack direction="row" spacing={1} my={1}>
                     { study.tagList ? (study.tagList.map((tag, tagIndex) => (
-                      <Chip key={tagIndex} label={tag} color="primary" size='small' />
+                      <Chip key={tagIndex} label={tag.name} color="primary" size='small' />
                     ))) : null
                   }
                   </Stack>
