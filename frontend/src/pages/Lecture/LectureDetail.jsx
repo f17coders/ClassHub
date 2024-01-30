@@ -8,17 +8,29 @@ import IconButton from '@mui/material/IconButton'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
-import Divider from '@mui/material/Divider';
+import Divider from '@mui/material/Divider'
+import SellIcon from '@mui/icons-material/Sell'
 import axios from 'axios'
+import EastIcon from '@mui/icons-material/East';
+import PersonIcon from '@mui/icons-material/Person';
 import { Button } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import LectureDetailReviews from '../../components/Lecture/LectureDetailReviews'
+import { useSelector } from 'react-redux'
+import LoginModal from '../../components/LoginModal';
 
 // 강의의 상세 내용이 들어가는 페이지 입니다.
 
 function LectureDetail() {
 	// id가져오기
 	const { lectureId } = useParams()
+
+	// 로그인 확인용(좋아요 버튼)
+	let isLogin = useSelector((state) => state.isLogin)
+	// 로그인 모달용
+	const [open, setOpen] = useState(false)
+	const ModalOpen = () => setOpen(true)
+	const ModalClose = () => setOpen(false)
 
 	// 강의 정보 저장할 변수
 	const [lecture, setLecture] = useState(null)
@@ -35,7 +47,13 @@ function LectureDetail() {
 
 	// 강의 좋아요 누르기
 	const [like, setLike] = useState(false)
-	const toggleLike = () => setLike(!like)
+	const toggleLike = function(){
+		if (isLogin) {
+			setLike(!like)
+		} else {
+			ModalOpen()
+		}
+	}
 
 	// 리뷰 요약 탭 제어
 	const [value, setValue] = useState(0)
@@ -67,6 +85,20 @@ function LectureDetail() {
 			})
 	}
 
+	// 강의 가격에 따라서 다르게 출력하는 함수
+	const definePrice = function(price1, price2) {
+		if (price2 == 0) {
+			return (<p>무료강의</p>)
+		} else if (price1 == price2) {
+			return (<p>{price1.toLocaleString()}</p>)
+		} else {
+			return(<div style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
+				<p style={{textDecoration:'line-through', margin:0}}>{price2.toLocaleString()}</p>
+				<EastIcon fontSize='small'/>
+				<p style={{margin:0}}>{price1.toLocaleString()}</p>
+				</div>)
+		}
+	}
 	return (
 		<div>
 			{
@@ -74,15 +106,21 @@ function LectureDetail() {
 					<div>
 						<Container style={{ display: 'flex', padding: '20px' }}>
 							<img src={img1} alt="강의 이미지" style={{ width: '300px', height: '250px' }} />
-							<div style={{ padding: '10px', marginLeft:'20px', width: '60%' }}>
-								<div style={{height:'85%'}}>
-									<p style={{fontSize:'1.5em', fontWeight:800}}>{lecture.lectureName}</p>
-									<p>카테고리: {lecture.categoryName}<br />가격: {lecture.priceOriginal}<br />할인가격: {lecture.priceSale}<br />강사명: {lecture.instructor}</p>
+							<div style={{ padding: '10px', marginLeft:'30px', width: '60%' }}>
+								<div style={{height:'80%', paddingTop:'30px'}}>
+									<p style={{fontSize:'0.9em', margin:'0px'}}>{lecture.categoryName}</p>
+									<p style={{fontSize:'1.8em', fontWeight:800}}>{lecture.lectureName}</p>
+									<div style={{display:'flex', flexDirection:'row'}}>
+										<SellIcon fontSize='small'/><p style={{margin:"0px 4px"}}>가격:</p>{definePrice(lecture.priceOriginal, lecture.priceSale)}
+									</div>
+									<div style={{display:'flex', flexDirection:'row', alignItems:'center', marginTop:'10px'}}>
+										<PersonIcon fontSize='small'/><p style={{margin:"0px 4px"}}>강의자:</p>{lecture.instructor}
+									</div>
 								</div>
 								<div style={{display:'flex', justifyContent:'space-between'}}>
-									<div>
-										<Rating defaultValue={lecture.combinedRating} precision={0.5} readOnly />
-										<>{`(${lecture.combinedRating}) 총 ${lecture.combinedRatingCount}개의 수강평 `}</>
+									<div style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
+										<Rating defaultValue={lecture.combinedRating} precision={0.5} readOnly sx={{margin:0}}/>
+										<p style={{margin:"0 4px"}}>{`(${lecture.combinedRating}) 총 ${lecture.combinedRatingCount}개의 수강평 `}</p>
 									</div>
 									
 									<div>
@@ -102,14 +140,14 @@ function LectureDetail() {
 
 						{/* GPT강의요약 */}
 						<Container sx={{ marginTop: '20px' }}>
-							<p>🤖GPT로 리뷰를 한 줄로 요약했어요</p>
-							<Box sx={{ width: '100%' }}>
+							<p style={{fontSize:'1.2em', marginBottom:'10px'}}>🤖GPT로 리뷰를 한 줄 요약했어요</p>
+							<Box sx={{ width: '100%'}}>
 								<Tabs
 									value={value}
 									onChange={handleChange}
 								>
-									<Tab value={0} label="높은 평점 요약" />
-									<Tab value={1} label="낮은 평점 요약" />
+									<Tab value={0} label="높은 평점 요약" sx={{fontSize:'1.2em'}}/>
+									<Tab value={1} label="낮은 평점 요약" sx={{fontSize:'1.2em'}} />
 								</Tabs>
 								<div style={{ marginTop: "20px" }}>
 									{
@@ -149,6 +187,7 @@ function LectureDetail() {
 					</div>
 				)
 			}
+			<LoginModal open={open} onClose={ModalClose} />
 		</div >
 	)
 }

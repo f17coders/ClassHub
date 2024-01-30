@@ -12,14 +12,48 @@ import Divider from '@mui/material/Divider'
 import SouthIcon from '@mui/icons-material/South'
 import NorthIcon from '@mui/icons-material/North';
 import Box from '@mui/material/Box'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 // 강의 검색창 (+ 태그 선택까지)
-
 export default function LimitTags() {
+	// 옆에 있을 태그(임시)
+	const [recommendTags, setRecommendTags] = useState(['임시', '태그', '입니다', '여기엔', '자주쓸거같은', '태그가', '들어가요'])
 
-	// 태그 검색 -> 불러와야함
-	const Tags = ['프론트엔드', '백엔드', '게임개발','데이터', '다른', 'adfadfafd', '태그들','데이터', '다른', '추가', '태그들','데이터', '다른', '추가', '태그들','데이터', '다른', '추가', '태그들','데이터', '다른', '추가', '태그들','데이터', '다른', '추가', '태그들', '데이터', '다른', '추가', '태그들', '다른', '추가', '태그들', '다른', '추가', '태그들']
+	// 처음 전체 태그 불러오기
+	const [tags, setTags] = useState([])
+	const getTags = function () {
+		if (tags.length == 0) {
+			axios.get('http://i10a810.p.ssafy.io:4000/tags/v0/lectures')
+				.then((res) => {
+					let tmp = res.data.result.tagList
+					let copy = tmp.map((item) => item.name)
+					setTags(copy)
+				})
+				.catch((err) => console.log(err))
+		}
+	}
+
+	// 태그 선택용
+	// 선택된 태그
+	const [selectedTags, setSelectedTags] = useState([])
+
+	// 인풋 받는 용
+	const [value, setValue] = useState(null);
+	const [inputValue, setInputValue] = useState('');
+	const addTag = function (event, newValue) {
+		let copy = [newValue, ...selectedTags]
+
+		setSelectedTags(copy)
+		setValue(newValue)
+		if (newValue != null) {
+			let tmp = [newValue, ...recommendTags]
+			setRecommendTags(tmp)
+			let tmp2 = [newValue, ...selectedButtons]
+			setSelectedButtons(tmp2)
+		}
+	}
+
 
 	// 호버 버튼용변수들
 	const [selectedButtons, setSelectedButtons] = useState([])
@@ -52,26 +86,27 @@ export default function LimitTags() {
 			{
 				// 추가로 안봤을 때
 				add == false ? (
-					<Grid container>
+					<Grid container sx={{ display: 'flex', justifyContent: 'space-between' }}>
 						{/* 태그로 검색 */}
-						<Grid item style={{ width: '40%', display: 'flex', alignItems: 'center' }}>
+						<Grid item style={{ width: '40%', display: 'flex', alignItems: 'center' }} onClick={getTags}>
 							<Autocomplete
-								multiple
-								id="multiple-limit-tags"
-								options={Tags}
 								freeSolo
-								getOptionLabel={(option) => '#' + option}
-								renderInput={(params) => (
-									<TextField {...params} label="태그로 검색해보세요" placeholder="" />
-								)}
+								value={value}
+								onChange={addTag}
+								inputValue={inputValue}
+								onInputChange={(event, newInputValue) => {
+									setInputValue(newInputValue);
+								}}
+								options={tags}
+								renderInput={(params) => <TextField {...params} label="태그로 검색해보세요" placeholder="" />}
 								sx={{ flex: '70%' }}
 								size="small"
 							/>
 							<IconButton style={{ margin: 5 }}><SearchIcon fontSize='small' /></IconButton>
 						</Grid>
-						<Grid item style={{ marginLeft: '40px' }}>
+						<Grid item sx={{ width: '50%', whiteSpace: 'nowrap', overflow: 'hidden' }}>
 							{
-								Tags.slice(0,3).map((item, idx) => {
+								recommendTags.map((item, idx) => {
 									return (
 										<ToggleButton
 											key={idx}
@@ -87,25 +122,26 @@ export default function LimitTags() {
 									)
 								})
 							}
-							<IconButton style={{ margin: 5 }} onClick={toggleAdd}>{
-								add == false ? (<SouthIcon fontSize='small' />) : (<NorthIcon fontSize='small' />)
-							}</IconButton>
-						</Grid>
 
+						</Grid>
+						<IconButton style={{ margin: 5 }} onClick={toggleAdd}>{
+							add == false ? (<SouthIcon fontSize='small' />) : (<NorthIcon fontSize='small' />)
+						}</IconButton>
 					</Grid>
 				) : (
-					<Grid container>
+					<Grid container sx={{ display: 'flex', justifyContent: 'space-between' }}>
 						{/* 태그로 검색 */}
 						<Grid item style={{ width: '40%', display: 'flex', alignItems: 'center' }}>
 							<Autocomplete
-								multiple
-								id="multiple-limit-tags"
-								options={Tags}
 								freeSolo
-								getOptionLabel={(option) => '#' + option}
-								renderInput={(params) => (
-									<TextField {...params} label="태그로 검색해보세요" placeholder="" />
-								)}
+								value={value}
+								onChange={addTag}
+								inputValue={inputValue}
+								onInputChange={(event, newInputValue) => {
+									setInputValue(newInputValue);
+								}}
+								options={tags}
+								renderInput={(params) => <TextField {...params} label="태그로 검색해보세요" placeholder="" />}
 								sx={{ flex: '70%' }}
 								size="small"
 							/>
@@ -113,7 +149,7 @@ export default function LimitTags() {
 						</Grid>
 						<Grid item style={{ marginLeft: '40px' }}>
 							{
-								Tags.slice(0,3).map((item, idx) => {
+								recommendTags.slice(0, 3).map((item, idx) => {
 									return (
 										<ToggleButton
 											key={idx}
@@ -133,10 +169,10 @@ export default function LimitTags() {
 								add == false ? (<SouthIcon fontSize='small' />) : (<NorthIcon fontSize='small' />)
 							}</IconButton>
 						</Grid>
-						<Box style={{height:'40px', overflow:'hidden', flexWrap:'nowrap', display:'flex'}}>
+						<Box style={{ height: '40px', overflow: 'hidden', flexWrap: 'nowrap', display: 'flex' }}>
 							<Grid item >
 								{
-									Tags.slice(3).map((item, idx) => {
+									recommendTags.slice(3).map((item, idx) => {
 										return (
 											<ToggleButton
 												key={idx}
@@ -145,7 +181,7 @@ export default function LimitTags() {
 												onChange={() => handleButtonClick(item)}
 												color='primary'
 												size='large'
-												sx={{ margin: '4px', height: '35px'}}
+												sx={{ margin: '4px', height: '35px' }}
 											>
 												#{item}
 											</ToggleButton>
@@ -154,7 +190,7 @@ export default function LimitTags() {
 								}
 							</Grid>
 						</Box>
-						
+
 
 					</Grid>
 				)
@@ -215,7 +251,7 @@ export default function LimitTags() {
 							defaultValue={'최신순'}
 							onChange={handleSort}
 							inputProps={{ 'aria-label': 'Without label' }}
-							sx={{color:'grey'}}
+							sx={{ color: 'grey' }}
 						>
 							<MenuItem value='최신순'>최신순</MenuItem>
 							<MenuItem value='가격순'>가격순</MenuItem>
