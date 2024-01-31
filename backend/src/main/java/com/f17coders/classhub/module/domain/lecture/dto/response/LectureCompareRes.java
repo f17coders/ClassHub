@@ -1,5 +1,6 @@
 package com.f17coders.classhub.module.domain.lecture.dto.response;
 
+import com.f17coders.classhub.module.domain.tag.dto.response.TagRes;
 import java.util.List;
 import lombok.Builder;
 
@@ -20,7 +21,7 @@ public record LectureCompareRes(
 	String gptReviewGood,
 	String gptReviewBad,
 	String curriculum,
-	List<String> tagList
+	List<TagRes> tagList
 
 ) {
 

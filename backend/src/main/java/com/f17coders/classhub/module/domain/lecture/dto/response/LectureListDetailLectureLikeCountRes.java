@@ -3,13 +3,10 @@ package com.f17coders.classhub.module.domain.lecture.dto.response;
 import com.f17coders.classhub.module.domain.category.dto.resource.CategoryRes;
 import com.f17coders.classhub.module.domain.lecture.Level;
 import com.f17coders.classhub.module.domain.lecture.SiteType;
-import com.f17coders.classhub.module.domain.tag.dto.response.TagRes;
 import lombok.Builder;
 
-import java.util.List;
-
 @Builder
-public record LectureListDetailRes(
+public record LectureListDetailLectureLikeCountRes(
 	int lectureId,
 	String lectureName,
 	SiteType siteType,
@@ -23,7 +20,6 @@ public record LectureListDetailRes(
 	String descriptionSummary,  // 한줄요약
 	int totalTime,
 	CategoryRes category,
-	List<TagRes> tagList,
 	int lectureLikeCount
 ) {
 

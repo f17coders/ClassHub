@@ -1,4 +1,4 @@
-package com.f17coders.classhub.module.domain.category.Dto.resource;
+package com.f17coders.classhub.module.domain.category.dto.resource;
 
 import lombok.Builder;
 

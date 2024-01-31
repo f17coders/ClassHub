@@ -1,7 +1,7 @@
 package com.f17coders.classhub.module.domain.category.service;
 
-import com.f17coders.classhub.module.domain.category.Dto.resource.CategoryListRes;
-import com.f17coders.classhub.module.domain.category.Dto.resource.CategoryRes;
+import com.f17coders.classhub.module.domain.category.dto.resource.CategoryListRes;
+import com.f17coders.classhub.module.domain.category.dto.resource.CategoryRes;
 import com.f17coders.classhub.module.domain.category.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

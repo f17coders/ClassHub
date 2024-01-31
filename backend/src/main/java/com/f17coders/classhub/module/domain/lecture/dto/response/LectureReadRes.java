@@ -14,7 +14,7 @@ public record LectureReadRes(
 	String siteLink,
 	int priceOriginal,
 	int priceSale,
-	int totalTime,
+	Integer totalTime, // null인경우는 프론트에서 숨긴다.
 	String curriculum,
 	int categoryId,
 	String categoryName,

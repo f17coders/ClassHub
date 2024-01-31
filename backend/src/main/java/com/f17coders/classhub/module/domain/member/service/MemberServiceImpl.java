@@ -15,7 +15,6 @@ import com.f17coders.classhub.module.domain.memberTag.service.MemberTagService;
 import com.f17coders.classhub.module.domain.study.dto.response.StudyBaseRes;
 import com.f17coders.classhub.module.domain.study.repository.StudyRepository;
 import com.f17coders.classhub.module.domain.tag.Tag;
-import com.f17coders.classhub.module.domain.tag.dto.response.TagListRes;
 import com.f17coders.classhub.module.domain.tag.dto.response.TagRes;
 import com.f17coders.classhub.module.domain.tag.repository.TagRepository;
 import java.io.IOException;

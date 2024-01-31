@@ -6,6 +6,7 @@ import com.f17coders.classhub.module.domain.lectureBuy.LectureBuy;
 import com.f17coders.classhub.module.domain.lectureLike.LectureLike;
 import com.f17coders.classhub.module.domain.lectureTag.LectureTag;
 import com.f17coders.classhub.module.domain.review.Review;
+import com.f17coders.classhub.module.domain.studyTag.StudyTag;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,10 +15,12 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.ToString;
 
 @Getter
 @Setter
 @Entity
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Lecture extends BaseEntity {
 
@@ -80,6 +83,10 @@ public class Lecture extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_id")
 	private Category category;
+
+	// Lecture - tag 연관 관계, Lecture 있는 tag list
+	@OneToMany(mappedBy = "lecture", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<LectureTag> lectureTagList = new ArrayList<>();
 
 //    TODO : 단방향 연관 관계로 우선 설정 후 필요에 의해서 양방향으로 연관 관계 설정 + 연관 관계 편의 메서드의 위치는 로직에 따라 Many쪽에 있을 수도 있고 One쪽에 있을 수도 있으니 변경 가능//    // Lecture - review 연관 관계
 //    @OneToMany(mappedBy = "lecture", fetch = FetchType.LAZY)

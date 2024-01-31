@@ -33,7 +33,6 @@ public class TagRepositoryImpl implements TagRepositoryCustom {
             .fetch();
     }
 
-
     public List<TagRes> findTagJoinCommnunityTagOrderByCnt() {
         return queryFactory
             .select(Projections.constructor(TagRes.class, tag.tagId, tag.name))
@@ -66,4 +65,19 @@ public class TagRepositoryImpl implements TagRepositoryCustom {
             .where(studyTag.study.studyId.eq(studyId))
             .fetch();
     }
+
+	@Override
+	public List<TagRes> findTagsByLectureIdFetchJoinLectureTag(int lectureId) {
+		return queryFactory
+			.select(Projections.constructor(TagRes.class, tag.tagId, tag.name))
+			.from(tag)
+			.join(lectureTag)
+			.on(lectureTag.tag.tagId.eq(tag.tagId))
+			.where(lectureTag.lecture.lectureId.eq(lectureId))
+			.fetch();
+	}
+
+	private BooleanExpression tagNameContain(String tags) {
+		return tags != null ? tag.name.contains(tags) : null;
+	}
 }

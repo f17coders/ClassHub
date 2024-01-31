@@ -2,7 +2,7 @@ package com.f17coders.classhub.module.domain.category.controller;
 
 import com.f17coders.classhub.global.api.response.BaseResponse;
 import com.f17coders.classhub.global.exception.code.SuccessCode;
-import com.f17coders.classhub.module.domain.category.Dto.resource.CategoryListRes;
+import com.f17coders.classhub.module.domain.category.dto.resource.CategoryListRes;
 import com.f17coders.classhub.module.domain.category.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

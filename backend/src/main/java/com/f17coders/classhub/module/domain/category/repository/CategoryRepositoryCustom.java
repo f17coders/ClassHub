@@ -1,6 +1,6 @@
 package com.f17coders.classhub.module.domain.category.repository;
 
-import com.f17coders.classhub.module.domain.category.Dto.resource.CategoryRes;
+import com.f17coders.classhub.module.domain.category.dto.resource.CategoryRes;
 
 import java.util.List;
 
