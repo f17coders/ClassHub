@@ -15,12 +15,14 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Getter
 @Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@CrossOrigin("*")
 public class Community extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
