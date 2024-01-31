@@ -1,11 +1,7 @@
 package com.f17coders.classhub.module.domain.study.dto.response;
 
-import com.f17coders.classhub.module.domain.tag.Dto.response.TagListRes;
-import com.f17coders.classhub.module.domain.tag.Dto.response.TagRes;
-import com.f17coders.classhub.module.domain.tag.Tag;
+import com.f17coders.classhub.module.domain.tag.dto.response.TagRes;
 import lombok.Builder;
-
-import java.util.List;
 
 @Builder
 public record StudyListDetailRes(

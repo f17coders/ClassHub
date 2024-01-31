@@ -1,7 +1,6 @@
 package com.f17coders.classhub.module.domain.studyTag.repository;
 
-import com.f17coders.classhub.module.domain.tag.Dto.response.TagRes;
-import com.f17coders.classhub.module.domain.tag.Tag;
+import com.f17coders.classhub.module.domain.tag.dto.response.TagRes;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

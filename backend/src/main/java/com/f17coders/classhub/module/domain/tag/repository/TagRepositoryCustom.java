@@ -1,10 +1,15 @@
 package com.f17coders.classhub.module.domain.tag.repository;
 
-import com.f17coders.classhub.module.domain.tag.Dto.response.TagRes;
+import com.f17coders.classhub.module.domain.tag.dto.response.TagRes;
 
 import java.util.List;
 
 public interface TagRepositoryCustom {
-    List<TagRes> findTagByKeywordJoinLectureTagOrderByCntLimit10(String tags);
-    List<TagRes> findTagByKeywordJoinCommnunityTagOrderByCntLimit10(String tags);
+
+    List<TagRes> findTagJoinLectureTagOrderByCnt();
+
+    List<TagRes> findTagJoinCommnunityTagOrderByCnt();
+
+    List<TagRes> findTagJoinMemberTagOrderByCnt();
+
 }

@@ -2,7 +2,7 @@ package com.f17coders.classhub.module.domain.tag.controller;
 
 import com.f17coders.classhub.global.api.response.BaseResponse;
 import com.f17coders.classhub.global.exception.code.SuccessCode;
-import com.f17coders.classhub.module.domain.tag.Dto.response.TagListRes;
+import com.f17coders.classhub.module.domain.tag.dto.response.TagListRes;
 import com.f17coders.classhub.module.domain.tag.service.TagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,24 +13,33 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "tag", description = "해시태그 API")
 @RestController
-@RequestMapping("/tags/v0")
+@RequestMapping("/tags")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class TagController {
 
     private final TagService tagService;
-    @Operation(summary="강의 기준 해시태그 목록 조회")
-    @GetMapping("/lectures")
-    public ResponseEntity<BaseResponse<TagListRes>> getTagListOrderLecture(@RequestParam(required = false) String tags) {
-        TagListRes tagListRes = tagService.getTagListOrderLecture(tags);
+
+    @Operation(summary = "강의 기준 해시태그 목록 조회")
+    @GetMapping("/v0/lectures")
+    public ResponseEntity<BaseResponse<TagListRes>> getTagListOrderLecture() {
+        TagListRes tagListRes = tagService.getTagListOrderLecture();
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, tagListRes);
     }
 
-    @Operation(summary="커뮤니티 기준 해시태그 목록 조회")
-    @GetMapping("/communities")
-    public ResponseEntity<BaseResponse<TagListRes>> getTagListOrderCommunity(@RequestParam(required = false) String tags) {
-        TagListRes tagListRes = tagService.getTagListOrderCommunity(tags);
+    @Operation(summary = "커뮤니티 기준 해시태그 목록 조회")
+    @GetMapping("/v0/communities")
+    public ResponseEntity<BaseResponse<TagListRes>> getTagListOrderCommunity() {
+        TagListRes tagListRes = tagService.getTagListOrderCommunity();
+
+        return BaseResponse.success(SuccessCode.SELECT_SUCCESS, tagListRes);
+    }
+
+    @Operation(summary = "멤버 기준 해시태그 목록 조회")
+    @GetMapping("/v1/members")
+    public ResponseEntity<BaseResponse<TagListRes>> getTagListOrderMember() {
+        TagListRes tagListRes = tagService.getTagListOrderMember();
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, tagListRes);
     }

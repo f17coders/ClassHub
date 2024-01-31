@@ -9,16 +9,11 @@ import com.f17coders.classhub.module.domain.study.dto.request.StudyRegisterReq;
 import com.f17coders.classhub.module.domain.study.dto.request.StudyUpdateReq;
 import com.f17coders.classhub.module.domain.study.dto.response.*;
 import com.f17coders.classhub.module.domain.study.repository.StudyRepository;
-import com.f17coders.classhub.module.domain.study.repository.StudyRepositoryCustom;
 import com.f17coders.classhub.module.domain.studyMember.repository.StudyMemberRepository;
-import com.f17coders.classhub.module.domain.studyTag.StudyTag;
 import com.f17coders.classhub.module.domain.studyTag.repository.StudyTagRepository;
-import com.f17coders.classhub.module.domain.studyTag.repository.StudyTagRepositoryCustom;
-import com.f17coders.classhub.module.domain.tag.Dto.response.TagRes;
-import com.f17coders.classhub.module.domain.tag.Tag;
+import com.f17coders.classhub.module.domain.tag.dto.response.TagRes;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -28,9 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-
-import static com.f17coders.classhub.module.domain.lecture.QLecture.lecture;
 
 @Log4j2
 @Service
