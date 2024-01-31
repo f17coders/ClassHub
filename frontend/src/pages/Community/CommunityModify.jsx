@@ -4,8 +4,12 @@ import axios from 'axios';
 import {Routes, Route, Link, useNavigate, Outlet, useParams, useLocation } from 'react-router-dom'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 export default function CommunityModify(){
+  const MySwal = withReactContent(Swal);
+
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [tagList, setTagList] = useState([]);
@@ -20,7 +24,7 @@ export default function CommunityModify(){
     setTitle(input);
 
     //최대 30자까지만 입력 가능하도록 검사
-    if(input.length > 30 || input.length === 0){
+    if(input.length > 30){
       setTitleError(true);
     } else{
       setTitleError(false);
@@ -42,15 +46,6 @@ export default function CommunityModify(){
 
   // 모든 유효성 검사 결과 확인
   const hasErrors = titleError || contentError || tagList.length === 0
-
-  // 수정 alert창 용
-  const [openAlert, setOpenAlert] = useState(false);
-  const handleCloseAlert = () => {
-    setOpenAlert(false);
-  };
-  const handleOpenAlert = () => {
-    setOpenAlert(true);
-  };
 
   const navigate = useNavigate();
 
@@ -85,6 +80,17 @@ export default function CommunityModify(){
   .catch((err) => console.log(err))
   };
 
+  //수정 확인 Dialog용
+  const handleCreateDialogOpen = () =>{
+    MySwal.fire({
+      title: "수정되었습니다!",
+      text: "게시물이 정상적으로 수정되었습니다.",
+      icon: "success"
+    }).then(() =>{
+      CommunityPatch();
+      }
+    )
+  }
     return(
         <div>
             <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', marginTop: '40px'}}>
@@ -160,19 +166,9 @@ export default function CommunityModify(){
                     </div>
 
                     <Button 
-                      onClick={handleOpenAlert} 
+                      onClick={handleCreateDialogOpen} 
                       style={{marginTop: '20px'}} variant="contained"
-                      disabled={hasErrors}>수정</Button>
-                    {/* 수정 Alert창 */}
-                    <Backdrop
-                      open={openAlert}
-                      onClick={() =>{handleCloseAlert(); CommunityPatch();}}
-                      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                      >
-                      <Alert severity="success" onClose={() => {}}>
-                        수정되었습니다!
-                      </Alert>
-                    </Backdrop>
+                      disabled={hasErrors || title.trim() === ''}>수정</Button>
                 </Stack>
             </Container>
         </div>

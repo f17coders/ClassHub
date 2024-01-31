@@ -13,10 +13,12 @@ import {Routes, Route, Link, useNavigate, Outlet, useParams} from 'react-router-
 import CommunityReply from '../../components/Community/CommunityReply';
 import axios from 'axios';
 import DOMPurify from "dompurify";
-
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 export default function CommunityDetail(){
     const navigate = useNavigate();
+    const MySwal = withReactContent(Swal);
 
     // 좋아요용 변수
 	const [like, setLike] = useState(false)
@@ -25,26 +27,6 @@ export default function CommunityDetail(){
     // 북마크용 변수
 	const [bookmark, setBookmark] = useState(false)
 	const toggleBookmark = () => setBookmark(!bookmark)
-
-    // 삭제 확인 Dialog용
-    const [open, setOpen] = useState(false);
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
-    const handleClose = () => {
-      setOpen(false);
-    };
-
-
-    // 삭제 alert창 용
-    const [openAlert, setOpenAlert] = useState(false);
-    const handleCloseAlert = () => {
-      setOpenAlert(false);
-    };
-    const handleOpenAlert = () => {
-      setOpenAlert(true);
-    };
-    
 
     const [detailData, setDetailData] = useState([]); //받아온 데이터 저장할 배열
     const { communityId } = useParams();
@@ -58,14 +40,48 @@ export default function CommunityDetail(){
           .catch((err) => console.log(err));
       }, [communityId]);
 
-    const deleteData = () =>{
+    const deleteData = (communityId) =>{
         axios.delete(`http://i10a810.p.ssafy.io:4000/communities/v1/${communityId}`)
         .then((response) => {
             console.log('게시물 삭제 성공')
             navigate('/community'); //삭제 후 커뮤니티 홈으로 이동
+            window.location.reload(); //페이지 새로고침
         })
         .catch((err) => console.log(err));
     } 
+
+    // 삭제 확인 Dialog용
+    const handleDeleteDialogOpen = (communityId) => {
+      MySwal.fire({
+        title: "정말 삭제하시겠습니까?",
+        text: "게시물이 완전히 삭제됩니다.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "네, 삭제할래요",
+        confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+        cancelButtonText: "아니오, 취소할게요",
+        cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          MySwal.fire({
+            title: "삭제되었습니다!",
+            text: "게시물이 정상적으로 삭제되었습니다.",
+            icon: "success"
+          }).then(() =>{
+              deleteData(communityId);
+          });
+        } else if (
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          MySwal.fire({
+            title: "취소되었습니다",
+            text: "게시물 삭제가 취소되었습니다.",
+            icon: "error"
+          });
+        }
+      });
+    };
 
     return(
         <div>
@@ -163,22 +179,22 @@ export default function CommunityDetail(){
                                         </IconButton>
                                     </Tooltip>
                                     <Tooltip title="삭제">
-                                        <IconButton onClick={handleClickOpen} aria-label="삭제">
+                                        <IconButton onClick={() => {handleDeleteDialogOpen(communityId); }}>
                                             <DeleteIcon/>
                                         </IconButton>
                                     </Tooltip>
 
                                     {/* 삭제확인 Dialog창 */}
-                                    <Dialog open={open}>
+                                    {/* <Dialog open={open}>
                                         <DialogTitle>{"정말 삭제하시겠습니까?"}</DialogTitle>
                                         <DialogActions>
                                           <Button onClick={handleClose}>아니오</Button>
                                           <Button onClick={() => {handleClose(); handleOpenAlert();}} autoFocus>예</Button>
                                         </DialogActions>
-                                    </Dialog>
+                                    </Dialog> */}
 
                                     {/* 삭제 Alert창 */}
-                                    <Backdrop
+                                    {/* <Backdrop
                                       open={openAlert}
                                       onClick={() =>{handleCloseAlert(); deleteData();}}
                                       sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -186,7 +202,7 @@ export default function CommunityDetail(){
                                       <Alert severity="success" onClose={() => {}}>
                                         삭제되었습니다!
                                       </Alert>
-                                    </Backdrop>
+                                    </Backdrop> */}
                                 </div>
                             </Stack>
                         </Stack>

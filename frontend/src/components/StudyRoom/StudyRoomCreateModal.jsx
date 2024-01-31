@@ -133,6 +133,11 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
       }
     }, [studyCreate]);
 
+    // 모든 유효성 검사 결과 확인
+    const hasErrors = studyNameError || studyPersonnelError || studyDescriptionError || studyTagError
+    || studyName.length === 0 || studyDescription.length === 0 || studyTag.length === 0 
+    || (selected1 === false && selected2 === false)
+    
     return(
         <div>
             <Modal
@@ -399,12 +404,6 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
 
                     {/* 등록버튼 */}
                     <Button style={{marginTop: '20px'}} variant="contained" onClick={() => { 
-
-                      // 모든 유효성 검사 결과 확인
-                      const hasErrors = studyNameError || studyPersonnelError || studyDescriptionError || studyTagError
-                        || studyName.length === 0 || studyDescription.length === 0 || studyTag.length === 0 
-                        || (selected1 === false && selected2 === false)
-
                       // 유효성 검사 에러가 있을 경우
                       if (hasErrors) {
                         handleOpenErrorAlert();
@@ -414,7 +413,9 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
                         createStudyRoom()
                         // onRegisterSuccess(); // 부모 컴포넌트에 등록 성공을 알림
                       }
-                    }}>등록</Button>
+                    }}
+                    disabled={hasErrors}
+                    >등록</Button>
 
                     
                 </Stack>

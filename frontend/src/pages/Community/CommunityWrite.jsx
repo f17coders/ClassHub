@@ -4,8 +4,12 @@ import axios from 'axios';
 import {Routes, Route, Link, useNavigate, Outlet, useParams} from 'react-router-dom'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 export default function CommunityWrite(){
+  const MySwal = withReactContent(Swal);
+
   const [title, setTitle] = useState(''); //제목
   const [content, setContent] = useState(''); //내용
   const [tagList, setTagList] = useState([]);
@@ -43,23 +47,17 @@ export default function CommunityWrite(){
   // 모든 유효성 검사 결과 확인
   const hasErrors = titleError || contentError || tagList.length === 0
 
-  // 오류 alert창 용
-  const [openErrorAlert, setOpenErrorAlert] = useState(false);
-  const handleCloseErrorAlert = () => {
-    setOpenErrorAlert(false);
-  };
-  const handleOpenErrorAlert = () => {
-    setOpenErrorAlert(true);
-  };
-
-  // 등록 alert창 용
-  const [openAlert, setOpenAlert] = useState(false);
-  const handleCloseAlert = () => {
-    setOpenAlert(false);
-  };
-  const handleOpenAlert = () => {
-    setOpenAlert(true);
-  };
+  //등록 확인 Dialog용
+  const handleCreateDialogOpen = () =>{
+    MySwal.fire({
+      title: "등록되었습니다!",
+      text: "게시물이 정상적으로 등록되었습니다.",
+      icon: "success"
+    }).then(() =>{
+      CommunityPost();
+      }
+    )
+  }
 
   const navigate = useNavigate();
 
@@ -154,30 +152,14 @@ export default function CommunityWrite(){
                         />
                     </div>
                       <Button onClick={() =>{
-                        // 유효성 검사 에러가 있을 경우
-                        if (hasErrors) {
-                          handleOpenErrorAlert();
-                        } 
                         // 모든 유효성 검사에서 에러가 없을 경우
-                        else {
-                          handleOpenAlert()
-                        }
+                        handleCreateDialogOpen();
                       }} 
                       style={{marginTop: '20px'}} 
                       variant="contained"
                       disabled={hasErrors}
                       >등록</Button>
                     
-                    {/* 등록 Alert창 */}
-                    <Backdrop
-                      open={openAlert}
-                      onClick={() =>{handleCloseAlert(); CommunityPost();}}
-                      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                      >
-                      <Alert severity="success" onClose={() => {}}>
-                        등록되었습니다!
-                      </Alert>
-                    </Backdrop>
                 </Stack>
             </Container>
         </div>

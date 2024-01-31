@@ -4,7 +4,9 @@ import ChatIcon from '@mui/icons-material/Chat';
 import LoginIcon from '@mui/icons-material/Login';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import LinkIcon from '@mui/icons-material/Link';
 import StudyRoomEnterCodeModal from './StudyRoomEnterCodeModal';
+import { Link } from 'react-router-dom';
 
 export default function StudyRoomRecruitList({study}){
     // 스터디 입장하기 모달 오픈
@@ -50,6 +52,8 @@ export default function StudyRoomRecruitList({study}){
                 <Stack direction="row" sx={{ marginTop: 1 }}>
                   <p>{study.description}</p>
                 </Stack>
+
+                <LinkIcon/>
                     
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'space-around' }}>
                   <Stack direction="row" spacing={1} my={1}>
