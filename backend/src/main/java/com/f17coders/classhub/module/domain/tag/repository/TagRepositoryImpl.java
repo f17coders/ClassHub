@@ -9,6 +9,7 @@ import jakarta.persistence.EntityManager;
 import java.util.List;
 
 import static com.f17coders.classhub.module.domain.memberTag.QMemberTag.*;
+import static com.f17coders.classhub.module.domain.studyTag.QStudyTag.studyTag;
 import static com.f17coders.classhub.module.domain.tag.QTag.tag;
 import static com.f17coders.classhub.module.domain.lectureTag.QLectureTag.lectureTag;
 import static com.f17coders.classhub.module.domain.communityTag.QCommunityTag.communityTag;
@@ -52,6 +53,17 @@ public class TagRepositoryImpl implements TagRepositoryCustom {
             .on(tag.tagId.eq(memberTag.tag.tagId))
             .groupBy(tag.tagId, tag.name)
             .orderBy(memberTag.member.memberId.count().desc())
+            .fetch();
+    }
+
+    @Override
+    public List<TagRes> findTagByStudyIdFetchJoinStudyTag(int studyId) {
+        return queryFactory
+            .select(Projections.constructor(TagRes.class, tag.tagId, tag.name))
+            .from(tag)
+            .join(studyTag)
+            .on(studyTag.tag.tagId.eq(tag.tagId))
+            .where(studyTag.study.studyId.eq(studyId))
             .fetch();
     }
 }

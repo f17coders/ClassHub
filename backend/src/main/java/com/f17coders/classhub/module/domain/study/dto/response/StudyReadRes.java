@@ -11,11 +11,10 @@ public record StudyReadRes(
     String title,
     long currentMembers,
     int capacity,
-    int studyReaderId,
+    int studyLeaderId,
     String description,
     boolean isPublic,
-    LectureBaseRes lecture,
-    TagRes tag
+    LectureBaseRes lecture
 
 ) {
 

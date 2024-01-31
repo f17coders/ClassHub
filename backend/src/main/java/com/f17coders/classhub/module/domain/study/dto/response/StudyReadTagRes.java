@@ -13,7 +13,7 @@ public record StudyReadTagRes(
     String title,
     long currentMembers,
     int capacity,
-    int studyReaderId,
+    int studyLeaderId,
     String description,
     boolean isPublic,
 

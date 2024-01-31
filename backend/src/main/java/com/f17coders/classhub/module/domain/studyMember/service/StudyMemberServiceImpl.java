@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class StudyMemberServiceImpl implements StudyMemberService{
+public class StudyMemberServiceImpl implements StudyMemberService {
+
     private final StudyRepository studyRepository;
     private final StudyMemberRepository studyMemberRepository;
 
@@ -28,7 +29,8 @@ public class StudyMemberServiceImpl implements StudyMemberService{
 
     @Override
     public void exitStudy(int studyId, Member member) {
-        StudyMember studyMember = studyMemberRepository.findByStudy_StudyIdAndMember_MemberId(studyId, member.getMemberId());
+        StudyMember studyMember = studyMemberRepository.findByStudy_StudyIdAndMember_MemberId(
+            studyId, member.getMemberId());
 
         studyMemberRepository.delete(studyMember);
     }

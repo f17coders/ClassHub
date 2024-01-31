@@ -42,13 +42,12 @@ public class StudyMember extends BaseEntity {
         study.getStudyMemberList().add(this);
     }
 
-    // TODO: member 생성 시 수정
     public void putMember(Member member) {
-//        if(this.member != null) {
-//
-//        }
-//        this.member = member;
-//        
+        if (this.member != null) {
+            this.member.getStudyMemberList().remove(this);
+        }
+        this.member = member;
+        member.getStudyMemberList().add(this);
     }
 
     public static StudyMember createStudyMember() {

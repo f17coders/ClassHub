@@ -53,21 +53,13 @@ public class Study extends BaseEntity {
 
     // Study - 스터디장 관계
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "study_reader_id")
-    private Member studyReader;
-
-    // studyReader 만드는중
-//    public void putStudyReader(Member studyReader) {
-//        if(this.studyReader != null ) {
-//
-//        }
-//        this.member.g
-//    }
+    @JoinColumn(name = "study_Leader_id")
+    private Member studyLeader;
 
 
     public static Study createStudy(String title, Integer capacity, String description,
         boolean isPublic,
-        Lecture lecture, Member studyReader) {
+        Lecture lecture, Member studyLeader) {
         Study study = new Study();
 
         study.setTitle(title);
@@ -75,7 +67,7 @@ public class Study extends BaseEntity {
         study.setDescription(description);
         study.setPublic(isPublic);
         study.setLecture(lecture);
-        study.setStudyReader(studyReader);
+        study.setStudyLeader(studyLeader);
 
         if (!isPublic) {
             study.setEnterCode(makeEnterCode());

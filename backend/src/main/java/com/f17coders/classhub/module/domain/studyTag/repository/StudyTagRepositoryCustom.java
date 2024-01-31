@@ -7,8 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface StudyTagRepositoryCustom {
 
-    List<TagRes> findTagsByStudyIdFetchJoinStudyTag(int studyId);
-
     @Transactional
     void deleteStudyTagsByStudyId(int studyId);
 }

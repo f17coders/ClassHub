@@ -6,7 +6,7 @@ import java.util.List;
 
 @Builder
 public record StudyListRes(
-    List<StudyListDetailTagRes> studyList,
+    List<StudyReadTagRes> studyList,
     int totalPages
 ) {
 

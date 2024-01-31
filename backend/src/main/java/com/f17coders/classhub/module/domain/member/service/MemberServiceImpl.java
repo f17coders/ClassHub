@@ -12,6 +12,8 @@ import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
 import com.f17coders.classhub.module.domain.memberTag.MemberTag;
 import com.f17coders.classhub.module.domain.memberTag.repository.MemberTagRepository;
 import com.f17coders.classhub.module.domain.memberTag.service.MemberTagService;
+import com.f17coders.classhub.module.domain.study.dto.response.StudyBaseRes;
+import com.f17coders.classhub.module.domain.study.repository.StudyRepository;
 import com.f17coders.classhub.module.domain.tag.Tag;
 import com.f17coders.classhub.module.domain.tag.dto.response.TagListRes;
 import com.f17coders.classhub.module.domain.tag.dto.response.TagRes;
@@ -31,8 +33,8 @@ public class MemberServiceImpl implements MemberService {
     private final JobRepository jobRepository;
     private final TagRepository tagRepository;
     private final MemberTagRepository memberTagRepository;
-
     private final MemberTagService memberTagService;
+    private final StudyRepository studyRepository;
 
     @Override
     public int registerMember(String nickname) throws BaseExceptionHandler, IOException {
@@ -116,5 +118,10 @@ public class MemberServiceImpl implements MemberService {
             Optional<Tag> tag = tagRepository.findById(tagId);
             memberTagService.registerMemberTag(member, tag.get());
         }
+    }
+
+    @Override
+    public List<StudyBaseRes> getStudyList(Member member) throws BaseExceptionHandler, IOException {
+        return studyRepository.findStudyFetchJoinStudyMemberByMemberId(member.getMemberId());
     }
 }

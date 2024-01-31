@@ -12,4 +12,5 @@ public interface TagRepositoryCustom {
 
     List<TagRes> findTagJoinMemberTagOrderByCnt();
 
+    List<TagRes> findTagByStudyIdFetchJoinStudyTag(int studyId);
 }

@@ -24,7 +24,7 @@ public class StudyTagServiceImpl implements StudyTagService {
 
         Study study = studyRepository.findByStudyId(studyId);
 
-        for(int tagId : tagList) {
+        for (int tagId : tagList) {
             Tag tag = tagRepository.findTagByTagId(tagId);
 
             StudyTag studyTag = StudyTag.createStudyTag(tag);
@@ -37,7 +37,7 @@ public class StudyTagServiceImpl implements StudyTagService {
     @Override
     public void removeStudyTag(int studyId, List<Tag> tagList) {
 
-        for(Tag tag : tagList) {
+        for (Tag tag : tagList) {
             StudyTag studyTag = studyTagRepository.findByStudy_StudyIdAndTag_TagId(studyId,
                 tag.getTagId());
 

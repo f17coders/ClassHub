@@ -21,17 +21,6 @@ public class StudyTagRepositoryImpl implements StudyTagRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    @Override
-    public List<TagRes> findTagsByStudyIdFetchJoinStudyTag(int studyId) {
-        return queryFactory
-            .select(Projections.constructor(TagRes.class, tag.tagId, tag.name))
-            .from(tag)
-            .join(studyTag)
-            .on(studyTag.tag.tagId.eq(tag.tagId))
-            .where(studyTag.study.studyId.eq(studyId))
-            .fetch();
-    }
-
     @Transactional
     @Override
     public void deleteStudyTagsByStudyId(int studyId) {

@@ -8,9 +8,11 @@ import com.f17coders.classhub.module.domain.member.dto.request.MemberUpdateInfoR
 import com.f17coders.classhub.module.domain.member.dto.response.MemberGetInfoRes;
 import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
 import com.f17coders.classhub.module.domain.member.service.MemberService;
+import com.f17coders.classhub.module.domain.study.dto.response.StudyBaseRes;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -75,5 +77,16 @@ public class MemberController {
         memberService.updateInformation(memberUpdateInfoReq, member.get());
 
         return BaseResponse.success(SuccessCode.UPDATE_SUCCESS, memberId);
+    }
+
+    @Operation(summary = "내가 참여중인 스터디 목록 조회")
+    @GetMapping("/v1/studies/participation")
+    public ResponseEntity<BaseResponse<List<StudyBaseRes>>> updateInformation(
+        @RequestHeader("AUTHORIZATION") int memberId) throws IOException {
+        Optional<Member> member = memberRepository.findById(memberId);  // TODO : 시큐리티 적용 후 변경
+
+        List<StudyBaseRes> studyBaseResList = memberService.getStudyList(member.get());
+
+        return BaseResponse.success(SuccessCode.SELECT_SUCCESS, studyBaseResList);
     }
 }

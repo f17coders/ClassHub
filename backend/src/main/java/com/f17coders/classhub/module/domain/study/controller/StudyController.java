@@ -3,17 +3,16 @@ package com.f17coders.classhub.module.domain.study.controller;
 import com.f17coders.classhub.global.api.response.BaseResponse;
 import com.f17coders.classhub.global.exception.code.SuccessCode;
 import com.f17coders.classhub.module.domain.member.Member;
-import com.f17coders.classhub.module.domain.member.service.MemberService;
+import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
 import com.f17coders.classhub.module.domain.study.dto.request.StudyRegisterReq;
 import com.f17coders.classhub.module.domain.study.dto.request.StudyUpdateReq;
 import com.f17coders.classhub.module.domain.study.dto.response.StudyListRes;
-import com.f17coders.classhub.module.domain.study.dto.response.StudyReadRes;
 import com.f17coders.classhub.module.domain.study.dto.response.StudyReadTagRes;
 import com.f17coders.classhub.module.domain.study.service.StudyService;
 import com.f17coders.classhub.module.domain.studyMember.service.StudyMemberService;
-import com.f17coders.classhub.module.domain.studyTag.service.StudyTagService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,24 +27,21 @@ import java.io.IOException;
 public class StudyController {
 
     private final StudyService studyService;
-    private final StudyTagService studyTagService;
     private final StudyMemberService studyMemberService;
-    private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     @Operation(summary = "스터디룸 생성")
     @PostMapping
     public ResponseEntity<BaseResponse<Integer>> registerStudy(
-        @RequestBody StudyRegisterReq studyRegisterReq) throws IOException {
-        Member member = null;
+        @RequestBody StudyRegisterReq studyRegisterReq,
+        @RequestHeader("AUTHORIZATION") int memberId)
+        throws IOException {
+
+        //TODO: security 적용 후 변경
+        Optional<Member> member = memberRepository.findById(memberId);
 
         // 스터디 생성
-        int studyId = studyService.registerStudy(studyRegisterReq, member);
-
-        // 스터디 태그 등록
-        studyTagService.registerStudyTag(studyId, studyRegisterReq.tagList());
-
-        // 스터디장의 스터디 입장
-        studyMemberService.enterStudy(studyId, member);
+        int studyId = studyService.registerStudy(studyRegisterReq, member.get());
 
         return BaseResponse.success(SuccessCode.INSERT_SUCCESS, studyId);
     }
@@ -54,16 +50,17 @@ public class StudyController {
     @GetMapping
     public ResponseEntity<BaseResponse<StudyListRes>> getStudyList(
         @RequestParam(required = false) String keyword, Pageable pageable) throws IOException {
+
         StudyListRes studyListRes = studyService.getStudyList(keyword, pageable);
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, studyListRes);
-
     }
 
     @Operation(summary = "스터디룸 개별 정보 조회")
     @GetMapping("/detail/{studyId}")
     public ResponseEntity<BaseResponse<StudyReadTagRes>> getStudyDetail(@PathVariable int studyId)
         throws IOException {
+
         StudyReadTagRes studyReadTagRes = studyService.readStudy(studyId);
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, studyReadTagRes);
@@ -77,12 +74,6 @@ public class StudyController {
 
         studyService.updateStudy(studyUpdateReq);
 
-        // 스터디 태그 삭제
-        studyTagService.removeStudyTagAll(studyUpdateReq.studyId());
-
-        // 스터디 태그 등록
-        studyTagService.registerStudyTag(studyUpdateReq.studyId(), studyUpdateReq.tagList());
-
         return BaseResponse.success(SuccessCode.UPDATE_SUCCESS, studyUpdateReq.studyId());
     }
 
@@ -91,7 +82,6 @@ public class StudyController {
     public ResponseEntity<BaseResponse<Integer>> deleteStudy(@PathVariable int studyId)
         throws IOException {
 
-        // 스터디 삭제
         studyService.deleteStudy(studyId);
 
         return BaseResponse.success(SuccessCode.DELETE_SUCCESS, studyId);
@@ -109,23 +99,28 @@ public class StudyController {
 
     @Operation(summary = "스터디룸 참여")
     @PostMapping("/entrance/{studyId}")
-    public ResponseEntity<BaseResponse<Integer>> enterStudy(@PathVariable int studyId)
+    public ResponseEntity<BaseResponse<Integer>> enterStudy(@PathVariable int studyId,
+        @RequestHeader("AUTHORIZATION") int memberId)
         throws IOException {
 
-        Member member = null;
+        //TODO: security 적용 후 변경
+        Optional<Member> member = memberRepository.findById(memberId);
 
-        studyMemberService.enterStudy(studyId, member);
+        studyMemberService.enterStudy(studyId, member.get());
 
         return BaseResponse.success(SuccessCode.INSERT_SUCCESS, studyId);
     }
 
     @Operation(summary = "스터디룸 나가기")
     @DeleteMapping("/exit/{studyId}")
-    public ResponseEntity<BaseResponse<Integer>> exitStudy(@PathVariable int studyId)
+    public ResponseEntity<BaseResponse<Integer>> exitStudy(@PathVariable int studyId,
+        @RequestHeader("AUTHORIZATION") int memberId)
         throws IOException {
 
-        Member member = null;
-        studyMemberService.exitStudy(studyId, member);
+        //TODO: security 적용 후 변경
+        Optional<Member> member = memberRepository.findById(memberId);
+
+        studyMemberService.exitStudy(studyId, member.get());
 
         return BaseResponse.success(SuccessCode.DELETE_SUCCESS, studyId);
     }
