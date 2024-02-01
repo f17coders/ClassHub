@@ -37,15 +37,15 @@ public class CommunityLike extends BaseEntity {
 
     public void putCommunity(Community community){   // 연관 관계 편의 메서드
         this.community = community;
-        community.getCommunityLikeList().add(this);
+        community.getCommunityLikeSet().add(this);
     }
 
     // 생성 메서드
     public static CommunityLike createCommunityLike(Community community, Member member){
         CommunityLike communityLike = new CommunityLike();
 
-        communityLike.setCommunity(community);
-        communityLike.setMember(member);
+        communityLike.putCommunity(community);
+        communityLike.putMember(member);
 
         return communityLike;
     }

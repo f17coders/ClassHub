@@ -49,10 +49,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberGetInfoRes getInformation(Member member)
         throws BaseExceptionHandler, IOException {    // TODO : 최적화 고려 (쿼리 횟수)
-        JobRes jobRes = JobRes.builder()
-            .name(member.getJob().getName())
-            .jobId(member.getJob().getJobId())
-            .build();
+        JobRes jobRes = JobRes.builder().name(member.getJob().getName())
+            .jobId(member.getJob().getJobId()).build();
 
         // 관심 태그 조회
 
@@ -62,21 +60,15 @@ public class MemberServiceImpl implements MemberService {
         List<TagRes> tagResList = new ArrayList<>();
 
         for (MemberTag memberTag : memberTagList) {
-            TagRes tagRes = TagRes.builder()
-                .tagId(memberTag.getTag().getTagId())
-                .name(memberTag.getTag().getName())
-                .build();
+            TagRes tagRes = TagRes.builder().tagId(memberTag.getTag().getTagId())
+                .name(memberTag.getTag().getName()).build();
 
             tagResList.add(tagRes);
         }
 
         // MemberGetInfoRes 생성
-        return MemberGetInfoRes.builder()
-            .nickname(member.getNickname())
-            .profileImage(member.getProfileImage())
-            .tagList(tagResList)
-            .job(jobRes)
-            .build();
+        return MemberGetInfoRes.builder().nickname(member.getNickname())
+            .profileImage(member.getProfileImage()).tagList(tagResList).job(jobRes).build();
     }
 
     @Override
@@ -100,17 +92,14 @@ public class MemberServiceImpl implements MemberService {
     public void updateInformation(MemberUpdateInfoReq memberUpdateInfoReq, Member member)
         throws BaseExceptionHandler, IOException {
         // 희망 직무 설젇
-        Optional<Job> job = jobRepository.findById(memberUpdateInfoReq.jobId());
+        Optional<Job> job = jobRepository.findById(
+            memberUpdateInfoReq.jobId());    // TODO : fetchJoin으로 MemberTag 가져와야할듯
         if (job.isPresent()) {
             member.putJob(job.get());
         }
 
         // 기존 관심 태그 삭제
-        List<MemberTag> originalMemberTagList = memberTagRepository.findAllByMember(member);
-
-        for (MemberTag memberTag : member.getMemberTagList()) {
-            memberTagRepository.delete(memberTag);
-        }
+        memberTagRepository.deleteAll(member.getMemberTagList());
 
         // 새로운 관심 태그 설정
         for (int tagId : memberUpdateInfoReq.tagList()) {

@@ -6,24 +6,33 @@ import com.f17coders.classhub.module.domain.communityLike.CommunityLike;
 import com.f17coders.classhub.module.domain.communityScrap.CommunityScrap;
 import com.f17coders.classhub.module.domain.communityTag.CommunityTag;
 import com.f17coders.classhub.module.domain.member.Member;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Getter
 @Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@CrossOrigin("*")
 public class Community extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "community_id")
@@ -48,10 +57,14 @@ public class Community extends BaseEntity {
     @Setter
     private Member member;
 
-    public void putMember(Member member){  // 연관 관계 편의 메서드
+    public void putMember(Member member) {  // 연관 관계 편의 메서드
         this.member = member;
         member.getCommunityList().add(this);
     }
+
+    // Community - CommunityTag 연관 관계
+    @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<CommunityTag> communityTagSet = new HashSet<>();   // TODO : 순서 고려 필요
 
     // Community - Comment 연관 관계
     @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
@@ -59,28 +72,19 @@ public class Community extends BaseEntity {
 
     // Community - CommunityLike 연관 관계
     @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CommunityLike> communityLikeList = new ArrayList<>(); // 좋아요한 강의 목록
+    private Set<CommunityLike> communityLikeSet = new HashSet<>(); // 좋아요한 강의 목록
 
     // Community - CommunityScrap 연관 관계
     @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CommunityScrap> communityScrapList = new ArrayList<>(); // 좋아요한 강의 목록
-
-    // Community - CommunityTag 연관 관계
-    @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CommunityTag> communityTagList = new ArrayList<>(); // 좋아요한 강의 목록
-
-    public void putCommunity(CommunityTag communityTag) {  // 연관 관계 편의 메서드
-        communityTag.setCommunity(this);
-        this.getCommunityTagList().add(communityTag);
-    }
+    private Set<CommunityScrap> communityScrapSet = new HashSet<>(); // 좋아요한 강의 목록
 
     // 생성 메서드
-    public static Community createCommunity(String title, String content, List<CommunityTag> tagList, Member member) {
+    public static Community createCommunity(String title, String content, Member member) {
         Community community = new Community();
 
         community.setTitle(title);
         community.setContent(content);
-        community.setCommunityTagList(tagList);
+        community.putMember(member);
 
         return community;
     }
