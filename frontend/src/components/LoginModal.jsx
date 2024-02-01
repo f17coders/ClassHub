@@ -10,6 +10,8 @@ import google2 from './../assets/Login/google_hover.svg'
 import naver1 from './../assets/Login/naver.png'
 import naver2 from './../assets/Login/naver_hover.png'
 import kakao from './../assets/Login/kakao.png'
+import axios from 'axios'
+import Swal from 'sweetalert2'
 
 
 // Modal창 스타일
@@ -25,13 +27,10 @@ const style = {
 	p: 4,
 }
 
-const targetJobs = ['백엔드', '프론트엔드', '게임개발', '데이터분석', '정보보안']
-const skills = ['Spring', 'git', 'Django', 'React', 'Vue', 'Python', 'Java', 'PyTorch', '갯수', '채우기용', '몇개 더 추가', '해보자']
+function LoginModal({open, onClose}) {
 
-function LoginModal(props) {
 	// 몇번째 모달인지 확인용
 	let [order, setOrder] = useState(1)
-
 
 	// 구글 로그인 버튼 호버용
 	let [googleHover, setGoogleHover] = useState(false)
@@ -60,13 +59,14 @@ function LoginModal(props) {
 	}
 
 
-
+	// 처음엔 로그인 창부터 뜨게 하자
 	useEffect(() => {
 		setOrder(1)
 	}, [])
 	return (
 		<Modal
-			{...props}
+			open={open}
+			onClose={onClose}
 		>
 			{
 				order == 1 ? (
@@ -98,7 +98,9 @@ function LoginModal(props) {
 								</div>
 								<div
 									// 테스트용 수정해야함
-									onClick={() => setOrder(2)}
+									onClick={() => {
+										setOrder(2)	
+									}}
 									onMouseEnter={hoverInKakao}
 									onMouseLeave={hoverOutKakao}
 									style={{ cursor: kakaoHover ? 'pointer' : 'default', margin: '10px 0px', position: 'relative' }}>
@@ -112,7 +114,7 @@ function LoginModal(props) {
 					</Box>
 				) : (
 					<div>
-						<SecondModal />
+						<SecondModal/>
 					</div>
 				)
 			}
@@ -123,12 +125,39 @@ function LoginModal(props) {
 export default LoginModal
 
 function SecondModal() {
+	// 관심있는 기술
+	const [skills, setSkills] = useState([])
+	// 목표 직무
+	const [targetJobs, setTargetJobs] = useState([])
+
+
+	// 처음에 관심있는 기술과 목표직무를 가져온다
+	useEffect(() => {
+		if (skills.length == 0) {
+			axios.get('http://i10a810.p.ssafy.io:4000/tags/v1/members')
+			.then((res) => {
+				let loadedSkills = res.data.result.tagList.map((item) => item)
+				setSkills(loadedSkills)
+			})
+			.catch((err) => console.log(err))
+		} 
+		if (targetJobs.length == 0) {
+			axios.get('http://i10a810.p.ssafy.io:4000/jobs/v1')
+			.then((res) =>{
+				let loadedJobs = res.data.result.jobList.map((item) => item)
+				setTargetJobs(loadedJobs)
+			})
+			.catch((err) => console.log(err))
+		}
+	}, [])
+
 	// 관심있는 기술 유효성 검사용
 	const [interstedSkills, setInterestedSkills] = useState([])
 	const [skillError, setSkillError] = useState(false);
 	const handleCheckedSkills = (event, newValue) => {
 		//newValue는 선택된 옵션을 나타냄
-		const selectedSkills = newValue.map((option) => option);
+		// skill들 중에 newValue와 같은애를 통채로 저장함
+		const selectedSkills = skills.filter((option) => newValue.includes(option.name))
 		//최대 10개 까지만 입력 가능하도록 검사
 		if (selectedSkills.length > 10) {
 			setSkillError(true);
@@ -141,10 +170,10 @@ function SecondModal() {
 
 	// 목표 직무 유효성 검사
 	const [target, setTarget] = useState([])
-	const [inputTarget, setInputTarget] = useState('')
+	const [inputTarget, setInputTarget] = useState([])
 	const [targetError, setTargetError] = useState(false)
 	const testTargetInput = function () {
-		if (inputTarget == '') {
+		if (inputTarget == null) {
 			setTargetError(true)
 		} else {
 			setTargetError(false)
@@ -152,16 +181,35 @@ function SecondModal() {
 	}
 
 	// 전체 유효성 검사
-	const [valid, setValid] = useState(true)
-	const checkValid = function() {
+	const [valid, setValid] = useState(false)
+	const checkValid = function () {
 		testTargetInput()
-		if (interstedSkills.length < 2) {
+		if (interstedSkills.length < 2 | interstedSkills.length > 10) {
 			setSkillError(true);
 		}
-		if (skillError | targetError)	{
+		if (skillError | targetError) {
 			setValid(false)
-		}	else {
+		} else {
 			setValid(true)
+		}
+		if (valid) {
+			// 유효할 때 가입 요청 보내기
+			axios.post('http://i10a810.p.ssafy.io:4000/members/v1', {
+				tagList: interstedSkills.map((skill) => skill.tagId),
+				jobId: target[0].jobId
+			}, {
+				headers: {
+					// 여기는 임시, 여기에 로그인 id가져오기
+					Authorization: 3
+				}
+			})
+				.then((res) => {
+					Swal.fire({
+						title: "회원가입 완료",
+						icon: "success"
+					}) .then((a) => window.location.reload())
+				})
+				.catch((err) => console.log(err))
 		}
 	}
 
@@ -184,44 +232,40 @@ function SecondModal() {
 								<p style={{ fontSize: '0.8em' }}>최소 2개, 최대 10개</p>
 							</div>
 							{
-								skillError ? (
-									<Autocomplete
-										required
-										multiple
-										options={skills}
-										value={interstedSkills.map((skill) => skill)}
-										onChange={handleCheckedSkills}
-										getOptionLabel={(option) => option}
-										filterSelectedOptions
-										isOptionEqualToValue={(option, value) => option === value}
-										renderInput={(params) => (
-											<TextField
-												{...params}
-												error
-												helperText="관심 기술은 최소 2개, 최대 10개 지정해야합니다"
-												placeholder="관심 기술"
-											/>
-										)}
-									/>
-								) : (
-									<Autocomplete
-										required
-										multiple
-										options={skills}
-										value={interstedSkills.map((skill) => skill)}
-										onChange={handleCheckedSkills}
-										getOptionLabel={(option) => option}
-										filterSelectedOptions
-										isOptionEqualToValue={(option, value) => option === value}
-										renderInput={(value) => (
-											<TextField
-												{...value}
-												placeholder="관심 기술"
-											/>
-										)}
-									/>
-								)
-							}
+							skillError ? (
+								<Autocomplete
+									required
+									multiple
+									options={skills.map((item) => item.name)}
+									// value={interstedSkills}
+									onChange={handleCheckedSkills}
+									// getOptionLabel={(option) => option}
+									// filterSelectedOptions
+									// isOptionEqualToValue={(option, value) => option === value}
+									renderInput={(value) => (
+										<TextField
+											{...value}
+											error
+											helperText="관심 기술은 최소 2개, 최대 10개 지정해야합니다"
+											placeholder="관심 기술"
+										/>
+									)}
+								/>
+							) : (
+								<Autocomplete
+									required
+									multiple
+									options={skills.map((item) => item.name)}
+									onChange={handleCheckedSkills}
+									renderInput={(value) => (
+										<TextField
+											{...value}
+											placeholder='관심 기술'
+										/>
+									)}
+								/>
+							)
+						}
 						</div>
 
 						{/* 목표직무 */}
@@ -231,45 +275,40 @@ function SecondModal() {
 								<p style={{ fontSize: '0.8em' }}>1개 지정 필수</p>
 							</div>
 							{
-								targetError ? (
-									<Autocomplete
-										options={targetJobs}
-										onChange={(event, newValue) => {
-											setTarget(newValue)
-										}}
-										inputValue={inputTarget}
-										onInputChange={(event, newInputValue) => {
-											setInputTarget(newInputValue)
-										}}
-										renderInput={(value) => (
-											<TextField
-												error
-												{...value}
-												helperText='목표 직무 지정은 필수입니다.'
-												placeholder="목표 직무"
-											/>
-										)}
-									/>
-								) : (
-									<Autocomplete
-										options={targetJobs}
-										onChange={(event, newValue) => {
-											setTarget(newValue)
-										}}
-										inputValue={inputTarget}
-										onInputChange={(event, newInputValue) => {
-											setInputTarget(newInputValue)
-										}}
-										renderInput={(value) => (
-											<TextField
-												{...value}
-												placeholder="목표 직무"
-											/>
-										)}
-									/>
-								)
-							}
-
+							targetError ? (
+								<Autocomplete
+									options={targetJobs.map((item) => item.name)}
+									onChange={(event, newValue) => {
+										// skill들 중에 newValue와 같은애를 통채로 저장함
+										const selectedJob = targetJobs.filter((option) => newValue.includes(option.name))
+										setTarget(selectedJob)
+									}}
+									renderInput={(value) => (
+										<TextField
+											error
+											{...value}
+											helperText='목표 직무 지정은 필수입니다.'
+											placeholder="목표 직무"
+										/>
+									)}
+								/>
+							) : (
+								<Autocomplete
+									options={targetJobs.map((item) => item.name)}
+									onChange={(event, newValue) => {
+										// skill들 중에 newValue와 같은애를 통채로 저장함
+										const selectedJob = targetJobs.filter((option) => newValue.includes(option.name))
+										setTarget(selectedJob)
+									}}
+									renderInput={(value) => (
+										<TextField
+											{...value}
+											placeholder="목표 직무"
+										/>
+									)}
+								/>
+							)
+						}
 						</div>
 
 						{/* 제출 버튼 */}
@@ -278,7 +317,7 @@ function SecondModal() {
 							style={{ marginTop: '20px' }}
 							onClick={checkValid}
 						>
-							제출
+							가입하기
 						</Button>
 					</div>
 				</div>

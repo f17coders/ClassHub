@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Card, CardContent, CardMedia, Button, Rating, IconButton, Snackbar, Alert, Backdrop } from '@mui/material'
+import { Card, CardContent, CardMedia, Button, Rating, IconButton } from '@mui/material'
 import { useState } from 'react'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
@@ -9,6 +9,8 @@ import { styled } from '@mui/material/styles'
 import { useSelector, useDispatch } from 'react-redux'
 import { addElement } from './../store/store.js'
 import { useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
+
 
 // tooltip에 스타일 주기
 const LightTooltip = styled(({ className, ...props }) => (
@@ -46,36 +48,35 @@ function LectureCard(props) {
 		navigate(`/lecture/detail/1`)
 	}
 
-	// snackbar용 병수
-	const [open, setOpen] = useState(false)
-	const handleClick = () => {
-    setOpen(true)
-  }
-	const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
 
-    setOpen(false);
-  }
+	// 강의 담았을 때 알림 (sweetAlert용)
+	const Toast = Swal.mixin({
+		toast: true,
+		position: "bottom-start",
+		showConfirmButton: false,
+		timer: 2000,
+		didOpen: (toast) => {
+			toast.onmouseenter = Swal.stopTimer;
+			toast.onmouseleave = Swal.resumeTimer;
+		}
+	})
 	
-	// alert창 용
-	const [openAlert, setOpenAlert] = React.useState(false);
-  const handleCloseAlert = () => {
-    setOpenAlert(false);
-  };
-  const handleOpenAlert = () => {
-    setOpenAlert(true);
-  };
-
-	// 함수 두개 합치는 용(강의 비교 + 완료됐다는 snackbar) or 3개 다 차면 안된다고 해주기
+	
+	// 강의 담겼을 때 or 3개 다 차면 안된다고 해주기
 	let compareLectures = useSelector((state) => state.compareLectures)
 	function addCart() {
 		if (compareLectures.length < 3) {
 			dispatch(addElement(props))
-			handleClick()
+			Toast.fire({
+				icon: "success",
+				title: "강의 비교하기에 담겼습니다."
+			});
 		} else {
-			handleOpenAlert()
+			Swal.fire({
+				icon: "error",
+				title: "강의가 3개 이상입니다",
+				text: "비교할 수 있는 강의는 최대 3개입니다.",
+			});
 		}
 	}
 
@@ -147,24 +148,10 @@ function LectureCard(props) {
 									<BalanceIcon />
 								</IconButton>
 							</LightTooltip>
-
 						</div>
 					</div>
 				) : null
 			}
-			<Snackbar
-        open={open}
-        autoHideDuration={2000}
-        onClose={handleClose}
-        message="비교하기 위한 강의에 담겼습니다"
-      />
-			<Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={openAlert}
-        onClick={handleCloseAlert}
-      >
-        <Alert severity="warning">비교강의가 3개 이상입니다!</Alert>
-      </Backdrop>
 		</Card>
 	)
 }

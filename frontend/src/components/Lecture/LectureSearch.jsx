@@ -4,7 +4,6 @@ import SearchIcon from '@mui/icons-material/Search'
 import IconButton from '@mui/material/IconButton'
 import ToggleButton from '@mui/material/ToggleButton'
 import Grid from '@mui/material/Grid'
-import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
@@ -18,7 +17,7 @@ import axios from 'axios'
 // 강의 검색창 (+ 태그 선택까지)
 export default function LimitTags() {
 	// 옆에 있을 태그(임시)
-	const [recommendTags, setRecommendTags] = useState(['임시', '태그', '입니다', '여기엔', '자주쓸거같은', '태그가', '들어가요'])
+	const [recommendTags, setRecommendTags] = useState(['Spring', 'React', '네트워크', 'C++', 'SQL', 'JavaScript', 'Vue.js'])
 
 	// 처음 전체 태그 불러오기
 	const [tags, setTags] = useState([])
@@ -42,16 +41,23 @@ export default function LimitTags() {
 	const [value, setValue] = useState(null);
 	const [inputValue, setInputValue] = useState('');
 	const addTag = function (event, newValue) {
-		let copy = [newValue, ...selectedTags]
+		if (tags.includes(newValue)) {
+			let copy = [newValue, ...selectedTags]
 
-		setSelectedTags(copy)
-		setValue(newValue)
-		if (newValue != null) {
-			let tmp = [newValue, ...recommendTags]
-			setRecommendTags(tmp)
-			let tmp2 = [newValue, ...selectedButtons]
-			setSelectedButtons(tmp2)
+			setSelectedTags(copy)
+			setValue(newValue)
+			if (newValue != null) {
+				if (recommendTags.includes(newValue)) {
+					console.log('있는 태그')
+				} else {
+					let tmp = [newValue, ...recommendTags]
+					setRecommendTags(tmp)
+				}
+				let tmp2 = [newValue, ...selectedButtons]
+				setSelectedButtons(tmp2)
+			}
 		}
+
 	}
 
 
@@ -115,9 +121,9 @@ export default function LimitTags() {
 											onChange={() => handleButtonClick(item)}
 											color='primary'
 											size='large'
-											sx={{ margin: '4px', height: '35px' }}
+											sx={{ margin: '4px', height: '35px'  }}
 										>
-											#{item}
+											# {item}
 										</ToggleButton>
 									)
 								})
