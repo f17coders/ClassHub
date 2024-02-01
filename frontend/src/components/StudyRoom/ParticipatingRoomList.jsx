@@ -7,22 +7,31 @@ import PermMedia from '@mui/icons-material/PermMedia';
 import Dns from '@mui/icons-material/Dns';
 import Public from '@mui/icons-material/Public';
 import ImageIcon from '@mui/icons-material/Image';
-
-
-
-// 참여중인 스터디 목록 데이터 -> API에서 받아올것!
-const data = [
-    { id: 1, icon: <People />, label: '자바의 신이 될거야', date: 'Jan 22, 2024' },
-    { id: 2, icon: <Dns />, label: '스프링을 공부해봐요', date: 'Jan 19, 2024' },
-    { id: 3, icon: <PermMedia />, label: 'CS 뿌시기', date: 'Jan 12, 2024' },
-    { id: 4, icon: <Public />, label: '기술면접 준비방', date: 'Jan 2, 2024' },
-  ];
+import axios from 'axios';
 
 // 내가 참여중인 스터디 목록 조회(왼쪽 사이드메뉴에서)
 export default function ParticipatingRoomList(){
-        // 사이드바 메뉴 열기
-        const [open, setOpen] = React.useState(true);
-        const navigate = useNavigate();
+  const [data, setData] = useState([]);
+
+
+  // 참여중인 스터디 목록 데이터 -> API에서 받아올것!
+  useEffect(() => {
+    axios.get(`http://i10a810.p.ssafy.io:4000/members/v1/studies/participation`, {
+      headers: {
+        AUTHORIZATION: '9'
+      }
+    })
+    .then((res) => {
+      console.log(res.data.result)
+      setData(res.data.result)
+      // window.location.reload(); //페이지 새로고침
+    })
+    .catch((err) => console.log(err))
+  },[]);
+
+  // 사이드바 메뉴 열기
+  const [open, setOpen] = React.useState(true);
+  const navigate = useNavigate();
 
     return(
         <Box sx={{ bgcolor: open ? 'rgba(71, 98, 130, 0.2)' : null, pb: open ? 2 : 0,}}>
@@ -62,10 +71,10 @@ export default function ParticipatingRoomList(){
         {open &&
           data.map((item) => (
             <ListItemButton 
-              key={item.label}
+              key={item.studyId}
               sx={{ width: '100%', maxWidth: 360 }}
               onClick={() => {
-                navigate(`participating/${item.id}`)
+                navigate(`participating/${item.studyId}`)
             }}
               >
                 <ListItem sx={{ py: 0, minHeight: 32, color: 'rgba(255,255,255,.8)' }}>
@@ -74,7 +83,7 @@ export default function ParticipatingRoomList(){
                       <ImageIcon />
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText primary={item.label} secondary={item.date}
+                  <ListItemText primary={item.title}
                   primaryTypographyProps={{ fontSize: 12, fontWeight: 'medium' }} />
                 </ListItem>
                 <Divider/>

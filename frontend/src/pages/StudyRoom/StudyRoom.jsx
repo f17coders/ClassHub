@@ -10,16 +10,6 @@ import Public from '@mui/icons-material/Public';
 import PrivateMessageList from "../../components/StudyRoom/PrivateMessageList";
 import ParticipatingRoomList from "../../components/StudyRoom/ParticipatingRoomList";
 
-
-
-const data = [
-  { icon: <People />, label: 'JAVA의 신이 될거야', date: 'Jan 22, 2024' },
-  { icon: <Dns />, label: 'Database', date: 'Jan 19, 2024' },
-  { icon: <PermMedia />, label: 'Storage', date: 'Jan 12, 2024' },
-  { icon: <Public />, label: 'Hosting', date: 'Jan 2, 2024' },
-];
-
-
 const FireNav = styled(List)({
   '& .MuiListItemButton-root': {
     paddingLeft: 24,

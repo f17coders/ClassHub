@@ -22,6 +22,8 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
     const [value, setValue] = React.useState(null);
     const [selected1, setSelected1] = React.useState(true); //공개 버튼 선택
     const [selected2, setSelected2] = React.useState(false); //비공개 버튼 선택
+    // 상위 컴포넌트에서 선택된 목표 강의를 관리하기 위한 상태 추가
+    const [selectedLecture, setSelectedLecture] = useState(null);
     
     const [title, setTitle] = useState(''); //스터디명
     const [capacity, setCapacity] = useState(10); //스터디 정원
@@ -30,6 +32,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
     const [description, setDescription] = useState(''); //스터디 설명
     const [tagList, setTagList] = useState([]); //스터디 태그
     const [tagListFromAPI, setTagListFromAPI] = useState([]); //API에서 가져온 스터디 태그 저장
+    const [lectureFromAPI, setLectureFromAPI] = useState([]); //API에서 가져온 목표강의 리스트 저장
 
     // 유효성 검사 변수
     const [titleError, setTitleError] = useState(false);
@@ -40,6 +43,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
 
     // 생성 함수
     const createStudyRoom = function() {
+      console.log(lectureId)
       axios.post('http://i10a810.p.ssafy.io:4000/studies/v1',
       {
         "title": title,
@@ -50,26 +54,40 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
         "lectureId": lectureId
       }, {
         headers: {
-          Authorization: '10'
+          AUTHORIZATION : 9
         }
       })
       .then((res) => {
         console.log(res)
         onRegisterSuccess()
-        window.location.reload(); //페이지 새로고침
+        // window.location.reload(); //페이지 새로고침
       })
       .catch((err) => console.log(err))
     }
 
     // 태그 리스트 가져오기
 	  useEffect(() => {
-      axios.get(`http://i10a810.p.ssafy.io:4000/tags/v0/lectures`)
-      .then((response)=> {
-          console.log(response.data.result.tagList)
-          setTagListFromAPI(response.data.result.tagList)
-      })
-      .catch((err) => console.log(err))
-    }, [])
+      if(studyCreate){
+        axios.get(`http://i10a810.p.ssafy.io:4000/tags/v0/lectures`)
+        .then((response)=> {
+            console.log(response.data.result.tagList)
+            setTagListFromAPI(response.data.result.tagList)
+        })
+        .catch((err) => console.log(err))
+      }
+    }, [studyCreate])
+
+    // 목표강의 리스트 가져오기
+	  useEffect(() => {
+      if(studyCreate){
+        axios.get(`http://i10a810.p.ssafy.io:4000/lectures/v0?category&tags&keyword&level&site&order&page=0&size=16&sort=string`)
+        .then((response)=> {
+            console.log(response.data.result.lectureList)
+            setLectureFromAPI(response.data.result.lectureList)
+        })
+        .catch((err) => console.log(err))
+      }
+    }, [studyCreate])
     
     // 스터디명 유효성 검사
     const handleTitleCheck = (event) => {
@@ -127,15 +145,16 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
 
     
     // 스터디 목표강의 유효성 검사
-    const handleLectureIdCheck = (event) => {
-      const input = event.target.value;
-      setLectureId(input);
+    const handleLectureIdCheck = (event, newLecture) => {
+      //newValue는 선택된 옵션을 나타냄
+      const selectedLecture = newLecture.lectureId;
+      console.log(selectedLecture)
 
-      //최대 90자까지만 입력 가능하도록 검사
-      if(input.length === 0 || input === null){
+      if(selectedLecture.length === 0){
         setLectureIdError(true);
       } else{
         setLectureIdError(false);
+        setLectureId(selectedLecture);
       }
     }
 
@@ -373,124 +392,28 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
                             <p>목표강의 연결</p>
                             <p>필수</p>
                         </div>
-                        {
-                          lectureIdError? (
-                            // 오류 처리 하기
+                        
                           <Autocomplete
                             size='small'
-                            value={value}
-                            onChange={(event, newValue) => {
-                              handleLectureIdCheck(event);
-                              if (typeof newValue === 'string') {
-                                setValue({
-                                  title: newValue,
-                                });
-                              } else if (newValue && newValue.inputValue) {
-                                // Create a new value from the user input
-                                setValue({
-                                  title: newValue.inputValue,
-                                });
-                              } else {
-                                setValue(newValue);
-                              }
+                            value={selectedLecture}
+                            onChange={(event, newLecture) => {
+                              setSelectedLecture(newLecture);
+                              handleLectureIdCheck(event, newLecture);
                             }}
-                            filterOptions={(options, params) => {
-                              const filtered = filter(options, params);
-                            
-                              const { inputValue } = params;
-                              // Suggest the creation of a new value
-                              const isExisting = options.some((option) => inputValue === option.name);
-                              if (inputValue !== '' && !isExisting) {
-                                filtered.push({
-                                  inputValue,
-                                  title: `Add "${inputValue}"`,
-                                });
-                              }
-                          
-                              return filtered;
-                            }}
-                            selectOnFocus
-                            clearOnBlur
-                            handleHomeEndKeys
-                            id="free-solo-with-text-demo"
-                            options={tagListFromAPI}
-                            getOptionLabel={(option) => {
-                              // Value selected with enter, right from the input
-                              if (typeof option === 'string') {
-                                return option;
-                              }
-                              // Add "xxx" option created dynamically
-                              if (option.inputValue) {
-                                return option.inputValue;
-                              }
-                              // Regular option
-                              return option.name;
-                            }}
-                            renderOption={(props, option) => <li {...props}>{option.name}</li>}
-                            freeSolo
-                            renderInput={(params) => (
-                              <TextField error {...params} placeholder="목표강의를 연결하세요"/>
+                            options={lectureFromAPI}
+                            getOptionKey={(option) => option.lectureId}
+                            getOptionLabel={(option) => option.lectureName}
+                            filterSelectedOptions
+                            renderInput={(value) => (
+                              <TextField
+                                {...value}
+                                placeholder="목표강의를 연결하세요"
+                              />
                             )}
-                          />
-                          ):(
-                          <Autocomplete
-                            size='small'
-                            value={value}
-                            onChange={(event, newValue) => {
-                              handleLectureIdCheck(event)
-                              if (typeof newValue === 'string') {
-                                setValue({
-                                  title: newValue,
-                                });
-                              } else if (newValue && newValue.inputValue) {
-                                // Create a new value from the user input
-                                setValue({
-                                  title: newValue.inputValue,
-                                });
-                              } else {
-                                setValue(newValue);
-                              }
-                            }}
-                            filterOptions={(options, params) => {
-                              const filtered = filter(options, params);
-                            
-                              const { inputValue } = params;
-                              // Suggest the creation of a new value
-                              const isExisting = options.some((option) => inputValue === option.name);
-                              if (inputValue !== '' && !isExisting) {
-                                filtered.push({
-                                  inputValue,
-                                  title: `Add "${inputValue}"`,
-                                });
-                              }
-                          
-                              return filtered;
-                            }}
-                            selectOnFocus
-                            clearOnBlur
-                            handleHomeEndKeys
-                            id="free-solo-with-text-demo"
-                            options={tagListFromAPI}
-                            getOptionLabel={(option) => {
-                              // Value selected with enter, right from the input
-                              if (typeof option === 'string') {
-                                return option;
-                              }
-                              // Add "xxx" option created dynamically
-                              if (option.inputValue) {
-                                return option.inputValue;
-                              }
-                              // Regular option
-                              return option.name;
-                            }}
-                            renderOption={(props, option) => <li {...props}>{option.name}</li>}
                             freeSolo
-                            renderInput={(params) => (
-                              <TextField {...params} placeholder="목표강의를 연결하세요"/>
-                            )}
                           />
-                          )
-                        }
+                          
+                        
                         
                     </div>
 
