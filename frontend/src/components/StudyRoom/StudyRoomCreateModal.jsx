@@ -35,10 +35,11 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
     const [lectureFromAPI, setLectureFromAPI] = useState([]); //API에서 가져온 목표강의 리스트 저장
 
     // 유효성 검사 변수
-    const [studyNameError, setStudyNameError] = useState(false);
-    const [studyPersonnelError, setStudyPersonnelError] = useState(false);
-    const [studyDescriptionError, setStudyDescriptionError] = useState(false);
-    const [studyTagError, setStudyTagError] = useState(false);
+    const [titleError, setTitleError] = useState(false);
+    const [capacityError, setCapacityError] = useState(false);
+    const [lectureIdError, setLectureIdError] = useState(false);
+    const [descriptionError, setDescriptionError] = useState(false);
+    const [tagListError, setTagListError] = useState(false);
 
     // 생성 함수
     const createStudyRoom = function() {
@@ -89,54 +90,54 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
     }, [studyCreate])
     
     // 스터디명 유효성 검사
-    const handleStudyNameCheck = (event) => {
+    const handleTitleCheck = (event) => {
       const input = event.target.value;
-      setStudyName(input);
+      setTitle(input);
 
       //최대 10자까지만 입력 가능하도록 검사
       if(input.length > 10 || input.length === 0){
-        setStudyNameError(true);
+        setTitleError(true);
       } else{
-        setStudyNameError(false);
+        setTitleError(false);
       }
     }
 
     // 스터디 정원 유효성 검사
-    const handleStudyPersonnelCheck = (event) => {
+    const handleCapacityCheck = (event) => {
       const input = event.target.value;
-      setStudyPersonnel(input);
+      setCapacity(input);
 
       //최소 1명, 최대 10명
       if(input < 1 || input > 10){
-        setStudyPersonnelError(true);
+        setCapacityError(true);
       } else{
-        setStudyPersonnelError(false);
+        setCapacityError(false);
       }
     }
 
     // 스터디 설명 유효성 검사
-    const handleStudyDescriptionCheck = (event) => {
+    const handleDescriptionCheck = (event) => {
       const input = event.target.value;
-      setStudyDescription(input);
+      setDescription(input);
 
       //최대 90자까지만 입력 가능하도록 검사
       if(input.length > 90){
-        setStudyDescriptionError(true);
+        setDescriptionError(true);
       } else{
-        setStudyDescriptionError(false);
+        setDescriptionError(false);
       }
     }
 
     // 스터디 태그 유효성 검사
-    const handleStudyTagCheck = (event, newValue) => {
+    const handleTagListCheck = (event, newValue) => {
       //newValue는 선택된 옵션을 나타냄
-      const selectedTags = newValue.map((option) => option.title);
-
+      const selectedTags = newValue.map((option) => option.tagId);
+      console.log(selectedTags)
       //최대 10개 까지만 입력 가능하도록 검사
       if(selectedTags.length > 10){
-        setStudyTagError(true);
+        setTagListError(true);
       } else{
-        setStudyTagError(false);
+        setTagListError(false);
         //선택된 태그들을 state에 설정
         setTagList(selectedTags);
       }
@@ -172,20 +173,21 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
         setValue(null);
         setSelected1(true);
         setSelected2(false);
-        setStudyName('');
-        setStudyPersonnel(10);
-        setStudyDescription('');
-        setStudyTag([]);
-        setStudyNameError(false);
-        setStudyPersonnelError(false);
-        setStudyDescriptionError(false);
-        setStudyTagError(false);
+        setTitle('');
+        setCapacity(10);
+        setDescription('');
+        setTagList([]);
+        setTitleError(false);
+        setCapacityError(false);
+        setDescriptionError(false);
+        setTagListError(false);
+        setLectureIdError(false);
       }
     }, [studyCreate]);
 
     // 모든 유효성 검사 결과 확인
-    const hasErrors = studyNameError || studyPersonnelError || studyDescriptionError || studyTagError
-    || studyName.length === 0 || studyDescription.length === 0 || studyTag.length === 0 
+    const hasErrors = titleError || capacityError || descriptionError || tagListError || lectureIdError
+    || title.length === 0 || description.length === 0 || tagList.length === 0 
     || (selected1 === false && selected2 === false)
     
     return(
@@ -193,8 +195,6 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
             <Modal
                 open={studyCreate}
                 onClose={studyCreateClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
             >
               <Container sx={style} style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', marginTop: '40px'}}>
                 <Stack style={{width: "80%"}}>
@@ -210,15 +210,15 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
                        </div>
                         
                         {
-                          studyNameError ? (
+                          titleError ? (
                             <TextField
                               error
                               id="outlined-error-helper-text"
                               size='small'
                               sx = {{width: '100%'}}
                               helperText="10자 이내로 입력하세요"
-                              value={studyName}
-                              onChange={handleStudyNameCheck}
+                              value={title}
+                              onChange={handleTitleCheck}
                             />
                           ) : (
                             <TextField
@@ -227,8 +227,8 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
                               placeholder="스터디명을 입력하세요*"
                               size='small'
                               sx = {{width: '100%'}}
-                              value={studyName}
-                              onChange={handleStudyNameCheck}
+                              value={title}
+                              onChange={handleTitleCheck}
                             />
                           )
                         }
@@ -241,7 +241,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
                         <p>최소 1명, 최대 10명</p>
                       </div>
                       {
-                        studyPersonnelError ?(
+                        capacityError ?(
                           <TextField
                             error
                             id="outlined-error-helper-text"
@@ -249,8 +249,8 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
                             type='number'
                             sx = {{width: '100%'}}
                             helperText="정확한 인원수를 설정하세요"
-                            value={studyPersonnel}
-                            onChange={handleStudyPersonnelCheck}
+                            value={capacity}
+                            onChange={handleCapacityCheck}
                             />
                         ) : (
                           <TextField
@@ -260,8 +260,8 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
                             type='number'
                             size='small'
                             sx = {{width: '100%'}}
-                            value={studyPersonnel}
-                            onChange={handleStudyPersonnelCheck}
+                            value={capacity}
+                            onChange={handleCapacityCheck}
                           /> 
                         )
                       }
@@ -275,7 +275,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
                             <p>90자 이내</p>
                         </div>
                         {
-                          studyDescriptionError ? (
+                          descriptionError ? (
                             <TextField
                               error
                               multiline
@@ -284,8 +284,8 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
                               size='small'
                               sx = {{width: '100%'}}
                               helperText="90자 이내로 입력하세요"
-                              value={studyDescription}
-                              onChange={handleStudyDescriptionCheck}
+                              value={description}
+                              onChange={handleDescriptionCheck}
                             />
                           ) : (
                             <TextField
@@ -296,8 +296,8 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
                               placeholder="설명을 입력하세요*"
                               size='small'
                               sx = {{width: '100%'}}
-                              value={studyDescription}
-                              onChange={handleStudyDescriptionCheck}
+                              value={description}
+                              onChange={handleDescriptionCheck}
                             />
                           )
                         }
@@ -311,18 +311,16 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
                             <p >최소 1개, 최대 10개</p>
                         </div>
                         {
-                          studyTagError ? (
+                          tagListError ? (
                           <Autocomplete
                             required
                             multiple
                             id="tags-outlined"
                             size='small'
-                            options={top100Films}
-                            value={studyTag.map((tag) => ({title: tag}))}
-                            onChange={handleStudyTagCheck}
-                            getOptionLabel={(option) => option.title}
+                            options={tagListFromAPI}
+                            onChange={handleTagListCheck}
+                            getOptionLabel={(option) => option.name}
                             filterSelectedOptions
-                            isOptionEqualToValue={(option, value) => option.title === value.title}
                             renderInput={(params) => (
                               <TextField
                                 {...params}
@@ -338,12 +336,10 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
                             multiple
                             id="tags-outlined"
                             size='small'
-                            options={top100Films}
-                            value={studyTag.map((tag) => ({title: tag}))}
-                            onChange={handleStudyTagCheck}
-                            getOptionLabel={(option) => option.title}
+                            options={tagListFromAPI}
+                            onChange={handleTagListCheck}
+                            getOptionLabel={(option) => option.name}
                             filterSelectedOptions
-                            isOptionEqualToValue={(option, value) => option.title === value.title}
                             renderInput={(value) => (
                               <TextField
                                 {...value}
@@ -367,6 +363,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
                             onChange={() => {
                               setSelected1(!selected1);
                               setSelected2(false); // 비공개 버튼을 선택해제
+                              setIsPublic(true);
                             }}
                             sx={{borderRadius: '30px', width: '45%'}}
                           >
@@ -380,6 +377,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
                             onChange={() => {
                               setSelected2(!selected2);
                               setSelected1(false); // 공개 버튼을 선택해제
+                              setIsPublic(false);
                             }}
                             sx={{borderRadius: '20px', width: '45%'}}
                           >
@@ -392,7 +390,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
                     <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
                             <p>목표강의 연결</p>
-                            <p>선택</p>
+                            <p>필수</p>
                         </div>
                         
                           <Autocomplete
@@ -455,12 +453,3 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
 
 
 
-const top100Films = [
-    { title: 'Spring Boot' },
-    { title: 'Vue.js' },
-    { title: 'React.js' },
-    { title: 'VSCode' },
-    { title: 'IntelliJ' },
-    { title: 'Git' },
-    
-  ];

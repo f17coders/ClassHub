@@ -21,34 +21,107 @@ export default function CommunityDetail(){
     const MySwal = withReactContent(Swal);
 
     // 좋아요용 변수
-	const [like, setLike] = useState(false)
-	const toggleLike = () => setLike(!like)
+	const [canLike, setCanLike] = useState(false)
+	const toggleLike = () => setCanLike(!canLike)
 
     // 북마크용 변수
-	const [bookmark, setBookmark] = useState(false)
-	const toggleBookmark = () => setBookmark(!bookmark)
+	const [canScrap, setCanScrap] = useState(false)
+	const toggleBookmark = () => setCanScrap(!canScrap)
+
+    //수정 및 삭제 가능 여부
+    const [canUpdate, setCanUpdate] = useState(false)
 
     const [detailData, setDetailData] = useState([]); //받아온 데이터 저장할 배열
     const { communityId } = useParams();
+    // 게시글 상세 조회
     useEffect(() => {
-        axios.get(`http://i10a810.p.ssafy.io:4000/communities/v0/details/${communityId}`)
+        axios.get(`http://i10a810.p.ssafy.io:4000/communities/v0/details/${communityId}`, {
+            headers: {
+              Authorization: '10'
+            }
+          })
           .then((response) => {
-            // 받아온 데이터를 필요에 맞게 처리합니다.
+            // 받아온 데이터 필요에 맞게 처리
             setDetailData(response.data.result);
+            setCanLike(response.data.result.canLike);
+            setCanScrap(response.data.result.canScrap);
+            setCanUpdate(response.data.result.canUpdate);
             console.log(response.data.result)
           })
           .catch((err) => console.log(err));
       }, [communityId]);
 
+    // 게시글 삭제
     const deleteData = (communityId) =>{
-        axios.delete(`http://i10a810.p.ssafy.io:4000/communities/v1/${communityId}`)
+        axios.delete(`http://i10a810.p.ssafy.io:4000/communities/v1/${communityId}`, {
+            headers: {
+              Authorization: '10'
+            }
+          })
         .then((response) => {
             console.log('게시물 삭제 성공')
             navigate('/community'); //삭제 후 커뮤니티 홈으로 이동
             window.location.reload(); //페이지 새로고침
         })
         .catch((err) => console.log(err));
-    } 
+    }
+
+    //좋아요
+    const postLike = (communityId) => {
+        axios.post(`http://i10a810.p.ssafy.io:4000/communities/v1/likes/${communityId}`, {
+            headers: {
+              Authorization: '10'
+            }
+          })
+        .then(() => {
+            console.log('좋아요 등록 성공')
+            // window.location.reload(); //페이지 새로고침
+        })
+        .catch((err) => console.log(err));
+    }
+
+    //좋아요 취소
+    const deleteLike = (communityId) => {
+        axios.delete(`http://i10a810.p.ssafy.io:4000/communities/v1/unlikes/${communityId}`, {
+            headers: {
+              Authorization: '10'
+            }
+          })
+        .then(() => {
+            console.log('좋아요 취소 성공')
+            // window.location.reload(); //페이지 새로고침
+        })
+        .catch((err) => console.log(err));
+    }
+
+    //스크랩
+    const postScrap = (communityId) => {
+        axios.post(`http://i10a810.p.ssafy.io:4000/communities/v1/scrap/${communityId}`, {
+            headers: {
+              Authorization: '10'
+            }
+          })
+        .then(() => {
+            console.log('게시글 스크랩 성공')
+            // window.location.reload(); //페이지 새로고침
+        })
+        .catch((err) => console.log(err));
+    }
+
+    //스크랩 취소
+    const deleteScrap = (communityId) => {
+        axios.delete(`http://i10a810.p.ssafy.io:4000/communities/v1/unscrap/${communityId}`, {
+            headers: {
+              Authorization: '10'
+            }
+          })
+        .then(() => {
+            console.log('스크랩 취소 성공')
+            // window.location.reload(); //페이지 새로고침
+        })
+        .catch((err) => console.log(err));
+    }
+
 
     // 삭제 확인 Dialog용
     const handleDeleteDialogOpen = (communityId) => {
@@ -142,67 +215,57 @@ export default function CommunityDetail(){
                                 <div style={{justifyContent:"center"}}>
                                     {/* 좋아요 */}
                                     {
-                                        like ? (
-                                            <Tooltip title="좋아요 취소">
-                                                <IconButton size='small' onClick={toggleLike}>
-                                                    <FavoriteIcon />
+                                        canLike ? (
+                                            <Tooltip title="좋아요">
+                                                <IconButton size='small' onClick={() => {toggleLike(); postLike(communityId); }} >
+                                                    <FavoriteBorderIcon />
                                                 </IconButton>
                                             </Tooltip>
                                         ) : (
-                                            <Tooltip title="좋아요">
-                                                <IconButton size='small' onClick={toggleLike} >
-                                                    <FavoriteBorderIcon />
+                                            <Tooltip title="좋아요 취소">
+                                                <IconButton size='small' onClick={() => {toggleLike(); deleteLike(communityId); }} >
+                                                    <FavoriteIcon />
                                                 </IconButton>
                                             </Tooltip>
                                         )
                                     }
                                     {/* 스크랩 */}
                                     {
-                                        bookmark ? (
-                                            <Tooltip title="스크랩 취소">
-                                                <IconButton size='small' onClick={toggleBookmark}>
-                                                    <BookmarkIcon />
+                                        canScrap ? (
+                                            <Tooltip title="스크랩">
+                                                <IconButton size='small' onClick={() => {toggleBookmark(); postScrap(communityId); }} >
+                                                    <BookmarkBorderIcon />
                                                 </IconButton>
                                             </Tooltip>
                                         ) : (
-                                            <Tooltip title="스크랩">
-                                                <IconButton size='small' onClick={toggleBookmark} >
-                                                    <BookmarkBorderIcon />
+                                            <Tooltip title="스크랩 취소">
+                                                <IconButton size='small' onClick={() => {toggleBookmark(); deleteScrap(communityId);}}>
+                                                    <BookmarkIcon />
                                                 </IconButton>
                                             </Tooltip>
                                         )
                                     }
-                                    <Tooltip title="수정">
-                                        <IconButton onClick={() => {navigate(`/community/modify/${communityId}` ); 
-                                         } } aria-label="수정">
-                                            <EditIcon/>
-                                        </IconButton>
-                                    </Tooltip>
-                                    <Tooltip title="삭제">
-                                        <IconButton onClick={() => {handleDeleteDialogOpen(communityId); }}>
-                                            <DeleteIcon/>
-                                        </IconButton>
-                                    </Tooltip>
-
-                                    {/* 삭제확인 Dialog창 */}
-                                    {/* <Dialog open={open}>
-                                        <DialogTitle>{"정말 삭제하시겠습니까?"}</DialogTitle>
-                                        <DialogActions>
-                                          <Button onClick={handleClose}>아니오</Button>
-                                          <Button onClick={() => {handleClose(); handleOpenAlert();}} autoFocus>예</Button>
-                                        </DialogActions>
-                                    </Dialog> */}
-
-                                    {/* 삭제 Alert창 */}
-                                    {/* <Backdrop
-                                      open={openAlert}
-                                      onClick={() =>{handleCloseAlert(); deleteData();}}
-                                      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                                      >
-                                      <Alert severity="success" onClose={() => {}}>
-                                        삭제되었습니다!
-                                      </Alert>
-                                    </Backdrop> */}
+                                    {/* 수정 & 삭제 */}
+                                    {
+                                        canUpdate ? (
+                                            <>
+                                                <Tooltip title="수정">
+                                                    <IconButton onClick={() => {navigate(`/community/modify/${communityId}` ); }} >
+                                                        <EditIcon/>
+                                                    </IconButton>
+                                                </Tooltip>
+                                                <Tooltip title="삭제">
+                                                <IconButton onClick={() => {handleDeleteDialogOpen(communityId); }}>
+                                                    <DeleteIcon/>
+                                                </IconButton>
+                                                </Tooltip>
+                                            </>
+                                        ) : (
+                                            <></>
+                                        )
+                                    }
+                                    
+                                    
                                 </div>
                             </Stack>
                         </Stack>
@@ -217,10 +280,3 @@ export default function CommunityDetail(){
         </div>
     )
 }
-
-
-const top100Films = [
-    { title: 'Spring Boot', id: 1 },
-    { title: 'Vue.js', id: 2 },
-    { title: 'React.js', id: 3 },
-  ];
