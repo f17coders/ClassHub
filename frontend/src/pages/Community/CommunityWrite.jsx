@@ -17,7 +17,7 @@ export default function CommunityWrite(){
 
   // 태그 리스트 가져오기
   useEffect(() => {
-    axios.get(`http://i10a810.p.ssafy.io:4000/tags/v0/communities`)
+    axios.get(`https://i10a810.p.ssafy.io/api/tags/v0/communities`)
     .then((response)=> {
         console.log(response.data.result.tagList)
         setTagListFromAPI(response.data.result.tagList)
@@ -93,7 +93,7 @@ export default function CommunityWrite(){
     const CommunityPost = () => {
     // const concatenatedTag = tagList.map(tag => tag.title).join(',');
 
-      axios.post(`http://i10a810.p.ssafy.io:4000/communities/v1`,{
+      axios.post(`https://i10a810.p.ssafy.io/api/communities/v1`,{
         "title": title,
         "content": content,
         "tagList": tagList
@@ -102,7 +102,8 @@ export default function CommunityWrite(){
           Authorization: '10'
         }
       })
-      .then(()=> {
+      .then((res)=> {
+        console.log(res)
         console.log('게시물 등록완료')
         console.log(tagList)
         navigate('/community') //글 등록 후 커뮤니티 페이지로 이동

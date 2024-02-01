@@ -44,7 +44,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
     // 생성 함수
     const createStudyRoom = function() {
       console.log(lectureId)
-      axios.post('http://i10a810.p.ssafy.io:4000/studies/v1',
+      axios.post('https://i10a810.p.ssafy.io/api/studies/v1',
       {
         "title": title,
         "capacity": capacity,
@@ -68,7 +68,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
     // 태그 리스트 가져오기
 	  useEffect(() => {
       if(studyCreate){
-        axios.get(`http://i10a810.p.ssafy.io:4000/tags/v0/lectures`)
+        axios.get(`https://i10a810.p.ssafy.io/api/tags/v0/lectures`)
         .then((response)=> {
             console.log(response.data.result.tagList)
             setTagListFromAPI(response.data.result.tagList)
@@ -80,7 +80,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
     // 목표강의 리스트 가져오기
 	  useEffect(() => {
       if(studyCreate){
-        axios.get(`http://i10a810.p.ssafy.io:4000/lectures/v0?category&tags&keyword&level&site&order&page=0&size=16&sort=string`)
+        axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?category&tags&keyword&level&site&order&page=0&size=16&sort=string`)
         .then((response)=> {
             console.log(response.data.result.lectureList)
             setLectureFromAPI(response.data.result.lectureList)

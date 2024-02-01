@@ -25,7 +25,7 @@ function Community() {
 
   // 전체 글 조회
 	useEffect(() => {
-    axios.get(`http://i10a810.p.ssafy.io:4000/communities/v0?page=${currentPage-1}&size=${itemsPerPage}&sort=${alignList}`)
+    axios.get(`https://i10a810.p.ssafy.io/api/communities/v0?page=${currentPage-1}&size=${itemsPerPage}&sort=${alignList}`)
     .then((response)=> {
         console.log(response.data.result.communityList)
         // let copy = [...articles, ...response.data.result.communityList]

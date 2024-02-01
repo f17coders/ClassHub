@@ -46,7 +46,7 @@ export default function StudyRoomRecruitList({study}){
         // 비공개 방일 경우
         else{
           // 버튼 클릭 시에만 초대코드 요청
-        axios.get(`http://i10a810.p.ssafy.io:4000/studies/v1/invitation-code/${studyId}`)
+        axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/invitation-code/${studyId}`)
         .then((res) => {
     // console.log('초대코드 요청됨')
     // console.log(res.data.result)

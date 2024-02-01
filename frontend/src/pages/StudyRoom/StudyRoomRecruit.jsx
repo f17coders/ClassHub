@@ -18,7 +18,7 @@ export default function StudyRoomRecruit() {
   const [data, setData] = useState([])
   // 처음에 axios 요청으로 전체 목록 가져오기
 	useEffect(() => {
-    axios.get('http://i10a810.p.ssafy.io:4000/studies/v1')
+    axios.get('https://i10a810.p.ssafy.io/api/studies/v1')
     .then((response)=> {
         console.log(response.data.result.studyList)
         setData(response.data.result.studyList)

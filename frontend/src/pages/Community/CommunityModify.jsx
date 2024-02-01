@@ -17,7 +17,7 @@ export default function CommunityModify(){
 
   // 태그 리스트 가져오기
   useEffect(() => {
-    axios.get(`http://i10a810.p.ssafy.io:4000/tags/v0/communities`)
+    axios.get(`https://i10a810.p.ssafy.io/api/tags/v0/communities`)
     .then((response)=> {
         console.log(response.data.result.tagList)
         setTagListFromAPI(response.data.result.tagList)
@@ -81,7 +81,7 @@ export default function CommunityModify(){
   const [detailData, setDetailData] = useState([]); //받아온 데이터 저장할 배열
   const { communityId } = useParams();
   useEffect(() => {
-      axios.get(`http://i10a810.p.ssafy.io:4000/communities/v0/details/${communityId}`, {
+      axios.get(`https://i10a810.p.ssafy.io/api/communities/v0/details/${communityId}`, {
         headers: {
           Authorization: '10'
         }
@@ -97,7 +97,7 @@ export default function CommunityModify(){
   // 글 수정
   const CommunityPatch = () => {
   // const concatenatedTag = tagList.map(tag => tag.title).join(',');
-  axios.patch(`http://i10a810.p.ssafy.io:4000/communities/v1/${communityId}`,{
+  axios.patch(`https://i10a810.p.ssafy.io/api/communities/v1/${communityId}`,{
     "title": title,
     "content": content,
     "tagList": tagList

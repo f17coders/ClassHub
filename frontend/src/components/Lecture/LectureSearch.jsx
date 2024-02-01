@@ -33,7 +33,7 @@ export default function LimitTags() {
 	// 처음 전체 태그 불러오기(id랑 같이)
 	useEffect(() => {
 		if (tags.length == 0) {
-			axios.get('http://i10a810.p.ssafy.io:4000/tags/v0/lectures')
+			axios.get('https://i10a810.p.ssafy.io/api/tags/v0/lectures')
 				.then((res) => {
 					let tmp = res.data.result.tagList
 					setTags(tmp.slice(10))

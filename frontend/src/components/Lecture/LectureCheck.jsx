@@ -18,7 +18,7 @@ function LectureCheck() {
 	// 카테고리 목록 가져오기
 	useEffect(() => {
 		if (categories.length == 1) {
-			axios.get('http://i10a810.p.ssafy.io:4000/category/v0')
+			axios.get('https://i10a810.p.ssafy.io/api/category/v0')
 			.then((data)=> {
 					let copy = [...categories, ...data.data.result.categoryList]
 					setCategories(copy)
@@ -32,7 +32,7 @@ function LectureCheck() {
 	const searchCategory = function(category) {
 		if (category.categoryId == 0) {
 			dispatch(changeCategory(null))
-			axios.get(`http://i10a810.p.ssafy.io:4000/lectures/v0?page=0&size=16`)
+			axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?page=0&size=16`)
 			.then((res) =>{
 				console.log(res.data.result)
 			})
@@ -41,7 +41,7 @@ function LectureCheck() {
 			})
 		} else {
 			dispatch(changeCategory(category))
-			axios.get(`http://i10a810.p.ssafy.io:4000/lectures/v0?category=${category.categoryId}&page=0&size=16`)
+			axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?category=${category.categoryId}&page=0&size=16`)
 			.then((res) =>{
 				console.log(res.data.result)
 			})

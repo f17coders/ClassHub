@@ -16,7 +16,7 @@ export default function ParticipatingRoomList(){
 
   // 참여중인 스터디 목록 데이터 -> API에서 받아올것!
   useEffect(() => {
-    axios.get(`http://i10a810.p.ssafy.io:4000/members/v1/studies/participation`, {
+    axios.get(`https://i10a810.p.ssafy.io/api/members/v1/studies/participation`, {
       headers: {
         AUTHORIZATION: '9'
       }

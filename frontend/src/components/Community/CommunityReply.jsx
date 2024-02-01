@@ -67,7 +67,7 @@ export default function CommunityReply({detailData}){
 
   const createReply = () => {
     // 댓글 생성 함수
-      axios.post(`http://i10a810.p.ssafy.io:4000/comments/v1/${detailData.communityId}`,
+      axios.post(`https://i10a810.p.ssafy.io/api/comments/v1/${detailData.communityId}`,
       {
         "communityId": detailData.communityId,
         "content": content,
@@ -83,7 +83,7 @@ export default function CommunityReply({detailData}){
 
   const deleteReply = (commentId) => {
     // 댓글 삭제 함수
-      axios.delete(`http://i10a810.p.ssafy.io:4000/comments/v1/${commentId}`,
+      axios.delete(`https://i10a810.p.ssafy.io/api/comments/v1/${commentId}`,
       {
         "commentId": commentId,
       })

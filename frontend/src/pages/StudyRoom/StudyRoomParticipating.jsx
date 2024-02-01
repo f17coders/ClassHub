@@ -22,7 +22,7 @@ export default function StudyRoomParticipating(){
   const [data, setData] = useState([])
   // 스터디룸 ID로 상세정보 가져오기
 	useEffect(() => {
-    axios.get(`http://i10a810.p.ssafy.io:4000/studies/v1/detail/${studyId}`)
+    axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/detail/${studyId}`)
     .then((response)=> {
         console.log(response.data.result)
         setData(response.data.result)
@@ -83,7 +83,7 @@ export default function StudyRoomParticipating(){
 
   // 초대코드 요청
   useEffect(() => {
-    axios.get(`http://i10a810.p.ssafy.io:4000/studies/v1/invitation-code/${studyId}`)
+    axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/invitation-code/${studyId}`)
     .then((res) => {
       // console.log('초대코드 요청됨')
       // console.log(res.data.result)
@@ -130,7 +130,7 @@ export default function StudyRoomParticipating(){
 
   // 스터디룸 삭제
   const exitStudyRoom = (studyId) =>{
-    axios.delete(`http://i10a810.p.ssafy.io:4000/studies/v1/${studyId}`, 
+    axios.delete(`https://i10a810.p.ssafy.io/api/studies/v1/${studyId}`, 
     {
       headers: {
         AUTHORIZATION: '9'

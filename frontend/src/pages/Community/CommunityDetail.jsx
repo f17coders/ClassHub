@@ -35,7 +35,7 @@ export default function CommunityDetail(){
     const { communityId } = useParams();
     // 게시글 상세 조회
     useEffect(() => {
-        axios.get(`http://i10a810.p.ssafy.io:4000/communities/v0/details/${communityId}`, {
+        axios.get(`https://i10a810.p.ssafy.io/api/communities/v0/details/${communityId}`, {
             headers: {
               Authorization: '10'
             }
@@ -53,7 +53,7 @@ export default function CommunityDetail(){
 
     // 게시글 삭제
     const deleteData = (communityId) =>{
-        axios.delete(`http://i10a810.p.ssafy.io:4000/communities/v1/${communityId}`, {
+        axios.delete(`https://i10a810.p.ssafy.io/api/communities/v1/${communityId}`, {
             headers: {
               Authorization: '10'
             }
@@ -68,7 +68,7 @@ export default function CommunityDetail(){
 
     //좋아요
     const postLike = (communityId) => {
-        axios.post(`http://i10a810.p.ssafy.io:4000/communities/v1/likes/${communityId}`, {
+        axios.post(`https://i10a810.p.ssafy.io/api/communities/v1/likes/${communityId}`, {
             headers: {
               Authorization: '10'
             }
@@ -82,7 +82,7 @@ export default function CommunityDetail(){
 
     //좋아요 취소
     const deleteLike = (communityId) => {
-        axios.delete(`http://i10a810.p.ssafy.io:4000/communities/v1/unlikes/${communityId}`, {
+        axios.delete(`https://i10a810.p.ssafy.io/api/communities/v1/unlikes/${communityId}`, {
             headers: {
               Authorization: '10'
             }
@@ -96,7 +96,7 @@ export default function CommunityDetail(){
 
     //스크랩
     const postScrap = (communityId) => {
-        axios.post(`http://i10a810.p.ssafy.io:4000/communities/v1/scrap/${communityId}`, {
+        axios.post(`https://i10a810.p.ssafy.io/api/communities/v1/scrap/${communityId}`, {
             headers: {
               Authorization: '10'
             }
@@ -110,7 +110,7 @@ export default function CommunityDetail(){
 
     //스크랩 취소
     const deleteScrap = (communityId) => {
-        axios.delete(`http://i10a810.p.ssafy.io:4000/communities/v1/unscrap/${communityId}`, {
+        axios.delete(`https://i10a810.p.ssafy.io/api/communities/v1/unscrap/${communityId}`, {
             headers: {
               Authorization: '10'
             }

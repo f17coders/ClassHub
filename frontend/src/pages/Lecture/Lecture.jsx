@@ -31,7 +31,7 @@ function Lecture() {
 	// 검색어로 검색하기
 	const searchByKeyword = function () {
 		dispatch(changeKeyword(keyword))
-		axios.get(`http://i10a810.p.ssafy.io:4000/lectures/v0?${searchParams.category ?'category='+searchParams.category.categoryId : ''}${searchParams.keyword ? '&keyword=' + searchParams.keyword : ''}${searchParams.level ? '&level=' + searchParams.level : ''}${searchParams.site ? '&site=' + searchParams.site : ''}&page=0&size=16`)
+		axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?${searchParams.category ?'category='+searchParams.category.categoryId : ''}${searchParams.keyword ? '&keyword=' + searchParams.keyword : ''}${searchParams.level ? '&level=' + searchParams.level : ''}${searchParams.site ? '&site=' + searchParams.site : ''}&page=0&size=16`)
 			.then((res) => {
 				console.log(res)
 			})

@@ -50,7 +50,7 @@ export default function CommunityReplyModify({comment}){
 
   const modifyReply = (commentId) => {
     // 댓글 수정 함수
-      axios.put(`http://i10a810.p.ssafy.io:4000/comments/v1/${commentId}`,
+      axios.put(`https://i10a810.p.ssafy.io/api/comments/v1/${commentId}`,
       {
         "commentId": commentId,
         "content": content,

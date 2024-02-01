@@ -41,7 +41,7 @@ export default function StudyRoomModifyModal({ studyModify, studyModifyClose, on
 
     // 스터디룸 수정 함수
     const modifyStudyRoom = function() {
-      axios.patch('http://i10a810.p.ssafy.io:4000/studies/v1',{
+      axios.patch('https://i10a810.p.ssafy.io/api/studies/v1',{
         'studyId': studyId,
         'title' : studyName,
         'capacity' : studyPersonnel,
