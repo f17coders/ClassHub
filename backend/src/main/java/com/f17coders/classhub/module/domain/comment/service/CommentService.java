@@ -1,6 +1,7 @@
 package com.f17coders.classhub.module.domain.comment.service;
 
 import com.f17coders.classhub.global.exception.BaseExceptionHandler;
+import com.f17coders.classhub.module.domain.comment.Comment;
 import com.f17coders.classhub.module.domain.comment.dto.request.CommentRegisterReq;
 import com.f17coders.classhub.module.domain.comment.dto.request.CommentUpdateReq;
 import com.f17coders.classhub.module.domain.comment.dto.response.CommentDetailRes;
@@ -20,5 +21,5 @@ public interface CommentService {
 
     void deleteComment(int commentId, Member member) throws BaseExceptionHandler, IOException;
 
-    List<CommentDetailRes> getCommentListRes(Community community);
+    public CommentDetailRes convertToCommentListRes(Comment comment, Member member);
 }

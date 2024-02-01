@@ -5,13 +5,14 @@ import com.f17coders.classhub.module.domain.community.Community;
 import com.f17coders.classhub.module.domain.member.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Entity
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,6 +44,17 @@ public class Comment extends BaseEntity {
     public void putCommunity(Community community){   // 연관 관계 편의 메서드
         this.community = community;
         community.getCommentList().add(this);
+    }
+
+    // 생성 메서드
+    public static Comment createComment(String content, Member member, Community community) {
+        Comment comment = new Comment();
+
+        comment.setContent(content);
+        comment.putMember(member);
+        comment.putCommunity(community);
+
+        return comment;
     }
 }
 

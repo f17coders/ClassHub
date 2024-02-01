@@ -2,6 +2,7 @@ package com.f17coders.classhub.module.domain.community.service;
 
 import com.f17coders.classhub.global.exception.BaseExceptionHandler;
 import com.f17coders.classhub.global.exception.code.ErrorCode;
+import com.f17coders.classhub.module.domain.comment.Comment;
 import com.f17coders.classhub.module.domain.comment.dto.response.CommentDetailRes;
 import com.f17coders.classhub.module.domain.comment.service.CommentService;
 import com.f17coders.classhub.module.domain.community.Community;
@@ -19,7 +20,6 @@ import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.tag.Tag;
 import com.f17coders.classhub.module.domain.tag.dto.response.TagRes;
 import com.f17coders.classhub.module.domain.tag.repository.TagRepository;
-import jakarta.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +73,12 @@ public class CommunityServiceImpl implements CommunityService {
             communityId);
 
         // 댓글 목록
-        List<CommentDetailRes> commentDetailResList = commentService.getCommentListRes(community);
+        List<CommentDetailRes> commentDetailResList = new ArrayList<>();
+
+        for (Comment comment : community.getCommentList()) {
+            CommentDetailRes commentDetailRes = commentService.convertToCommentListRes(comment, member);    // TODO : 람다식으로 구현 가능 여부 확인
+            commentDetailResList.add(commentDetailRes);
+        }
 
         // 커뮤니티 태그 조회
         List<TagRes> tagResList = new ArrayList<>();

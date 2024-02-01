@@ -22,7 +22,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
 
-    private final MemberRepository memberRepository;
     private final CommunityRepository communityRepository;
     private final CommentRepository commentRepository;
 
@@ -31,47 +30,42 @@ public class CommentServiceImpl implements CommentService {
         Member member) throws BaseExceptionHandler, IOException {
         Optional<Community> community = communityRepository.findById(communityId);
 
-        Comment comment = new Comment();
+        Comment comment = Comment.createComment(commentRegisterReq.content(), member,
+            community.get());
 
-        comment.setContent(commentRegisterReq.content());
-        comment.putCommunity(community.get());
-//        comment.putMember(member);    // TODO : 시큐리티 적용 후 member로 변경
+        Comment saveComment = commentRepository.save(comment);
 
-        commentRepository.save(comment);
-
-        return comment.getCommentId();
+        return saveComment.getCommentId();
     }
 
     @Override
     public void updateComment(int commentId, CommentUpdateReq commentUpdateReq, Member member) {
-        String content = commentUpdateReq.content();
+        Optional<Comment> comment = commentRepository.findById(commentId);
 
-        Comment comment = commentRepository.findByCommentId(commentId);
-        comment.setContent(content);
-        commentRepository.save(comment);
+        comment.get().setContent(commentUpdateReq.content());
+
+        commentRepository.save(comment.get());
     }
 
     @Override
     public void deleteComment(int commentId, Member member) {
-        Comment comment = commentRepository.findByCommentId(commentId);
-        commentRepository.delete(comment);
+        Optional<Comment> comment = commentRepository.findById(commentId);
+        commentRepository.delete(comment.get());
     }
 
     @Override
-    public List<CommentDetailRes> getCommentListRes(Community community) {
-        List<CommentDetailRes> commentListDetailResList = new ArrayList<>();
+    public CommentDetailRes convertToCommentListRes(Comment comment, Member member) {
+        return CommentDetailRes.builder()
+            .commentId(comment.getCommentId())
+            .content(comment.getContent())
+            .memberNickname(comment.getMember().getNickname())
+            .memberProfileImg(comment.getMember().getProfileImage())
+            .canUpdate(isWriter(member, comment))
+            .createdAt(comment.getCreateTime())
+            .build();
+    }
 
-        for (Comment comment : community.getCommentList()) {
-            CommentDetailRes commentDetailRes = CommentDetailRes.builder()
-                .commentId(comment.getCommentId()).content(comment.getContent())
-                .memberNickname("memberNickname")   // TODO : 시큐리티 적용 후 변경
-                .memberProfileImg("member profileImg")  // TODO : 시큐리티 적용 후 변경
-                .canUpdate(true)  // TODO : 시큐리티 적용 후 변경
-                .createdAt(comment.getCreateTime()).build();
-
-            commentListDetailResList.add(commentDetailRes);
-        }
-
-        return commentListDetailResList;
+    private static boolean isWriter(Member member, Comment comment) {
+        return comment.getMember().equals(member);
     }
 }

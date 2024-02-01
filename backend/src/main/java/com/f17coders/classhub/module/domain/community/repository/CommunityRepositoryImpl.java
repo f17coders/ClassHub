@@ -9,6 +9,7 @@ import static com.f17coders.classhub.module.domain.member.QMember.member;
 import static com.f17coders.classhub.module.domain.tag.QTag.tag;
 
 import com.f17coders.classhub.module.domain.community.Community;
+import com.f17coders.classhub.module.domain.member.QMember;
 import com.f17coders.classhub.module.domain.tag.Tag;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -25,11 +26,15 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
     }
 
     @Override
-    public Community findCommunityByCommunityIdForCommunityReadRes(int communityId) {
+    public Community findCommunityByCommunityIdForCommunityReadRes(int communityId) {   // TODO : 한번에 모든 것을 다 가져오기 vs id를 통해 여러번으로 받기 vs 한방쿼리로 프로젝션
+        QMember communityMember = new QMember("communityMember");
+        QMember commentMember = new QMember("commentMember");
+
         return queryFactory
             .selectFrom(community)
-            .leftJoin(community.member, member).fetchJoin()
+            .leftJoin(community.member, communityMember).fetchJoin()
             .leftJoin(community.commentList, comment).fetchJoin()
+            .leftJoin(comment.member, commentMember).fetchJoin()
             .leftJoin(community.communityTagSet, communityTag).fetchJoin()
             .leftJoin(communityTag.tag, tag).fetchJoin()
             .where(community.communityId.eq(communityId))
