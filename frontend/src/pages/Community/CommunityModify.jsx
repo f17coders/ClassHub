@@ -10,13 +10,26 @@ import withReactContent from 'sweetalert2-react-content'
 export default function CommunityModify(){
   const MySwal = withReactContent(Swal);
 
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [tagList, setTagList] = useState([]);
+  const [title, setTitle] = useState(''); //제목
+  const [content, setContent] = useState(''); //내용
+  const [tagList, setTagList] = useState([]); //해시태그
+  const [tagListFromAPI, setTagListFromAPI] = useState([]); //API에서 가져온 스터디 태그 저장
+
+  // 태그 리스트 가져오기
+  useEffect(() => {
+    axios.get(`http://i10a810.p.ssafy.io:4000/tags/v0/communities`)
+    .then((response)=> {
+        console.log(response.data.result.tagList)
+        setTagListFromAPI(response.data.result.tagList)
+    })
+    .catch((err) => console.log(err))
+  }, [])
 
   // 유효성 검사 변수
   const [titleError, setTitleError] = useState(false);
   const [contentError, setContentError] = useState(false);
+  const [tagListError, setTagListError] = useState(false);
+
 
   // 제목 유효성 검사
   const handleTitleCheck = (event) => {
@@ -36,7 +49,6 @@ export default function CommunityModify(){
     const input = event.target.value;
     setContent(input);
 
-    //최대 30자까지만 입력 가능하도록 검사
     if( input.length === 0){
       setContentError(true);
     } else{
@@ -44,15 +56,36 @@ export default function CommunityModify(){
     }
   }
 
+  // 태그 유효성 검사
+  const handleTagListCheck = (event, newValue) => {
+    //newValue는 선택된 옵션을 나타냄
+    const selectedTags = newValue.map((option) => option.tagId);
+    console.log(selectedTags)
+    //최대 10개 까지만 입력 가능하도록 검사
+    if(selectedTags.length > 10){
+      setTagListError(true);
+    } else{
+      setTagListError(false);
+      //선택된 태그들을 state에 설정
+      setTagList(selectedTags);
+    }
+  }
+
+
   // 모든 유효성 검사 결과 확인
-  const hasErrors = titleError || contentError || tagList.length === 0
+  const hasErrors = titleError || contentError || tagListError || 
+    title === '' || content === '' ||  tagList.length === 0;
 
   const navigate = useNavigate();
 
   const [detailData, setDetailData] = useState([]); //받아온 데이터 저장할 배열
   const { communityId } = useParams();
   useEffect(() => {
-      axios.get(`http://i10a810.p.ssafy.io:4000/communities/v0/details/${communityId}`)
+      axios.get(`http://i10a810.p.ssafy.io:4000/communities/v0/details/${communityId}`, {
+        headers: {
+          Authorization: '10'
+        }
+      })
         .then((response) => {
           // 받아온 데이터를 필요에 맞게 처리합니다.
           setDetailData(response.data.result);
@@ -63,18 +96,21 @@ export default function CommunityModify(){
 
   // 글 수정
   const CommunityPatch = () => {
-  const concatenatedTag = tagList.map(tag => tag.title).join(',');
+  // const concatenatedTag = tagList.map(tag => tag.title).join(',');
   axios.patch(`http://i10a810.p.ssafy.io:4000/communities/v1/${communityId}`,{
     "title": title,
     "content": content,
-    "tagList": concatenatedTag
+    "tagList": tagList
+  }, {
+    headers: {
+      Authorization: '10'
+    }
   })
   .then(()=> {
     console.log('게시물 수정완료')
     console.log('communityId' + communityId)
     console.log(title)
     console.log(content)
-    console.log(concatenatedTag)
     navigate('/community') //글 등록 후 커뮤니티 페이지로 이
   })
   .catch((err) => console.log(err))
@@ -151,10 +187,10 @@ export default function CommunityModify(){
                         <Autocomplete
                           multiple
                           id="tags-outlined"
-                          options={top100Films}
-                          getOptionLabel={(option) => option.title}
-                          value={tagList}
-                          onChange={(event, newValue) => setTagList(newValue)}
+                          options={tagListFromAPI}
+                          getOptionLabel={(option) => option.name}
+                          // value={tagList}
+                          onChange={handleTagListCheck}
                           filterSelectedOptions
                           renderInput={(params) => (
                             <TextField
@@ -168,16 +204,9 @@ export default function CommunityModify(){
                     <Button 
                       onClick={handleCreateDialogOpen} 
                       style={{marginTop: '20px'}} variant="contained"
-                      disabled={hasErrors || title.trim() === ''}>수정</Button>
+                      disabled={hasErrors}>수정</Button>
                 </Stack>
             </Container>
         </div>
     )
 }
-
-
-const top100Films = [
-  { title: 'Spring Boot', id: 1 },
-  { title: 'Vue.js', id: 2 },
-  { title: 'React.js', id: 3 },
-];

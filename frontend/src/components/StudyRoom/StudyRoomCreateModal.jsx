@@ -61,16 +61,15 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
       .catch((err) => console.log(err))
     }
 
-    // 전체 글 조회
-	useEffect(() => {
-    axios.get(`http://i10a810.p.ssafy.io:4000/tags/v0/lectures`)
-    .then((response)=> {
-        console.log(response.data.result.tagList)
-        setTagListFromAPI(response.data.result.tagList)   // 조회한 글 저장
-        
-    })
-    .catch((err) => console.log(err))
-  }, [])
+    // 태그 리스트 가져오기
+	  useEffect(() => {
+      axios.get(`http://i10a810.p.ssafy.io:4000/tags/v0/lectures`)
+      .then((response)=> {
+          console.log(response.data.result.tagList)
+          setTagListFromAPI(response.data.result.tagList)
+      })
+      .catch((err) => console.log(err))
+    }, [])
     
     // 스터디명 유효성 검사
     const handleTitleCheck = (event) => {
