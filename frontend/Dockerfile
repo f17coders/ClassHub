@@ -8,11 +8,14 @@ RUN npm run build
 
 ## 2. React를 Nginx로 Serve
 FROM nginx:latest
-WORKDIR /usr/share/nginx/html
 
 RUN rm /etc/nginx/conf.d/default.conf
-COPY ./nginx.conf /etc/nginx/conf.d
+COPY nginx.conf /etc/nginx/conf.d
+
+WORKDIR /usr/share/nginx/html
+
+COPY --from=builder /app/build /usr/share/nginx/html
 
 EXPOSE 80
-# Start Nginx
+
 CMD ["nginx", "-g", "daemon off;"]
