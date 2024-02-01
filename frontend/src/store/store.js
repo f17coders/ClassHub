@@ -1,6 +1,7 @@
 import { configureStore, createSlice, combineReducers } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storageSession from 'redux-persist/lib/storage/session';
+import user from './userSlice.js'
 
 // 로그인 된 상태인지 확인용
 let isLogin = createSlice({
@@ -90,7 +91,7 @@ const persistConfig = {
   key: 'root',
   storage: storageSession,
   // 로컬에 저장하고 싶은 애만 빼주기
-  whitelist: ['isLogin','compareLectures']
+  whitelist: ['isLogin','compareLectures', 'user']
 };
 
 const persistedReducer = persistReducer(

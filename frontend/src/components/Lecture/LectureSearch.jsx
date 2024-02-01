@@ -19,14 +19,9 @@ import { addTags, deleteTags, changeKeyword } from '../../store/store'
 
 // 강의 검색창 (+ 태그 선택까지)
 export default function LimitTags() {
-<<<<<<< HEAD
 	// 검색할 때 쓸 변수들
 	let searchParams = useSelector((state) => state.searchParams)
 	const dispatch = useDispatch()
-=======
-	// 옆에 있을 태그(임시)
-	const [recommendTags, setRecommendTags] = useState(['임시', '태그', '입니다', '여기엔', '자주쓸거같은', '태그가', '들어가요'])
->>>>>>> 4e7b5adf02f905f2a362343f1a0f8f8972dcf527
 
 
 	// 1. 태그 검색
@@ -58,7 +53,6 @@ export default function LimitTags() {
 		let arr = [newBtn, ...selectedButtons]
 		setSelectedButtons(arr)
 	}
-<<<<<<< HEAD
 	const handleTag = function (event, newValue) {
 		// 있는 값만 추가
 		if (tagNames.includes(newValue)) {
@@ -77,26 +71,6 @@ export default function LimitTags() {
 				addSelectedButton(nowValue[0])
 				dispatch(addTags(nowValue[0]))
 			}
-=======
-
-	// 태그 선택용
-	// 선택된 태그
-	const [selectedTags, setSelectedTags] = useState([])
-
-	// 인풋 받는 용
-	const [value, setValue] = useState(null);
-	const [inputValue, setInputValue] = useState('');
-	const addTag = function (event, newValue) {
-		let copy = [newValue, ...selectedTags]
-
-		setSelectedTags(copy)
-		setValue(newValue)
-		if (newValue != null) {
-			let tmp = [newValue, ...recommendTags]
-			setRecommendTags(tmp)
-			let tmp2 = [newValue, ...selectedButtons]
-			setSelectedButtons(tmp2)
->>>>>>> 4e7b5adf02f905f2a362343f1a0f8f8972dcf527
 		}
 	}
 	// 호버 버튼용변수들
@@ -162,11 +136,7 @@ export default function LimitTags() {
 											size='large'
 											sx={{ margin: '4px', height: '35px' }}
 										>
-<<<<<<< HEAD
 											# {item.name}
-=======
-											#{item}
->>>>>>> 4e7b5adf02f905f2a362343f1a0f8f8972dcf527
 										</ToggleButton>
 									)
 								})
