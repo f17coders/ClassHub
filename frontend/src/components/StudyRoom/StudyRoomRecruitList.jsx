@@ -52,20 +52,8 @@ export default function StudyRoomRecruitList({study}){
                 <Stack direction="row" sx={{ marginTop: 1 }}>
                   <p>{study.description}</p>
                 </Stack>
-                
-                <Stack direction="row" spacing={1}>
-                  <Tooltip title="연결된 강의">
-                    <LinkIcon/>
-                  </Tooltip>
-                  {
-                    study.lecture.name? (
-                      <p>{study.lecture.name}</p>
 
-                    ):(
-                      <p>연결된 강의 없음</p>
-                    )
-                  }
-                </Stack>
+                <LinkIcon/>
                     
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'space-around' }}>
                   <Stack direction="row" spacing={1} my={1}>

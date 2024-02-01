@@ -1,7 +1,6 @@
 import { configureStore, createSlice, combineReducers } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storageSession from 'redux-persist/lib/storage/session';
-import user from './userSlice'
 
 // 로그인 된 상태인지 확인용
 let isLogin = createSlice({
@@ -35,7 +34,6 @@ let selectedCategory = createSlice({
     }
   }
 })
-
 export let {changeCategory} = selectedCategory.actions
 
 // storage 저장용
@@ -49,8 +47,7 @@ const persistedReducer = persistReducer(
   combineReducers({
     isLogin: isLogin.reducer,
     compareLectures: compareLectures.reducer,
-    selectedCategory: selectedCategory.reducer,
-    user: user.reducer
+    selectedCategory: selectedCategory.reducer
   })
 );
 

@@ -7,6 +7,7 @@ import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListDeta
 import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListRes;
 import com.f17coders.classhub.module.domain.lecture.dto.response.LectureReadRes;
 import com.f17coders.classhub.module.domain.lecture.service.LectureService;
+import com.f17coders.classhub.module.domain.lectureLike.service.LectureLikeService;
 import com.f17coders.classhub.module.domain.study.dto.response.StudyListRes;
 import com.querydsl.core.Tuple;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LectureController {
 
 	private final LectureService lectureService;
+	private final LectureLikeService lectureLikeService;
 
 	@Operation(summary = "강의 상세 정보 조회")
 	@GetMapping("/v0/details/{lectureId}")
@@ -45,7 +47,7 @@ public class LectureController {
 	@Operation(summary = "강의 목록 조회 - 더미 데이터 구현(태그,order미구현)")
 	@GetMapping("/v0")
 	public ResponseEntity<BaseResponse<LectureListRes>> getLectureList(
-		@RequestParam(value = "category", required = false) String categoryName,
+		@RequestParam(value = "category", required = false) Integer categoryId,
 		@RequestParam(value = "tags", required = false) String tags,
 		@RequestParam(value = "keyword", required = false) String keyword,
 		@RequestParam(value = "level", required = false) String level,
@@ -53,10 +55,18 @@ public class LectureController {
 		@RequestParam(value = "order", required = false) String order,
 		Pageable pageable
 	) throws IOException {
-		LectureListRes lectureListRes = lectureService.getLecturesList(categoryName, keyword, level,
+		LectureListRes lectureListRes = lectureService.getLecturesList(categoryId, tags, keyword, level,
 			site, order, pageable);
 
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectureListRes);
+	}
+
+	@Operation(summary = "강의 좋아요")
+	@PostMapping("/v1/likes/{lectureId}")
+	public ResponseEntity<BaseResponse<Integer>> likeCommunity(@PathVariable("lectureId") int lectureId) throws IOException {
+//		lectureLikeService.likeLecture(lectureId, null);
+
+		return BaseResponse.success(SuccessCode.INSERT_SUCCESS, lectureId);
 	}
 
 

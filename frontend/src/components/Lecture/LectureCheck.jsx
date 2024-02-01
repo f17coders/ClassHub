@@ -8,7 +8,8 @@ import {changeCategory} from './../../store/store.js'
 function LectureCheck() {
 	// redux용 변수
 	let dispatch = useDispatch()
-	
+	let selectedCategory = useSelector((state) => state.selectedCategory)
+
 	// 강의 검색 카테고리들
 	const [categories, setCategories] = useState([{categoryId:0, categoryName:'전체'}])
 	// const setCategory = function() {
