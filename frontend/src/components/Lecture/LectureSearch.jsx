@@ -14,25 +14,70 @@ import NorthIcon from '@mui/icons-material/North';
 import Box from '@mui/material/Box'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useSelector, useDispatch } from 'react-redux'
+import { addTags, deleteTags, changeKeyword } from '../../store/store'
 
 // 강의 검색창 (+ 태그 선택까지)
 export default function LimitTags() {
+<<<<<<< HEAD
+	// 검색할 때 쓸 변수들
+	let searchParams = useSelector((state) => state.searchParams)
+	const dispatch = useDispatch()
+=======
 	// 옆에 있을 태그(임시)
 	const [recommendTags, setRecommendTags] = useState(['임시', '태그', '입니다', '여기엔', '자주쓸거같은', '태그가', '들어가요'])
+>>>>>>> 4e7b5adf02f905f2a362343f1a0f8f8972dcf527
 
-	// 처음 전체 태그 불러오기
+
+	// 1. 태그 검색
+	// 옆에 있을 태그 = recommendTags, 검색에서 나올 태그 = tags
+	const [recommendTags, setRecommendTags] = useState([])
 	const [tags, setTags] = useState([])
-	const getTags = function () {
+	const [tagNames, setTagNames] = useState([])  // 확인용으로 이름만 있는애
+	
+	// 처음 전체 태그 불러오기(id랑 같이)
+	useEffect(() => {
 		if (tags.length == 0) {
 			axios.get('http://i10a810.p.ssafy.io:4000/tags/v0/lectures')
 				.then((res) => {
 					let tmp = res.data.result.tagList
-					let copy = tmp.map((item) => item.name)
-					setTags(copy)
+					setTags(tmp.slice(10))
+					// 앞에 10개는 추천 태그
+					setRecommendTags(tmp.slice(0, 10))
+					// 이름만 뽑아서 저장
+					let temp = tmp.map((item) => item.name)
+					setTagNames(temp)
 				})
 				.catch((err) => console.log(err))
 		}
+	}, [])
+	
+	// 선택된 태그들(id까지)
+	const [selectedButtons, setSelectedButtons] = useState([])
+	const addSelectedButton = function(newBtn) {
+		let arr = [newBtn, ...selectedButtons]
+		setSelectedButtons(arr)
 	}
+<<<<<<< HEAD
+	const handleTag = function (event, newValue) {
+		// 있는 값만 추가
+		if (tagNames.includes(newValue)) {
+			// 만약에 옆에 있는 애들 중에 하나 검색한거라면
+			if (tagNames.slice(0, 10).includes(newValue)) {
+				// 버튼은 추가 안하고 활성화 + 검색에 추가
+				const nowValue = recommendTags.filter((item) => item.name == newValue)
+				addSelectedButton(nowValue[0])
+				dispatch(addTags(nowValue[0]))
+	
+			} else {
+				// 새로운걸 검색한거라면 버튼추가, 활성화, 검색 추가
+				const nowValue = tags.filter((item) => item.name == newValue)
+				let copy = [nowValue[0], ...recommendTags]
+				setRecommendTags(copy)
+				addSelectedButton(nowValue[0])
+				dispatch(addTags(nowValue[0]))
+			}
+=======
 
 	// 태그 선택용
 	// 선택된 태그
@@ -51,16 +96,16 @@ export default function LimitTags() {
 			setRecommendTags(tmp)
 			let tmp2 = [newValue, ...selectedButtons]
 			setSelectedButtons(tmp2)
+>>>>>>> 4e7b5adf02f905f2a362343f1a0f8f8972dcf527
 		}
 	}
-
-
 	// 호버 버튼용변수들
-	const [selectedButtons, setSelectedButtons] = useState([])
 	const handleButtonClick = (value) => {
 		if (selectedButtons.includes(value)) {
-			setSelectedButtons(selectedButtons.filter((btn) => btn !== value));
+			setSelectedButtons(selectedButtons.filter((btn) => btn !== value))
+			dispatch(deleteTags(value))
 		} else {
+			dispatch(addTags(value))
 			setSelectedButtons([...selectedButtons, value]);
 		}
 	}
@@ -70,12 +115,15 @@ export default function LimitTags() {
 		setAdd(!add)
 	}
 
+
+	// 2. 검색어(키워드) -> 는 전체 창에 있음
+	
+
 	// (해시태그 이외의) 버튼들
 	const levels = ['입문', '초급', '중급이상', '모든 수준']
 	const sites = ['인프런', '유데미', '구름 에듀']
 
-
-	//정렬관련
+	// 정렬(sort)
 	const [sort, setSort] = useState('')
 	const handleSort = (event) => {
 		setSort(event.target.value)
@@ -88,17 +136,14 @@ export default function LimitTags() {
 				add == false ? (
 					<Grid container sx={{ display: 'flex', justifyContent: 'space-between' }}>
 						{/* 태그로 검색 */}
-						<Grid item style={{ width: '40%', display: 'flex', alignItems: 'center' }} onClick={getTags}>
+						<Grid item style={{ width: '40%', display: 'flex', alignItems: 'center' }}>
 							<Autocomplete
 								freeSolo
-								value={value}
-								onChange={addTag}
-								inputValue={inputValue}
-								onInputChange={(event, newInputValue) => {
-									setInputValue(newInputValue);
-								}}
-								options={tags}
-								renderInput={(params) => <TextField {...params} label="태그로 검색해보세요" placeholder="" />}
+								onChange={handleTag}
+								options={tags.map((item) => item.name)}
+								renderInput={(params) => (
+									<TextField {...params} label="태그로 검색해보세요" placeholder="" />
+								)}
 								sx={{ flex: '70%' }}
 								size="small"
 							/>
@@ -117,7 +162,11 @@ export default function LimitTags() {
 											size='large'
 											sx={{ margin: '4px', height: '35px' }}
 										>
+<<<<<<< HEAD
+											# {item.name}
+=======
 											#{item}
+>>>>>>> 4e7b5adf02f905f2a362343f1a0f8f8972dcf527
 										</ToggleButton>
 									)
 								})
@@ -134,14 +183,11 @@ export default function LimitTags() {
 						<Grid item style={{ width: '40%', display: 'flex', alignItems: 'center' }}>
 							<Autocomplete
 								freeSolo
-								value={value}
-								onChange={addTag}
-								inputValue={inputValue}
-								onInputChange={(event, newInputValue) => {
-									setInputValue(newInputValue);
-								}}
-								options={tags}
-								renderInput={(params) => <TextField {...params} label="태그로 검색해보세요" placeholder="" />}
+								onChange={handleTag}
+								options={tags.map((item) => item.name)}
+								renderInput={(params) => (
+									<TextField {...params} label="태그로 검색해보세요" placeholder="" />
+								)}
 								sx={{ flex: '70%' }}
 								size="small"
 							/>
@@ -160,7 +206,7 @@ export default function LimitTags() {
 											size='large'
 											sx={{ margin: '4px', height: '35px' }}
 										>
-											#{item}
+											#{item.name}
 										</ToggleButton>
 									)
 								})
@@ -183,7 +229,7 @@ export default function LimitTags() {
 												size='large'
 												sx={{ margin: '4px', height: '35px' }}
 											>
-												#{item}
+												#{item.name}
 											</ToggleButton>
 										)
 									})

@@ -36,7 +36,7 @@ function LectureDetail() {
 	const [lecture, setLecture] = useState(null)
 	// 강의 정보 가져오기
 	useEffect(() => {
-		axios.get(`http://i10a810.p.ssafy.io:4000/api/lectures/v0/details/${lectureId}`)
+		axios.get(`http://i10a810.p.ssafy.io:4000/lectures/v0/details/${lectureId}`)
 			.then((response) => {
 				console.log(response.data.result)
 				setLecture(response.data.result)
