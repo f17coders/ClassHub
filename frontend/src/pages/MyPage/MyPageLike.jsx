@@ -9,10 +9,10 @@ function MyPageLike() {
         <h2>내가 찜한 강의</h2>
       </div>
       <Grid container spacing={2} padding={3}>
+        {/* <Grid item xs={3}><LectureCard img={lectureImg} title='찜한 강의'/></Grid>
         <Grid item xs={3}><LectureCard img={lectureImg} title='찜한 강의'/></Grid>
         <Grid item xs={3}><LectureCard img={lectureImg} title='찜한 강의'/></Grid>
-        <Grid item xs={3}><LectureCard img={lectureImg} title='찜한 강의'/></Grid>
-        <Grid item xs={3}><LectureCard img={lectureImg} title='찜한 강의'/></Grid>
+        <Grid item xs={3}><LectureCard img={lectureImg} title='찜한 강의'/></Grid> */}
         
       </Grid>
       

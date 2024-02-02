@@ -36,7 +36,7 @@ function Home() {
 		<div>
 			<Banner />
 			<Search />
-			{
+			{/* {
 				isLogin ? (<div>{
 					userInfo != null ? (<div>
 						<Recommend title={`${userInfo.job.name}를 꿈꾸는 ${userInfo.nickname}님을 위한 강의 추천`} />
@@ -48,7 +48,7 @@ function Home() {
 					</div>) :(<div>로딩중</div>)
 					}</div>):(<div>로그인을 해주세요!</div>)
 			}
-			
+			 */}
 			<CompareButton />
 		</div>
 	)

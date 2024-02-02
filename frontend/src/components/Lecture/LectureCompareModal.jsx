@@ -37,8 +37,8 @@ function LectureCompareModal(props) {
             <Box sx={style}>
                 {
                     compareLectures.length > 0 ? (
-                        compareLectures.map((item, idx) => (
-                            <LectureCompareModalElement lec={item} key={idx}/>
+                        compareLectures.map((lecture, idx) => (
+                            <LectureCompareModalElement lecture={lecture} key={idx}/>
                         ))
                     ) : (<div><p>비교할 강의를 넣어주세요</p></div>)
                 }
@@ -47,10 +47,10 @@ function LectureCompareModal(props) {
     )
 }
 
-function LectureCompareModalElement(props) {
+function LectureCompareModalElement({lecture}) {
     return(
         <div style={{margin:'5px', border:'1px solid grey', width:'260px', padding:'10px', display:'flex', flexDirection:'column', alignItems:'center'}}>
-            <div style={{textAlign:'center', fontSize:'1.5em', height:'17%'}}>{props.lec.title}</div>
+            <div style={{textAlign:'center', fontSize:'1.5em', height:'17%'}}>{lecture.title}</div>
             <Rating
                 readOnly
                 value={3}

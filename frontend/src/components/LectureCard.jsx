@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Card, CardContent, CardMedia, Button, Rating, IconButton } from '@mui/material'
+import { Card, CardContent, CardMedia, Button, Rating, IconButton, Chip } from '@mui/material'
 import { useState } from 'react'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
@@ -7,7 +7,7 @@ import BalanceIcon from '@mui/icons-material/Balance'
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip'
 import { styled } from '@mui/material/styles'
 import { useSelector, useDispatch } from 'react-redux'
-import { addElement } from './../store/store.js'
+import { addElement, searchResult } from './../store/store.js'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 
@@ -23,7 +23,7 @@ const LightTooltip = styled(({ className, ...props }) => (
 	},
 }))
 
-function LectureCard(props) {
+function LectureCard({lecture}) {
 	const navigate = useNavigate()
 	// 비교 강의 추가할때 쓰는 변수
 	let dispatch = useDispatch()
@@ -44,7 +44,7 @@ function LectureCard(props) {
 
 	// 디테일 페이지로 가기
 	const goDetail = function() {
-		navigate(`/lecture/detail/1`)
+		navigate(`/lecture/detail/${lecture.lectureId}`)
 	}
 	// 강의 담았을 때 알림 (sweetAlert용)
 	const Toast = Swal.mixin({
@@ -62,7 +62,7 @@ function LectureCard(props) {
 	let compareLectures = useSelector((state) => state.compareLectures)
 	function addCart() {
 		if (compareLectures.length < 3) {
-			dispatch(addElement(props))
+			dispatch(addElement(lecture))
 			Toast.fire({
 				icon: "success",
 				title: "강의 비교하기에 담겼습니다."
@@ -85,23 +85,34 @@ function LectureCard(props) {
 		>
 			<CardMedia
 				sx={{ height: 140 }}
-				image={props.img}
+				image={lecture.image}
 				title="lecture image"
 			/>
 			<CardContent style={{ padding: '13px' }}>
 				<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
 					<div style={{ height: '70px' }}>
-						<p style={{ fontWeight: '700', fontSize: '1.1em' }}>{props.title}</p>
+						<p style={{ fontWeight: '700', fontSize: '1.1em' }}>{lecture.lectureName}</p>
 					</div>
 					<div>
-						<p style={{ marginBottom: '5px' }}>강의자<br /><Rating value={4} readOnly></Rating></p>
+						<p style={{ marginBottom: '5px' }}>{lecture.instructor}<br /><Rating value={lecture.combinedRating} readOnly></Rating></p>
 					</div>
+					{/* 해시태그들(2개까지만) */}
 					<div>
-						<Button size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em' }}>#VSCode</Button>
+						{
+							lecture.tagList.length == 1 ? (<div>{
+								<Chip size="small" label={`# ${lecture.tagList[0].name}`}></Chip>
+							}</div>) : (<div>{
+								lecture.tagList.length == 2 ? (<div>
+									<Chip size="small" label={`# ${lecture.tagList[0].name}`}></Chip>
+									<Chip size="small" label={`# ${lecture.tagList[1].name}`}></Chip>
+								</div>) : null
+								}</div>)
+						}
 					</div>
 				</div>
 			</CardContent>
 			{
+				// 호버했을 때
 				hover == true ? (
 					<div
 						style={{
@@ -116,9 +127,12 @@ function LectureCard(props) {
 							flexDirection: 'column'
 						}}
 					>
-						<p style={{ fontWeight: '700', fontSize: '1.3em' }} onClick={goDetail}>{props.title}</p>
+						<div>
+							<p style={{ fontWeight: '700', fontSize: '1.3em', margin:0 }} onClick={goDetail}>{lecture.lectureName}</p>
+						</div>
+					
 						<div style={{ height: '70%' }} onClick={goDetail}>
-							<p>수강기간<br />한줄 설명<br />강의 총 시간<br />난이도</p>
+							<p>{lecture.descriptionSummary}<br />총 {lecture.totalTime}시간<br />{lecture.level}</p>
 						</div>
 						<div style={{ height: '20%' }} onClick={goDetail}>
 							<Button size="small" sx={{ backgroundColor: 'RGB(83, 96, 245)', color: 'white', borderRadius: '20px', marginRight: '0.5em' }}>#VSCode</Button>

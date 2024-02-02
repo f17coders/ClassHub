@@ -11,7 +11,7 @@ import img1 from './../../assets/Lecture/Lecture2.png'
 import CompareButton from './../../components/CompareButton'
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
-import { changeCategory, addTags, deleteTags, changeKeyword } from '../../store/store'
+import { changeCategory, addTags, deleteTags, changeKeyword, searchResult, changeLevel } from '../../store/store'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import axios from 'axios'
 
@@ -19,6 +19,8 @@ import axios from 'axios'
 function Lecture() {
 	// 검색할꺼 가져오기
 	let searchParams = useSelector((state) => state.searchParams)
+	// 검색결과 가져오기
+	let lectureResult = useSelector((state) => state.lectureResult)
 	let dispatch = useDispatch()
 
 	// 검색어
@@ -28,27 +30,41 @@ function Lecture() {
 		setKeyword(input)
 	}
 
+	// 검색하기
+	useEffect(() => {
+		axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?${searchParams.category ? 'category=' + searchParams.category.categoryId : ''}${searchParams.keyword ? '&keyword=' + searchParams.keyword : ''}${searchParams.level != 'ALL' ? '&level=' + searchParams.level : ''}${searchParams.site ? '&site=' + searchParams.site : ''}&page=0&size=16`)
+		.then((res) => {
+			console.log(`${res.config.url}으로 요청 보냄`)
+			dispatch(searchResult(res.data.result.lectureList))
+		}).catch((err) =>
+			console.log(err)
+		)
+	}, [searchParams])
+
+
 	// 검색어로 검색하기
 	const searchByKeyword = function () {
 		dispatch(changeKeyword(keyword))
-		axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?${searchParams.category ?'category='+searchParams.category.categoryId : ''}${searchParams.keyword ? '&keyword=' + searchParams.keyword : ''}${searchParams.level ? '&level=' + searchParams.level : ''}${searchParams.site ? '&site=' + searchParams.site : ''}&page=0&size=16`)
-			.then((res) => {
-				console.log(res)
-			})
-			.catch((err) => {
-				console.log(err)
-			})
 	}
+
+	const enterKeyPress = (event) =>{
+    //엔터키 눌렀을 때 등록 함수 호출
+    if(event.key === 'Enter'){
+      event.preventDefault() //기본 동작 방지
+      searchByKeyword()
+    }
+  }
 
 	// 새로고침하면 전체로 바꿔주기
 	useEffect(() => {
 		dispatch(changeCategory(null))
 	}, [])
+
 	return (
 		<Container>
 			<Grid container sx={{ margin: 'auto', minHeight: '500px', marginTop: '20px' }}>
 				{/* 왼쪽 사이드 바 */}
-				<Grid item xs={5} sm={4} md={2} sx={{ borderRight: "1px solid lightgrey", paddingRight: '0px' }}>
+				<Grid item xs={0} sm={4} md={2} sx={{ borderRight: "1px solid lightgrey", paddingRight: '0px' }}>
 					<Box>
 						{/* 강의 카테고리 체크 */}
 						<LectureCheck />
@@ -77,53 +93,33 @@ function Lecture() {
 								size="small"
 								value={keyword}
 								onChange={handlekeyword}
+								onKeyDown={enterKeyPress}
 							/>
 							<IconButton onClick={searchByKeyword} style={{ margin: 5 }}><SearchIcon fontSize='small' /></IconButton>
 						</div>
 					</div>
-					<Box>
-						{/* 세부 검색창 */}
+					<div>
 						<LectureSearch />
-					</Box>
+					</div>
 					{/* 강의 전체 목록 */}
 					<Box sx={{ margin: '20px' }}>
 						<Grid container spacing={1}>
-							<Grid item xs={3}>
-								<LectureCard img={img1} title='강의제목' />
-							</Grid>
-							<Grid item xs={3}>
-								<LectureCard img={img1} title='강의제목' />
-							</Grid>
-							<Grid item xs={3}>
-								<LectureCard img={img1} title='강의제목' />
-							</Grid>
-							<Grid item xs={3}>
-								<LectureCard img={img1} title='강의제목' />
-							</Grid>
-							<Grid item xs={3}>
-								<LectureCard img={img1} title='강의제목' />
-							</Grid>
-							<Grid item xs={3}>
-								<LectureCard img={img1} title='강의제목' />
-							</Grid>
-							<Grid item xs={3}>
-								<LectureCard img={img1} title='강의제목' />
-							</Grid>
-							<Grid item xs={3}>
-								<LectureCard img={img1} title='강의제목' />
-							</Grid>
-							<Grid item xs={3}>
-								<LectureCard img={img1} title='강의제목' />
-							</Grid>
-							<Grid item xs={3}>
-								<LectureCard img={img1} title='강의제목' />
-							</Grid>
-							<Grid item xs={3}>
-								<LectureCard img={img1} title='강의제목' />
-							</Grid>
-							<Grid item xs={3}>
-								<LectureCard img={img1} title='강의제목' />
-							</Grid>
+							{
+								lectureResult.length > 0 ? (
+									lectureResult.map((item, idx) => {
+										return (
+											<Grid item xs={3} key={idx}>
+											<LectureCard img={img1} lecture={item} />
+										</Grid>
+										)
+										
+									})
+								):(
+									<div style={{margin:'auto'}}>
+										<p style={{textAlign:'center'}}>결과가 없습니다!</p>
+									</div>
+								)
+							}
 						</Grid>
 					</Box>
 					{/* 페이지네이션 */}

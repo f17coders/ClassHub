@@ -19,10 +19,10 @@ function MyPageLecture() {
         <Button color="secondary" style={{marginRight:'50px', fontSize:'1.3em'}} onClick={() => changeConnect()} >연동하기</Button>
       </div>
       <Grid container spacing={2} padding={3}>
+        {/* <Grid item xs={3}><LectureCard img={lectureImg} title='갖고있는 강의'/></Grid>
         <Grid item xs={3}><LectureCard img={lectureImg} title='갖고있는 강의'/></Grid>
         <Grid item xs={3}><LectureCard img={lectureImg} title='갖고있는 강의'/></Grid>
-        <Grid item xs={3}><LectureCard img={lectureImg} title='갖고있는 강의'/></Grid>
-        <Grid item xs={3}><LectureCard img={lectureImg} title='갖고있는 강의'/></Grid>
+        <Grid item xs={3}><LectureCard img={lectureImg} title='갖고있는 강의'/></Grid> */}
         
       </Grid>
       {

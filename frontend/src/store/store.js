@@ -26,7 +26,6 @@ export let { addElement, deleteElement } = compareLectures.actions
 
 
 // 여긴 강의 검색용 변수들이 들어감!
-// 1. 선택된 강의 카테고리 저장
 let searchParams = createSlice({
   name:'searchParams',
   initialState: {
@@ -76,12 +75,76 @@ let searchParams = createSlice({
         }
       }
     },
-
+    // 레벨 변경
+    changeLevel(state, action){
+      if (action.payload == '입문') {
+        return {
+          ...state,
+          level: 'BEGINNER'
+        }
+      }
+      if (action.payload == '초급') {
+        return {
+          ...state,
+          level: 'INTERMEDIATE'
+        }
+      }
+      if (action.payload == '중급이상') {
+        return {
+          ...state,
+          level: 'EXPERT'
+        }
+      }
+      if (action.payload == '모든 수준') {
+        return {
+          ...state,
+          level: 'ALL'
+        }
+      } else {
+        return {
+          ...state,
+          level:'ALL'
+        }
+      }
+    },
+    changeSite(state, action){
+      if (action.payload == '인프런') {
+        return {
+          ...state,
+          site: 'INFLEARN'
+        }
+      } else if (action.payload == '유데미') {
+        return {
+          ...state,
+          site: 'UDEMY'
+        }
+      } else if (action.payload == '구름 에듀') {
+        return {
+          ...state,
+          site: 'GOORM'
+        }
+      } else {
+        return {
+          ...state,
+          site: null
+        }
+      }
+    }
   }
 })
-export let {changeCategory, addTags, deleteTags, changeKeyword} = searchParams.actions
+export let {changeCategory, addTags, deleteTags, changeKeyword, changeLevel,changeSite } = searchParams.actions
 
-
+// 강의 검색 결과
+let lectureResult = createSlice({
+  name: 'lectureResult',
+  initialState: [],
+  reducers: {
+    searchResult(state, action) {
+      return action.payload
+    },
+  }
+});
+export let { searchResult } = lectureResult.actions
 
 
 
@@ -100,7 +163,8 @@ const persistedReducer = persistReducer(
     isLogin: isLogin.reducer,
     compareLectures: compareLectures.reducer,
     searchParams: searchParams.reducer,
-    user: user.reducer
+    user: user.reducer,
+    lectureResult: lectureResult.reducer
   })
 );
 

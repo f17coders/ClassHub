@@ -3,7 +3,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
-import {changeCategory} from './../../store/store.js'
+import {changeCategory, searchResult} from './../../store/store.js'
 // 강의 검색 사이드바에 들어가는 토글 리스트
 function LectureCheck() {
 	// 검색할 때 쓸 변수들
@@ -35,6 +35,7 @@ function LectureCheck() {
 			axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?page=0&size=16`)
 			.then((res) =>{
 				console.log(res.data.result)
+				dispatch(searchResult(res.data.result.lectureList))
 			})
 			.catch((err) => {
 				console.log(err)
@@ -44,6 +45,7 @@ function LectureCheck() {
 			axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?category=${category.categoryId}&page=0&size=16`)
 			.then((res) =>{
 				console.log(res.data.result)
+				dispatch(searchResult(res.data.result.lectureList))
 			})
 			.catch((err) => {
 				console.log(err)
