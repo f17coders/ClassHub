@@ -6,5 +6,6 @@ import java.io.IOException;
 
 public interface LectureLikeService {
 	void likeLecture(int lectureId, Member member) throws BaseExceptionHandler, IOException;
+	void unLikeLecture(int lectureId, Member member) throws BaseExceptionHandler, IOException;
 
 }

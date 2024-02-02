@@ -6,6 +6,7 @@ import com.f17coders.classhub.module.domain.community.Community;
 import com.f17coders.classhub.module.domain.communityLike.CommunityLike;
 import com.f17coders.classhub.module.domain.communityScrap.CommunityScrap;
 import com.f17coders.classhub.module.domain.job.Job;
+import com.f17coders.classhub.module.domain.lectureLike.LectureLike;
 import com.f17coders.classhub.module.domain.memberTag.MemberTag;
 import com.f17coders.classhub.module.domain.studyMember.StudyMember;
 import jakarta.persistence.Column;
@@ -91,6 +92,10 @@ public class Member extends BaseEntity {
     // Member - StudyMember 연관관계
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<StudyMember> studyMemberList = new ArrayList<>();
+
+    // Member - LectureLike 연관 관계
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<LectureLike> lectureLikeList = new ArrayList<>();
 
     public void putMemberTag(MemberTag memberTag) {  // 연관 관계 편의 메서드
         memberTag.setMember(this);

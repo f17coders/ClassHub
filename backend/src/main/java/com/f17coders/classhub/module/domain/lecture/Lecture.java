@@ -8,6 +8,8 @@ import com.f17coders.classhub.module.domain.lectureTag.LectureTag;
 import com.f17coders.classhub.module.domain.review.Review;
 import com.f17coders.classhub.module.domain.studyTag.StudyTag;
 import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -87,6 +89,10 @@ public class Lecture extends BaseEntity {
 	// Lecture - tag 연관 관계, Lecture 있는 tag list
 	@OneToMany(mappedBy = "lecture", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<LectureTag> lectureTagList = new ArrayList<>();
+
+	// Lecture - LectureLike 연관 관계
+    @OneToMany(mappedBy = "lecture", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<LectureLike> lectureLikeSet = new HashSet<>();
 
 //    TODO : 단방향 연관 관계로 우선 설정 후 필요에 의해서 양방향으로 연관 관계 설정 + 연관 관계 편의 메서드의 위치는 로직에 따라 Many쪽에 있을 수도 있고 One쪽에 있을 수도 있으니 변경 가능//    // Lecture - review 연관 관계
 //    @OneToMany(mappedBy = "lecture", fetch = FetchType.LAZY)

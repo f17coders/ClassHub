@@ -24,9 +24,30 @@ public class LectureLike extends BaseEntity {
     @Setter
     private Member member;
 
+    public void putMember(Member member) {
+        this.member = member;
+        member.getLectureLikeList().add(this);
+    }
+
+
     // LectureLike - Lecture 연관 관계 매핑
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lecture_id")
     @Setter
     private Lecture lecture;
+
+    public void putLecture(Lecture lecture) {
+        this.lecture = lecture;
+        lecture.getLectureLikeSet().add(this);
+    }
+
+    public static LectureLike createLectureLike(Lecture lecture, Member member) {
+        LectureLike lectureLike = new LectureLike();
+
+        lectureLike.putLecture(lecture);
+        lectureLike.putMember(member);
+
+        return lectureLike;
+    }
+
 }
