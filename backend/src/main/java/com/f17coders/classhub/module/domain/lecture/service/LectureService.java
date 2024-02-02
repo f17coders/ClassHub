@@ -15,4 +15,5 @@ public interface LectureService {
 
 	LectureListRes getLecturesList(Integer categoryId, String tags, String keyword, String level, String site,
 		String order, Pageable pageable) throws BaseExceptionHandler, IOException;
+
 }

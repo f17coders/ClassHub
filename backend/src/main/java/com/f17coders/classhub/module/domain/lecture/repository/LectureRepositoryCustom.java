@@ -18,4 +18,5 @@ public interface LectureRepositoryCustom {
 	List<LectureListDetailLectureLikeCountRes> findLecturesBySearchCond(Integer categoryId,
 		String tags,
 		String keyword, String level, String site, String order, Pageable pageable);
+
 }

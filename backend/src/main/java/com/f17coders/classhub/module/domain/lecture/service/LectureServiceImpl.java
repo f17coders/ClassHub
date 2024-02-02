@@ -109,4 +109,5 @@ public class LectureServiceImpl implements LectureService {
 			.totalPages(totalPages)
 			.build();
 	}
+
 }
