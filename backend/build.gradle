@@ -47,6 +47,8 @@ dependencies {
 	// https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
 
+	// mongodb
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 }
 
 
