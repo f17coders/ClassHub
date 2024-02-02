@@ -54,6 +54,10 @@ export default function CommunityReplyModify({comment}){
       {
         "commentId": commentId,
         "content": content,
+      }, {
+        headers: {
+          Authorization: '10'
+        }
       })
       .then((res) => {
         console.log(res)

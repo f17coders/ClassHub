@@ -71,6 +71,10 @@ export default function CommunityReply({detailData}){
       {
         "communityId": detailData.communityId,
         "content": content,
+      }, {
+        headers: {
+          Authorization: '10'
+        }
       })
       .then((res) => {
         console.log(res)
@@ -86,6 +90,10 @@ export default function CommunityReply({detailData}){
       axios.delete(`https://i10a810.p.ssafy.io/api/comments/v1/${commentId}`,
       {
         "commentId": commentId,
+      }, {
+        headers: {
+          Authorization: '10'
+        }
       })
       .then((res) => {
         console.log(res)
