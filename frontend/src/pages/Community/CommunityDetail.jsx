@@ -204,7 +204,7 @@ export default function CommunityDetail(){
                                             variant="contained" 
                                             sx={{ height: '2rem', borderRadius: '20px', marginRight: '0.5em'}}
                                         >
-                                            #{tag}
+                                            #{tag.name}
                                         </Button>
                                     ))
                                 }

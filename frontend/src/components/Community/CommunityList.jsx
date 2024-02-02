@@ -28,7 +28,7 @@ export default function CommunityPostList({post}){
               <Stack direction="row" spacing={1}>
                   {post.tagList.map((tag, tagIndex) => (
                   <Button key={tagIndex} label={tag} size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}} >
-                      #{tag}
+                      #{tag.name}
                   </Button>
                   ))}
               </Stack>

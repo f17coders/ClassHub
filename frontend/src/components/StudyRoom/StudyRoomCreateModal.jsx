@@ -60,7 +60,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
       .then((res) => {
         console.log(res)
         onRegisterSuccess()
-        // window.location.reload(); //페이지 새로고침
+        window.location.reload(); //페이지 새로고침
       })
       .catch((err) => console.log(err))
     }
