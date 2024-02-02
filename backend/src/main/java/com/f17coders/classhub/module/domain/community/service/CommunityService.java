@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface CommunityService {
 
-    int registerCommunity(CommunityRegisterReq communityRegisterReq, Member member) // check
+    int registerCommunity(CommunityRegisterReq communityRegisterReq, Member member) // check commit
         throws BaseExceptionHandler, IOException;
 
     CommunityReadRes readCommunity(int id, Member member) throws BaseExceptionHandler, IOException;
