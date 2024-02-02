@@ -8,6 +8,8 @@ public record ChannelDetailListRes(
 
     String channelId,
     String name,
+
+    boolean isDelete,
     LocalDateTime createTime,
 
     LocalDateTime updateTime

@@ -18,6 +18,7 @@ public class StudyMemberServiceImpl implements StudyMemberService {
 
     @Override
     public void enterStudy(int studyId, Member member) {
+
         Study study = studyRepository.findByStudyId(studyId);
 
         StudyMember studyMember = StudyMember.createStudyMember();

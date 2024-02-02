@@ -3,6 +3,7 @@ package com.f17coders.classhub.module.domain.channel.controller;
 import com.f17coders.classhub.global.api.response.BaseResponse;
 import com.f17coders.classhub.global.exception.code.SuccessCode;
 import com.f17coders.classhub.module.domain.channel.dto.request.ChannelRegisterReq;
+import com.f17coders.classhub.module.domain.channel.dto.request.ChannelUpdateReq;
 import com.f17coders.classhub.module.domain.channel.dto.response.ChannelDetailListRes;
 import com.f17coders.classhub.module.domain.channel.service.ChannelService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,6 +47,16 @@ public class ChannelController {
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, channelList);
     }
+
+    @Operation(summary = "채널 이름 수정")
+    @PatchMapping
+    public ResponseEntity<BaseResponse<String>> updateChannel(
+        @RequestBody ChannelUpdateReq channelUpdateReq) {
+        channelService.updateChannel(channelUpdateReq);
+
+        return BaseResponse.success(SuccessCode.UPDATE_SUCCESS, channelUpdateReq.channelId());
+    }
+
 
     @Operation(summary = "채널 삭제")
     @DeleteMapping("/{channelId}")

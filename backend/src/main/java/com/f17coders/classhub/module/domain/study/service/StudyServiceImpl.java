@@ -1,9 +1,13 @@
 package com.f17coders.classhub.module.domain.study.service;
 
 import com.f17coders.classhub.global.exception.BaseExceptionHandler;
+import com.f17coders.classhub.module.domain.channel.Channel;
+import com.f17coders.classhub.module.domain.channel.repository.ChannelRepository;
 import com.f17coders.classhub.module.domain.lecture.Lecture;
 import com.f17coders.classhub.module.domain.lecture.repository.LectureRepository;
 import com.f17coders.classhub.module.domain.member.Member;
+import com.f17coders.classhub.module.domain.member.dto.response.MemberStudyInfoRes;
+import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
 import com.f17coders.classhub.module.domain.study.Study;
 import com.f17coders.classhub.module.domain.study.dto.request.StudyRegisterReq;
 import com.f17coders.classhub.module.domain.study.dto.request.StudyUpdateReq;
@@ -32,9 +36,11 @@ public class StudyServiceImpl implements StudyService {
 
     private final StudyRepository studyRepository;
     private final LectureRepository lectureRepository;
+    private final MemberRepository memberRepository;
     private final StudyMemberRepository studyMemberRepository;
     private final TagRepository tagRepository;
     private final StudyTagRepository studyTagRepository;
+    private final ChannelRepository channelRepository;
 
     @Override
     public int registerStudy(StudyRegisterReq studyRegisterReq, Member member)
@@ -69,6 +75,16 @@ public class StudyServiceImpl implements StudyService {
         studyMember.putStudy(study);
 
         studyMemberRepository.save(studyMember);
+
+        // 스터디 생성시 기본 채널 3개 생성
+        String[] BasicChannelName = {"공지사항", "학습 인증", "잡담방"};
+        boolean[] isDeleteList = {false, true, true};
+
+        for (int i = 0; i < BasicChannelName.length; i++) {
+            Channel channel = Channel.createChannel(BasicChannelName[i], study.getStudyId(),
+                new ArrayList<>(), isDeleteList[i]);
+            channelRepository.save(channel);
+        }
 
         return study.getStudyId();
     }
@@ -181,6 +197,32 @@ public class StudyServiceImpl implements StudyService {
     @Override
     public int getEnterCode(int studyId) throws BaseExceptionHandler, IOException {
         return studyRepository.findEnterCodeByStudyId(studyId);
+    }
+
+    @Override
+    public StudyMemberListRes getStudyMemberList(int studyId)
+        throws BaseExceptionHandler, IOException {
+
+        Study study = studyRepository.findByStudyId(studyId);
+
+        Member leader = study.getStudyLeader();
+
+        List<MemberStudyInfoRes> memberStudyInfoResList = memberRepository.findMemberFetchJoinStudyMemberByStudyId(
+            studyId);
+
+        MemberStudyInfoRes studyLeader = null;
+
+        for (MemberStudyInfoRes memberStudyInfoRes : memberStudyInfoResList) {
+            if (memberStudyInfoRes.memberId() == leader.getMemberId()) {
+                studyLeader = memberStudyInfoRes;
+                break;
+            }
+        }
+        memberStudyInfoResList.remove(studyLeader);
+
+        return StudyMemberListRes.builder()
+            .leader(studyLeader)
+            .studyMemberList(memberStudyInfoResList).build();
     }
 
 }

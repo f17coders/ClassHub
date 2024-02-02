@@ -7,6 +7,7 @@ import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
 import com.f17coders.classhub.module.domain.study.dto.request.StudyRegisterReq;
 import com.f17coders.classhub.module.domain.study.dto.request.StudyUpdateReq;
 import com.f17coders.classhub.module.domain.study.dto.response.StudyListRes;
+import com.f17coders.classhub.module.domain.study.dto.response.StudyMemberListRes;
 import com.f17coders.classhub.module.domain.study.dto.response.StudyReadTagRes;
 import com.f17coders.classhub.module.domain.study.service.StudyService;
 import com.f17coders.classhub.module.domain.studyMember.service.StudyMemberService;
@@ -123,6 +124,17 @@ public class StudyController {
         studyMemberService.exitStudy(studyId, member.get());
 
         return BaseResponse.success(SuccessCode.DELETE_SUCCESS, studyId);
+    }
+
+    @Operation(summary = "스터디룸 멤버 조회")
+    @GetMapping("/members/{studyId}")
+    public ResponseEntity<BaseResponse<StudyMemberListRes>> getStudyMemberList(
+        @PathVariable int studyId)
+        throws IOException {
+
+        StudyMemberListRes studyMemberListRes = studyService.getStudyMemberList(studyId);
+
+        return BaseResponse.success(SuccessCode.SELECT_SUCCESS, studyMemberListRes);
     }
 
 

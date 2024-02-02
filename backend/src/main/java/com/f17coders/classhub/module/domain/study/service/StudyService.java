@@ -6,13 +6,12 @@ import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.study.dto.request.StudyRegisterReq;
 import com.f17coders.classhub.module.domain.study.dto.request.StudyUpdateReq;
 import com.f17coders.classhub.module.domain.study.dto.response.StudyListRes;
-import com.f17coders.classhub.module.domain.study.dto.response.StudyReadRes;
+import com.f17coders.classhub.module.domain.study.dto.response.StudyMemberListRes;
 import com.f17coders.classhub.module.domain.study.dto.response.StudyReadTagRes;
 import org.springframework.data.domain.Pageable;
 
 
 import java.io.IOException;
-import java.util.List;
 
 public interface StudyService {
 
@@ -30,4 +29,5 @@ public interface StudyService {
 
     int getEnterCode(int studyId) throws BaseExceptionHandler, IOException;
 
+    StudyMemberListRes getStudyMemberList(int studyId) throws BaseExceptionHandler, IOException;
 }

@@ -2,6 +2,7 @@ package com.f17coders.classhub.module.domain.channel.service;
 
 import com.f17coders.classhub.module.domain.channel.Channel;
 import com.f17coders.classhub.module.domain.channel.dto.request.ChannelRegisterReq;
+import com.f17coders.classhub.module.domain.channel.dto.request.ChannelUpdateReq;
 import com.f17coders.classhub.module.domain.channel.dto.response.ChannelDetailListRes;
 import com.f17coders.classhub.module.domain.channel.repository.ChannelRepository;
 import com.f17coders.classhub.module.domain.message.Message;
@@ -26,7 +27,7 @@ public class ChannelServiceImpl implements ChannelService {
         int studyId = channelRegisterReq.studyId();
         List<Message> messageList = new ArrayList<>();
 
-        Channel channel = Channel.createChannel(name, studyId, messageList, false);
+        Channel channel = Channel.createChannel(name, studyId, messageList, true);
         channelRepository.save(channel);
 
         return channel.getChannelId();
@@ -37,6 +38,14 @@ public class ChannelServiceImpl implements ChannelService {
         List<ChannelDetailListRes> channelList = channelRepository.findByStudyId(studyId);
 
         return channelList;
+    }
+
+    @Override
+    public void updateChannel(ChannelUpdateReq channelUpdateReq) {
+        Channel channel = channelRepository.findById(channelUpdateReq.channelId()).get();
+
+        channel.setName(channelUpdateReq.name());
+        channelRepository.save(channel);
     }
 
     @Override

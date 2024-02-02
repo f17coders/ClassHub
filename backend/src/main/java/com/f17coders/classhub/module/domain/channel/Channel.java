@@ -31,17 +31,17 @@ public class Channel extends MongoBaseEntity {
     @Field(name = "study_id")
     private int studyId;
 
-    @Field(name = "is_basic")
-    private boolean isBasic;
+    @Field(name = "is_delete")
+    private boolean isDelete;
 
     public static Channel createChannel(String name, int studyId, List<Message> message,
-        boolean isBasic) {
+        boolean isDelete) {
         Channel channel = new Channel();
 
         channel.setName(name);
         channel.setStudyId(studyId);
         channel.setMessageList(message);
-        channel.setBasic(isBasic);
+        channel.setDelete(isDelete);
 
         return channel;
     }
