@@ -8,10 +8,11 @@ import java.util.Map;
 import org.springframework.http.MediaType;
 
 public class AccessTokenException extends RuntimeException {
+
     TOKEN_ERROR token_error;
 
     public enum TOKEN_ERROR {
-        UNACCEPT(401,"Token is null or too short"),
+        UNACCEPT(401, "Token is null or too short"),
         BADTYPE(401, "Token type Bearer"),
         MALFORM(403, "Malformed Token"),
         BADSIGN(403, "BadSignatured Token"),
@@ -20,7 +21,7 @@ public class AccessTokenException extends RuntimeException {
         private int status;
         private String msg;
 
-        TOKEN_ERROR(int status, String msg){
+        TOKEN_ERROR(int status, String msg) {
             this.status = status;
             this.msg = msg;
         }
@@ -34,21 +35,21 @@ public class AccessTokenException extends RuntimeException {
         }
     }
 
-    public AccessTokenException(TOKEN_ERROR error){
+    public AccessTokenException(TOKEN_ERROR error) {
         super(error.name());
         this.token_error = error;
     }
 
-    public void sendResponseError(HttpServletResponse response){
+    public void sendResponseError(HttpServletResponse response) {
         response.setStatus(token_error.getStatus());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         Gson gson = new Gson();
 
         String responseStr = gson.toJson(Map.of(
-                "code", token_error.getStatus(),
-                "msg", token_error.getMsg(),
-                "time", new Date()
+            "code", token_error.getStatus(),
+            "msg", token_error.getMsg(),
+            "time", new Date()
         ));
 
         try {

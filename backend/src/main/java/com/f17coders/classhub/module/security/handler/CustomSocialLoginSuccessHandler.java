@@ -20,11 +20,13 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Log4j2
 @RequiredArgsConstructor
 public class CustomSocialLoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+
     @Value("${classhub.react.domain}")
     private String REACT_DOMAIN;
     private final JWTUtil jwtUtil;
 
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+        Authentication authentication) throws IOException {
         log.info("[CustomSocialLoginSuccessHandler] enter onAuthenticationSuccess");
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -42,10 +44,10 @@ public class CustomSocialLoginSuccessHandler extends SimpleUrlAuthenticationSucc
 
         response.getWriter().println(authentication.getName() + "LOGIN SUCCESS");
         String frontPage = UriComponentsBuilder.fromUriString(REACT_DOMAIN + "/login")
-                .queryParam("Authorization", accessToken)
-                .build().toUriString();
+            .queryParam("Authorization", accessToken)
+            .build().toUriString();
 
         getRedirectStrategy()
-                .sendRedirect(request, response, frontPage);
+            .sendRedirect(request, response, frontPage);
     }
 }

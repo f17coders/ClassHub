@@ -23,11 +23,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Log4j2
 @RequiredArgsConstructor
 public class TokenCheckFilter extends OncePerRequestFilter {
+
     private final APIUserDetailsService apiUserDetailsService;
     private final JWTUtil jwtUtil;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+        FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
         if (!path.startsWith("/api")) {
             filterChain.doFilter(request, response);
@@ -44,7 +46,7 @@ public class TokenCheckFilter extends OncePerRequestFilter {
 
             UserDetails userDetails = apiUserDetailsService.loadUserByUsername(memberId);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities()
+                userDetails, null, userDetails.getAuthorities()
             );
 
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
