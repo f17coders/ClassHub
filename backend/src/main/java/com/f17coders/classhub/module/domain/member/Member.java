@@ -22,6 +22,7 @@ import jakarta.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -54,7 +55,8 @@ public class Member extends BaseEntity {
     private Boolean isWithdrawn = false;
 
     @Column(length = 80, unique = true)
-    @Size(min = 4, max = 80, message = "닉네임을 4 ~ 80자 사이로 설정해주세요!")
+//    @Size(min = 4, max = 80, message = "닉네임을 4 ~ 80자 사이로 설정해주세요!")    // 소셜 로그인 시 최소 4자로 입력하면 정승환 이 로그인이 안 되는 오류 발생
+    @Size(max = 80, message = "닉네임을 80자 이내로 설정해주세요!")
     @Setter
     private String nickname;
 
@@ -100,6 +102,22 @@ public class Member extends BaseEntity {
     public void putMemberTag(MemberTag memberTag) {  // 연관 관계 편의 메서드
         memberTag.setMember(this);
         this.getMemberTagList().add(memberTag);
+    }
+
+    @Builder
+    public Member(String socialId, String nickname, String profileImage, String provider) {
+        this.socialId = socialId;
+        this.nickname = nickname;
+        this.profileImage = profileImage;
+        this.provider = provider;
+    }
+
+    @Builder(builderMethodName = "fromUser", buildMethodName = "get")
+    public Member(int memberId, String socialId, String nickname, String profileImage) {
+        this.memberId = memberId;
+        this.socialId = socialId;
+        this.nickname = nickname;
+        this.profileImage = profileImage;
     }
 
     // 생성 메서드
