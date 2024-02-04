@@ -5,7 +5,6 @@ import LoginIcon from '@mui/icons-material/Login';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import LinkIcon from '@mui/icons-material/Link';
-import StudyRoomEnterCodeModal from './StudyRoomEnterCodeModal';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
@@ -16,132 +15,130 @@ export default function StudyRoomRecruitList({study}){
   const [studyId, setStudyId] = useState('');
   const [status, setStatus] = useState(false) //방 공개여부
   const [inviteCode, setInviteCode] = useState(''); //초대코드
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(''); //입력한 초대코드
 
   //입장 확인 Dialog용(공개방 전용)
   const handleEnterDialogOpen = (studyId) =>{
-    MySwal.fire({
-      title: "입장하시겠습니까?",
-      text: "해당 스터디룸은 공개상태이므로 참여가 가능합니다.",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "네, 참여할래요",
-      confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
-      cancelButtonText: "아니오, 취소할게요",
-      cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
-      reverseButtons: true
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // 공개 방일 경우
-        if(study.isPublic){
+    //공개방일 경우
+    if(study.isPublic){
+      MySwal.fire({
+        title: "입장하시겠습니까?",
+        text: "해당 스터디룸은 공개상태이므로 참여가 가능합니다.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "네, 참여할래요",
+        confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+        cancelButtonText: "아니오, 취소할게요",
+        cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+        reverseButtons: true
+      }).then((result) => {
+        if(result.isConfirmed){
           MySwal.fire({
-            title: "참여 완료되었습니당~",
+            title: "참여 완료되었습니다!",
             text: "참여중인 스터디 목록에서 확인 가능합니다.",
             icon: "success"
           }).then(() =>{
               enterStudyRoom(studyId);
               window.location.reload(); //페이지 새로고침
           });
-        }
-        // 비공개 방일 경우
-        else{
-          // 버튼 클릭 시에만 초대코드 요청
-        axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/invitation-code/${studyId}`)
-        .then((res) => {
-    // console.log('초대코드 요청됨')
-    // console.log(res.data.result)
-          setInviteCode(res.data.result)});
-    
-    //참여코드 입력 후 입장 가능
-    MySwal.fire({
-      title: "참여코드를 입력하세요.",
-      input: "text",
-      inputAttributes: {
-        autocapitalize: "off"
-      },
-      showCancelButton: true,
-      confirmButtonText: "확인",
-      cancelButtonText: "취소",
-      showLoaderOnConfirm: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        console.log(result.value)
-        
-        setInputValue(result.value)
-        console.log(inputValue)
-        //참여코드가 일치하면
-        if(inviteCode === inputValue){
-          Swal.fire({
-            title: '참여 완료되었습니당~',
-            icon: "success"})
-          .then(() =>{
-            enterStudyRoom(studyId);
-            window.location.reload(); //페이지 새로고침
-          });
-        } else{
-          Swal.fire({
-            title: '참여 코드가 일치하지 않습니다.',
-            icon: "warning"})
-          .then(() =>{
-            window.location.reload(); //페이지 새로고침
+        } else if (
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          MySwal.fire({
+            title: "취소되었습니다",
+            text: "스터디룸 입장이 취소되었습니다.",
+            icon: "error"
           });
         }
-      }
-    });
-
-              
-          // //참여코드 입력 후 입장 가능
-          // MySwal.fire({
-          //   title: "참여코드를 입력하세요.",
-          //   input: "text",
-          //   inputAttributes: {
-          //     autocapitalize: "off"
-          //   },
-          //   showCancelButton: true,
-          //   confirmButtonText: "확인",
-          //   cancelButtonText: "취소",
-          //   showLoaderOnConfirm: true,
-          // })
-          // //참여코드 일치하는지 검증하는 코드 추가 필요!!!!!!!!!!!!!!!!!!!!!!!!
-          // .then((result) => {
-          //   if (result.isConfirmed) {
-          //     const inputValue = result.value
-              
-          //     //참여코드가 일치하면
-          //     if(inviteCode === inputValue){
-          //       Swal.fire({
-          //         title: '참여 완료되었습니당~',
-          //         icon: "success"})
-          //       .then(() =>{
-          //         enterStudyRoom(studyId);
-          //         window.location.reload(); //페이지 새로고침
-          //       });
-          //     } else{
-          //       Swal.fire({
-          //         title: '참여 코드가 일치하지 않습니다.',
-          //         icon: "warning"})
-          //       .then(() =>{
-          //         window.location.reload(); //페이지 새로고침
-          //       });
-          //     }
-
-              
-          //   }
-          // });
-        }
-      } else if (
-        result.dismiss === Swal.DismissReason.cancel
-      ) {
+          
+      }).catch(() => {
         MySwal.fire({
-          title: "취소되었습니다",
-          text: "스터디룸 참여가 취소되었습니다.",
+          title: "오류 발생",
+          text: "스터디 참여중 오류가 발생했습니다.",
           icon: "error"
         });
-      }
-    });
+      })
+    } 
+    //비공개 방일 경우
+    else if(!study.isPublic){
+
+      MySwal.fire({
+        title: "입장하시겠습니까?",
+        text: "해당 스터디룸은 비공개상태이므로 참여코드가 필요합니다.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "네, 참여할래요",
+        confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+        cancelButtonText: "아니오, 취소할게요",
+        cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+        reverseButtons: true
+      }).then((result) => {
+        if(result.isConfirmed){
+          // 버튼 클릭 시에만 초대코드 요청
+          axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/invitation-code/${studyId}`)
+          .then((result) => {
+            setInviteCode(result.data.result);
+            console.log(result.data.result);
+          }).catch((err) => console.log(err))
+
+          //참여코드 입력 후 입장 가능
+          MySwal.fire({
+            title: "참여코드를 입력하세요.",
+            input: "text",
+            inputAttributes: {
+              autocapitalize: "off"
+            },
+            showCancelButton: true,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소",
+            
+          }).then((result) => {
+          if (result.isConfirmed) {
+            console.log(result.value)
+            setInputValue(result.value)
+
+            //참여코드가 일치하면
+            if(inviteCode == inputValue){
+              console.log(inviteCode)
+              console.log(inputValue)
+              MySwal.fire({
+                title: '참여 완료되었습니다!',
+                icon: "success"})
+              .then(() =>{
+                enterStudyRoom(studyId);
+                window.location.reload(); //페이지 새로고침
+              });
+            } else{
+              MySwal.fire({
+                title: '참여 코드가 일치하지 않습니다.',
+                icon: "warning"})
+              .then(() =>{
+                window.location.reload(); //페이지 새로고침
+              });
+            }
+          } else if (
+            result.dismiss === Swal.DismissReason.cancel
+          ) {
+            MySwal.fire({
+              title: "취소되었습니다",
+              text: "스터디룸 입장이 취소되었습니다.",
+              icon: "error"
+            });
+          }
+        });
+
+        }else if (
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          MySwal.fire({
+            title: "취소되었습니다",
+            text: "스터디룸 입장이 취소되었습니다.",
+            icon: "error"
+          });
+        }
+      })
+    }
   }
-
-
 
     // 스터디룸 입장
     const enterStudyRoom = (studyId) => {
@@ -157,7 +154,6 @@ export default function StudyRoomRecruitList({study}){
     })
     .catch((err) => console.log(err));
     }
-
 
     return(
         <ListItemButton>
@@ -200,7 +196,7 @@ export default function StudyRoomRecruitList({study}){
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'space-around' }}>
                   <Stack direction="row" spacing={1} my={1}>
                     { study.tagList ? (study.tagList.map((tag, tagIndex) => (
-                      <Chip key={tagIndex} label={tag.name} color="primary" size='small' />
+                      <Chip key={tag.tagId} label={tag.name} color="primary" size='small' />
                     ))) : null
                   }
                   </Stack>
@@ -219,9 +215,6 @@ export default function StudyRoomRecruitList({study}){
                       </IconButton>
                     </Tooltip>
                     
-                    
-                    {/* StudyRoomEnterCodeModal 컴포넌트를 사용하여 모달을 렌더링 */}
-                    {/* <StudyRoomEnterCodeModal studyEnter={studyEnter} studyEnterClose={studyEnterClose} /> */}
                   </Stack>
                 </div>
               </Stack>

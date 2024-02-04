@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, Backdrop,  ToggleButton, Button, Modal, Stack, TextField, Autocomplete, Box, Typography, Container, createFilterOptions} from '@mui/material';
 import axios from 'axios';
-
-const filter = createFilterOptions();
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 const style = {
     position: 'absolute',
@@ -19,6 +19,8 @@ const style = {
   };
 
 export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, onRegisterSuccess }){
+    const MySwal = withReactContent(Swal);
+
     const [value, setValue] = React.useState(null);
     const [selected1, setSelected1] = React.useState(true); //공개 버튼 선택
     const [selected2, setSelected2] = React.useState(false); //비공개 버튼 선택
@@ -43,7 +45,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
 
     // 생성 함수
     const createStudyRoom = function() {
-      console.log(lectureId)
+      // console.log(lectureId)
       axios.post('https://i10a810.p.ssafy.io/api/studies/v1',
       {
         "title": title,
@@ -60,7 +62,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
       .then((res) => {
         console.log(res)
         onRegisterSuccess()
-        window.location.reload(); //페이지 새로고침
+        // window.location.reload(); //페이지 새로고침
       })
       .catch((err) => console.log(err))
     }
@@ -121,7 +123,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
       setDescription(input);
 
       //최대 90자까지만 입력 가능하도록 검사
-      if(input.length > 90){
+      if(input.length > 90 || input.length === 0){
         setDescriptionError(true);
       } else{
         setDescriptionError(false);
@@ -159,14 +161,13 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
     }
 
     // 오류 alert창 용
-	  const [openErrorAlert, setOpenErrorAlert] = React.useState(false);
-    const handleCloseErrorAlert = () => {
-      setOpenErrorAlert(false);
-    };
     const handleOpenErrorAlert = () => {
-      setOpenErrorAlert(true);
+      MySwal.fire({
+        title: "입력값을 확인하세요!",
+        icon: "warning",
+      })
     };
-    
+
     useEffect(() => {
       // 모달이 열릴 때 값 초기화
       if (studyCreate) {
@@ -187,7 +188,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
 
     // 모든 유효성 검사 결과 확인
     const hasErrors = titleError || capacityError || descriptionError || tagListError || lectureIdError
-    || title.length === 0 || description.length === 0 || tagList.length === 0 
+    || title.length === 0 || description.length === 0 || tagList.length === 0  || selectedLecture === null
     || (selected1 === false && selected2 === false)
     
     return(
@@ -412,38 +413,24 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
                             )}
                             freeSolo
                           />
-                          
-                        
-                        
                     </div>
 
                     {/* 등록버튼 */}
                     <Button style={{marginTop: '20px'}} variant="contained" onClick={() => { 
                       // 유효성 검사 에러가 있을 경우
                       if (hasErrors) {
+                        //오류 alert 띄우기
                         handleOpenErrorAlert();
                       } 
                       // 모든 유효성 검사에서 에러가 없을 경우
                       else {
-                        createStudyRoom()
+                        createStudyRoom();
                         // onRegisterSuccess(); // 부모 컴포넌트에 등록 성공을 알림
                       }
                     }}
                     disabled={hasErrors}
                     >등록</Button>
-
-                    
                 </Stack>
-                  {/* 에러 Alert창 */}
-                  <Backdrop
-                      open={openErrorAlert}
-                      onClick={handleCloseErrorAlert}
-                      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                      >
-                      <Alert severity="warning" onClose={() => {}}>
-                        입력값을 확인하세요!
-                      </Alert>
-                  </Backdrop>
                 
               </Container>
             </Modal>

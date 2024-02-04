@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Alert, Backdrop,  ToggleButton, Button, Modal, Stack, TextField, Autocomplete, Box, Typography, Container, createFilterOptions} from '@mui/material';
 import axios from 'axios';
 
-const filter = createFilterOptions();
-
 const style = {
     position: 'absolute',
     top: '45%',
@@ -18,138 +16,194 @@ const style = {
     p: 4,
   };
 
-export default function StudyRoomModifyModal({ studyModify, studyModifyClose, onModifySuccess }){
-    const [value, setValue] = React.useState(null);
-    const [selected1, setSelected1] = React.useState(true); //공개 버튼 선택
-    const [selected2, setSelected2] = React.useState(false); //비공개 버튼 선택
+export default function StudyRoomModifyModal({ data, studyModify, studyModifyClose, onModifySuccess }){
+  const [value, setValue] = React.useState(null);
+  const [selected1, setSelected1] = React.useState(true); //공개 버튼 선택
+  const [selected2, setSelected2] = React.useState(false); //비공개 버튼 선택
+  // 상위 컴포넌트에서 선택된 목표 강의를 관리하기 위한 상태 추가
+  const [selectedLecture, setSelectedLecture] = useState(null);
+  
+  const [title, setTitle] = useState(''); //스터디명
+  const [capacity, setCapacity] = useState(10); //스터디 정원
+  const [lectureId, setLectureId] = useState(0); //목표 강의ID
+  const [isPublic, setIsPublic] = useState(true); //공개여부
+  const [description, setDescription] = useState(''); //스터디 설명
+  const [tagList, setTagList] = useState([]); //스터디 태그
+  const [tagListFromAPI, setTagListFromAPI] = useState([]); //API에서 가져온 스터디 태그 저장
+  const [lectureFromAPI, setLectureFromAPI] = useState([]); //API에서 가져온 목표강의 리스트 저장
+
+  // 유효성 검사 변수
+  const [titleError, setTitleError] = useState(false);
+  const [capacityError, setCapacityError] = useState(false);
+  const [lectureIdError, setLectureIdError] = useState(false);
+  const [descriptionError, setDescriptionError] = useState(false);
+  const [tagListError, setTagListError] = useState(false);
+
+  // 스터디룸 수정 함수
+  const modifyStudyRoom = function() {
+    axios.patch('https://i10a810.p.ssafy.io/api/studies/v1',
+    {
+      "studyId" : data.studyId,
+      "title": title,
+      "capacity": capacity,
+      "isPublic": isPublic,
+      "description": description,
+      "tagList": tagList,
+      "lectureId": lectureId
+    }, {
+      headers: {
+        AUTHORIZATION : 9
+      }
+    })
+    .then((res) => {
+      console.log(res)
+      onModifySuccess()
+      // window.location.reload(); //페이지 새로고침
+    })
+    .catch((err) => console.log(err))
+  }
     
-    // const [studyId, setStudyId] = useState(0); //스터디 ID
-
-    const [studyName, setStudyName] = useState(''); //스터디명
-    const [studyPersonnel, setStudyPersonnel] = useState(10); //스터디 정원
-    const [studyDescription, setStudyDescription] = useState(''); //스터디 설명
-    const [studyTag, setStudyTag] = useState([]); //스터디 태그
-
-    // const [studyPublic, setStudyPublic] = useState(true); //스터디 공개여부
-    // const [studyMember, setStudyMember] = useState([]); //스터디 참여멤버
-
-    // 유효성 검사 변수
-    const [studyNameError, setStudyNameError] = useState(false);
-    const [studyPersonnelError, setStudyPersonnelError] = useState(false);
-    const [studyDescriptionError, setStudyDescriptionError] = useState(false);
-    const [studyTagError, setStudyTagError] = useState(false);
-
-    // 스터디룸 수정 함수
-    const modifyStudyRoom = function() {
-      axios.patch('https://i10a810.p.ssafy.io/api/studies/v1',{
-        'studyId': studyId,
-        'title' : studyName,
-        'capacity' : studyPersonnel,
-        'lectureId': 1,
-        'isPublic' : studyPublic,
-        'description' : studyDescription,
-        'tagList' : ['...studyTag'],
-        'studyMember' : ['...studyMember']
-      })
-      .then((res) => {
-        console.log(res)
-        onModifySuccess()
+  // 태그 리스트 가져오기
+  useEffect(() => {
+    if(studyModify){
+      axios.get(`https://i10a810.p.ssafy.io/api/tags/v0/lectures`)
+      .then((response)=> {
+          console.log(response.data.result.tagList)
+          setTagListFromAPI(response.data.result.tagList)
       })
       .catch((err) => console.log(err))
     }
-    
-    // 스터디명 유효성 검사
-    const handleStudyNameCheck = (event) => {
+  }, [studyModify])
+
+  // 목표강의 리스트 가져오기
+  useEffect(() => {
+    if(studyModify){
+      axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?category&tags&keyword&level&site&order&page=0&size=16&sort=string`)
+      .then((response)=> {
+          console.log(response.data.result.lectureList)
+          setLectureFromAPI(response.data.result.lectureList)
+      })
+      .catch((err) => console.log(err))
+    }
+  }, [studyModify])
+
+  // 스터디명 유효성 검사
+    const handleTitleCheck = (event) => {
       const input = event.target.value;
-      setStudyName(input);
+      setTitle(input);
 
       //최대 10자까지만 입력 가능하도록 검사
       if(input.length > 10 || input.length === 0){
-        setStudyNameError(true);
+        setTitleError(true);
       } else{
-        setStudyNameError(false);
+        setTitleError(false);
       }
     }
 
     // 스터디 정원 유효성 검사
-    const handleStudyPersonnelCheck = (event) => {
+    const handleCapacityCheck = (event) => {
       const input = event.target.value;
-      setStudyPersonnel(input);
+      setCapacity(input);
 
       //최소 1명, 최대 10명
       if(input < 1 || input > 10){
-        setStudyPersonnelError(true);
+        setCapacityError(true);
       } else{
-        setStudyPersonnelError(false);
+        setCapacityError(false);
       }
     }
 
     // 스터디 설명 유효성 검사
-    const handleStudyDescriptionCheck = (event) => {
+    const handleDescriptionCheck = (event) => {
       const input = event.target.value;
-      setStudyDescription(input);
+      setDescription(input);
 
       //최대 90자까지만 입력 가능하도록 검사
-      if(input.length > 90){
-        setStudyDescriptionError(true);
+      if(input.length > 90 || input.length === 0){
+        setDescriptionError(true);
       } else{
-        setStudyDescriptionError(false);
+        setDescriptionError(false);
       }
     }
 
     // 스터디 태그 유효성 검사
-    const handleStudyTagCheck = (event, newValue) => {
+    const handleTagListCheck = (event, newValue) => {
       //newValue는 선택된 옵션을 나타냄
-      const selectedTags = newValue.map((option) => option.title);
-
+      const selectedTags = newValue.map((option) => option.tagId);
+      console.log(selectedTags)
       //최대 10개 까지만 입력 가능하도록 검사
       if(selectedTags.length > 10){
-        setStudyTagError(true);
+        setTagListError(true);
       } else{
-        setStudyTagError(false);
+        setTagListError(false);
         //선택된 태그들을 state에 설정
-        setStudyTag(selectedTags);
+        setTagList(selectedTags);
+      }
+    }
+
+    
+    // 스터디 목표강의 유효성 검사
+    const handleLectureIdCheck = (event, newLecture) => {
+      //newValue는 선택된 옵션을 나타냄
+      const selectedLecture = newLecture.lectureId;
+      console.log(selectedLecture)
+
+      if(selectedLecture.length === 0){
+        setLectureIdError(true);
+      } else{
+        setLectureIdError(false);
+        setLectureId(selectedLecture);
       }
     }
 
     // 오류 alert창 용
-	  const [openErrorAlert, setOpenErrorAlert] = React.useState(false);
-    const handleCloseErrorAlert = () => {
-      setOpenErrorAlert(false);
-    };
     const handleOpenErrorAlert = () => {
-      setOpenErrorAlert(true);
+      MySwal.fire({
+        title: "입력값을 확인하세요!",
+        icon: "warning",
+      })
     };
     
     useEffect(() => {
-      // 모달이 열릴 때 값 초기화
+      // 모달이 열릴 때 기존 정보로 초기화
       if (studyModify) {
         setValue(null);
-        setSelected1(true);
-        setSelected2(false);
-        setStudyName('');
-        setStudyPersonnel(10);
-        setStudyDescription('');
-        setStudyTag([]);
-        setStudyNameError(false);
-        setStudyPersonnelError(false);
-        setStudyDescriptionError(false);
-        setStudyTagError(false);
+        setTitle(data.title);
+        setCapacity(data.capacity);
+        setDescription(data.description);
+        if(data.isPublic){
+          setSelected1(true);
+          setSelected2(false);
+        } else{
+          setSelected1(false);
+          setSelected2(true);
+        }
+        setIsPublic(data.isPublic);
+        setTagList([]);
+        setSelectedLecture(null);
+        setTitleError(false);
+        setCapacityError(false);
+        setDescriptionError(false);
+        setTagListError(false);
+        setLectureIdError(false);
       }
     }, [studyModify]);
+
+    // 모든 유효성 검사 결과 확인
+    const hasErrors = titleError || capacityError || descriptionError || tagListError || lectureIdError
+    || title.length === 0 || description.length === 0 || tagList.length === 0 || selectedLecture === null
+    || (selected1 === false && selected2 === false)
 
     return(
         <div>
             <Modal
                 open={studyModify}
                 onClose={studyModifyClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
             >
               <Container sx={style} style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', marginTop: '40px'}}>
                 <Stack style={{width: "80%"}}>
                     <Typography variant="h5" fontWeight="bold" >
-                        스터디 수정
+                        스터디 수정하기
                     </Typography>
 
                     {/* 제목 */}
@@ -160,15 +214,15 @@ export default function StudyRoomModifyModal({ studyModify, studyModifyClose, on
                        </div>
                         
                         {
-                          studyNameError ? (
+                          titleError ? (
                             <TextField
                               error
                               id="outlined-error-helper-text"
                               size='small'
                               sx = {{width: '100%'}}
                               helperText="10자 이내로 입력하세요"
-                              value={studyName}
-                              onChange={handleStudyNameCheck}
+                              value={title}
+                              onChange={handleTitleCheck}
                             />
                           ) : (
                             <TextField
@@ -177,8 +231,8 @@ export default function StudyRoomModifyModal({ studyModify, studyModifyClose, on
                               placeholder="스터디명을 입력하세요*"
                               size='small'
                               sx = {{width: '100%'}}
-                              value={studyName}
-                              onChange={handleStudyNameCheck}
+                              value={title}
+                              onChange={handleTitleCheck}
                             />
                           )
                         }
@@ -191,7 +245,7 @@ export default function StudyRoomModifyModal({ studyModify, studyModifyClose, on
                         <p>최소 1명, 최대 10명</p>
                       </div>
                       {
-                        studyPersonnelError ?(
+                        capacityError ?(
                           <TextField
                             error
                             id="outlined-error-helper-text"
@@ -199,8 +253,8 @@ export default function StudyRoomModifyModal({ studyModify, studyModifyClose, on
                             type='number'
                             sx = {{width: '100%'}}
                             helperText="정확한 인원수를 설정하세요"
-                            value={studyPersonnel}
-                            onChange={handleStudyPersonnelCheck}
+                            value={capacity}
+                            onChange={handleCapacityCheck}
                             />
                         ) : (
                           <TextField
@@ -210,8 +264,8 @@ export default function StudyRoomModifyModal({ studyModify, studyModifyClose, on
                             type='number'
                             size='small'
                             sx = {{width: '100%'}}
-                            value={studyPersonnel}
-                            onChange={handleStudyPersonnelCheck}
+                            value={capacity}
+                            onChange={handleCapacityCheck}
                           /> 
                         )
                       }
@@ -225,7 +279,7 @@ export default function StudyRoomModifyModal({ studyModify, studyModifyClose, on
                             <p>90자 이내</p>
                         </div>
                         {
-                          studyDescriptionError ? (
+                          descriptionError ? (
                             <TextField
                               error
                               multiline
@@ -234,8 +288,8 @@ export default function StudyRoomModifyModal({ studyModify, studyModifyClose, on
                               size='small'
                               sx = {{width: '100%'}}
                               helperText="90자 이내로 입력하세요"
-                              value={studyDescription}
-                              onChange={handleStudyDescriptionCheck}
+                              value={description}
+                              onChange={handleDescriptionCheck}
                             />
                           ) : (
                             <TextField
@@ -246,8 +300,8 @@ export default function StudyRoomModifyModal({ studyModify, studyModifyClose, on
                               placeholder="설명을 입력하세요*"
                               size='small'
                               sx = {{width: '100%'}}
-                              value={studyDescription}
-                              onChange={handleStudyDescriptionCheck}
+                              value={description}
+                              onChange={handleDescriptionCheck}
                             />
                           )
                         }
@@ -261,18 +315,16 @@ export default function StudyRoomModifyModal({ studyModify, studyModifyClose, on
                             <p >최소 1개, 최대 10개</p>
                         </div>
                         {
-                          studyTagError ? (
+                          tagListError ? (
                           <Autocomplete
                             required
                             multiple
                             id="tags-outlined"
                             size='small'
-                            options={top100Films}
-                            value={studyTag.map((tag) => ({title: tag}))}
-                            onChange={handleStudyTagCheck}
-                            getOptionLabel={(option) => option.title}
+                            options={tagListFromAPI}
+                            onChange={handleTagListCheck}
+                            getOptionLabel={(option) => option.name}
                             filterSelectedOptions
-                            isOptionEqualToValue={(option, value) => option.title === value.title}
                             renderInput={(params) => (
                               <TextField
                                 {...params}
@@ -288,12 +340,10 @@ export default function StudyRoomModifyModal({ studyModify, studyModifyClose, on
                             multiple
                             id="tags-outlined"
                             size='small'
-                            options={top100Films}
-                            value={studyTag.map((tag) => ({title: tag}))}
-                            onChange={handleStudyTagCheck}
-                            getOptionLabel={(option) => option.title}
+                            options={tagListFromAPI}
+                            onChange={handleTagListCheck}
+                            getOptionLabel={(option) => option.name}
                             filterSelectedOptions
-                            isOptionEqualToValue={(option, value) => option.title === value.title}
                             renderInput={(value) => (
                               <TextField
                                 {...value}
@@ -317,6 +367,7 @@ export default function StudyRoomModifyModal({ studyModify, studyModifyClose, on
                             onChange={() => {
                               setSelected1(!selected1);
                               setSelected2(false); // 비공개 버튼을 선택해제
+                              setIsPublic(true);
                             }}
                             sx={{borderRadius: '30px', width: '45%'}}
                           >
@@ -330,6 +381,7 @@ export default function StudyRoomModifyModal({ studyModify, studyModifyClose, on
                             onChange={() => {
                               setSelected2(!selected2);
                               setSelected1(false); // 공개 버튼을 선택해제
+                              setIsPublic(false);
                             }}
                             sx={{borderRadius: '20px', width: '45%'}}
                           >
@@ -342,112 +394,52 @@ export default function StudyRoomModifyModal({ studyModify, studyModifyClose, on
                     <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
                             <p>목표강의 연결</p>
-                            <p>선택</p>
+                            <p>필수</p>
                         </div>
                         
-                        <Autocomplete
+                          <Autocomplete
                             size='small'
-                            value={value}
-                            onChange={(event, newValue) => {
-                              if (typeof newValue === 'string') {
-                                setValue({
-                                  title: newValue,
-                                });
-                              } else if (newValue && newValue.inputValue) {
-                                // Create a new value from the user input
-                                setValue({
-                                  title: newValue.inputValue,
-                                });
-                              } else {
-                                setValue(newValue);
-                              }
+                            value={selectedLecture}
+                            onChange={(event, newLecture) => {
+                              setSelectedLecture(newLecture);
+                              handleLectureIdCheck(event, newLecture);
                             }}
-                            filterOptions={(options, params) => {
-                              const filtered = filter(options, params);
-                            
-                              const { inputValue } = params;
-                              // Suggest the creation of a new value
-                              const isExisting = options.some((option) => inputValue === option.title);
-                              if (inputValue !== '' && !isExisting) {
-                                filtered.push({
-                                  inputValue,
-                                  title: `Add "${inputValue}"`,
-                                });
-                              }
-                          
-                              return filtered;
-                            }}
-                            selectOnFocus
-                            clearOnBlur
-                            handleHomeEndKeys
-                            id="free-solo-with-text-demo"
-                            options={top100Films}
-                            getOptionLabel={(option) => {
-                              // Value selected with enter, right from the input
-                              if (typeof option === 'string') {
-                                return option;
-                              }
-                              // Add "xxx" option created dynamically
-                              if (option.inputValue) {
-                                return option.inputValue;
-                              }
-                              // Regular option
-                              return option.title;
-                            }}
-                            renderOption={(props, option) => <li {...props}>{option.title}</li>}
-                            freeSolo
-                            renderInput={(params) => (
-                              <TextField {...params} placeholder="목표강의를 연결하세요"/>
+                            options={lectureFromAPI}
+                            getOptionKey={(option) => option.lectureId}
+                            getOptionLabel={(option) => option.lectureName}
+                            filterSelectedOptions
+                            renderInput={(value) => (
+                              <TextField
+                                {...value}
+                                placeholder="목표강의를 연결하세요"
+                              />
                             )}
-                        />
+                            freeSolo
+                          />
+                          
+                        
+                        
                     </div>
 
                     {/* 수정버튼 */}
                     <Button style={{marginTop: '20px'}} variant="contained" onClick={() => { 
-
-                      // 모든 유효성 검사 결과 확인
-                      const hasErrors = studyNameError || studyPersonnelError || studyDescriptionError || studyTagError
-                        || studyName.length === 0 || studyDescription.length === 0 || studyTag.length === 0 
-                        || (selected1 === false && selected2 === false)
-
                       // 유효성 검사 에러가 있을 경우
                       if (hasErrors) {
+                        //오류 alert 띄우기
                         handleOpenErrorAlert();
                       } 
                       // 모든 유효성 검사에서 에러가 없을 경우
                       else {
-                        createStudyRoom()
+                        modifyStudyRoom();
                         // onRegisterSuccess(); // 부모 컴포넌트에 등록 성공을 알림
                       }
-                    }}>수정</Button>
+                    }}
+                    disabled={hasErrors}
+                    >수정</Button>
 
-                    
                 </Stack>
-                  {/* 에러 Alert창 */}
-                  <Backdrop
-                      open={openErrorAlert}
-                      onClick={handleCloseErrorAlert}
-                      sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                      >
-                      <Alert severity="warning" onClose={() => {}}>
-                        입력값을 확인하세요!
-                      </Alert>
-                  </Backdrop>
-                
               </Container>
             </Modal>
         </div>
     )
 }
-
-
-
-const top100Films = [
-    { title: 'Spring Boot' },
-    { title: 'Vue.js' },
-    { title: 'React.js' },
-    { title: 'VSCode' },
-    { title: 'IntelliJ' },
-    { title: 'Git' },
-    
-  ];

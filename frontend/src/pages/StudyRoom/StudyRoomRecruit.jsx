@@ -8,14 +8,14 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import StudyRoomCreateModal from '../../components/StudyRoom/StudyRoomCreateModal';
 import StudyRoomRecruitList from '../../components/StudyRoom/StudyRoomRecruitList';
 import axios from 'axios'
-
-const Demo = styled('div')(({ theme }) => ({
-  backgroundColor: theme.palette.background.paper,
-}));
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 // 스터디 모집하는 페이지
 export default function StudyRoomRecruit() {
+  const MySwal = withReactContent(Swal);
   const [data, setData] = useState([])
+
   // 처음에 axios 요청으로 전체 목록 가져오기
 	useEffect(() => {
     axios.get('https://i10a810.p.ssafy.io/api/studies/v1')
@@ -47,21 +47,24 @@ export default function StudyRoomRecruit() {
   const onRegisterSuccess = () => {
     setRegisterSuccess(true);
     studyCreateClose(); // 등록이 성공하면 모달 닫기
-    handleOpenSuccessAlert(); //성공 alert창 표시
+    handleCreateDialogOpen();
   };
+
+  // 등록 확인용 Dialog
+  const handleCreateDialogOpen = () => {
+    MySwal.fire({
+      title: "스터디 등록이 완료되었습니다!",
+      text: "좌측의 참여중인 스터디 목록에서 확인 가능합니다.",
+      icon: "success",
+    }).then(() =>{
+      window.location.reload();
+    })
+  };
+
 
   // StudyRoomCreateModal이 닫힐 때 실행되는 콜백 함수
   const studyCreateClose = () => {
     SetStudyCreate(false);
-  };
-
-  // 성공 alert창 용
-  const [openSuccessAlert, setOpenSuccessAlert] = React.useState(false);
-  const handleCloseSuccessAlert = () => {
-    setOpenSuccessAlert(false);
-  };
-  const handleOpenSuccessAlert = () => {
-    setOpenSuccessAlert(true);
   };
 
 
@@ -89,11 +92,6 @@ export default function StudyRoomRecruit() {
         }
     }
     const filteredData = filteringData(data).slice(startIndex, endIndex)
-    // const filteredData = selectedIndex === 1
-    //   ? data.filter(study => {study.capaity > study.currentMembers})
-    //   : selectedIndex === 2
-    //     ? data.filter(study => {study.capaity <= study.currentMembers})
-    //     : data;
     return filteredData.map((study, index) => 
     (
       <StudyRoomRecruitList
@@ -158,21 +156,13 @@ export default function StudyRoomRecruit() {
 
           {/* StudyRoomCreateModal 컴포넌트를 사용하여 모달을 렌더링 */}
           <StudyRoomCreateModal studyCreate={studyCreate} studyCreateClose={studyCreateClose} onRegisterSuccess={onRegisterSuccess} />
-          {/* 등록 성공 알림 창 렌더링 */}
-          <Backdrop
-            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            open={openSuccessAlert}
-            onClick={handleCloseSuccessAlert}
-          >
-            <Alert severity="success" onClose={() => {}}>등록이 완료되었습니다!</Alert>
-          </Backdrop>
 
           {/* 스터디 모집 공고 리스트 */}
-          <Demo>
+          <div>
             {
               data.length > 0 ? getCurrentItems() : null
             }
-          </Demo>
+          </div>
           {/* 페이지네이션 */}
           <Stack sx={{
             mx: 'auto',
