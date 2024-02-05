@@ -13,6 +13,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import PersonIcon from '@mui/icons-material/Person'
 import SellIcon from '@mui/icons-material/Sell'
 import EastIcon from '@mui/icons-material/East';
+import {useState} from 'react'
 
 // 강의 비교하는 컴포넌트
 
@@ -22,13 +23,13 @@ function LectureCompare() {
 	let dispatch = useDispatch()
 
 	return (
-		<Container sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', padding: '5px' }}>
-			<p style={{ fontSize: '1.5em', fontWeight: '600' }}>강의 비교</p>
-			<Grid container spacing={3} style={{ display: 'flex', justifyContent: 'space-between' }}>
+		<Container sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+			<p style={{ fontSize: '1.7em', fontWeight: '600', marginBottom:'40px', marginTop:'20px' }}>강의 비교</p>
+			<Grid container spacing={3} style={{ display: 'flex', justifyContent: 'space-between', marginBottom:'30px' }}>
 				{compareLectures.map((lecture, idx) => (
 					<Grid item xs={4} key={idx}>
 						<div style={{position:'relative'}}>
-							<IconButton onClick={() => dispatch(deleteElement(idx))} sx={{ position: 'absolute', top: -15, right: -10 }}>
+							<IconButton onClick={() => dispatch(deleteElement(idx))} sx={{ position: 'absolute', top: -15, right: -10, zIndex:'100' }}>
 								<HighlightOffIcon />
 							</IconButton>
 							<CompareElement lecture={lecture} />
@@ -51,6 +52,27 @@ function LectureCompare() {
 
 function CompareElement({ lecture }) {
 
+	// 호버용 변수들
+	const [isHover, setIsHover] = useState(false)
+	const handleMouseEnter = () => {
+	  setIsHover(true)
+	}
+	const handleMouseLeave = () => {
+	  setIsHover(false)
+	}
+
+	// 전체 스타일
+	const elementStyle = {
+		height: '500px', 
+		display: 'flex', 
+		alignItems: 'center', 
+		flexDirection: 'column',
+		padding: '10px',
+		transition: 'transform 0.3s ease',
+		transform: isHover ? 'scale(1.01)' : 'scale(1)',
+		cursor: isHover ? 'pointer' : null
+	}
+
 	// 강의 가격에 따라서 다르게 출력하는 함수
 	const definePrice = function (price1, price2) {
 		if (price2 == 0) {
@@ -71,8 +93,8 @@ function CompareElement({ lecture }) {
 		navigate(`/lecture/detail/${lectureId}`)
 	}
 	return (
-		<Paper sx={{ height: '500px', display: 'flex', alignItems: 'center', flexDirection: 'column', padding: '10px' }}>
-			<Box sx={{ height: '350px' }}>
+		<Paper sx={elementStyle} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} onClick={() => goDetail(lecture.lectureId)}>
+			<Box sx={{ height: '300px' }}>
 				<div style={{ height: '80%', paddingTop: '30px' }}>
 					<p style={{ fontSize: '0.9em', margin: '0px' }}>{lecture.categoryName}</p>
 					<p style={{ fontSize: '1.8em', fontWeight: 800 }}>{lecture.lectureName}</p>
@@ -84,10 +106,6 @@ function CompareElement({ lecture }) {
 					</div>
 				</div>
 			</Box>
-			<Box sx={{ height: '50px' }}>
-				<Button variant="outlined" onClick={() => goDetail(lecture.lectureId)}>강의 보러가기</Button>
-			</Box>
-
 		</Paper>
 	)
 }

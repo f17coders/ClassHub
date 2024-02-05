@@ -11,7 +11,7 @@ import img1 from './../../assets/Lecture/Lecture2.png'
 import CompareButton from './../../components/CompareButton'
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
-import { changeCategory, addTags, deleteTags, changeKeyword, searchResult, changeLevel } from '../../store/store'
+import { changeCategory, changeKeyword, searchResult, setFromMainFalse } from '../../store/store'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import axios from 'axios'
 
@@ -21,6 +21,8 @@ function Lecture() {
 	let searchParams = useSelector((state) => state.searchParams)
 	// 검색결과 가져오기
 	let lectureResult = useSelector((state) => state.lectureResult)
+	// 메인에서 검색해서 온건지 확인하기
+	let fromMain = useSelector((state) => state.fromMain)
 	let dispatch = useDispatch()
 
 	// 검색어
@@ -32,13 +34,15 @@ function Lecture() {
 
 	// 검색하기
 	useEffect(() => {
-		axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?${searchParams.category ? 'category=' + searchParams.category.categoryId : ''}${searchParams.keyword ? '&keyword=' + searchParams.keyword : ''}${searchParams.level != 'ALL' ? '&level=' + searchParams.level : ''}${searchParams.site ? '&site=' + searchParams.site : ''}&page=0&size=16`)
-		.then((res) => {
-			console.log(`${res.config.url}으로 요청 보냄`)
-			dispatch(searchResult(res.data.result.lectureList))
-		}).catch((err) =>
-			console.log(err)
-		)
+		if (fromMain == false) {
+			axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?${searchParams.category ? 'category=' + searchParams.category.categoryId : ''}${searchParams.keyword ? '&keyword=' + searchParams.keyword : ''}${searchParams.level != 'ALL' ? '&level=' + searchParams.level : ''}${searchParams.site ? '&site=' + searchParams.site : ''}&page=0&size=16`)
+			.then((res) => {
+				console.log(`${res.config.url}으로 요청 보냄`)
+				dispatch(searchResult(res.data.result.lectureList))
+			}).catch((err) =>
+				console.log(err)
+			)
+		}	
 	}, [searchParams])
 
 
@@ -103,6 +107,9 @@ function Lecture() {
 					</div>
 					{/* 강의 전체 목록 */}
 					<Box sx={{ margin: '20px' }}>
+						{
+							fromMain ? (<p>{searchParams.keyword}에 대한 검색 결과</p>) : null
+						}
 						<Grid container spacing={1}>
 							{
 								lectureResult.length > 0 ? (

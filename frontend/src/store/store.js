@@ -153,8 +153,20 @@ let lectureResult = createSlice({
 });
 export let { searchResult } = lectureResult.actions
 
-
-
+// 강의 페이지를 메인페이지에서 출발해서 갈때를 확인하는 용도
+let fromMain = createSlice({
+  name:'fromMain',
+  initialState: false,
+  reducers: {
+    setFromMainTrue(state) {
+      return true
+    },
+    setFromMainFalse(state) {
+      return false
+    },
+  }
+})
+export let { setFromMainTrue, setFromMainFalse } = fromMain.actions
 
 // storage 저장용
 const persistConfig = {
@@ -171,7 +183,8 @@ const persistedReducer = persistReducer(
     compareLectures: compareLectures.reducer,
     searchParams: searchParams.reducer,
     user: user.reducer,
-    lectureResult: lectureResult.reducer
+    lectureResult: lectureResult.reducer,
+    fromMain: fromMain.reducer,
   })
 );
 

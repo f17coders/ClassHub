@@ -35,9 +35,9 @@ function LectureCard({ lecture }) {
 	const [hover, setHover] = useState(false)
 	const hoverStyle = {
 		position: 'relative',
-		height: 340,
+		height: 350,
 		cursor: hover ? 'pointer' : 'none',
-		boxShadow: hover ? "0px 4px 8px 0px rgba(0, 0, 0, 0.2)" : 'none',
+		boxShadow: hover ? "0px 8px 12px 0px rgba(0, 0, 0, 0.2)" : 'none',
 	}
 
 	// 좋아요 + 로그인 안했으면 로그인 하라 하기
@@ -126,7 +126,7 @@ function LectureCard({ lecture }) {
 						<p style={{ fontWeight: '700', fontSize: '1.1em' }}>{lecture.lectureName}</p>
 					</div>
 					<div>
-						<p style={{ marginBottom: '5px' }}>{lecture.instructor}<br /><Rating value={lecture.combinedRating} readOnly></Rating></p>
+						<p style={{ marginBottom: '5px' }}>{lecture.instructor}<br /><Rating size='small' value={lecture.combinedRating} readOnly></Rating></p>
 					</div>
 					{/* 해시태그들(2개까지만) */}
 					<div>
@@ -135,7 +135,7 @@ function LectureCard({ lecture }) {
 								<Chip size="small" label={`# ${lecture.tagList[0].name}`}></Chip>
 							}</div>) : (<div>{
 								lecture.tagList.length == 2 ? (<div>
-									<Chip size="small" label={`# ${lecture.tagList[0].name}`}></Chip>
+									<Chip size="small" label={`# ${lecture.tagList[0].name}`} sx={{marginRight:'4px', marginBottom:'4px'}}></Chip>
 									<Chip size="small" label={`# ${lecture.tagList[1].name}`}></Chip>
 								</div>) : null
 							}</div>)
@@ -151,8 +151,7 @@ function LectureCard({ lecture }) {
 							position: 'absolute',
 							top: 0,
 							backgroundColor: 'rgba(29, 35, 100, 0.9)',
-							width: '100%',
-							height: '100%',
+							height: 340,
 							color: 'white',
 							padding: '15px',
 							display: 'flex',
@@ -169,28 +168,27 @@ function LectureCard({ lecture }) {
 						<div style={{ height: '20%' }} onClick={goDetail}>
 							<Button size="small" sx={{ backgroundColor: 'RGB(83, 96, 245)', color: 'white', borderRadius: '20px', marginRight: '0.5em' }}>#VSCode</Button>
 						</div>
-						<div style={{ marginLeft: '75%', display: 'flex', flexDirection: 'column' }}>
+						<div style={{ display: 'flex', flexDirection: 'column', width:'20%', marginLeft:'auto', marginBottom:'10px'}}>
 							{
 								like ? (
-									<LightTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15], }, },] }, }} placement="left" arrow title="좋아요 취소">
+									<LightTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5], }, },] }, }} placement="left" arrow title="좋아요 취소">
 										<IconButton size='small' onClick={toggleLike} sx={{ color: 'white' }}>
 											<FavoriteIcon />
 										</IconButton>
 									</LightTooltip>
 								) : (
-									<LightTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15], }, },] }, }} placement="left" arrow title="좋아요">
+									<LightTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5], }, },] }, }} placement="left" arrow title="좋아요">
 										<IconButton size='small' onClick={toggleLike} sx={{ color: 'white' }}>
 											<FavoriteBorderIcon />
 										</IconButton>
 									</LightTooltip>
 								)
 							}
-							<LightTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15], }, },] }, }} placement="left" arrow title="강의 비교하기">
+							<LightTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5], }, },] }, }} placement="left" arrow title="강의 비교하기">
 								<IconButton size='small' sx={{ color: 'white' }} onClick={addCart}>
 									<BalanceIcon />
 								</IconButton>
 							</LightTooltip>
-
 						</div>
 					</div>
 				) : null
