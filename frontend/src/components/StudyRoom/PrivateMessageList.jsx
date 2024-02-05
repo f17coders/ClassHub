@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
-import { Box, Divider, ListItem, ListItemButton, ListItemText, ListItemAvatar,Avatar  } from "@mui/material";
+import { Box, Divider, ListItem, ListItemButton, ListItemText, ListItemAvatar, ListSubheader, Avatar  } from "@mui/material";
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import People from '@mui/icons-material/People';
 import PermMedia from '@mui/icons-material/PermMedia';
@@ -24,45 +24,53 @@ export default function PrivateMessageList(){
     const navigate = useNavigate();
 
     return(
-
-        <Box
+        <Box sx={{
+          maxHeight: 350,
+          width:"100%",
+          position: 'relative',
+          overflow: 'auto',
+          // 스크롤바 숨기기
+          "-ms-overflow-style": "none", /* IE and Edge */
+          "scrollbar-width": "none", /* Firefox */
+          "&::-webkit-scrollbar": {
+            display: "none" /* Chrome, Safari, and Opera */,
+          },
+          bgcolor: open ? 'rgba(71, 98, 130, 0.2)' : null,
+          pb: open ? 2 : 0,
+          }}>
+          <ListSubheader>
+            <ListItemButton
+              alignItems="flex-start"
+              onClick={() => setOpen(!open)}
               sx={{
-                bgcolor: open ? 'rgba(71, 98, 130, 0.2)' : null,
-                pb: open ? 2 : 0,
-              }}
-            >
-              <ListItemButton
-                alignItems="flex-start"
-                onClick={() => setOpen(!open)}
-                sx={{
-                  px: 3,
-                  pt: 2.5,
-                  pb: open ? 0 : 2.5,
-                  width: "100%",
-                  minWidth: 360,
-                  '&:hover, &:focus': { '& svg': { opacity: open ? 1 : 0 } },
+                px: 3,
+                pt: 2.5,
+                pb: open ? 0 : 2.5,
+                width: "100%",
+                minWidth: 360,
+                '&:hover, &:focus': { '& svg': { opacity: open ? 1 : 0 } },
+              }}>
+              <ListItemText
+                primary="개인 메시지"
+                primaryTypographyProps={{
+                  fontSize: 15,
+                  fontWeight: 'medium',
+                  lineHeight: '20px',
+                  mb: '24px',
+                  width: "100%"
                 }}
-              >
-                <ListItemText
-                  primary="개인 메시지"
-                  primaryTypographyProps={{
-                    fontSize: 15,
-                    fontWeight: 'medium',
-                    lineHeight: '20px',
-                    mb: '24px',
-                    width: "100%"
-                  }}
-                  sx={{ my: 0 }}
-                />
-                <KeyboardArrowDown
-                  sx={{
-                    mr: -1,
-                    opacity: 0,
-                    transform: open ? 'rotate(-180deg)' : 'rotate(0)',
-                    transition: '0.2s',
-                  }}
-                />
-              </ListItemButton>
+                sx={{ my: 0 }}
+              />
+              <KeyboardArrowDown
+                sx={{
+                  mr: -1,
+                  opacity: 0,
+                  transform: open ? 'rotate(-180deg)' : 'rotate(0)',
+                  transition: '0.2s',
+                }}
+              />
+            </ListItemButton>
+          </ListSubheader>
                 
               {open &&
                 data.map((item) => (
