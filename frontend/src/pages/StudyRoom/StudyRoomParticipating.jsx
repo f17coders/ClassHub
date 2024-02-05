@@ -16,6 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import ParticipatingMemberModal from '../../components/StudyRoom/ParticipatingMemberModal';
+import StudyRoomChannelModal from '../../components/StudyRoom/StudyRoomChannelModal';
 
 // 참여중인 스터디 상세 페이지
 export default function StudyRoomParticipating(){
@@ -23,6 +24,17 @@ export default function StudyRoomParticipating(){
   const { studyId } = useParams();
   const navigate = useNavigate();
   const [inviteCode, setInviteCode] = useState('');
+  const [channels, setChannels] = useState([]);
+
+    // 스터디룸 채널정보 가져오기
+	useEffect(() => {
+    axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/channels/${studyId}`)
+    .then((response)=> {
+        console.log(response.data.result)
+        setChannels(response.data.result)
+    })
+    .catch((err) => console.log(err))
+  },[])
 
   const [data, setData] = useState([])
   // 스터디룸 ID로 상세정보 가져오기
@@ -40,6 +52,19 @@ export default function StudyRoomParticipating(){
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
+
+  //StudyRoomChannelModal이 열렸는지 여부 관리하는 state
+  const [studyRoomChannel, setStudyRoomChannel] = useState(false);
+
+  //모달 열릴 때 실행되는 콜백 함수
+  const channelModalOpen = () => {
+    console.log('채널명 편집 모달 오픈');
+    setStudyRoomChannel(true);
+  }
+  //닫힐 때 실행되는 콜백 함수
+  const channelModalClose = () => {
+    setStudyRoomChannel(false);
+  }
 
   //ParticipatingMemberModal이 열렸는지 여부 관리하는 state
   const [participatingMember, setParticipatingMember] = useState(false);
@@ -245,7 +270,7 @@ export default function StudyRoomParticipating(){
                 <AccountCircleIcon />
               </ListItemIcon>참여중인 멤버 보기
             </MenuItem>
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={channelModalOpen}>
               <ListItemIcon>
                 <EditIcon  />
               </ListItemIcon>
@@ -280,27 +305,19 @@ export default function StudyRoomParticipating(){
             </MenuItem>
           </Menu>
           
-          <ListItemButton
-            selected={selectedIndex === 0}
-            onClick={(event) => handleListItemClick(event, 0)}
-            sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-          >
-             공지사항
-          </ListItemButton>
-          <ListItemButton
-            selected={selectedIndex === 1}
-            onClick={(event) => handleListItemClick(event, 1)}
-            sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-          >
-            잡담방
-          </ListItemButton>
-          <ListItemButton
-            selected={selectedIndex === 2}
-            onClick={(event) => handleListItemClick(event, 2)}
-            sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-          >
-            학습인증
-          </ListItemButton>
+          {/* 채널명 조회 */}
+          {
+            channels.map((channel, channelIndex) => (
+              <ListItemButton
+              key={channelIndex}
+                selected={selectedIndex === channelIndex}
+                onClick={(event) => handleListItemClick(event, channelIndex)}
+                sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+              >
+                 {channel.name}
+              </ListItemButton>
+            ))
+          }
         </Stack>
         
       </List>
@@ -312,15 +329,16 @@ export default function StudyRoomParticipating(){
       {/* 참여중인 멤버 보기 모달 렌더링 */}
       <ParticipatingMemberModal studyId={studyId} participatingMember={participatingMember} participatingMemberClose={participatingMemberClose}/>
 
-      {/* 스터디 목록 */}
+      {/* 채널명 편집 모달 렌더링 */}
+      <StudyRoomChannelModal studyId={studyId} studyRoomChannel={studyRoomChannel} channelModalClose={channelModalClose}/>
+
+      {/* 실시간 채팅 들어갈 부분 */}
       <Grid container sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
 
         <Grid item sx={{ width: '90%' }} >
           {/* 검색기능 */}
           <Stack direction="row" spacing={1} margin={1} padding={1}>
-            <TextField size="small" sx={{ width: "100%" }} id="outlined-basic" label="원하는 스터디를 검색해보세요!" variant="outlined" />
-            
-            
+            <TextField size="small" sx={{ width: "100%" }} id="outlined-basic" label="내용을 검색해보세요!" variant="outlined" />
           </Stack>
          
          {/* 채널에 대한 페이지 */}
