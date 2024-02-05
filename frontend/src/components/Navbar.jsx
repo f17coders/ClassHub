@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Appbar from '@mui/material/AppBar'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
@@ -44,53 +44,60 @@ function NavbarComponent() {
 
 	// 메뉴 + 호버링용 변수들
 	const [activeIndex, setActiveIndex] = useState(null);
-  const handleMouseEnter = (index) => {
+	const handleMouseEnter = (index) => {
 		setActiveIndex(index);
 	}
 	const handleMouseLeave = () => {
 		setActiveIndex(null);
 	}
 	const navItem = [
-		{link:'/lecture', name:'강의'},
-		{link:'/community', name:'커뮤니티'},
-		{link:'/studyroom', name:'스터디룸'},
+		{ link: '/lecture', name: '강의' },
+		{ link: '/community', name: '커뮤니티' },
+		{ link: '/studyroom', name: '스터디룸' },
 	]
 	const linkStyle = {
 		textDecoration: 'none',
-		color:'black',
+		color: 'black',
 		fontSize: '1.3em',
-		fontWeight:'550',
+		fontWeight: '550',
 		transition: 'font-size 0.3s ease'
 	}
+	const linkStyle2 = {
+		textDecoration: 'none',
+		color: 'black',
+		fontSize: '1.2em',
+		fontWeight: '550',
+		transition: 'font-size 0.3s ease',
+ }
 
 	const [accessToken, setAccessToken] = useState(null);
 	const getAccessTokenFromRedirectURL = () => {
 		const urlParams = new URLSearchParams(window.location.search);
 		console.log(urlParams);
 		return urlParams.get("Authorization");
-	  };
+	};
 
 	const handleLoginClick = () => {
 		window.location.href = 'http://localhost:8080/login/oauth2/authorization/kakao';
-	  };
+	};
 
-	  useEffect(() => {
+	useEffect(() => {
 		try {
-		  // 컴포넌트가 마운트되면서 리다이렉트된 URL에서 AccessToken을 처리
-		  const token = getAccessTokenFromRedirectURL();
-		  if (token) {
-			setAccessToken(token);
-			console.log(token)
-			// loadUserInfo(token);
-			// history.push('/main');  // 원하는 페이지로 리다이렉트
-		  } else {
-			throw new Error('Missing access token');
-		  }
+			// 컴포넌트가 마운트되면서 리다이렉트된 URL에서 AccessToken을 처리
+			const token = getAccessTokenFromRedirectURL();
+			if (token) {
+				setAccessToken(token);
+				console.log(token)
+				// loadUserInfo(token);
+				// history.push('/main');  // 원하는 페이지로 리다이렉트
+			} else {
+				throw new Error('Missing access token');
+			}
 		} catch (error) {
-		  console.error("카카오 로그인 에러:", error);
-		//   history.push("/");
+			console.error("카카오 로그인 에러:", error);
+			//   history.push("/");
 		}
-	  }, []);
+	}, []);
 
 	return (
 		<Appbar
@@ -98,7 +105,7 @@ function NavbarComponent() {
 			color='transparent'
 			sx={{
 				padding: '10px 0px',
-				height:'75px'
+				height: '75px'
 			}}
 		>
 			<Grid container alignItems="center">
@@ -108,20 +115,20 @@ function NavbarComponent() {
 						<Link to='/'>
 							<img src={MainLogo} alt='HOME' style={{ width: '220px', marginRight: '20px' }}></img>
 						</Link>
-							{
-								navItem.map((item, idx) => (
-									<div key={idx} style={{margin: '0px 15px'}}>
-										<Link to={item.link} 
-											style={idx == activeIndex ? {...linkStyle, color:'RGB(83, 96, 245)'} : linkStyle } 
-											onMouseEnter={() => handleMouseEnter(idx)} 
-											onMouseLeave={handleMouseLeave}
-											onClick={() => handleClick(idx)}
-										>
-											{item.name}
-										</Link>
-									</div>
-								))
-							}
+						{
+							navItem.map((item, idx) => (
+								<div key={idx} style={{ margin: '0px 15px' }}>
+									<Link to={item.link}
+										style={idx == activeIndex ? { ...linkStyle, color: 'RGB(83, 96, 245)' } : linkStyle}
+										onMouseEnter={() => handleMouseEnter(idx)}
+										onMouseLeave={handleMouseLeave}
+										onClick={() => handleClick(idx)}
+									>
+										{item.name}
+									</Link>
+								</div>
+							))
+						}
 					</Box>
 
 					<Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center' }}>
@@ -136,7 +143,7 @@ function NavbarComponent() {
 							<MenuIcon />
 						</IconButton>
 						<Link to='/' >
-							<img src={MainLogo} alt='HOME' style={{ width: '200px', marginRight: '20px' }}></img>
+							<img src={MainLogo} alt='HOME' style={{ width: '150px', marginRight: '20px', paddingTop: '10px' }}></img>
 						</Link>
 						<Menu
 							id="menu-appbar"
@@ -156,18 +163,33 @@ function NavbarComponent() {
 								display: { xs: 'block', md: 'none' },
 							}}
 						>
-							{pages.map((page) => (
+							{
+								navItem.map((item, idx) => (
+									<div key={idx} style={{ margin: '10px 15px' }}>
+										<Link to={item.link}
+											style={idx == activeIndex ? { ...linkStyle2, color: 'RGB(83, 96, 245)' } : linkStyle2}
+											onMouseEnter={() => handleMouseEnter(idx)}
+											onMouseLeave={handleMouseLeave}
+											onClick={() => handleClick(idx)}
+										>
+											{item.name}
+										</Link>
+									</div>
+								))
+							}
+
+							{/* {pages.map((page) => (
 								<MenuItem key={page.url} onClick={handleCloseNavMenu}>
 									<Link to={'/' + page.url}>
-										<Button>{page.name}</Button>
+										<Button sx={{color:'black'}}>{page.name}</Button>
 									</Link>
 								</MenuItem>
-							))}
+							))} */}
 						</Menu>
 					</Box>
 
 					{/* 테스트용 로그인 토글 스위치 */}
-					<Box><Switch onChange={() => dispatch(toggleLogin())}/></Box>
+					<Box><Switch onChange={() => dispatch(toggleLogin())} /></Box>
 
 				</Grid>
 
@@ -175,17 +197,17 @@ function NavbarComponent() {
 					{
 						isLogin == false ? (
 							<Button onClick={ModalOpen}>Login</Button>
-						) : ( 
+						) : (
 							<Link to="/mypage">
 								<IconButton>
-									<img src={profile} alt="profile" style={{width: '40px', borderRadius:'70%'}} />
+									<img src={profile} alt="profile" style={{ width: '40px', borderRadius: '70%' }} />
 								</IconButton>
 							</Link>
 						)
 					}
-					<Button onClick={handleLoginClick}>
+					{/* <Button onClick={handleLoginClick}>
 						로그인
-					</Button>
+					</Button> */}
 				</Grid>
 			</Grid>
 			<LoginModal open={open} onClose={ModalClose} />

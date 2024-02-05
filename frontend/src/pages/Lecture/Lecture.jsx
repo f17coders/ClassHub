@@ -64,7 +64,7 @@ function Lecture() {
 		<Container>
 			<Grid container sx={{ margin: 'auto', minHeight: '500px', marginTop: '20px' }}>
 				{/* 왼쪽 사이드 바 */}
-				<Grid item xs={0} sm={4} md={2} sx={{ borderRight: "1px solid lightgrey", paddingRight: '0px' }}>
+				<Grid item sm={4} md={2} sx={{ borderRight: "1px solid lightgrey", paddingRight: '0px' }}>
 					<Box>
 						{/* 강의 카테고리 체크 */}
 						<LectureCheck />
