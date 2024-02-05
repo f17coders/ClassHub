@@ -9,7 +9,7 @@ const style = {
     top: '45%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 600,
+    width: "30%",
     maxHeight: '80vh', // 최대 높이
     overflowY: 'auto',  // 수직 스크롤 적용
     bgcolor: 'background.paper',
