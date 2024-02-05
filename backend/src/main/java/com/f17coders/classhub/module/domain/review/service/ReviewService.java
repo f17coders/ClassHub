@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 public interface ReviewService {
 
 	ReviewListRes getReviewList(int lectureId, Pageable pageable);
+
 	SiteReviewListRes getSiteReviewList(int lectureId, Pageable pageable);
 
 

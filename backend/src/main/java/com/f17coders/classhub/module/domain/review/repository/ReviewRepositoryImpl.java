@@ -32,6 +32,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 					Expressions.stringTemplate(
 						"COALESCE({0}, 'https://simage-kr.uniqlo.com/goods/31/11/77/82/414920_COL_COL99_1000.jpg')",
 						member.profileImage).as("profileImage")),
+				review.createTime,
 				Expressions.numberTemplate(Float.class, "ROUND({0}, 1)",
 					review.score).as("score"),
 				review.content

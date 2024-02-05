@@ -1,15 +1,24 @@
 package com.f17coders.classhub.module.domain.lecture.controller;
 
 import com.f17coders.classhub.global.api.response.BaseResponse;
+import com.f17coders.classhub.global.exception.BaseExceptionHandler;
+import com.f17coders.classhub.global.exception.code.ErrorCode;
 import com.f17coders.classhub.global.exception.code.SuccessCode;
 import com.f17coders.classhub.module.domain.BaseEntity;
+import com.f17coders.classhub.module.domain.job.Job;
+import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListDetailLectureLikeCountRes;
 import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListDetailRes;
+import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListJobRes;
 import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListRes;
+import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListTagRes;
 import com.f17coders.classhub.module.domain.lecture.dto.response.LectureReadRes;
+import com.f17coders.classhub.module.domain.lecture.repository.LectureRepository;
 import com.f17coders.classhub.module.domain.lecture.service.LectureService;
 import com.f17coders.classhub.module.domain.lectureLike.service.LectureLikeService;
 import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
+import com.f17coders.classhub.module.domain.memberTag.MemberTag;
+import com.f17coders.classhub.module.domain.memberTag.repository.MemberTagRepository;
 import com.f17coders.classhub.module.domain.study.dto.response.StudyListRes;
 import com.querydsl.core.Tuple;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,6 +48,7 @@ public class LectureController {
 
 	private final LectureService lectureService;
 	private final MemberRepository memberRepository;
+	private final LectureRepository lectureRepository;
 	private final LectureLikeService lectureLikeService;
 
 	@Operation(summary = "강의 상세 정보 조회")
@@ -61,7 +71,8 @@ public class LectureController {
 		@RequestParam(value = "order", required = false) String order,
 		Pageable pageable
 	) throws IOException {
-		LectureListRes lectureListRes = lectureService.getLecturesList(categoryId, tags, keyword, level,
+		LectureListRes lectureListRes = lectureService.getLecturesList(categoryId, tags, keyword,
+			level,
 			site, order, pageable);
 
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectureListRes);
@@ -89,6 +100,48 @@ public class LectureController {
 		lectureLikeService.unLikeLecture(lectureId, member.get());
 
 		return BaseResponse.success(SuccessCode.INSERT_SUCCESS, lectureId);
+	}
+
+	@Operation(summary = "로그인 유저가 관심있어 하는 태그를 랜덤 1개 골라서, Top5 강의 조회(관심 기술의 Top5 강의 조회)")
+	@GetMapping("/v1/interest-skills")
+	public ResponseEntity<BaseResponse<LectureListTagRes>> get5LecturesByInterestTag(
+		@RequestHeader("X-My-Int-Header") int memberId) throws IOException {
+
+		LectureListTagRes lectures = lectureService.getLecturesByInterestTag(
+			memberId);
+
+		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectures);
+	}
+
+	@Operation(summary = "비로그인 유저대상 인기태그를 랜덤 1개 골라서, Top5 강의 조회(관심 기술의 Top5 강의 조회)")
+	@GetMapping("/v0/interest-skills")
+	public ResponseEntity<BaseResponse<LectureListTagRes>> get5LecturesByRandomTag()
+		throws IOException {
+
+		LectureListTagRes lectures = lectureService.getLecturesByRandomTag();
+
+		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectures);
+	}
+
+	@Operation(summary = "비로그인 유저에게 인기직무중 랜덤 1개 골라서, 해당 직무 선택 유저들이 수강하는 Top5 강의 조회(관심 직무의 Top5 강의 조회)")
+	@GetMapping("/v0/desired-job")
+	public ResponseEntity<BaseResponse<LectureListJobRes>> get5LecturesByFamousJob(
+	) throws IOException {
+
+		LectureListJobRes lectures = lectureService.getLecturesByFamousJob();
+
+		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectures);
+	}
+
+	@Operation(summary = "로그인 유저가 희망직무가 있다면 그 직무로, 없다면 인기직무중 랜덤 1개 골라서, 해당 직무 선택 유저들이 수강하는 Top5 강의 조회(관심 직무의 Top5 강의 조회)")
+	@GetMapping("/v1/desired-job")
+	public ResponseEntity<BaseResponse<LectureListJobRes>> get5LecturesByDesiredJob(
+		@RequestHeader("X-My-Int-Header") int memberId
+	) throws IOException {
+
+		LectureListJobRes lectures = lectureService.getLecturesByDesiredJob(memberId);
+
+		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectures);
 	}
 
 

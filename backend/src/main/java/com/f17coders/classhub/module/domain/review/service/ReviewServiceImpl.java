@@ -17,34 +17,36 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ReviewServiceImpl implements ReviewService {
 
-    private final ReviewRepository reviewRepository;
-    private final SiteReviewRepository siteReviewRepository;
+	private final ReviewRepository reviewRepository;
+	private final SiteReviewRepository siteReviewRepository;
 
-    @Override
-    public ReviewListRes getReviewList(int lectureId, Pageable pageable) {
-        List<ReviewRes> reviewList = reviewRepository.findReviewsByLectureIdJoinMemberId(lectureId,
-            pageable);
+	@Override
+	public ReviewListRes getReviewList(int lectureId, Pageable pageable) {
+		List<ReviewRes> reviewList = reviewRepository.findReviewsByLectureIdJoinMemberId(lectureId,
+			pageable);
 
-        int totalPages = (int) Math.ceil(
-            (double) reviewRepository.countReviewByLectureId(lectureId) / pageable.getPageSize());
+		int totalPages = (int) Math.ceil(
+			(double) reviewRepository.countReviewByLectureId(lectureId) / pageable.getPageSize());
 
-        return ReviewListRes.builder()
-            .reviewResList(reviewList)
-            .totalPages(totalPages)
-            .build();
-    }
+		return ReviewListRes.builder()
+			.reviewResList(reviewList)
+			.totalPages(totalPages)
+			.build();
+	}
 
-    @Override
-    public SiteReviewListRes getSiteReviewList(int lectureId, Pageable pageable) {
-        List<SiteReviewRes> siteReviewList = siteReviewRepository.findSiteReviewsByLectureId(lectureId,
-            pageable);
+	@Override
+	public SiteReviewListRes getSiteReviewList(int lectureId, Pageable pageable) {
+		List<SiteReviewRes> siteReviewList = siteReviewRepository.findSiteReviewsByLectureId(
+			lectureId,
+			pageable);
 
-        int totalPages = (int) Math.ceil(
-            (double) siteReviewRepository.countSiteReviewByLectureId(lectureId) / pageable.getPageSize());
+		int totalPages = (int) Math.ceil(
+			(double) siteReviewRepository.countSiteReviewByLectureId(lectureId)
+				/ pageable.getPageSize());
 
-        return SiteReviewListRes.builder()
-            .siteReviewResList(siteReviewList)
-            .totalPages(totalPages)
-            .build();
-    }
+		return SiteReviewListRes.builder()
+			.siteReviewResList(siteReviewList)
+			.totalPages(totalPages)
+			.build();
+	}
 }

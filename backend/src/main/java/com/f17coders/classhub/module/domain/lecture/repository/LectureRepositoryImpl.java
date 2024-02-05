@@ -1,7 +1,9 @@
 package com.f17coders.classhub.module.domain.lecture.repository;
 
 import static com.f17coders.classhub.module.domain.category.QCategory.category;
+import static com.f17coders.classhub.module.domain.job.QJob.job;
 import static com.f17coders.classhub.module.domain.lecture.QLecture.lecture;
+import static com.f17coders.classhub.module.domain.member.QMember.member;
 import static com.f17coders.classhub.module.domain.lectureLike.QLectureLike.lectureLike;
 import static com.f17coders.classhub.module.domain.lectureTag.QLectureTag.lectureTag;
 
@@ -9,6 +11,7 @@ import com.f17coders.classhub.module.domain.category.dto.resource.CategoryRes;
 import com.f17coders.classhub.module.domain.lecture.Level;
 import com.f17coders.classhub.module.domain.lecture.SiteType;
 import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListDetailLectureLikeCountRes;
+import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListJobRes;
 import com.f17coders.classhub.module.domain.lecture.dto.response.LectureReadLectureLikeCountRes;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
@@ -154,6 +157,111 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 		return lectureListDetailLectureLikeCountRes;
 
 
+	}
+
+	@Override
+	public List<LectureListDetailLectureLikeCountRes> findTop5LecturesWithTagId(int tagId) {
+		List<LectureListDetailLectureLikeCountRes> lectureListDetailLectureLikeCountRes = queryFactory.select(
+				Projections.constructor(LectureListDetailLectureLikeCountRes.class,
+					lecture.lectureId,
+					lecture.name,
+					lecture.siteType,
+					lecture.instructor,
+					Expressions.stringTemplate(
+						"COALESCE({0}, 'https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791187395027.jpg')",
+						lecture.image).as("image"),
+					lecture.level,
+					Expressions.numberTemplate(Float.class,
+						"CASE WHEN {1}=0 AND {3}=0 THEN 0 "
+							+
+							"WHEN {1} < 10 THEN ROUND( ({0} * 0.2 + {2} * {3} * 0.8) / ({1} * 0.2 + {3} * 0.8), 1) "
+							+
+							"ELSE ROUND(({0} * 0.5 + {2} * {3} * 0.5) / ({1} * 0.5 + {3} * 0.5), 1) END",
+						lecture.reviewSum, lecture.reviewCount, lecture.siteReviewRating,
+						lecture.siteReviewCount).as("combinedRating"),
+					Expressions.numberTemplate(Integer.class, "{0} + {1}", lecture.reviewCount,
+						lecture.siteReviewCount).as("combinedRatingCount"),
+					lecture.priceOriginal,
+					lecture.priceSale,
+					lecture.descriptionSummary,
+					lecture.totalTime,
+					Projections.constructor(CategoryRes.class,
+						category.categoryId,
+						category.categoryName
+					),
+					Expressions.numberTemplate(Integer.class, "{0}",
+						JPAExpressions
+							.select(lectureLike.lecture.lectureId.count())
+							.from(lectureLike)
+							.where(lecture.lectureId.eq(lectureLike.lecture.lectureId))
+							.groupBy(lecture.lectureId)).as("lectureLikeCount")
+				))
+			.from(lectureLike)
+			.innerJoin(lectureLike.lecture, lecture)
+			.innerJoin(lecture.category,category)
+			.where(lecture.lectureId.in(
+				JPAExpressions
+					.select(lectureTag.lecture.lectureId)
+					.from(lectureTag)
+					.where(lectureTag.tag.tagId.eq(tagId))
+			))
+			.groupBy(lecture.lectureId)
+			.orderBy(lecture.count().desc())
+			.limit(5)
+			.fetch();
+
+		return lectureListDetailLectureLikeCountRes;
+	}
+
+	@Override
+	public List<LectureListDetailLectureLikeCountRes> findTop5LecturesWithJobId(int jobId) {
+		List<LectureListDetailLectureLikeCountRes> lectureListJobResList = queryFactory.select(
+				Projections.constructor(LectureListDetailLectureLikeCountRes.class,
+					lecture.lectureId,
+					lecture.name,
+					lecture.siteType,
+					lecture.instructor,
+					Expressions.stringTemplate(
+						"COALESCE({0}, 'https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791187395027.jpg')",
+						lecture.image).as("image"),
+					lecture.level,
+					Expressions.numberTemplate(Float.class,
+						"CASE WHEN {1}=0 AND {3}=0 THEN 0 "
+							+
+							"WHEN {1} < 10 THEN ROUND( ({0} * 0.2 + {2} * {3} * 0.8) / ({1} * 0.2 + {3} * 0.8), 1) "
+							+
+							"ELSE ROUND(({0} * 0.5 + {2} * {3} * 0.5) / ({1} * 0.5 + {3} * 0.5), 1) END",
+						lecture.reviewSum, lecture.reviewCount, lecture.siteReviewRating,
+						lecture.siteReviewCount).as("combinedRating"),
+					Expressions.numberTemplate(Integer.class, "{0} + {1}", lecture.reviewCount,
+						lecture.siteReviewCount).as("combinedRatingCount"),
+					lecture.priceOriginal,
+					lecture.priceSale,
+					lecture.descriptionSummary,
+					lecture.totalTime,
+					Projections.constructor(CategoryRes.class,
+						category.categoryId,
+						category.categoryName
+					),
+					Expressions.numberTemplate(Integer.class, "{0}",
+						JPAExpressions
+							.select(lectureLike.lecture.lectureId.count())
+							.from(lectureLike)
+							.where(lecture.lectureId.eq(lectureLike.lecture.lectureId))
+							.groupBy(lecture.lectureId)).as("lectureLikeCount")
+				))
+			.from(lectureLike)
+			.innerJoin(lectureLike.member, member)
+			.innerJoin(member.job, job)
+			.innerJoin(lectureLike.lecture, lecture)
+			.innerJoin(lecture.category,category)
+			.where(member.job.jobId.eq(jobId))
+			.groupBy(lectureLike.lecture)
+			.orderBy(lectureLike.lecture.lectureId.count().desc())
+			.limit(5)
+			.fetch();
+
+		return lectureListJobResList;
 	}
 
 	private BooleanExpression categoryIdEq(Integer categoryId) {

@@ -8,29 +8,31 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 @Getter
 @Setter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "review_id")
-    private int reviewId;
 
-    private Float score;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "review_id")
+	private int reviewId;
 
-    @Column(length = 1000)
-    private String content;
+	private Float score;
 
-    // Review - Member 연관 관계 매핑
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+	@Column(length = 1000)
+	private String content;
 
-    // Review - Lecture 연관 관계 매핑
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lecture_id")
-    private Lecture lecture;
+	// Review - Member 연관 관계 매핑
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "member_id")
+	private Member member;
+
+	// Review - Lecture 연관 관계 매핑
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "lecture_id")
+	private Lecture lecture;
 }
 
