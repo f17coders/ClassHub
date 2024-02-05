@@ -13,7 +13,7 @@ import axios from 'axios';
 export default function ParticipatingRoomList(){
   const [data, setData] = useState([]);
 
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedIndex, setSelectedIndex] = React.useState(-1);
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
@@ -38,7 +38,7 @@ export default function ParticipatingRoomList(){
   const navigate = useNavigate();
 
     return(
-        <Box sx={{maxHeight: 350,
+        <Box sx={{maxHeight: 360,
                 width:"100%",
                 position: 'relative',
                 overflow: 'auto',
@@ -59,7 +59,7 @@ export default function ParticipatingRoomList(){
               pt: 2.5,
               pb: open ? 0 : 2.5,
               width: "100%",
-              minWidth: 360,
+              // minWidth: 360,
               '&:hover, &:focus': { '& svg': { opacity: open ? 1 : 0 } },
             }}
           >
@@ -89,7 +89,7 @@ export default function ParticipatingRoomList(){
           data.map((item, itemIndex) => (
             <ListItemButton 
               key={itemIndex}
-              sx={{ width: '100%', maxWidth: 360 }}
+              sx={{ width: '100%', minHeight:'60px' }}
               selected={selectedIndex === itemIndex}
               onClick={(event) => {
                 handleListItemClick(event, itemIndex);

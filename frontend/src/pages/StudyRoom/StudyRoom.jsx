@@ -51,8 +51,8 @@ export default function StudyRoom() {
     const [open, setOpen] = React.useState(true);
 
     return(
-        <Container height={"100vh"}>
-          <Grid container  width="100%">
+        <Container>
+          <Grid container sx={{width:"100%", height:"100%"}}>
             {/* <Hidden smUp>
             </Hidden> */}
 
@@ -109,7 +109,7 @@ export default function StudyRoom() {
                         
                     <Divider />
                     {/* 1:1 개인 메시지 */}
-                    <PrivateMessageList/>
+                    <PrivateMessageList selected={selectedIndex} onClick={handleListItemClick}/>
                         
                   </FireNav>
                 </Paper>

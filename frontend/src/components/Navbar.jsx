@@ -3,7 +3,7 @@ import Appbar from '@mui/material/AppBar'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import MainLogo from './../assets/MainLogo.png'
 import MenuIcon from '@mui/icons-material/Menu'
 import IconButton from '@mui/material/IconButton'
@@ -21,6 +21,7 @@ const pages = [
 // navbar
 
 function NavbarComponent() {
+	const navigate = useNavigate();
 	// 로그인 체크용
 	let isLogin = useSelector((state) => state.isLogin)
 
@@ -59,6 +60,9 @@ function NavbarComponent() {
 		transition: 'font-size 0.3s ease'
 	}
 
+	const handleLoginClick = () => {
+		window.location.href = 'http://localhost:8080/login/oauth2/code/kakao';
+	  };
 
 	return (
 		<Appbar
@@ -145,6 +149,9 @@ function NavbarComponent() {
 							</Link>
 						)
 					}
+					<Button onClick={handleLoginClick}>
+						로그인
+					</Button>
 				</Grid>
 			</Grid>
 			<LoginModal open={open} onClose={ModalClose} />
