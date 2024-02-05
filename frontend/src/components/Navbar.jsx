@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import Appbar from '@mui/material/AppBar'
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
@@ -62,9 +62,35 @@ function NavbarComponent() {
 		fontWeight:'550',
 		transition: 'font-size 0.3s ease'
 	}
-	const handleLoginClick = () => {
-		window.location.href = 'http://localhost:8080/login/oauth2/code/kakao';
+
+	const [accessToken, setAccessToken] = useState(null);
+	const getAccessTokenFromRedirectURL = () => {
+		const urlParams = new URLSearchParams(window.location.search);
+		console.log(urlParams);
+		return urlParams.get("Authorization");
 	  };
+
+	const handleLoginClick = () => {
+		window.location.href = 'http://localhost:8080/login/oauth2/authorization/kakao';
+	  };
+
+	  useEffect(() => {
+		try {
+		  // 컴포넌트가 마운트되면서 리다이렉트된 URL에서 AccessToken을 처리
+		  const token = getAccessTokenFromRedirectURL();
+		  if (token) {
+			setAccessToken(token);
+			console.log(token)
+			// loadUserInfo(token);
+			// history.push('/main');  // 원하는 페이지로 리다이렉트
+		  } else {
+			throw new Error('Missing access token');
+		  }
+		} catch (error) {
+		  console.error("카카오 로그인 에러:", error);
+		//   history.push("/");
+		}
+	  }, []);
 
 	return (
 		<Appbar
