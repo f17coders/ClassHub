@@ -22,10 +22,14 @@ export default function PrivateMessageList(){
     // 사이드바 메뉴 열기
     const [open, setOpen] = React.useState(true);
     const navigate = useNavigate();
+    const [selectedIndex, setSelectedIndex] = useState(null);
+    const handleListItemClick = (event, index) => {
+      setSelectedIndex(index);
+    };
 
     return(
         <Box sx={{
-          maxHeight: 350,
+          maxHeight: 360,
           width:"100%",
           position: 'relative',
           overflow: 'auto',
@@ -73,11 +77,15 @@ export default function PrivateMessageList(){
           </ListSubheader>
                 
               {open &&
-                data.map((item) => (
+                data.map((item, itemIndex) => (
                   <ListItemButton 
-                    key={item.label} 
-                    sx={{ width: '100%', maxWidth: 360 }}
-                    onClick={() => {navigate('message')}}
+                    key={itemIndex}
+                    sx={{ width: '100%', minHeight:'60px' }}
+                    selected={selectedIndex === itemIndex}
+                    onClick={(event) => {
+                      handleListItemClick(event, itemIndex);
+                      navigate('message');
+                    }}
                     >
                       <ListItem sx={{ py: 0, minHeight: 32, color: 'rgba(255,255,255,.8)' }}>
                         <ListItemAvatar>
@@ -85,7 +93,7 @@ export default function PrivateMessageList(){
                             <ImageIcon />
                           </Avatar>
                         </ListItemAvatar>
-                        <ListItemText primary={item.label} secondary={item.date}
+                        <ListItemText primary={item.label}
                         primaryTypographyProps={{ fontSize: 12, fontWeight: 'medium' }} />
                       </ListItem>
                       <Divider/>
