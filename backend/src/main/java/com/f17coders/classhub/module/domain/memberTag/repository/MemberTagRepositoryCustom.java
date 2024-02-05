@@ -5,6 +5,6 @@ import java.util.List;
 
 public interface MemberTagRepositoryCustom {
 
-    List<MemberTag> findByMemberIdFetchJoinMemberAndFetchJoinTag(int memberId);
+    List<MemberTag> findByIdFetchJoinMemberAndTag(int memberId);
 
 }

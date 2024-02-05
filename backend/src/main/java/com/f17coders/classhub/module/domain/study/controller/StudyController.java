@@ -15,19 +15,21 @@ import com.f17coders.classhub.module.domain.study.dto.response.StudyMemberListRe
 import com.f17coders.classhub.module.domain.study.dto.response.StudyReadTagRes;
 import com.f17coders.classhub.module.domain.study.service.StudyService;
 import com.f17coders.classhub.module.domain.studyMember.service.StudyMemberService;
+import com.f17coders.classhub.module.security.dto.MemberSecurityDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
 import java.io.IOException;
 
 @Tag(name = "study", description = "스터디룸 API")
 @RestController
-@RequestMapping("/studies/v1")
+@RequestMapping("/api/studies/v1")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class StudyController {
@@ -40,14 +42,11 @@ public class StudyController {
     @PostMapping
     public ResponseEntity<BaseResponse<Integer>> registerStudy(
         @RequestBody StudyRegisterReq studyRegisterReq,
-        @RequestHeader("AUTHORIZATION") int memberId)
+        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
         throws IOException {
 
-        //TODO: security 적용 후 변경
-        Optional<Member> member = memberRepository.findById(memberId);
-
         // 스터디 생성
-        int studyId = studyService.registerStudy(studyRegisterReq, member.get());
+        int studyId = studyService.registerStudy(studyRegisterReq,memberSecurityDTO.toMember());
 
         return BaseResponse.success(SuccessCode.INSERT_SUCCESS, studyId);
     }
@@ -122,13 +121,10 @@ public class StudyController {
     @Operation(summary = "스터디룸 참여")
     @PostMapping("/entrance/{studyId}")
     public ResponseEntity<BaseResponse<Integer>> enterStudy(@PathVariable int studyId,
-        @RequestHeader("AUTHORIZATION") int memberId)
+        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
         throws IOException {
 
-        //TODO: security 적용 후 변경
-        Optional<Member> member = memberRepository.findById(memberId);
-
-        studyMemberService.enterStudy(studyId, member.get());
+        studyMemberService.enterStudy(studyId,memberSecurityDTO.toMember());
 
         return BaseResponse.success(SuccessCode.INSERT_SUCCESS, studyId);
     }
@@ -136,13 +132,10 @@ public class StudyController {
     @Operation(summary = "스터디룸 나가기")
     @DeleteMapping("/exit/{studyId}")
     public ResponseEntity<BaseResponse<Integer>> exitStudy(@PathVariable int studyId,
-        @RequestHeader("AUTHORIZATION") int memberId)
+        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
         throws IOException {
 
-        //TODO: security 적용 후 변경
-        Optional<Member> member = memberRepository.findById(memberId);
-
-        studyMemberService.exitStudy(studyId, member.get());
+        studyMemberService.exitStudy(studyId,memberSecurityDTO.toMember());
 
         return BaseResponse.success(SuccessCode.DELETE_SUCCESS, studyId);
     }

@@ -20,6 +20,7 @@ import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
 import com.f17coders.classhub.module.domain.memberTag.MemberTag;
 import com.f17coders.classhub.module.domain.memberTag.repository.MemberTagRepository;
 import com.f17coders.classhub.module.domain.study.dto.response.StudyListRes;
+import com.f17coders.classhub.module.security.dto.MemberSecurityDTO;
 import com.querydsl.core.Tuple;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,6 +30,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +43,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "lecture", description = "강의 API")
 @RestController
-@RequestMapping("/lectures")
+@RequestMapping("/api/lectures")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class LectureController {
@@ -82,10 +84,8 @@ public class LectureController {
 	@PostMapping("/v1/likes/{lectureId}")
 	public ResponseEntity<BaseResponse<Integer>> likeCommunity(
 		@PathVariable("lectureId") int lectureId,
-		@RequestHeader("X-My-Int-Header") int memberId) throws IOException {
-		Optional<Member> member = memberRepository.findById(memberId);
-
-		lectureLikeService.likeLecture(lectureId, member.get());
+		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+		lectureLikeService.likeLecture(lectureId, memberSecurityDTO.toMember());
 
 		return BaseResponse.success(SuccessCode.INSERT_SUCCESS, lectureId);
 	}
@@ -94,10 +94,8 @@ public class LectureController {
 	@DeleteMapping("/v1/unlikes/{lectureId}")
 	public ResponseEntity<BaseResponse<Integer>> unLikeCommunity(
 		@PathVariable("lectureId") int lectureId,
-		@RequestHeader("X-My-Int-Header") int memberId) throws IOException {
-		Optional<Member> member = memberRepository.findById(memberId);
-
-		lectureLikeService.unLikeLecture(lectureId, member.get());
+		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+		lectureLikeService.unLikeLecture(lectureId, memberSecurityDTO.toMember());
 
 		return BaseResponse.success(SuccessCode.INSERT_SUCCESS, lectureId);
 	}
@@ -105,10 +103,10 @@ public class LectureController {
 	@Operation(summary = "로그인 유저가 관심있어 하는 태그를 랜덤 1개 골라서, Top5 강의 조회(관심 기술의 Top5 강의 조회)")
 	@GetMapping("/v1/interest-skills")
 	public ResponseEntity<BaseResponse<LectureListTagRes>> get5LecturesByInterestTag(
-		@RequestHeader("X-My-Int-Header") int memberId) throws IOException {
+		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
 
 		LectureListTagRes lectures = lectureService.getLecturesByInterestTag(
-			memberId);
+			memberSecurityDTO.toMember().getMemberId());
 
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectures);
 	}
@@ -117,7 +115,6 @@ public class LectureController {
 	@GetMapping("/v0/interest-skills")
 	public ResponseEntity<BaseResponse<LectureListTagRes>> get5LecturesByRandomTag()
 		throws IOException {
-
 		LectureListTagRes lectures = lectureService.getLecturesByRandomTag();
 
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectures);
@@ -127,7 +124,6 @@ public class LectureController {
 	@GetMapping("/v0/desired-job")
 	public ResponseEntity<BaseResponse<LectureListJobRes>> get5LecturesByFamousJob(
 	) throws IOException {
-
 		LectureListJobRes lectures = lectureService.getLecturesByFamousJob();
 
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectures);
@@ -136,10 +132,10 @@ public class LectureController {
 	@Operation(summary = "로그인 유저가 희망직무가 있다면 그 직무로, 없다면 인기직무중 랜덤 1개 골라서, 해당 직무 선택 유저들이 수강하는 Top5 강의 조회(관심 직무의 Top5 강의 조회)")
 	@GetMapping("/v1/desired-job")
 	public ResponseEntity<BaseResponse<LectureListJobRes>> get5LecturesByDesiredJob(
-		@RequestHeader("X-My-Int-Header") int memberId
+		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO
 	) throws IOException {
 
-		LectureListJobRes lectures = lectureService.getLecturesByDesiredJob(memberId);
+		LectureListJobRes lectures = lectureService.getLecturesByDesiredJob(memberSecurityDTO.toMember().getMemberId());
 
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectures);
 	}

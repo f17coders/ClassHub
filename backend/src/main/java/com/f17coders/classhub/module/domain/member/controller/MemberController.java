@@ -9,6 +9,7 @@ import com.f17coders.classhub.module.domain.member.dto.response.MemberGetInfoRes
 import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
 import com.f17coders.classhub.module.domain.member.service.MemberService;
 import com.f17coders.classhub.module.domain.study.dto.response.StudyBaseRes;
+import com.f17coders.classhub.module.security.dto.MemberSecurityDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "member", description = "멤버 API")
 @RestController
-@RequestMapping("/members")
+@RequestMapping("/api/members")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class MemberController {
@@ -35,22 +37,11 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
 
-    @Operation(summary = "회원 가입 (임시 구현 - 실제 api 아님)")
-    @PostMapping("/v1/tmp")
-    public ResponseEntity<BaseResponse<Integer>> registerMember(@RequestBody String nickname)
-        throws IOException {
-        int memberId = memberService.registerMember(nickname);
-
-        return BaseResponse.success(SuccessCode.INSERT_SUCCESS, memberId);
-    }
-
     @Operation(summary = "회원 정보 조회")
     @GetMapping("/v1")
     public ResponseEntity<BaseResponse<MemberGetInfoRes>> getInformation(
-        @RequestHeader("AUTHORIZATION") int memberId) throws IOException {
-        Optional<Member> member = memberRepository.findById(memberId);  // TODO : 시큐리티 적용 후 변경
-
-        MemberGetInfoRes memberGetInfoRes = memberService.getInformation(member.get());
+        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+        MemberGetInfoRes memberGetInfoRes = memberService.getInformation(memberSecurityDTO.toMember());
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, memberGetInfoRes);
     }
@@ -59,33 +50,27 @@ public class MemberController {
     @PostMapping("/v1")
     public ResponseEntity<BaseResponse<Integer>> addInformation(
         @RequestBody MemberAddInfoReq memberAddInfoReq,
-        @RequestHeader("AUTHORIZATION") int memberId) throws IOException {
-        Optional<Member> member = memberRepository.findById(memberId);  // TODO : 시큐리티 적용 후 변경
+        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+        memberService.addInformation(memberAddInfoReq, memberSecurityDTO.toMember());
 
-        memberService.addInformation(memberAddInfoReq, member.get());
-
-        return BaseResponse.success(SuccessCode.INSERT_SUCCESS, memberId);
+        return BaseResponse.success(SuccessCode.INSERT_SUCCESS, memberSecurityDTO.getMemberId());
     }
 
     @Operation(summary = "회원 추가 정보 수정")
     @PutMapping("/v1")
     public ResponseEntity<BaseResponse<Integer>> updateInformation(
         @RequestBody MemberUpdateInfoReq memberUpdateInfoReq,
-        @RequestHeader("AUTHORIZATION") int memberId) throws IOException {
-        Optional<Member> member = memberRepository.findById(memberId);  // TODO : 시큐리티 적용 후 변경
+        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+        memberService.updateInformation(memberUpdateInfoReq, memberSecurityDTO.toMember());
 
-        memberService.updateInformation(memberUpdateInfoReq, member.get());
-
-        return BaseResponse.success(SuccessCode.UPDATE_SUCCESS, memberId);
+        return BaseResponse.success(SuccessCode.UPDATE_SUCCESS, memberSecurityDTO.getMemberId());
     }
 
     @Operation(summary = "내가 참여중인 스터디 목록 조회")
     @GetMapping("/v1/studies/participation")
     public ResponseEntity<BaseResponse<List<StudyBaseRes>>> updateInformation(
-        @RequestHeader("AUTHORIZATION") int memberId) throws IOException {
-        Optional<Member> member = memberRepository.findById(memberId);  // TODO : 시큐리티 적용 후 변경
-
-        List<StudyBaseRes> studyBaseResList = memberService.getStudyList(member.get());
+        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+        List<StudyBaseRes> studyBaseResList = memberService.getStudyList(memberSecurityDTO.toMember());
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, studyBaseResList);
     }

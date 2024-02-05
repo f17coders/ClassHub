@@ -17,16 +17,18 @@ public class MemberSecurityDTO extends User implements OAuth2User {
     private final String socialId;
     private final String nickname;
     private final String profileImage;
+    private final String provider;
     private Map<String, Object> props;
 
     public MemberSecurityDTO(int username, String socialId,
-        String nickname, String profileImage,
+        String nickname, String profileImage, String provider,
         Collection<? extends GrantedAuthority> authorities) {
         super(String.valueOf(username), nickname, authorities);
         this.memberId = username;
         this.socialId = socialId;
         this.nickname = nickname;
         this.profileImage = profileImage;
+        this.provider = provider;
     }
 
     @Override
@@ -40,6 +42,7 @@ public class MemberSecurityDTO extends User implements OAuth2User {
             .socialId(this.socialId)
             .nickname(this.nickname)
             .profileImage(this.profileImage)
+            .provider(this.provider)
             .get();
     }
 

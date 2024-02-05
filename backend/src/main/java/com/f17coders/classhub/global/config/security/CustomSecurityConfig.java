@@ -34,31 +34,39 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class CustomSecurityConfig {
+
     private final APIUserDetailsService apiUserDetailsService;
     private final JWTUtil jwtUtil;
 
     @Bean
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(
+            AuthenticationManagerBuilder.class);
 
         authenticationManagerBuilder.userDetailsService(apiUserDetailsService);
         AuthenticationManager authenticationManager = authenticationManagerBuilder.build();
 
         http
-                .authenticationManager(authenticationManager)
-                .addFilterBefore(tokenCheckFilter(jwtUtil, apiUserDetailsService), UsernamePasswordAuthenticationFilter.class)
-                .csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement((sessionManagement) ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .cors(httpSecurityCorsConfigurer ->
-                        httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
-                .oauth2Login(oauth2 ->
-                        oauth2
-                                .authorizationEndpoint(authorization -> authorization
-                                        .baseUri("/login/oauth2/authorization")
-                                )
-                                .successHandler(authenticationSuccessHandler())
-                );
+            .authenticationManager(authenticationManager)
+            .addFilterBefore(tokenCheckFilter(jwtUtil, apiUserDetailsService),
+                UsernamePasswordAuthenticationFilter.class)
+            .csrf(AbstractHttpConfigurer::disable)
+            .sessionManagement((sessionManagement) ->
+                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .cors(httpSecurityCorsConfigurer ->
+                httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
+            .authorizeHttpRequests(auth ->
+                auth.requestMatchers("/api/*/v0/**").permitAll()
+                    .requestMatchers("/api/*/v0").permitAll()
+                    .anyRequest().authenticated()
+            )
+            .oauth2Login(oauth2 ->
+                oauth2
+                    .authorizationEndpoint(authorization -> authorization
+                        .baseUri("/login/oauth2/authorization")
+                    )
+                    .successHandler(authenticationSuccessHandler())
+            );
 
         return http.build();
     }
@@ -74,11 +82,12 @@ public class CustomSecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(List.of("*"));       // 모든 출처에서 오는 요청 허용
-        configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE"));     // 허용할 HTTP 메소드
+        configuration.setAllowedMethods(
+            Arrays.asList("HEAD", "GET", "POST", "PUT", "DELETE"));     // 허용할 HTTP 메소드
         configuration.setAllowedHeaders(Arrays.asList(      // 요청 헤더 중 허용할 헤더 설정
-                "Authorization",
-                "Cache-Control",
-                "Content-Type"
+            "Authorization",
+            "Cache-Control",
+            "Content-Type"
         ));
         configuration.setAllowCredentials(true);    // 인증 정보(cookies, headers) 등을 포함한 요청을 허용하도록 설정
 
@@ -88,7 +97,8 @@ public class CustomSecurityConfig {
     }
 
     @Bean
-    public TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil, APIUserDetailsService apiUserDetailsService) {
+    public TokenCheckFilter tokenCheckFilter(JWTUtil jwtUtil,
+        APIUserDetailsService apiUserDetailsService) {
         return new TokenCheckFilter(apiUserDetailsService, jwtUtil);
     }
 

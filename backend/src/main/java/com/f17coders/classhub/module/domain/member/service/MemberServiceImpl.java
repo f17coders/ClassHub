@@ -1,6 +1,7 @@
 package com.f17coders.classhub.module.domain.member.service;
 
 import com.f17coders.classhub.global.exception.BaseExceptionHandler;
+import com.f17coders.classhub.global.exception.code.ErrorCode;
 import com.f17coders.classhub.module.domain.job.Job;
 import com.f17coders.classhub.module.domain.job.dto.response.JobRes;
 import com.f17coders.classhub.module.domain.job.repository.JobRepository;
@@ -20,7 +21,6 @@ import com.f17coders.classhub.module.domain.tag.repository.TagRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -36,39 +36,41 @@ public class MemberServiceImpl implements MemberService {
     private final StudyRepository studyRepository;
 
     @Override
-    public int registerMember(String nickname) throws BaseExceptionHandler, IOException {
-        String profileImg = "https://hit-run-seoul.org/wp-content/uploads/2011/06/2011_06_16_cookiemonster_290x290.png";
-
-        Member member = Member.createMember(nickname, profileImg);
-
-        Member saveMember = memberRepository.save(member);
-
-        return saveMember.getMemberId();
-    }
-
-    @Override
     public MemberGetInfoRes getInformation(Member member)
         throws BaseExceptionHandler, IOException {    // TODO : 최적화 고려 (쿼리 횟수)
-        JobRes jobRes = JobRes.builder().name(member.getJob().getName())
-            .jobId(member.getJob().getJobId()).build();
+
+        Member memberWithJob = memberRepository.findByIdFetchJoinJob(member.getMemberId())
+            .orElseThrow(() -> new BaseExceptionHandler(
+                ErrorCode.NOT_FOUND_ERROR));
+
+        JobRes jobRes = JobRes.builder()
+            .name(memberWithJob.getJob().getName())
+            .jobId(memberWithJob.getJob().getJobId())
+            .build();
 
         // 관심 태그 조회
 
-        List<MemberTag> memberTagList = memberTagRepository.findByMemberIdFetchJoinMemberAndFetchJoinTag(
+        List<MemberTag> memberTagList = memberTagRepository.findByIdFetchJoinMemberAndTag(
             member.getMemberId());
 
         List<TagRes> tagResList = new ArrayList<>();
 
         for (MemberTag memberTag : memberTagList) {
-            TagRes tagRes = TagRes.builder().tagId(memberTag.getTag().getTagId())
-                .name(memberTag.getTag().getName()).build();
+            TagRes tagRes = TagRes.builder()
+                .tagId(memberTag.getTag().getTagId())
+                .name(memberTag.getTag().getName())
+                .build();
 
             tagResList.add(tagRes);
         }
 
         // MemberGetInfoRes 생성
-        return MemberGetInfoRes.builder().nickname(member.getNickname())
-            .profileImage(member.getProfileImage()).tagList(tagResList).job(jobRes).build();
+        return MemberGetInfoRes.builder()
+            .nickname(member.getNickname())
+            .profileImage(member.getProfileImage())
+            .tagList(tagResList)
+            .job(jobRes)
+            .build();
     }
 
     @Override
@@ -76,35 +78,41 @@ public class MemberServiceImpl implements MemberService {
         throws BaseExceptionHandler, IOException {
 
         // 희망 직무 설젇
-        Optional<Job> job = jobRepository.findById(memberAddInfoReq.jobId());
-        if (job.isPresent()) {
-            member.setJob(job.get());
-        }
+        Job job = jobRepository.findById(memberAddInfoReq.jobId())
+            .orElseThrow(() -> new BaseExceptionHandler(
+                ErrorCode.NOT_FOUND_ERROR));
+
+        member.setJob(job);
 
         // 관심 태그 설정
         for (int tagId : memberAddInfoReq.tagList()) {
-            Optional<Tag> tag = tagRepository.findById(tagId);
-            memberTagService.registerMemberTag(member, tag.get());
+            Tag tag = tagRepository.findById(tagId).orElseThrow(() -> new BaseExceptionHandler(
+                ErrorCode.NOT_FOUND_ERROR));
+            memberTagService.registerMemberTag(member, tag);
         }
+
+        memberRepository.save(member);
     }
 
     @Override
     public void updateInformation(MemberUpdateInfoReq memberUpdateInfoReq, Member member)
         throws BaseExceptionHandler, IOException {
         // 희망 직무 설젇
-        Optional<Job> job = jobRepository.findById(
-            memberUpdateInfoReq.jobId());    // TODO : fetchJoin으로 MemberTag 가져와야할듯
-        if (job.isPresent()) {
-            member.putJob(job.get());
-        }
+        Job job = jobRepository.findById(
+            memberUpdateInfoReq.jobId()).orElseThrow(() -> new BaseExceptionHandler(
+            ErrorCode.NOT_FOUND_ERROR));// TODO : fetchJoin으로 MemberTag 가져와야할듯
+
+        member.putJob(job);
 
         // 기존 관심 태그 삭제
         memberTagRepository.deleteAll(member.getMemberTagList());
+        member.setMemberTagList(new ArrayList<>());
 
         // 새로운 관심 태그 설정
         for (int tagId : memberUpdateInfoReq.tagList()) {
-            Optional<Tag> tag = tagRepository.findById(tagId);
-            memberTagService.registerMemberTag(member, tag.get());
+            Tag tag = tagRepository.findById(tagId).orElseThrow(() -> new BaseExceptionHandler(
+                ErrorCode.NOT_FOUND_ERROR));
+            memberTagService.registerMemberTag(member, tag);
         }
     }
 

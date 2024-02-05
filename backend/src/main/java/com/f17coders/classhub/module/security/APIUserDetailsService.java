@@ -36,6 +36,7 @@ public class APIUserDetailsService implements UserDetailsService {
             member.getSocialId(),
             member.getNickname(),
             member.getProfileImage(),
+            member.getProvider(),
             authorities
         );
     }

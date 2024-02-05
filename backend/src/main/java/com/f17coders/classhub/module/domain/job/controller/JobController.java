@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "job", description = "해시태그 API")
 @RestController
-@RequestMapping("/jobs/v1")
+@RequestMapping("/api/jobs/v0")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class JobController {

@@ -11,8 +11,6 @@ import java.util.List;
 
 public interface MemberService {
 
-    public int registerMember(String nickname) throws BaseExceptionHandler, IOException;
-
     public MemberGetInfoRes getInformation(Member member) throws BaseExceptionHandler, IOException;
 
     public void addInformation(MemberAddInfoReq memberAddInfoReq, Member member)

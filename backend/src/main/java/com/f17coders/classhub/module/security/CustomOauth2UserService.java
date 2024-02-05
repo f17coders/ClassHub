@@ -74,6 +74,7 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
                 savedMember.getSocialId(),
                 savedMember.getNickname(),
                 savedMember.getProfileImage(),
+                savedMember.getProvider(),
                 Arrays.asList(new SimpleGrantedAuthority("ROLE"))
             );
             memberSecurityDTO.setProps(paramMap);
@@ -90,6 +91,7 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
                 member.getSocialId(),
                 member.getNickname(),
                 member.getProfileImage(),
+                member.getProvider(),
                 authorities
             );
 

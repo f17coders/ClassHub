@@ -113,11 +113,12 @@ public class Member extends BaseEntity {
     }
 
     @Builder(builderMethodName = "fromUser", buildMethodName = "get")
-    public Member(int memberId, String socialId, String nickname, String profileImage) {
+    public Member(int memberId, String socialId, String nickname, String profileImage, String provider) {
         this.memberId = memberId;
         this.socialId = socialId;
         this.nickname = nickname;
         this.profileImage = profileImage;
+        this.provider = provider;
     }
 
     // 생성 메서드

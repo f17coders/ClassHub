@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "channel", description = "채널 API")
 @RestController
-@RequestMapping("/studies/v1/channels")
+@RequestMapping("/api/studies/v1/channels")
 @RequiredArgsConstructor
 @CrossOrigin("*")
 public class ChannelController {

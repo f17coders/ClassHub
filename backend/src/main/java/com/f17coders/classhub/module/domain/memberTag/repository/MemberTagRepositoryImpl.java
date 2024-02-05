@@ -16,7 +16,7 @@ public class MemberTagRepositoryImpl implements MemberTagRepositoryCustom {
     }
 
     @Override
-    public List<MemberTag> findByMemberIdFetchJoinMemberAndFetchJoinTag(int memberId) {
+    public List<MemberTag> findByIdFetchJoinMemberAndTag(int memberId) {
         return queryFactory
             .selectFrom(memberTag)
             .leftJoin(memberTag.member).fetchJoin()
