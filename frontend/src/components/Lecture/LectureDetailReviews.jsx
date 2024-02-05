@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import MenuItem from '@mui/material/MenuItem'
-import { Avatar, Rating, TextField, Tooltip, IconButton } from '@mui/material'
+import { Avatar, Rating, TextField, Tooltip, IconButton, Button } from '@mui/material'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import SendIcon from '@mui/icons-material/Send'
@@ -8,6 +8,7 @@ import LockPersonIcon from '@mui/icons-material/LockPerson';
 import LectureReview from './LectureReview'
 import { useSelector } from 'react-redux'
 import profileImg from './../../assets/Profile.png'
+import axios from 'axios'
 
 // 강의 detail에서 리뷰 탭에 들어가는 컴포넌트
 
@@ -22,17 +23,44 @@ function LectureDetailReviews() {
   const handleSort2 = (event) => {
     setSort2(event.target.value)
   }
+
+
   // 리뷰데이터(임시)
   // classhub에서 쓴 리뷰
-  const review1 = [
-    { user: '망글곰', date: '2023.11.07', rating: 5, content: '정말 플러터의 선두주자라는 느낌입니다. 캔버스를 활용하는 부분을 보니 아직도 플러터에서 배울 부분이 한참 남았다는 생각이 드네요' },
-    { user: '익명의 누군가', date: '2023.11.07', rating: 4, content: '강의가 무난하네요' }
-  ]
+  const [review1, setReview1] = useState([])
+  const [page1, setPage1] = useState(0)
+  const [totalPage1, setTotalPage1] = useState(null)
+  useEffect(() => {
+    axios.get(`https://i10a810.p.ssafy.io/api/reviews/v0/1/classhub?page=${page1}&size=4`)
+      .then((res) => {
+        // console.log(res)
+        setReview1(res.data.result.reviewResList)
+        setTotalPage1(res.data.result.totalPages)
+      })
+      .catch((err) => console.log(err))
+  }, [page1])
+  const setNextPage1 = function () {
+    let nextPage = page1 + 1
+    setPage1(nextPage)
+  } 
+
   // 다른 사이트의 리뷰
-  const review2 = [
-    { user: '망글곰', date: '2023.11.07', rating: 5, content: '정말 플러터의 선두주자라는 느낌입니다. 캔버스를 활용하는 부분을 보니 아직도 플러터에서 배울 부분이 한참 남았다는 생각이 드네요' },
-    { user: '익명의 누군가', date: '2023.11.07', rating: 4, content: '강의가 무난하네요' }
-  ]
+  const [review2, setReview2] = useState([])
+  const [page2, setPage2] = useState(0)
+  const [totalPage2, setTotalPage2] = useState(null)
+  useEffect(() => {
+    axios.get(`https://i10a810.p.ssafy.io/api/reviews/v0/1/site?page=${page2}&size=4`)
+      .then((res) => {
+        console.log(res)
+        setReview2(res.data.result.siteReviewResList)
+        setTotalPage2(res.data.result.totalPages)
+      })
+      .catch((err) => console.log(err))
+  }, [page2])
+  const setNextPage2 = function () {
+    let nextPage = page2 + 1
+    setPage2(nextPage)
+  } 
 
   // 로그인 했는지 확인하기
   // 로그인 확인용
@@ -74,6 +102,9 @@ function LectureDetailReviews() {
               </div>
             ))
           }
+          {
+            page1 + 1 == totalPage1 ? (null) : (<Button variant="outlined" onClick={setNextPage1} sx={{width:'90%'}}>더 보기</Button>)
+          }
         </div>
       </div>
       <div style={{ width: '50%' }}>
@@ -95,13 +126,16 @@ function LectureDetailReviews() {
         </div>
         {/* 다른 사이트 리뷰들어가는 곳 */}
         <div>
-          {
+          {review2 ? (<div>{
             review2.map((item, idx) => (
               <div key={idx} style={{ margin: '15px 0px' }}>
                 {/* 다른사이트에서 가는거는 from을 2로 설정해서 주기 */}
                 <LectureReview review={item} from={2} />
-              </div>
-            ))
+              </div>))
+            }</div>) : null
+          }
+          {
+            page1 + 1 == totalPage1 ? (null) : (<Button variant="outlined" onClick={setNextPage2} sx={{width:'90%'}}>더 보기</Button>)
           }
         </div>
       </div>
@@ -196,17 +230,17 @@ function CreateReview() {
         </div>
       </div>
       {/* 리뷰 쓰는 곳 */}
-      <div style={{ padding: '10px', position:'relative' }}>
+      <div style={{ padding: '10px', position: 'relative' }}>
         <TextField
           label="리뷰작성하기"
           multiline
           rows={4}
           sx={{ width: '100%' }}
         />
-        <IconButton aria-label="등록" sx={{position:'absolute', bottom:20, right:25}}>
+        <IconButton aria-label="등록" sx={{ position: 'absolute', bottom: 20, right: 25 }}>
           <Tooltip title="리뷰 작성">
             <SendIcon />
-          </Tooltip>  
+          </Tooltip>
         </IconButton>
       </div>
     </div>

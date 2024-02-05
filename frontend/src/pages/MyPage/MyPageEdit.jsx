@@ -42,7 +42,7 @@ function MyPageEdit() {
 		// skill들 중에 newValue와 같은애를 통채로 저장함
 		const selectedSkills = skills.filter((option) => newValue.includes(option.name))
 		//최대 10개 까지만 입력 가능하도록 검사
-		if (selectedSkills.length > 10) {
+		if (selectedSkills.length > 10 | selectedSkills.length < 2) {
 			setSkillError(true);
 		} else {
 			setSkillError(false);

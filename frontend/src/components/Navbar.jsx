@@ -10,8 +10,10 @@ import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import LoginModal from './LoginModal'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import profile from './../assets/Profile.png'
+import Switch from '@mui/material/Switch'
+import { toggleLogin } from '../store/store'
 
 const pages = [
 	{ name: 'Lecture', url: 'lecture' },
@@ -21,6 +23,7 @@ const pages = [
 // navbar
 
 function NavbarComponent() {
+	const dispatch = useDispatch()
 	// 로그인 체크용
 	let isLogin = useSelector((state) => state.isLogin)
 
@@ -55,17 +58,17 @@ function NavbarComponent() {
 		textDecoration: 'none',
 		color:'black',
 		fontSize: '1.3em',
-		fontWeight:'700',
+		fontWeight:'550',
 		transition: 'font-size 0.3s ease'
 	}
-
 
 	return (
 		<Appbar
 			position='static'
 			color='transparent'
 			sx={{
-				padding: '10px 0px'
+				padding: '10px 0px',
+				height:'75px'
 			}}
 		>
 			<Grid container alignItems="center">
@@ -132,7 +135,12 @@ function NavbarComponent() {
 							))}
 						</Menu>
 					</Box>
+
+					{/* 테스트용 로그인 토글 스위치 */}
+					<Box><Switch onChange={() => dispatch(toggleLogin())}/></Box>
+
 				</Grid>
+
 				<Grid item xs={1}>
 					{
 						isLogin == false ? (

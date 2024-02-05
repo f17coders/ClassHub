@@ -6,8 +6,15 @@ import user from './userSlice.js'
 // 로그인 된 상태인지 확인용
 let isLogin = createSlice({
   name: 'isLogin',
-  initialState: true
-});
+  initialState: true,
+  reducers: {
+    toggleLogin(state) {
+      return !state
+    }
+  }
+})
+
+export let {toggleLogin} = isLogin.actions
 
 // 강의 비교용
 let compareLectures = createSlice({

@@ -20,15 +20,15 @@ function MyPage() {
 	useEffect(() => {
 		if (user == null) {
 			axios.get('https://i10a810.p.ssafy.io/api/members/v1', {
-        headers: {
-          // 여기에 회원 아이디가 들어감
-          AUTHORIZATION: 3
-        }
-      })
-        .then((res) => {
-          setUser(res.data.result)
-        })
-        .catch((err) => console.log(err))
+				headers: {
+					// 여기에 회원 아이디가 들어감
+					AUTHORIZATION: 3
+				}
+			})
+				.then((res) => {
+					setUser(res.data.result)
+				})
+				.catch((err) => console.log(err))
 		}
 	}, [])
 
@@ -67,7 +67,7 @@ function MyPage() {
 	const linkStyle = {
 		textDecoration: 'none',
 		color: 'black',
-		fontSize: '1.5em',
+		fontSize: '1.35em',
 		transition: 'font-size 0.3s ease'
 	}
 
@@ -88,16 +88,16 @@ function MyPage() {
 						<Grid container>
 							<Grid item xs={5} md={3} sx={{ display: 'flex', justifyContent: 'center', padding: '30px', flexDirection: 'column' }}>
 								{/* 회원 이미지 및 정보 */}
-								<img style={{ width: '70%', borderRadius: '70%', margin: 'auto' }} src={user.profileImage == null ? profileImg : user.profileImage} alt="Profile Image" />
-								<p style={{ marginTop: '20px', marginBottom: '5px', textAlign: 'center', fontWeight: '600', color: 'grey' }}>{user.job.name}가 될</p>
-								<p style={{ textAlign: 'center', fontWeight: '800', fontSize: '1.7em' }}>{user.nickname}의<br />마이페이지</p>
-{/* 마이페이지 메뉴 */}
-<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '10px', paddingTop: '20px', borderTop: '1px solid lightgray' }}>
+								<img style={{ width: '60%', borderRadius: '70%', margin: 'auto' }} src={user.profileImage == null ? profileImg : user.profileImage} alt="Profile Image" />
+								{/* <p style={{ marginTop: '20px', marginBottom: '5px', textAlign: 'center', fontWeight: '600', color: 'grey' }}><span style={{color:'black'}}>{user.job.name}</span>가 될</p> */}
+								<p style={{  marginTop: '20px', textAlign: 'center', fontWeight: '800', fontSize: '1.6em' }}>{user.nickname}의<br />마이페이지</p>
+								{/* 마이페이지 메뉴 */}
+								<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '10px', paddingTop: '20px', borderTop: '1px solid lightgray' }}>
 									{
 										tabItem.map((item, idx) => (
 											<div key={idx} style={{ margin: '10px 0px' }}>
 												<Link to={item.link}
-													style={idx == activeIndex ? { ...linkStyle, fontSize: '1.55em' } : (idx == selectedIndex ? { ...linkStyle, color: 'rgb(83, 96, 245)' } : linkStyle)}
+													style={idx == activeIndex ? { ...linkStyle, fontSize: '1.4em' } : (idx == selectedIndex ? { ...linkStyle, color: 'rgb(83, 96, 245)' } : linkStyle)}
 													onMouseEnter={() => handleMouseEnter(idx)}
 													onMouseLeave={handleMouseLeave}
 													onClick={() => handleClick(idx)}

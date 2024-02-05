@@ -10,6 +10,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { addElement, searchResult } from './../store/store.js'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
+import axios from 'axios'
+import LoginModal from './LoginModal.jsx'
 
 // tooltip에 스타일 주기
 const LightTooltip = styled(({ className, ...props }) => (
@@ -23,10 +25,11 @@ const LightTooltip = styled(({ className, ...props }) => (
 	},
 }))
 
-function LectureCard({lecture}) {
+function LectureCard({ lecture }) {
 	const navigate = useNavigate()
-	// 비교 강의 추가할때 쓰는 변수
 	let dispatch = useDispatch()
+	// 로그인 확인용
+	let isLogin = useSelector((state) => state.isLogin)
 
 	// 호버용 변수
 	const [hover, setHover] = useState(false)
@@ -37,13 +40,42 @@ function LectureCard({lecture}) {
 		boxShadow: hover ? "0px 4px 8px 0px rgba(0, 0, 0, 0.2)" : 'none',
 	}
 
+	// 좋아요 + 로그인 안했으면 로그인 하라 하기
 	// 좋아요용 변수
 	const [like, setLike] = useState(false)
-	const toggleLike = () => setLike(!like)
+	// 로그인 모달용
+	const [open, setOpen] = useState(false)
+	const ModalOpen = () => setOpen(true)
+	const ModalClose = () => setOpen(false)
+	const toggleLike = () => {
+		if (isLogin == true) {
+			if (like == false) {
+				axios.post(`https://i10a810.p.ssafy.io/api/lectures/v1/likes/${lecture.lectureId}`)
+					.then((res) => console.log('좋아요를 눌렀어요'))
+					.catch((err) => console.log(err))
+				setLike(true)
+			} else {
+				axios.delete(`https://i10a810.p.ssafy.io/api/lectures/v1/unlikes/${lecture.lectureId}`)
+					.then((res) => console.log('좋아요 취소'))
+					.catch((err) => console.log(err))
+				setLike(false)
+			}
+		} else {
+			Swal.fire({
+				title: "로그인이 필요합니다!",
+				icon: "warning",
+				confirmButtonText: '로그인하러가기'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					ModalOpen()
+				}
+			})
+		}
+	}
 
 
-	// 디테일 페이지로 가기
-	const goDetail = function() {
+	// 디테일 페이지로 가기	
+	const goDetail = function () {
 		navigate(`/lecture/detail/${lecture.lectureId}`)
 	}
 	// 강의 담았을 때 알림 (sweetAlert용)
@@ -57,7 +89,7 @@ function LectureCard({lecture}) {
 			toast.onmouseleave = Swal.resumeTimer;
 		}
 	})
-	
+
 	// 강의 담겼을 때 or 3개 다 차면 안된다고 해주기
 	let compareLectures = useSelector((state) => state.compareLectures)
 	function addCart() {
@@ -106,7 +138,7 @@ function LectureCard({lecture}) {
 									<Chip size="small" label={`# ${lecture.tagList[0].name}`}></Chip>
 									<Chip size="small" label={`# ${lecture.tagList[1].name}`}></Chip>
 								</div>) : null
-								}</div>)
+							}</div>)
 						}
 					</div>
 				</div>
@@ -128,9 +160,9 @@ function LectureCard({lecture}) {
 						}}
 					>
 						<div>
-							<p style={{ fontWeight: '700', fontSize: '1.3em', margin:0 }} onClick={goDetail}>{lecture.lectureName}</p>
+							<p style={{ fontWeight: '700', fontSize: '1.3em', margin: 0 }} onClick={goDetail}>{lecture.lectureName}</p>
 						</div>
-					
+
 						<div style={{ height: '70%' }} onClick={goDetail}>
 							<p>{lecture.descriptionSummary}<br />총 {lecture.totalTime}시간<br />{lecture.level}</p>
 						</div>
@@ -140,20 +172,20 @@ function LectureCard({lecture}) {
 						<div style={{ marginLeft: '75%', display: 'flex', flexDirection: 'column' }}>
 							{
 								like ? (
-									<LightTooltip slotProps={{popper: {modifiers: [{name: 'offset', options: {offset: [0, -15],},},]},}} placement="left" arrow title="좋아요 취소">
+									<LightTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15], }, },] }, }} placement="left" arrow title="좋아요 취소">
 										<IconButton size='small' onClick={toggleLike} sx={{ color: 'white' }}>
 											<FavoriteIcon />
 										</IconButton>
 									</LightTooltip>
 								) : (
-									<LightTooltip slotProps={{popper: {modifiers: [{name: 'offset', options: {offset: [0, -15],},},]},}} placement="left" arrow title="좋아요">
+									<LightTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15], }, },] }, }} placement="left" arrow title="좋아요">
 										<IconButton size='small' onClick={toggleLike} sx={{ color: 'white' }}>
 											<FavoriteBorderIcon />
 										</IconButton>
 									</LightTooltip>
 								)
 							}
-							<LightTooltip slotProps={{popper: {modifiers: [{name: 'offset', options: {offset: [0, -15],},},]},}} placement="left" arrow title="강의 비교하기">
+							<LightTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -15], }, },] }, }} placement="left" arrow title="강의 비교하기">
 								<IconButton size='small' sx={{ color: 'white' }} onClick={addCart}>
 									<BalanceIcon />
 								</IconButton>
@@ -163,6 +195,7 @@ function LectureCard({lecture}) {
 					</div>
 				) : null
 			}
+		<LoginModal open={open} onClose={ModalClose} />
 		</Card>
 	)
 }

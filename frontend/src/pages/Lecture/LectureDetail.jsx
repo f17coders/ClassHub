@@ -11,13 +11,13 @@ import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
 import SellIcon from '@mui/icons-material/Sell'
 import axios from 'axios'
-import EastIcon from '@mui/icons-material/East';
-import PersonIcon from '@mui/icons-material/Person';
-import { Button } from '@mui/material'
+import EastIcon from '@mui/icons-material/East'
+import PersonIcon from '@mui/icons-material/Person'
 import { useParams } from 'react-router-dom'
 import LectureDetailReviews from '../../components/Lecture/LectureDetailReviews'
 import { useSelector } from 'react-redux'
-import LoginModal from '../../components/LoginModal';
+import LoginModal from '../../components/LoginModal'
+import Swal from 'sweetalert2'
 
 // 강의의 상세 내용이 들어가는 페이지 입니다.
 
@@ -25,12 +25,8 @@ function LectureDetail() {
 	// id가져오기
 	const { lectureId } = useParams()
 
-	// 로그인 확인용(좋아요 버튼)
+	// 로그인 확인용
 	let isLogin = useSelector((state) => state.isLogin)
-	// 로그인 모달용
-	const [open, setOpen] = useState(false)
-	const ModalOpen = () => setOpen(true)
-	const ModalClose = () => setOpen(false)
 
 	// 강의 정보 저장할 변수
 	const [lecture, setLecture] = useState(null)
@@ -38,20 +34,42 @@ function LectureDetail() {
 	useEffect(() => {
 		axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0/details/${lectureId}`)
 			.then((response) => {
-				console.log(response.data.result)
+				// console.log(response.data.result)
 				setLecture(response.data.result)
 			})
 			.catch((err) => console.log(err));
 	}, [lectureId]);
 
 
-	// 강의 좋아요 누르기
+	// 강의 좋아요 + 로그인 확인
 	const [like, setLike] = useState(false)
-	const toggleLike = function(){
-		if (isLogin) {
-			setLike(!like)
+	// 로그인 모달용
+	const [open, setOpen] = useState(false)
+	const ModalOpen = () => setOpen(true)
+	const ModalClose = () => setOpen(false)
+	const toggleLike = () => {
+		if (isLogin == true) {
+			if (like == false) {
+				axios.post(`https://i10a810.p.ssafy.io/api/lectures/v1/likes/${lecture.lectureId}`)
+					.then((res) => console.log('좋아요를 눌렀어요'))
+					.catch((err) => console.log(err))
+				setLike(true)
+			} else {
+				axios.delete(`https://i10a810.p.ssafy.io/api/lectures/v1/unlikes/${lecture.lectureId}`)
+					.then((res) => console.log('좋아요 취소'))
+					.catch((err) => console.log(err))
+				setLike(false)
+			}
 		} else {
-			ModalOpen()
+			Swal.fire({
+				title: "로그인이 필요합니다!",
+				icon: "warning",
+				confirmButtonText: '로그인하러가기'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					ModalOpen()
+				}
+			})
 		}
 	}
 
@@ -99,6 +117,7 @@ function LectureDetail() {
 				</div>)
 		}
 	}
+
 	return (
 		<div>
 			{
@@ -178,7 +197,7 @@ function LectureDetail() {
 										value2 == 1 ? (<Content2 lecture={lecture} />) : null
 									}
 									{
-										// 리뷰
+										// 리뷰(컴포넌트로 뺌)
 										value2 == 2 ? (<LectureDetailReviews lecture={lecture} />) : null
 									}
 								</div>
@@ -192,6 +211,7 @@ function LectureDetail() {
 	)
 }
 
+// 상세내용
 function Content1(props) {
 	const lecture = props.lecture
 	return (
@@ -212,6 +232,8 @@ function Content1(props) {
 	)
 }
 
+
+// 커리큘럼
 function Content2(props) {
 	const lecture = props.lecture
 	return (
