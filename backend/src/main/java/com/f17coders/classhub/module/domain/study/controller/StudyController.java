@@ -1,6 +1,10 @@
 package com.f17coders.classhub.module.domain.study.controller;
 
+import static com.f17coders.classhub.global.exception.code.ErrorCode.NOT_VALID_ERROR;
+
 import com.f17coders.classhub.global.api.response.BaseResponse;
+import com.f17coders.classhub.global.api.response.ErrorResponse;
+import com.f17coders.classhub.global.exception.code.ErrorCode;
 import com.f17coders.classhub.global.exception.code.SuccessCode;
 import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
@@ -15,6 +19,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
@@ -96,6 +101,22 @@ public class StudyController {
         int enterCode = studyService.getEnterCode(studyId);
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, enterCode);
+    }
+
+    @Operation(summary = "참여코드 일치 여부 조회")
+    @GetMapping("/invitation-code/valid/{studyId}")
+    public ResponseEntity<?> isEnterCode(@PathVariable int studyId,
+        @RequestParam int enterCode) throws IOException {
+
+        int trueEnterCode = studyService.getEnterCode(studyId);
+
+        if(enterCode == trueEnterCode) {
+            return BaseResponse.success(SuccessCode.SELECT_SUCCESS, studyId);
+        } else {
+            ErrorResponse response = ErrorResponse.of().code(NOT_VALID_ERROR).message("참여코드가 일치하지 않습니다.").build();
+
+            return new ResponseEntity<>(response, HttpStatus.valueOf(response.getStatus()));
+        }
     }
 
     @Operation(summary = "스터디룸 참여")
