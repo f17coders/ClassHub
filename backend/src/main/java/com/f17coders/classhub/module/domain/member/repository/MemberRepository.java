@@ -23,5 +23,4 @@ public interface MemberRepository extends JpaRepository<Member, Integer>, Member
 	@Query("SELECT m.job FROM Member m WHERE m.memberId = :memberId")
 	Job findJobIdByMemberId(@Param("memberId") int memberId);
 
-    Optional<Member> findBySocialId(String socialId);
 }
