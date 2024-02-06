@@ -41,7 +41,7 @@ public class MemberServiceImpl implements MemberService {
         throws BaseExceptionHandler, IOException {    // TODO : 최적화 고려 (쿼리 횟수)
         // 멤버와 직업 정보 가져오기
         Member memberWithJob = memberRepository.findByIdFetchJoinJob(member.getMemberId())
-            .orElseThrow(() -> new BaseExceptionHandler(
+            .orElseThrow(() -> new BaseExceptionHandler("존재하지 않는 회원입니다.",
                 ErrorCode.NOT_FOUND_ERROR));
 
         JobRes jobRes = null;
@@ -93,7 +93,7 @@ public class MemberServiceImpl implements MemberService {
         // 관심 태그 설정
         memberAddInfoReq.tagList().stream()
             .map(tagId -> tagRepository.findById(tagId)
-                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR)))
+                .orElseThrow(() -> new BaseExceptionHandler("존재하지 않는 태그입니다.", ErrorCode.NOT_FOUND_ERROR)))
             .forEach(tag -> memberTagService.registerMemberTag(member, tag));
 
         memberRepository.save(member);
