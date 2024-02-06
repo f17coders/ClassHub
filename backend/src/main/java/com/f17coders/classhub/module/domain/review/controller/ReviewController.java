@@ -1,8 +1,14 @@
 package com.f17coders.classhub.module.domain.review.controller;
 
 import com.f17coders.classhub.global.api.response.BaseResponse;
+import com.f17coders.classhub.global.exception.BaseExceptionHandler;
+import com.f17coders.classhub.global.exception.code.ErrorCode;
 import com.f17coders.classhub.global.exception.code.SuccessCode;
+import com.f17coders.classhub.module.domain.member.Member;
+import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
 import com.f17coders.classhub.module.domain.review.dto.response.ReviewListRes;
+import com.f17coders.classhub.module.domain.review.dto.request.ReviewRegisterReq;
+import com.f17coders.classhub.module.domain.review.dto.response.ReviewRes;
 import com.f17coders.classhub.module.domain.review.dto.response.SiteReviewListRes;
 import com.f17coders.classhub.module.domain.review.service.ReviewService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,8 +18,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,8 +37,9 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin("*")
 public class ReviewController {
 
-	//	private final LectureService lectureService;
 	private final ReviewService reviewService;
+
+	private final MemberRepository memberRepository;
 
 	@Operation(summary = "우리 사이트 리뷰 조회 - sort사용금지")
 	@GetMapping("/v0/{lectureId}/classhub")
@@ -51,6 +63,60 @@ public class ReviewController {
 		SiteReviewListRes siteReviewListRes = reviewService.getSiteReviewList(lectureId, pageable);
 
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, siteReviewListRes);
+	}
+
+	@Operation(summary = "해당 강의에 내가 작성한 리뷰가 있다면 가져옵니다.")
+	@GetMapping("/v1/{lectureId}")
+	public ResponseEntity<BaseResponse<ReviewRes>> getMyLectureReview(
+		@PathVariable("lectureId") int lectureId,
+		@RequestHeader("X-My-Int-Header") int memberId) throws IOException {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new BaseExceptionHandler("memberId="+memberId+" 인 사용자를 DB에서 찾을수없습니다.",ErrorCode.NOT_FOUND_USER_EXCEPTION));
+
+		ReviewRes review = reviewService.getMyLectureReview(lectureId, member);
+
+		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, review);
+	}
+
+	@Operation(summary = "리뷰 등록")
+	@PostMapping("/v1/{lectureId}")
+	public ResponseEntity<BaseResponse<Integer>> registerReview(
+		@PathVariable("lectureId") int lectureId,
+		@RequestBody ReviewRegisterReq reviewRegisterReq,
+		@RequestHeader("X-My-Int-Header") int memberId) throws IOException {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new BaseExceptionHandler("memberId="+memberId+" 인 사용자를 DB에서 찾을수없습니다.",ErrorCode.NOT_FOUND_USER_EXCEPTION));
+
+		int reviewId = reviewService.registerReview(lectureId, reviewRegisterReq, member);
+
+		return BaseResponse.success(SuccessCode.INSERT_SUCCESS, reviewId);
+	}
+
+	@Operation(summary = "리뷰 삭제")
+	@DeleteMapping("/v1/{reviewId}")
+	public ResponseEntity<BaseResponse<Integer>> deleteReview(
+		@PathVariable("reviewId") int reviewId,
+		@RequestHeader("X-My-Int-Header") int memberId) throws IOException {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new BaseExceptionHandler("memberId="+memberId+" 인 사용자를 DB에서 찾을수없습니다.",ErrorCode.NOT_FOUND_USER_EXCEPTION));
+
+		reviewService.deleteReview(reviewId, memberId);
+
+		return BaseResponse.success(SuccessCode.DELETE_SUCCESS, reviewId);
+	}
+
+	@Operation(summary = "리뷰 수정")
+	@PatchMapping("/v1/{lectureId}")
+	public ResponseEntity<BaseResponse<Integer>> updateReview(
+		@PathVariable("lectureId") int lectureId,
+		@RequestBody ReviewRegisterReq reviewRegisterReq,
+		@RequestHeader("X-My-Int-Header") int memberId) throws IOException {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new BaseExceptionHandler("memberId="+memberId+" 인 사용자를 DB에서 찾을수없습니다.",ErrorCode.NOT_FOUND_USER_EXCEPTION));
+
+		int reviewId = reviewService.updateReview(lectureId, reviewRegisterReq, member);
+
+		return BaseResponse.success(SuccessCode.INSERT_SUCCESS, reviewId);
 	}
 
 }
