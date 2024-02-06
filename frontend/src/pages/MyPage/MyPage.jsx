@@ -1,8 +1,11 @@
 import Grid from '@mui/material/Grid'
 import Container from '@mui/material/Container'
+import EditIcon from '@mui/icons-material/Edit';
+import NearMeIcon from '@mui/icons-material/NearMe';
+import { IconButton, Paper, Chip, Tooltip, Button } from '@mui/material'
 import profileImg from './../../assets/Profile.png'
 import { useState, useEffect } from 'react'
-import { Outlet, Link } from 'react-router-dom'
+import { Outlet, Link, useNavigate } from 'react-router-dom'
 import CompareButton from './../../components/CompareButton'
 import { useSelector } from 'react-redux'
 import LoginModal from '../../components/LoginModal'
@@ -17,12 +20,12 @@ function MyPage() {
 	let [user, setUser] = useState(null)
 
 	// 처음에 회원 정보 가져오기
+	const accessToken = localStorage.getItem('token')
 	useEffect(() => {
 		if (user == null) {
 			axios.get('https://i10a810.p.ssafy.io/api/members/v1', {
 				headers: {
-					// 여기에 회원 아이디가 들어감
-					AUTHORIZATION: 3
+					AUTHORIZATION: `Bearer ${accessToken}`
 				}
 			})
 				.then((res) => {
@@ -32,9 +35,45 @@ function MyPage() {
 		}
 	}, [])
 
+	// 참여중인 스터디 목록도 가져오기
+	const [studies, setStudies] = useState([])
+	useEffect(() => {
+		if (user == null) {
+			axios.get('https://i10a810.p.ssafy.io/api/members/v1/studies/participation', {
+				headers: {
+					AUTHORIZATION: `Bearer ${accessToken}`
+				}
+			})
+				.then((res) => {
+					setStudies(res.data.result)
+				})
+				.catch((err) => console.log(err))
+		}
+	}, [])
+
+
+	// 나에게 맞는 강의 추천
+	const [recommendLectures, setRecommendLectures] = useState({})
+	useEffect(() => {
+		// 우선 목표직무에 맞는 강의(여기 수정해야함)
+		axios.get('https://i10a810.p.ssafy.io/api/lectures/v1/desired-job', {
+			headers: {
+				AUTHORIZATION: `Bearer ${accessToken}`
+			}
+		})
+		.then((res) => {
+			setRecommendLectures(prevState => ({
+				...prevState, 
+				[res.data.result.job.name]: res.data.result.lectureList 
+		}));
+			console.log(recommendLectures)
+		})
+	}, [user])
+
+
 	// 메뉴 + 호버링용 변수들
 	const [activeIndex, setActiveIndex] = useState(null);
-	const [selectedIndex, setSelectedIndex] = useState(0);
+	const [selectedIndex, setSelectedIndex] = useState(null);
 	const handleMouseEnter = (index) => {
 		setActiveIndex(index);
 	}
@@ -87,10 +126,9 @@ function MyPage() {
 					user != null ? (
 						<Grid container>
 							<Grid item xs={5} md={3} sx={{ display: 'flex', justifyContent: 'center', padding: '30px', flexDirection: 'column' }}>
-								{/* 회원 이미지 및 정보 */}
-								<img style={{ width: '60%', borderRadius: '70%', margin: 'auto' }} src={user.profileImage == null ? profileImg : user.profileImage} alt="Profile Image" />
+								<img style={{ width: '180px', borderRadius: '75%', margin: '30px auto', cursor: 'pointer' }} onClick={() => handleClick(null)} src={user.profileImage == null ? profileImg : user.profileImage} alt="Profile Image" />
 								{/* <p style={{ marginTop: '20px', marginBottom: '5px', textAlign: 'center', fontWeight: '600', color: 'grey' }}><span style={{color:'black'}}>{user.job.name}</span>가 될</p> */}
-								<p style={{  marginTop: '20px', textAlign: 'center', fontWeight: '800', fontSize: '1.6em' }}>{user.nickname}의<br />마이페이지</p>
+								<p style={{ marginTop: '20px', textAlign: 'center', fontWeight: '800', fontSize: '1.6em', cursor: 'pointer' }} onClick={() => handleClick(null)}>{user.nickname}의<br />마이페이지</p>
 								{/* 마이페이지 메뉴 */}
 								<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '10px', paddingTop: '20px', borderTop: '1px solid lightgray' }}>
 									{
@@ -111,8 +149,56 @@ function MyPage() {
 							</Grid>
 
 							{/* 메뉴 요소들이 들어갈 곳 */}
-							<Grid item xs={7} md={9} sx={{ marginTop: '30px', padding: '20px' }}>
-								<Outlet />
+							<Grid item xs={7} md={9} sx={{ padding: '20px' }}>
+								{
+									selectedIndex != null ? (<Outlet />) : (
+										<Grid container sx={{ padding: '20px' }}>
+											<Grid item xs={6} style={{ height: '250px', padding:'10px' }}>
+												<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3px' }}>
+													<p style={{ fontSize: '1.4em', fontWeight: '700', margin: '0px' }}>목표 직무와 관심 기술</p>
+													<Tooltip title="수정하러가기"><IconButton onClick={() => setSelectedIndex(3)}><EditIcon /></IconButton></Tooltip>
+												</div>
+												<Paper sx={{ padding: '10px', height:'180px', overflow:'auto' }}>
+													<p style={{ fontSize: '1.2em', marginTop: '0px' }}><span style={{ color: 'grey' }}>목표직무: </span>{user.job.name}</p>
+													<p style={{ color: 'grey', fontSize: '1.2em', marginBottom:'2px' }}>관심 기술</p>
+													<div>
+														{
+															user.tagList.map((tag, idx) => {
+																return (
+																	<Chip key={idx} size="small" label={`# ${tag.name}`} sx={{ margin: '5px' }}></Chip>
+																)
+															})
+														}
+													</div>
+												</Paper>
+											</Grid>
+											<Grid item xs={6} style={{ height: '250px', padding:'10px' }}>
+												<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3px' }}>
+													<p style={{ fontSize: '1.4em', fontWeight: '700', margin: '0px' }}>참여중인 스터디 목록</p>
+													<Tooltip title="더보러가기"><Link to='/studyroom'><IconButton><NearMeIcon /></IconButton></Link></Tooltip>
+												</div>
+												<Paper sx={{ padding: '10px', height:'180px', overflow:'auto' }}>
+													{
+														studies.map((study, idx) => {
+															return (
+																<Button size='large' fullWidth href={`studyroom/participating/${study.studyId}`} key={idx} sx={{color:'black'}}>{study.title}</Button>
+															)})
+													}
+												</Paper>
+											</Grid>
+											<Grid item xs={12} style={{ height: '250px',marginTop:'20px' }}>
+												<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3px' }}>
+													<p style={{ fontSize: '1.4em', fontWeight: '700', margin: '0px' }}>나에게 맞는 강의 추천</p>
+													<Tooltip title="더보러가기"><Link to='/lecture'><IconButton><NearMeIcon /></IconButton></Link></Tooltip>
+												</div>
+												<Paper sx={{ padding: '10px', height:'180px', overflow:'auto' }}>
+													여기 추천이 들어감
+												</Paper>
+											</Grid>
+										</Grid>
+
+									)
+								}
 							</Grid>
 						</Grid>
 					) : (<div>로딩중</div>)}
@@ -125,3 +211,4 @@ function MyPage() {
 }
 
 export default MyPage
+

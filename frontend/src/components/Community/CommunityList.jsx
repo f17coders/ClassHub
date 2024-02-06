@@ -22,7 +22,7 @@ export default function CommunityPostList({post}){
         <>
             {/* 글 목록 한개 */}
             <div onClick={() => { navigate(`/community/detail/${post.communityId}`); }}>
-              <h5 style={{fontWeight: 'bold'}}>{post.title}</h5>
+              <h3 style={{fontWeight: 'bold'}}>{post.title}</h3>
               <p>{removeHTMLTags(post.content)}</p>
               {/* 해시태그 */}
               <Stack direction="row" spacing={1}>

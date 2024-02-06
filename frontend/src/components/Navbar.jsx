@@ -73,46 +73,29 @@ function NavbarComponent() {
 
 	const [accessToken, setAccessToken] = useState('');
 	const handleLoginClick = () => {
-		console.log('실행되낭')
-
+		console.log('로그인 버튼 클릭')
 		window.location.href = 'https://i10a810.p.ssafy.io/login/oauth2/authorization/kakao';
-		// window.location.href = 'https://i10a810.p.ssafy.io/login/oauth2/authorization/kakao?client_id=redirect_uri=https://i10a810.p.ssafy.io/login/oauth2/code/kakao';
 	  };
-
-	  const loadUserInfo = (token) => {
-		return axios
-		  .get(`https://i10a810.p.ssafy.io/api/members/v1`, {
-			headers: {
-			  Authorization: `Bearer ${token}`,
-			},
-		  })
-		  .then((response) => response.data)
-		  .then((data) => {
-			const userInfo = data["result"];
-			console.log("[userInfo] >> ", userInfo);
-			localStorage.setItem("loginUser", JSON.stringify(userInfo));
-		  });
-	  };
-
 
 	  useEffect(() => {
-		console.log('실행되낭')
-		const getAccessToken = async () => {
+			setAccessToken(new URL(window.location.href).searchParams.get(
+				'Authorization'
+			));
+			console.log(accessToken);
+
+		    if(accessToken) {
+			console.log('useEffect 실행')
 			try {
-				const code = new URL(window.location.href).searchParams.get('code');
-				if (code) {
-				  setAccessToken(code);
+				//   setAccessToken(code);
 				  console.log(accessToken)
-				  localStorage.setItem("token", code);
-				  await loadUserInfo(code);
+				  localStorage.setItem("token", accessToken);
+				// loadUserInfo(code);
 				  navigate('/');
-				}
 			  } catch (error) {
 				console.error("카카오 로그인 에러:", error);
 			  }
 		}
-		getAccessToken();
-	  }, []);
+	  }, [accessToken]);
 
 		return (
 			<Appbar

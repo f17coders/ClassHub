@@ -1,10 +1,12 @@
 import Paper from '@mui/material/Paper'
 import Box from '@mui/material/Box'
+import Rating from '@mui/material/Rating'
 import { useNavigate } from 'react-router-dom'
 import PersonIcon from '@mui/icons-material/Person'
 import SellIcon from '@mui/icons-material/Sell'
 import EastIcon from '@mui/icons-material/East';
 import { useState } from 'react'
+import img from './../../assets/Lecture/Lecture1.png'
 
 
 function CompareElement({ lecture }) {
@@ -51,18 +53,24 @@ function CompareElement({ lecture }) {
 	}
 	return (
 		<Paper sx={elementStyle} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} onClick={() => goDetail(lecture.lectureId)}>
-			<Box sx={{ height: '300px' }}>
-				<div style={{ height: '80%', paddingTop: '30px' }}>
-					<p style={{ fontSize: '0.9em', margin: '0px' }}>{lecture.categoryName}</p>
-					<p style={{ fontSize: '1.8em', fontWeight: 800 }}>{lecture.lectureName}</p>
-					<div style={{ display: 'flex', flexDirection: 'row' }}>
-						<SellIcon fontSize='small' /><p style={{ margin: "0px 4px" }}>가격:</p>{definePrice(lecture.priceOriginal, lecture.priceSale)}
+				<div style={{ padding:'5px' }}>
+					<img src={img} style={{width:"100%"}} />
+					<div style={{padding:'15px'}}>
+						<p style={{ fontSize: '0.9em', margin: '0px' }}>{lecture.categoryName}</p>
+						<p style={{ fontSize: '1.8em', fontWeight: 800 }}>{lecture.lectureName}</p>
+						<div style={{ display: 'flex', flexDirection: 'row' }}>
+							<SellIcon fontSize='small' /><p style={{ margin: "0px 4px" }}>가격:</p>{definePrice(lecture.priceOriginal, lecture.priceSale)}
+						</div>
+						<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: '10px' }}>
+							<PersonIcon fontSize='small' /><p style={{ margin: "0px 4px" }}>강의자:</p>{lecture.instructor}
+						</div>
+						<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: '10px' }}>
+							<PersonIcon fontSize='small' /><p style={{ margin: "0px 4px" }}>사이트:</p>{lecture.siteType}
+						</div>
+						<Rating defaultValue={lecture.combinedRating} precision={0.5} readOnly sx={{ margin: '5px' }} />
 					</div>
-					<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: '10px' }}>
-						<PersonIcon fontSize='small' /><p style={{ margin: "0px 4px" }}>강의자:</p>{lecture.instructor}
-					</div>
+					
 				</div>
-			</Box>
 		</Paper>
 	)
 }
