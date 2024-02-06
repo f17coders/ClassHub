@@ -21,6 +21,7 @@ import com.f17coders.classhub.module.domain.tag.repository.TagRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,31 +39,29 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberGetInfoRes getInformation(Member member)
         throws BaseExceptionHandler, IOException {    // TODO : 최적화 고려 (쿼리 횟수)
-
+        // 멤버와 직업 정보 가져오기
         Member memberWithJob = memberRepository.findByIdFetchJoinJob(member.getMemberId())
             .orElseThrow(() -> new BaseExceptionHandler(
                 ErrorCode.NOT_FOUND_ERROR));
 
-        JobRes jobRes = JobRes.builder()
-            .name(memberWithJob.getJob().getName())
-            .jobId(memberWithJob.getJob().getJobId())
-            .build();
+        JobRes jobRes = null;
+        if (memberWithJob.getJob() != null) {
+            jobRes = JobRes.builder()
+                .name(memberWithJob.getJob().getName())
+                .jobId(memberWithJob.getJob().getJobId())
+                .build();
+        }
 
-        // 관심 태그 조회
-
+        // 멤버와 태그 정보 가져오기
         List<MemberTag> memberTagList = memberTagRepository.findByIdFetchJoinMemberAndTag(
             member.getMemberId());
 
-        List<TagRes> tagResList = new ArrayList<>();
-
-        for (MemberTag memberTag : memberTagList) {
-            TagRes tagRes = TagRes.builder()
+        List<TagRes> tagResList = memberTagList.stream()    // TODO : stream 추후 추가 학습
+            .map(memberTag -> TagRes.builder()
                 .tagId(memberTag.getTag().getTagId())
                 .name(memberTag.getTag().getName())
-                .build();
-
-            tagResList.add(tagRes);
-        }
+                .build())
+            .collect(Collectors.toList());
 
         // MemberGetInfoRes 생성
         return MemberGetInfoRes.builder()
