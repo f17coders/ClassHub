@@ -9,8 +9,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +31,6 @@ public class Job extends BaseEntity {
     private String name;
 
     @OneToMany(mappedBy = "job", fetch = FetchType.LAZY)
-    List<Member> memberList = new ArrayList<>();
+    Set<Member> memberList = new HashSet<>();
 }
 

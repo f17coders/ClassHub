@@ -7,5 +7,5 @@ import java.io.IOException;
 
 public interface MemberTagService {
 
-    void registerMemberTag(Member member, Tag tag) throws BaseExceptionHandler, IOException;
+    void registerMemberTag(Member member, Tag tag);
 }
