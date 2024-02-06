@@ -136,10 +136,16 @@ let searchParams = createSlice({
           site: null
         }
       }
+    },
+    changePage(state,action) {
+      return {
+        ...state,
+        page: action.payload
+      }
     }
   }
 })
-export let {changeCategory, addTags, deleteTags, changeKeyword, changeLevel,changeSite } = searchParams.actions
+export let {changeCategory, addTags, deleteTags, changeKeyword, changeLevel,changeSite, changePage } = searchParams.actions
 
 // 강의 검색 결과
 let lectureResult = createSlice({
