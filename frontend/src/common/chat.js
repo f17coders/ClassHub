@@ -36,20 +36,16 @@ const registPersonalChat = (receiver) => {
     })
 }
 
-const send = (stompClient, message, personalChatId) => {
+const send = (stompClient, sender,message, personalChatId) => {
     if (stompClient && stompClient.connected) {
-
-        const currentDate = new Date(); // 현재 날짜
-        const currentDateString = currentDate.toISOString();
-
         let msg = {
-            sender: 10,
+            sender: sender,
             text: message,
             personalChatId: personalChatId
         };
         stompClient.publish({
             destination: "/pub/api/chat/send/" + personalChatId,
-            body: JSON.stringify(message),
+            body: JSON.stringify(msg),
             headers: {
                 "Authorization": "Bearer " + accessToken,
             }
