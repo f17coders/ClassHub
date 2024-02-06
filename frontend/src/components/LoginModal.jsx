@@ -12,6 +12,9 @@ import naver2 from './../assets/Login/naver_hover.png'
 import kakao from './../assets/Login/kakao.png'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import naverLogo from './../assets/Login/naverLogo.png'
+import googleLogo from './../assets/Login/googleLogo.png'
+import kakaoLogo from './../assets/Login/kakaoLogo.png'
 
 
 // Modal창 스타일
@@ -28,7 +31,7 @@ const style = {
 }
 
 
-function LoginModal({open, onClose}) {
+function LoginModal({ open, onClose }) {
 	// 몇번째 모달인지 확인용
 	let [order, setOrder] = useState(1)
 
@@ -80,8 +83,42 @@ function LoginModal({open, onClose}) {
 							alignItems: "center"
 						}}>
 							<img src={MainLogo} alt="MainLogo" style={{ width: '60%' }} />
-							<div style={{ display: 'flex', flexDirection: 'column', alignItems: "center", marginTop: '50px', width: '70%' }}>
+							<p>ClassHub서비스에 로그인하기</p>
+							<div style={{ display: 'flex', flexDirection: 'row', marginTop: '50px', width: '70%', justifyContent:'space-around', alignItems:'center'}}>
 								<div
+									onMouseEnter={hoverInGoogle}
+									onMouseLeave={hoverOutGoogle}
+									style={{ margin: '10px 0px' }}>
+									<img src={googleLogo} style={{
+										width:'80px', 
+										cursor: googleHover ? 'pointer' : 'default',
+										scale: googleHover ? '1.1' : '1'
+									}}/>
+								</div>
+								<div
+									onMouseEnter={hoverInNaver}
+									onMouseLeave={hoverOutNaver}
+									style={{ margin: '10px 0px' }}>
+									<img src={naverLogo} style={{
+										width:'80px',
+										cursor: naverHover ? 'pointer' : 'default',
+										scale: naverHover ? '1.1' : '1'
+									}}/>
+								</div>
+								<div
+									// 테스트용 수정해야함
+									// onClick={() => kakaoLogin()}
+									onMouseEnter={hoverInKakao}
+									onMouseLeave={hoverOutKakao}
+									style={{ margin: '10px 0px' }}>
+									<img src={kakaoLogo} style={{
+										width:'80px',
+										cursor: kakaoHover ? 'pointer' : 'default',
+										scale: kakaoHover ? '1.1' : '1'
+									}}/>
+								</div>
+
+								{/* <div
 									onMouseEnter={hoverInGoogle}
 									onMouseLeave={hoverOutGoogle}
 									style={{ cursor: googleHover ? 'pointer' : 'default', margin: '10px 0px' }}>
@@ -107,7 +144,7 @@ function LoginModal({open, onClose}) {
 									{
 										kakaoHover ? (<div style={{ backgroundColor: 'rgba(128, 128, 128, 0.5)', width: '100%', height: '100%', borderRadius: '12px', zIndex: 100, position: 'absolute', top: 0 }} />) : null
 									}
-								</div>
+								</div> */}
 							</div>
 						</div>
 					</Box>
@@ -134,19 +171,19 @@ function SecondModal() {
 	useEffect(() => {
 		if (skills.length == 0) {
 			axios.get('http://i10a810.p.ssafy.io:4000/tags/v1/members')
-			.then((res) => {
-				let loadedSkills = res.data.result.tagList.map((item) => item)
-				setSkills(loadedSkills)
-			})
-			.catch((err) => console.log(err))
-		} 
+				.then((res) => {
+					let loadedSkills = res.data.result.tagList.map((item) => item)
+					setSkills(loadedSkills)
+				})
+				.catch((err) => console.log(err))
+		}
 		if (targetJobs.length == 0) {
 			axios.get('http://i10a810.p.ssafy.io:4000/jobs/v1')
-			.then((res) =>{
-				let loadedJobs = res.data.result.jobList.map((item) => item)
-				setTargetJobs(loadedJobs)
-			})
-			.catch((err) => console.log(err))
+				.then((res) => {
+					let loadedJobs = res.data.result.jobList.map((item) => item)
+					setTargetJobs(loadedJobs)
+				})
+				.catch((err) => console.log(err))
 		}
 	}, [])
 
@@ -207,7 +244,7 @@ function SecondModal() {
 					Swal.fire({
 						title: "회원가입 완료",
 						icon: "success"
-					}) .then((a) => window.location.reload())
+					}).then((a) => window.location.reload())
 				})
 				.catch((err) => console.log(err))
 		}
