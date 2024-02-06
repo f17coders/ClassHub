@@ -68,7 +68,7 @@ public class MemberController {
 
     @Operation(summary = "내가 참여중인 스터디 목록 조회")
     @GetMapping("/v1/studies/participation")
-    public ResponseEntity<BaseResponse<List<StudyBaseRes>>> updateInformation(
+    public ResponseEntity<BaseResponse<List<StudyBaseRes>>> getStudyList(
         @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
         List<StudyBaseRes> studyBaseResList = memberService.getStudyList(memberSecurityDTO.toMember());
 
