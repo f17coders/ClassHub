@@ -48,7 +48,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
             ))
             .from(studyMember)
             .join(studyMember.member, member)
-            .join(member.job, job)
+            .leftJoin(member.job, job)
             .where(studyMember.study.studyId.eq(studyId))
             .fetch();
     }

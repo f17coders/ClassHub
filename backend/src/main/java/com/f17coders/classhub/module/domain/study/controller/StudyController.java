@@ -73,7 +73,7 @@ public class StudyController {
     }
 
     @Operation(summary = "스터디룸 정보 수정")
-    @PatchMapping
+    @PutMapping
     public ResponseEntity<BaseResponse<Integer>> updateStudy(
         @RequestBody StudyUpdateReq studyUpdateReq) throws IOException {
 
