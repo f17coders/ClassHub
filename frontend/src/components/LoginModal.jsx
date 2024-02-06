@@ -99,7 +99,7 @@ function LoginModal({open, onClose}) {
 								</div>
 								<div
 									// 테스트용 수정해야함
-									onClick={() => setOrder(2)}
+									// onClick={() => kakaoLogin()}
 									onMouseEnter={hoverInKakao}
 									onMouseLeave={hoverOutKakao}
 									style={{ cursor: kakaoHover ? 'pointer' : 'default', margin: '10px 0px', position: 'relative' }}>
