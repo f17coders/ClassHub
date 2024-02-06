@@ -96,20 +96,24 @@ function NavbarComponent() {
 
 
 	  useEffect(() => {
-		console.log('실행되낭')
-		const getAccessToken = async () => {
-			try {
-				const code = new URL(window.location.href).searchParams.get('code');
-				if (code) {
-				  setAccessToken(code);
-				  console.log(accessToken)
-				  localStorage.setItem("token", code);
-				  await loadUserInfo(code);
-				  navigate('/');
-				}
-			  } catch (error) {
-				console.error("카카오 로그인 에러:", error);
-			  }
+		try {
+		  // 컴포넌트가 마운트되면서 리다이렉트된 URL에서 AccessToken을 처리
+		//   const token = getAccessTokenFromRedirectURL();
+			const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDk3Nzc3MzEsImlhdCI6MTcwNzE4NTczMSwicm9sZXMiOlsiUk9MRSJdLCJtZW1iZXJJZCI6IjE2In0.azeezniWcI2m35YuTKq9oyO7b3n81Z-Yi4XeSsQ0C5Y";
+		  if (accessToken) {
+			setAccessToken(token);
+			console.log(accessToken);
+			// console.log(token);
+			localStorage.setItem("token", accessToken);
+			// loadUserInfo(token);
+			// history.push('/main');  // 원하는 페이지로 리다이렉트
+			navigate('/'); //메인 페이지로 리다이렉트
+		  } else {
+			throw new Error('Missing access token');
+		  }
+		} catch (error) {
+		  console.error("카카오 로그인 에러:", error);
+		//   history.push("/");
 		}
 		getAccessToken();
 	  }, []);

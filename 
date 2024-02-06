@@ -1,0 +1,225 @@
+[33mcommit fa8a676bd18013dfd8be6f03027d990cac4e2372[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeat/add-security[m[33m)[m
+Author: yeji <yeji1107@naver.com>
+Date:   Tue Feb 6 17:08:04 2024 +0900
+
+    S10P12A810-332 [feat] 강의 상세페이지 수정 및 마이페이지 페이지 하나 추가
+
+[33mcommit 91f65bd727e5adfc64bfcc8b2e3a130c88b9daad[m[33m ([m[1;31morigin/develop[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: 정유경 <kadie@naver.com>
+Date:   Tue Feb 6 16:23:12 2024 +0900
+
+    [fix] oauth 구현중
+    * [fix] oauth 구현중
+
+[33mcommit 342b72a84d069fc6861fb3dbefec5bafc924106e[m
+Author: 하동준 <djh0211@konkuk.ac.kr>
+Date:   Tue Feb 6 15:02:34 2024 +0900
+
+    [feat] 강의 정렬 기능 외 모든 api개발 완료
+    * S10P12A810-323 [fix] api path 수정 및 Token 적용
+    
+    * [fix] Security 도입으로 인한 Controller 수정 및 Member Service 수정
+    * [feat] /api/*/v0 로 시작하는 api는 토큰 검증하지 않는 기능 구현
+    
+    * [feat] Member 도메인 Security 설정
+    
+    * [feat] registerMember(임시 메서드) 삭제
+    
+    * [fix] MemberSecurityDTO에 provider 추가
+    - 추후 jobId도 추가해야함
+    
+    * [fix] 모든 controller에 Security 적용
+    
+    * S10P12A810-323 [fix] 태그 top5기능 단순화
+    
+    * [feat] oauth kakao 링크 연결
+    
+    * S10P12A810-323 [fix] api path 수정 및 Token 적용
+    
+    * S10P12A810-323 [fix] 태그 top5기능 단순화
+    
+    * [fix] Security 도입으로 인한 Controller 수정 및 Member Service 수정
+    * [feat] /api/*/v0 로 시작하는 api는 토큰 검증하지 않는 기능 구현
+    
+    * [feat] Member 도메인 Security 설정
+    
+    * [feat] registerMember(임시 메서드) 삭제
+    
+    * [fix] MemberSecurityDTO에 provider 추가
+    - 추후 jobId도 추가해야함
+    
+    * [fix] 모든 controller에 Security 적용
+    
+    * S10P12A810-323 [feat] 리뷰 등록, 수정, 삭제, 읽기 api 구현
+    
+    * S10P12A810-323 [fix] 태그 top5기능 단순화
+
+[33mcommit 902aa5abafc7da3214887b50216b704d195023a7[m
+Author: 남수진 <a25062401@gmail.com>
+Date:   Tue Feb 6 14:18:27 2024 +0900
+
+    [fix] 스터디룸 Patch 메서드 -> Put으로 변경
+    * [fix] 스터디룸 Patch 메서드 -> Put으로 변경
+
+[33mcommit 9a25fb51bc02e1e48ffad39dfd4eecded11487e2[m
+Author: 정유경 <kadie@naver.com>
+Date:   Tue Feb 6 14:10:49 2024 +0900
+
+    [fix] 오타 수정 및 patch 메서드에서 put으로 변경
+    * [fix] 오타 수정 및 patch 메서드에서 put으로 변경
+
+[33mcommit 6b219c46bb56b1e5791ea0e3f60971bce2e0a459[m[33m ([m[1;32mdevelop[m[33m)[m
+Author: 정유경 <kadie@naver.com>
+Date:   Tue Feb 6 13:03:54 2024 +0900
+
+    [feat] Authorization에 Access Token 받아오는 것으로 수정
+    * [feat] Authorization에 Access Token 받아오는 것으로 수정
+
+[33mcommit d6063f674cc84ce1464494ecb43773bff703c1e8[m
+Author: 정승환 <seunghw2@naver.com>
+Date:   Tue Feb 6 13:01:05 2024 +0900
+
+    S10P12A810-310 [chore] TokenCheckFilter에 frontPage log 출력 코드 추가
+    * [chore] TokenCheckFilter에 frontPage log 출력 코드 추가
+
+[33mcommit d270d773916222751800110468118d1d696434b9[m
+Author: 정승환 <seunghw2@naver.com>
+Date:   Tue Feb 6 12:56:27 2024 +0900
+
+    [chore] TokenCheckFilter에 log 출력 코드 추가
+    * [chore] TokenCheckFilter에 log 출력 코드 추가
+
+[33mcommit edb138edb0d1d601241f0f98c37066a7c35e776b[m
+Author: 김예지 <yeji1107@naver.com>
+Date:   Tue Feb 6 12:53:20 2024 +0900
+
+    S10P12A810-334 [feat] 강의 검색 해시태그 추가 및 페이지네이션 적용
+    * S10P12A810-334 [feat] 강의 검색 해시태그 추가 및 페이지네이션 적용
+
+[33mcommit 67add9c243ed83a983cf5bff0b0a457a6b6b0571[m
+Author: 김예지 <yeji1107@naver.com>
+Date:   Tue Feb 6 00:37:15 2024 +0900
+
+    S10P12A810-329 [feat] 메인페이지 검색 API 연결
+    * S10P12A810-329 [feat] 메인페이지 검색 API 연결
+
+[33mcommit 9336199ec2026cca7adc31283684df56c5fc67e4[m
+Author: 정승환 <seunghw2@naver.com>
+Date:   Mon Feb 5 20:36:31 2024 +0900
+
+    [fix] Security 도입으로 인한 Controller 수정 및 Member Service 수정
+    * [feat] /api/*/v0 로 시작하는 api는 토큰 검증하지 않는 기능 구현
+    
+    * [feat] Member 도메인 Security 설정
+    
+    * [feat] registerMember(임시 메서드) 삭제
+    
+    * [fix] MemberSecurityDTO에 provider 추가
+    - 추후 jobId도 추가해야함
+    
+    * [fix] 모든 controller에 Security 적용
+
+[33mcommit b9070b596cb8bfe5ea79cde119668f49e66ac64c[m
+Author: 김예지 <yeji1107@naver.com>
+Date:   Mon Feb 5 18:01:57 2024 +0900
+
+    S10P12A810-334 [feat] 메인페이지 수정 및 메인페이지 강의 검색
+    * S10P12A810-334 [feat] 메인페이지 수정 및 메인페이지 강의 검색
+
+[33mcommit 7521e5185a465df4108512bdebf29e16e19c3e18[m
+Author: 정유경 <kadie@naver.com>
+Date:   Mon Feb 5 16:35:29 2024 +0900
+
+    [feat] Kakao Access Token 가져오기
+    * [feat] oauth kakao access token 가져오기 성공
+    
+    * [feat] Oauth - kakao 로그인 회원 가입 구현
+    
+    * [feat] oauth kakao access token 가져오기 성공
+    
+    * [feat] Oauth - kakao 로그인 회원 가입 구현
+
+[33mcommit 586dc76c0bd31295bd817ba35ecd49b7566634ba[m
+Merge: 7f9d2bf 152102d
+Author: YuKyung-Chung <jyk4523@gmail.com>
+Date:   Mon Feb 5 16:30:25 2024 +0900
+
+    [fix] 충돌 해결
+
+[33mcommit 7f9d2bf2b8abc7cb83cb32efe4b5cf96057ccafe[m
+Author: YuKyung-Chung <jyk4523@gmail.com>
+Date:   Mon Feb 5 15:38:34 2024 +0900
+
+    [feat] 스터디룸 채널 조회 및 수정 기능 구현중
+
+[33mcommit 1ba464bca90ba208d4d8129e01ec3335a08f7d49[m
+Author: YuKyung-Chung <jyk4523@gmail.com>
+Date:   Mon Feb 5 11:18:50 2024 +0900
+
+    [feat] oauth kakao 링크 연결
+
+[33mcommit a47d2a067aad1f86aff7c016fc278c8c2d1ae596[m
+Author: 김예지 <yeji1107@naver.com>
+Date:   Mon Feb 5 16:18:39 2024 +0900
+
+    [feat] 강의 상세 페이지 리뷰 API 연결
+    * [feat] 강의 상세 페이지 리뷰 API 연결
+
+[33mcommit 0aac902d1085ee7d12ca836908b8c56bbc4ab1b5[m
+Author: 하동준 <djh0211@konkuk.ac.kr>
+Date:   Mon Feb 5 15:57:16 2024 +0900
+
+    S10P12A810-323 [fix] delete duplicate code line in MemberRepository
+    * S10P12A810-323 [fix] delete duplicate code line in MemberRepository
+
+[33mcommit 1acebe7cc04b9fb33d31f4e4d15a550fd57bd566[m
+Author: 하동준 <djh0211@konkuk.ac.kr>
+Date:   Mon Feb 5 15:50:31 2024 +0900
+
+    [fix] conflict fix
+    * S10P12A810-323 [fix] conflict fix delete security things
+    
+    * S10P12A810-323 [feat] 메인 - 관심 직무 top5강의 추천 기능 구현
+    
+    * [Feat] oauth 구현 - 카카오
+    * [chore] CrossOrigin 수정 및 구글 로그인 관련 코드 삭제
+    
+    * [feat] 카카오 로그인 임시 구현
+    
+    * S10P12A810-323 [fix] 컨벤션 적용
+    
+    * S10P12A810-323 [fix] 리뷰 - 우리 사이트 리뷰 작성 시각 데이터 추가
+    
+    * S10P12A810-323 [feat] 메인 - 관심 직무 top5강의 추천 기능 구현
+    
+    * S10P12A810-327 [feat] 메인 - 비로그인유저 대상 관심 기술 top5강의 추천 기능 구현
+    
+    * [feat] 메인 - 관심기술태그 top5 강의 조회
+
+[33mcommit 152102d2fbdebfb2b2adf8ae140f1a1d0735e53c[m
+Author: YuKyung-Chung <jyk4523@gmail.com>
+Date:   Mon Feb 5 15:38:34 2024 +0900
+
+    [feat] 스터디룸 채널 조회 및 수정 기능 구현중
+
+[33mcommit 6507e692475185270eac6983d6bdfc5ee92c8d76[m
+Author: YuKyung-Chung <jyk4523@gmail.com>
+Date:   Mon Feb 5 11:18:50 2024 +0900
+
+    [feat] oauth kakao 링크 연결
+
+[33mcommit ed70295383ba883ad7711e79adca1f18b1543b7b[m
+Author: 남수진 <a25062401@gmail.com>
+Date:   Mon Feb 5 09:25:34 2024 +0900
+
+    S10P12A810-267 [feat] 스터디룸 초대코드 일치여부 조회
+    * [feat] 스터디룸 초대코드 일치여부 조회
+
+[33mcommit 70426026be358e850bdcc2ae7f94eb2d95505388[m
+Author: YuKyung-Chung <jyk4523@gmail.com>
+Date:   Mon Feb 5 09:23:16 2024 +0900
+
+    [feat] 스터디룸 리스트 스크롤 기능 구현
+
+[33mcommit a150a8555f66c5fd2dc6c11f83f6aa3f20816a8d[m
+Author: 정승환 <seu
