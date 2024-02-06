@@ -39,6 +39,8 @@ export default function StudyRoomModifyModal({ data, studyModify, studyModifyClo
   const [descriptionError, setDescriptionError] = useState(false);
   const [tagListError, setTagListError] = useState(false);
 
+  const accessToken = localStorage.getItem('token');
+
   // 스터디룸 수정 함수
   const modifyStudyRoom = function() {
     axios.patch('https://i10a810.p.ssafy.io/api/studies/v1',
@@ -52,8 +54,8 @@ export default function StudyRoomModifyModal({ data, studyModify, studyModifyClo
       "lectureId": lectureId
     }, {
       headers: {
-        AUTHORIZATION : 9
-      }
+        Authorization: `Bearer ${accessToken}`,
+      },
     })
     .then((res) => {
       console.log(res)

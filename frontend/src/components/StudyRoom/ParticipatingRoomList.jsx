@@ -18,12 +18,14 @@ export default function ParticipatingRoomList(){
     setSelectedIndex(index);
   };
 
+  const accessToken = localStorage.getItem('token');
+
   // 참여중인 스터디 목록 데이터 -> API에서 받아올것!
   useEffect(() => {
     axios.get(`https://i10a810.p.ssafy.io/api/members/v1/studies/participation`, {
       headers: {
-        AUTHORIZATION: '9'
-      }
+        Authorization: `Bearer ${accessToken}`,
+      },
     })
     .then((res) => {
       console.log(res.data.result)

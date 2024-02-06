@@ -23,6 +23,7 @@ const style = {
 
 export default function StudyRoomChannelModify({channelId, studyRoomChannelModify,channelModifyClose}){
     const [content, setContent] = useState(''); //수정될 채널명
+    const accessToken = localStorage.getItem('token');
 
 
     // 채널 정보 수정
@@ -30,7 +31,11 @@ export default function StudyRoomChannelModify({channelId, studyRoomChannelModif
             axios.put(`https://i10a810.p.ssafy.io/api/studies/v1/channels`,{
                 "channelId": channelId,
                 "name": content,
-            })
+            }, {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                },
+              })
             .then((response)=> {
                 console.log(response.data.result)
                 channelModifyClose();

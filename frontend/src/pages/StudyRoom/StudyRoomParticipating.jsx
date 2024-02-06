@@ -25,10 +25,16 @@ export default function StudyRoomParticipating(){
   const navigate = useNavigate();
   const [inviteCode, setInviteCode] = useState('');
   const [channels, setChannels] = useState([]);
+  const accessToken = localStorage.getItem('token');
+
 
     // 스터디룸 채널정보 가져오기
 	useEffect(() => {
-    axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/channels/${studyId}`)
+    axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/channels/${studyId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
     .then((response)=> {
         console.log(response.data.result)
         setChannels(response.data.result)
@@ -39,7 +45,11 @@ export default function StudyRoomParticipating(){
   const [data, setData] = useState([])
   // 스터디룸 ID로 상세정보 가져오기
 	useEffect(() => {
-    axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/detail/${studyId}`)
+    axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/detail/${studyId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
     .then((response)=> {
         console.log(response.data.result)
         setData(response.data.result)
@@ -125,7 +135,11 @@ export default function StudyRoomParticipating(){
     //비공개방이면
     else{
       try {
-        const res = await axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/invitation-code/${studyId}`);
+        const res = await axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/invitation-code/${studyId}`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
         const inviteCode = res.data.result;
         await navigator.clipboard.writeText(inviteCode);
         // 복사되었습니다!
@@ -184,11 +198,10 @@ export default function StudyRoomParticipating(){
 
   // 스터디룸 삭제
   const exitStudyRoom = (studyId) =>{
-    axios.delete(`https://i10a810.p.ssafy.io/api/studies/v1/${studyId}`, 
-    {
+    axios.delete(`https://i10a810.p.ssafy.io/api/studies/v1/${studyId}`, {
       headers: {
-        AUTHORIZATION: '9'
-      }
+        Authorization: `Bearer ${accessToken}`,
+      },
     })
     .then((res) => {
       console.log(studyId + ' 삭제됨')

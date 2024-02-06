@@ -15,10 +15,16 @@ import withReactContent from 'sweetalert2-react-content'
 export default function StudyRoomRecruit() {
   const MySwal = withReactContent(Swal);
   const [data, setData] = useState([])
+  const accessToken = localStorage.getItem('token');
+
 
   // 처음에 axios 요청으로 전체 목록 가져오기
 	useEffect(() => {
-    axios.get('https://i10a810.p.ssafy.io/api/studies/v1')
+    axios.get('https://i10a810.p.ssafy.io/api/studies/v1', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
     .then((response)=> {
         console.log(response.data.result.studyList)
         setData(response.data.result.studyList)

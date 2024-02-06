@@ -43,6 +43,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
     const [descriptionError, setDescriptionError] = useState(false);
     const [tagListError, setTagListError] = useState(false);
 
+    const accessToken = localStorage.getItem('token');
     // 생성 함수
     const createStudyRoom = function() {
       // console.log(lectureId)
@@ -56,8 +57,8 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
         "lectureId": lectureId
       }, {
         headers: {
-          AUTHORIZATION : 9
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
       .then((res) => {
         console.log(res)
