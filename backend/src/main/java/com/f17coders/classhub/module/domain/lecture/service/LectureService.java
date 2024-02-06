@@ -20,9 +20,7 @@ public interface LectureService {
 		String site,
 		String order, Pageable pageable) throws BaseExceptionHandler, IOException;
 
-	LectureListTagRes getLecturesByInterestTag(int memberId);
-
-	LectureListTagRes getLecturesByRandomTag();
+	LectureListTagRes getTop5LecturesByTag(int tagId);
 
 	LectureListJobRes getLecturesByFamousJob();
 
