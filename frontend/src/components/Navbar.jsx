@@ -73,50 +73,29 @@ function NavbarComponent() {
 
 	const [accessToken, setAccessToken] = useState('');
 	const handleLoginClick = () => {
-		console.log('실행되낭')
-
+		console.log('로그인 버튼 클릭')
 		window.location.href = 'https://i10a810.p.ssafy.io/login/oauth2/authorization/kakao';
-		// window.location.href = 'https://i10a810.p.ssafy.io/login/oauth2/authorization/kakao?client_id=redirect_uri=https://i10a810.p.ssafy.io/login/oauth2/code/kakao';
 	  };
-
-	  const loadUserInfo = (token) => {
-		return axios
-		  .get(`https://i10a810.p.ssafy.io/api/members/v1`, {
-			headers: {
-			  Authorization: `Bearer ${token}`,
-			},
-		  })
-		  .then((response) => response.data)
-		  .then((data) => {
-			const userInfo = data["result"];
-			console.log("[userInfo] >> ", userInfo);
-			localStorage.setItem("loginUser", JSON.stringify(userInfo));
-		  });
-	  };
-
 
 	  useEffect(() => {
-		try {
-		  // 컴포넌트가 마운트되면서 리다이렉트된 URL에서 AccessToken을 처리
-		//   const token = getAccessTokenFromRedirectURL();
-			const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDk3Nzc3MzEsImlhdCI6MTcwNzE4NTczMSwicm9sZXMiOlsiUk9MRSJdLCJtZW1iZXJJZCI6IjE2In0.azeezniWcI2m35YuTKq9oyO7b3n81Z-Yi4XeSsQ0C5Y";
-		  if (accessToken) {
-			setAccessToken(token);
+			setAccessToken(new URL(window.location.href).searchParams.get(
+				'Authorization'
+			));
 			console.log(accessToken);
-			// console.log(token);
-			localStorage.setItem("token", accessToken);
-			// loadUserInfo(token);
-			// history.push('/main');  // 원하는 페이지로 리다이렉트
-			navigate('/'); //메인 페이지로 리다이렉트
-		  } else {
-			throw new Error('Missing access token');
-		  }
-		} catch (error) {
-		  console.error("카카오 로그인 에러:", error);
-		//   history.push("/");
+
+		    if(accessToken) {
+			console.log('useEffect 실행')
+			try {
+				//   setAccessToken(code);
+				  console.log(accessToken)
+				  localStorage.setItem("token", accessToken);
+				// loadUserInfo(code);
+				  navigate('/');
+			  } catch (error) {
+				console.error("카카오 로그인 에러:", error);
+			  }
 		}
-		getAccessToken();
-	  }, []);
+	  }, [accessToken]);
 
 		return (
 			<Appbar
