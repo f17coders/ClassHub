@@ -10,6 +10,7 @@ import com.f17coders.classhub.module.domain.lectureLike.LectureLike;
 import com.f17coders.classhub.module.domain.memberTag.MemberTag;
 import com.f17coders.classhub.module.domain.review.Review;
 import com.f17coders.classhub.module.domain.studyMember.StudyMember;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -89,7 +90,7 @@ public class Member extends BaseEntity {
     private List<CommunityScrap> communityScrapList = new ArrayList<>();
 
     // Member - MemberTag 연관 관계
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberTag> memberTagList = new ArrayList<>();
 
     // Member - StudyMember 연관관계
@@ -118,7 +119,8 @@ public class Member extends BaseEntity {
     }
 
     @Builder(builderMethodName = "fromUser", buildMethodName = "get")
-    public Member(int memberId, String socialId, String nickname, String profileImage, String provider) {
+    public Member(int memberId, String socialId, String nickname, String profileImage,
+        String provider) {
         this.memberId = memberId;
         this.socialId = socialId;
         this.nickname = nickname;
