@@ -93,7 +93,8 @@ public class MemberServiceImpl implements MemberService {
         // 관심 태그 설정
         memberAddInfoReq.tagList().stream()
             .map(tagId -> tagRepository.findById(tagId)
-                .orElseThrow(() -> new BaseExceptionHandler("존재하지 않는 태그입니다.", ErrorCode.NOT_FOUND_ERROR)))
+                .orElseThrow(
+                    () -> new BaseExceptionHandler("존재하지 않는 태그입니다.", ErrorCode.NOT_FOUND_ERROR)))
             .forEach(tag -> memberTagService.registerMemberTag(member, tag));
 
         memberRepository.save(member);
@@ -114,11 +115,10 @@ public class MemberServiceImpl implements MemberService {
         member.setMemberTagList(new ArrayList<>());
 
         // 새로운 관심 태그 설정
-        for (int tagId : memberUpdateInfoReq.tagList()) {
-            Tag tag = tagRepository.findById(tagId).orElseThrow(() -> new BaseExceptionHandler(
-                ErrorCode.NOT_FOUND_ERROR));
-            memberTagService.registerMemberTag(member, tag);
-        }
+        memberUpdateInfoReq.tagList().stream()
+            .map(tagId -> tagRepository.findById(tagId).orElseThrow(() -> new BaseExceptionHandler(
+                "존재하지 않는 태그입니다.", ErrorCode.NOT_FOUND_ERROR)))
+            .forEach(tag -> memberTagService.registerMemberTag(member, tag));
     }
 
     @Override
