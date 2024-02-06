@@ -225,7 +225,6 @@ function NavbarComponent() {
 							)
 						}
 						<Button onClick={handleLoginClick}>
-						<Button onClick={handleLoginClick}>
 							로그인
 						</Button>
 					</Grid>
