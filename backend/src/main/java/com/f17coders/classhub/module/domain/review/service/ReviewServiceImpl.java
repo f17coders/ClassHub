@@ -32,8 +32,8 @@ public class ReviewServiceImpl implements ReviewService {
 	private final LectureRepository lectureRepository;
 
 	@Override
-	public ReviewListRes getReviewList(int lectureId, Pageable pageable) {
-		List<ReviewRes> reviewList = reviewRepository.findReviewsByLectureIdJoinMemberId(lectureId,
+	public ReviewListRes getReviewList(int lectureId, String order, Pageable pageable) {
+		List<ReviewRes> reviewList = reviewRepository.findReviewsByLectureIdJoinMemberId(lectureId,order,
 			pageable);
 
 		int totalPages = (int) Math.ceil(
@@ -46,9 +46,9 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public SiteReviewListRes getSiteReviewList(int lectureId, Pageable pageable) {
+	public SiteReviewListRes getSiteReviewList(int lectureId, String order, Pageable pageable) {
 		List<SiteReviewRes> siteReviewList = siteReviewRepository.findSiteReviewsByLectureId(
-			lectureId,
+			lectureId, order,
 			pageable);
 
 		int totalPages = (int) Math.ceil(

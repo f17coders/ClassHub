@@ -6,6 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface SiteReviewRepositoryCustom {
 
-	List<SiteReviewRes> findSiteReviewsByLectureId(int lectureId, Pageable pageable);
+	List<SiteReviewRes> findSiteReviewsByLectureId(int lectureId, String order, Pageable pageable);
 	int countSiteReviewByLectureId(int lectureId);
 }

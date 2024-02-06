@@ -6,6 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 public interface ReviewRepositoryCustom {
 
-	List<ReviewRes> findReviewsByLectureIdJoinMemberId(int lectureId, Pageable pageable);
+	List<ReviewRes> findReviewsByLectureIdJoinMemberId(int lectureId, String order, Pageable pageable);
 	int countReviewByLectureId(int lectureId);
 }

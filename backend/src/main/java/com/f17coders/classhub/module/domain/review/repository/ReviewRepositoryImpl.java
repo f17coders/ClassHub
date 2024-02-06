@@ -5,6 +5,7 @@ import static com.f17coders.classhub.module.domain.review.QReview.review;
 
 import com.f17coders.classhub.module.domain.member.dto.response.MemberNickNameImageRes;
 import com.f17coders.classhub.module.domain.review.dto.response.ReviewRes;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -22,7 +23,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 		this.queryFactory = new JPAQueryFactory(em);
 	}
 
-	public List<ReviewRes> findReviewsByLectureIdJoinMemberId(int lectureId, Pageable pageable) {
+	public List<ReviewRes> findReviewsByLectureIdJoinMemberId(int lectureId, String order, Pageable pageable) {
 
 		return queryFactory.select(Projections.constructor(ReviewRes.class,
 				review.reviewId,
@@ -41,6 +42,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 			.innerJoin(member)
 			.on(review.member.memberId.eq(member.memberId))
 			.where(review.lecture.lectureId.eq(lectureId))
+			.orderBy(orderExpression(order))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
@@ -54,4 +56,15 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 			.where(review.lecture.lectureId.eq(lectureId))
 			.fetchFirst());
 	}
+
+	private OrderSpecifier orderExpression(String order) {
+		if (order.equals("lowest-ranking")) {
+			return review.score.asc();
+		} else if (order.equals("latest")) {
+			return review.updateTime.desc();
+		}
+		return review.score.desc();
+
+	}
+
 }
