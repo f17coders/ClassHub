@@ -15,10 +15,6 @@ public interface MemberTagRepository extends JpaRepository<MemberTag, Integer>,
 
 	List<MemberTag> findAllByMember(Member member);
 
-
-	@Query("SELECT mt FROM MemberTag mt WHERE mt.member.memberId = :memberId GROUP BY mt.tag.tagId ORDER BY FUNCTION('RAND') limit 1")
-	MemberTag findRandomMemberTagByMemberId(@Param("memberId") int memberId);
-
     @Query(value = "SELECT mt FROM MemberTag mt GROUP BY mt.tag.tagId ORDER BY COUNT(mt.tag.tagId) DESC LIMIT 5")
     Optional<List<MemberTag>> findRandomFamousMemberTags();
 
