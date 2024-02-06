@@ -1,33 +1,32 @@
 package com.f17coders.classhub.module.domain.message;
 
-import com.f17coders.classhub.module.domain.member.Member;
-import java.time.LocalDateTime;
+import com.f17coders.classhub.module.domain.MongoBaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
 @Document(collection = "message")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Message {
+public class Message extends MongoBaseEntity {
 
     @Id
     private String messageId;
 
     private String text;
-    @DBRef
-    private Member sender;
 
-    @CreatedDate
-    private LocalDateTime createTime;
+    private int sender;
 
-    @LastModifiedDate
-    private LocalDateTime updateTime;
+    static public Message createMessage(int sender, String text) {
+        Message message = new Message();
+
+        message.setSender(sender);
+        message.setText(text);
+
+        return message;
+    }
 }

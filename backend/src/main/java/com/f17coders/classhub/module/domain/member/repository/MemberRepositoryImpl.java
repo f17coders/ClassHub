@@ -52,4 +52,22 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
             .where(studyMember.study.studyId.eq(studyId))
             .fetch();
     }
+
+    @Override
+    public MemberStudyInfoRes findMemberStudyInfoResByMemberId(int memberId) {
+        return queryFactory
+            .select(Projections.constructor(MemberStudyInfoRes.class,
+                member.memberId,
+                member.nickname,
+                member.profileImage,
+                Projections.constructor(JobRes.class,
+                    job.jobId,
+                    job.name
+                )
+            ))
+            .from(member)
+            .leftJoin(member.job, job)
+            .where(member.memberId.eq(memberId))
+            .fetchFirst();
+    }
 }

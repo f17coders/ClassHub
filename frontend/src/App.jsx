@@ -46,7 +46,7 @@ function App() {
             <Route index element={<StudyRoomRecruit />} />
             <Route path="recruit" element={<StudyRoomRecruit />} />
             <Route path="participating/:studyId" element={<StudyRoomParticipating/>} />
-            <Route path="message" element={<StudyRoomPrivateMessage />} />
+            <Route path="message/:personalChatId" element={<StudyRoomPrivateMessage />} />
           </Route>
           <Route path='/mypage' element={<MyPage/>}>
             <Route index element={<MyPageLecture/>} />
