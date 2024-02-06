@@ -62,7 +62,7 @@ public class LectureController {
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectureReadRes);
 	}
 
-	@Operation(summary = "강의 목록 조회 - 더미 데이터 구현(태그,order미구현)")
+	@Operation(summary = "강의 목록 조회 - 더미 데이터 구현")
 	@GetMapping("/v0")
 	public ResponseEntity<BaseResponse<LectureListRes>> getLectureList(
 		@RequestParam(value = "category", required = false) Integer categoryId,
