@@ -15,15 +15,14 @@ import com.f17coders.classhub.module.domain.memberTag.repository.MemberTagReposi
 import com.f17coders.classhub.module.domain.memberTag.service.MemberTagService;
 import com.f17coders.classhub.module.domain.study.dto.response.StudyBaseRes;
 import com.f17coders.classhub.module.domain.study.repository.StudyRepository;
-import com.f17coders.classhub.module.domain.tag.Tag;
 import com.f17coders.classhub.module.domain.tag.dto.response.TagRes;
 import com.f17coders.classhub.module.domain.tag.repository.TagRepository;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -101,18 +100,28 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional
     public void updateInformation(MemberUpdateInfoReq memberUpdateInfoReq, Member member)
         throws BaseExceptionHandler, IOException {
-        // 희망 직무 설젇
-        Job job = jobRepository.findById(
-            memberUpdateInfoReq.jobId()).orElseThrow(() -> new BaseExceptionHandler(
-            ErrorCode.NOT_FOUND_ERROR));// TODO : fetchJoin으로 MemberTag 가져와야할듯
 
-        member.putJob(job);
+        Member memberWithJob = memberRepository.findByIdFetchJoinJob(member.getMemberId())
+            .orElseThrow(() -> new BaseExceptionHandler
+                ("존재하지 않는 회원입니다.", ErrorCode.NOT_FOUND_ERROR));
+
+        // 희망 직무 조회
+        Job job = jobRepository.findById(memberUpdateInfoReq.jobId())
+            .orElseThrow(() -> new BaseExceptionHandler
+                ("존재하지 않는 태그입니다.",
+                    ErrorCode.NOT_FOUND_ERROR));
+
+        // 기존 희망 직무 삭제 및 새 희망 직무 설정
+        job.getMemberList().remove(memberWithJob);
+        memberWithJob.putJob(job);
 
         // 기존 관심 태그 삭제
-        memberTagRepository.deleteAll(member.getMemberTagList());
-        member.setMemberTagList(new ArrayList<>());
+        System.out.println(
+            "memberWithJob.getMemberTagList() = " + memberWithJob.getMemberTagList());
+        memberWithJob.getMemberTagList().clear();
 
         // 새로운 관심 태그 설정
         memberUpdateInfoReq.tagList().stream()
