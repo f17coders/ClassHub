@@ -192,18 +192,4 @@ public class LectureServiceImpl implements LectureService {
 			.build();
 	}
 
-	private Map<String, Object> parseJsonData(String jsonData) {
-		// JSON 데이터를 파싱하여 Map으로 변환하거나, 원하는 형태로 가공
-		// 예시: JSON 문자열을 Map으로 변환하는 방법
-		ObjectMapper objectMapper = new ObjectMapper();
-		try {
-			return objectMapper.readValue(jsonData, new TypeReference<>() {});
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-
-		return Collections.emptyMap(); // 예외 처리를 위한 빈 Map 반환
-	}
-
-
 }

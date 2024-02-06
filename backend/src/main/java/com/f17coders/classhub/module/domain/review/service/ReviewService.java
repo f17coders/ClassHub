@@ -14,8 +14,10 @@ public interface ReviewService {
 	SiteReviewListRes getSiteReviewList(int lectureId, Pageable pageable);
 
 	int registerReview(int lectureId, ReviewRegisterReq reviewRegisterReq, Member member);
+
 	int updateReview(int lectureId, ReviewRegisterReq reviewRegisterReq, Member member);
-	void deleteReview(int reviewId, int memberId);
+
+	void deleteReview(int lectureId, int memberId);
 
 	ReviewRes getMyLectureReview(int lectureId, Member member);
 

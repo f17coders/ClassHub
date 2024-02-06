@@ -105,8 +105,6 @@ public class LectureController {
 	public ResponseEntity<BaseResponse<LectureListTagRes>> get5LecturesByInterestTag(
 		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO,
 		@RequestParam(value = "tagId", required = true) int tagId) throws IOException {
-		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
-		@RequestParam(value = "tagId", required = true) int tagId) throws IOException {
 
 		LectureListTagRes lectures = lectureService.getTop5LecturesByTag(
 			tagId);

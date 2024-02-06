@@ -94,7 +94,8 @@ public class ReviewServiceImpl implements ReviewService {
 			member.getMemberId(), lectureId);
 
 		if (!isReviewExist.isPresent()) {
-			throw new BaseExceptionHandler("해당 유저의 리뷰를 찾을수 없습니다.",ErrorCode.NOT_FOUND_ITEM_EXCEPTION);
+			throw new BaseExceptionHandler("해당 유저의 리뷰를 찾을수 없습니다.",
+				ErrorCode.NOT_FOUND_ITEM_EXCEPTION);
 			// reviewRepository.save(existingReview); // 이 부분은 필요하지 않을 수 있음
 		}
 
@@ -106,21 +107,18 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public void deleteReview(int reviewId, int memberId) {
-		Optional<Review> review = reviewRepository.findById(reviewId);
-		if (!review.isPresent()) {
+	public void deleteReview(int lectureId, int memberId) {
+		Optional<Review> isReviewExist = reviewRepository.findByMember_MemberIdAndLecture_LectureId(
+			memberId, lectureId);
+		if (!isReviewExist.isPresent()) {
 			// 엔티티가 존재하지 않네. 사고다.
-			throw new BaseExceptionHandler("reviewId=" + reviewId + " 해당 리뷰가 존재하지 않습니다.",
+			throw new BaseExceptionHandler("해당 리뷰가 존재하지 않습니다.",
 				ErrorCode.INTERNAL_SERVER_ERROR);
 		}
 
-		if (review.get().getMember().getMemberId() != memberId) {
-			// 지우려는 사람이 왜 작성자가 아니야?
-			throw new BaseExceptionHandler("해당 리뷰는 요청 사용자의 리뷰가 아닙니다.",
-				ErrorCode.INTERNAL_SERVER_ERROR);
-		}
+		Review review = isReviewExist.get();
 
-		reviewRepository.delete(review.get());
+		reviewRepository.delete(review);
 	}
 
 	@Override

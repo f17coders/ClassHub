@@ -11,12 +11,14 @@ import com.f17coders.classhub.module.domain.review.dto.request.ReviewRegisterReq
 import com.f17coders.classhub.module.domain.review.dto.response.ReviewRes;
 import com.f17coders.classhub.module.domain.review.dto.response.SiteReviewListRes;
 import com.f17coders.classhub.module.domain.review.service.ReviewService;
+import com.f17coders.classhub.module.security.dto.MemberSecurityDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,9 +71,11 @@ public class ReviewController {
 	@GetMapping("/v1/{lectureId}")
 	public ResponseEntity<BaseResponse<ReviewRes>> getMyLectureReview(
 		@PathVariable("lectureId") int lectureId,
-		@RequestHeader("X-My-Int-Header") int memberId) throws IOException {
-		Member member = memberRepository.findById(memberId)
-			.orElseThrow(() -> new BaseExceptionHandler("memberId="+memberId+" 인 사용자를 DB에서 찾을수없습니다.",ErrorCode.NOT_FOUND_USER_EXCEPTION));
+		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+		Member member = memberRepository.findById(memberSecurityDTO.getMemberId())
+			.orElseThrow(() -> new BaseExceptionHandler(
+				"memberId=" + memberSecurityDTO.getMemberId() + " 인 사용자를 DB에서 찾을수없습니다.",
+				ErrorCode.NOT_FOUND_USER_EXCEPTION));
 
 		ReviewRes review = reviewService.getMyLectureReview(lectureId, member);
 
@@ -83,9 +87,11 @@ public class ReviewController {
 	public ResponseEntity<BaseResponse<Integer>> registerReview(
 		@PathVariable("lectureId") int lectureId,
 		@RequestBody ReviewRegisterReq reviewRegisterReq,
-		@RequestHeader("X-My-Int-Header") int memberId) throws IOException {
-		Member member = memberRepository.findById(memberId)
-			.orElseThrow(() -> new BaseExceptionHandler("memberId="+memberId+" 인 사용자를 DB에서 찾을수없습니다.",ErrorCode.NOT_FOUND_USER_EXCEPTION));
+		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+		Member member = memberRepository.findById(memberSecurityDTO.getMemberId())
+			.orElseThrow(() -> new BaseExceptionHandler(
+				"memberId=" + memberSecurityDTO.getMemberId() + " 인 사용자를 DB에서 찾을수없습니다.",
+				ErrorCode.NOT_FOUND_USER_EXCEPTION));
 
 		int reviewId = reviewService.registerReview(lectureId, reviewRegisterReq, member);
 
@@ -93,16 +99,18 @@ public class ReviewController {
 	}
 
 	@Operation(summary = "리뷰 삭제")
-	@DeleteMapping("/v1/{reviewId}")
+	@DeleteMapping("/v1/{lectureId}")
 	public ResponseEntity<BaseResponse<Integer>> deleteReview(
-		@PathVariable("reviewId") int reviewId,
-		@RequestHeader("X-My-Int-Header") int memberId) throws IOException {
-		Member member = memberRepository.findById(memberId)
-			.orElseThrow(() -> new BaseExceptionHandler("memberId="+memberId+" 인 사용자를 DB에서 찾을수없습니다.",ErrorCode.NOT_FOUND_USER_EXCEPTION));
+		@PathVariable("lectureId") int lectureId,
+		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+		Member member = memberRepository.findById(memberSecurityDTO.getMemberId())
+			.orElseThrow(() -> new BaseExceptionHandler(
+				"memberId=" + memberSecurityDTO.getMemberId() + " 인 사용자를 DB에서 찾을수없습니다.",
+				ErrorCode.NOT_FOUND_USER_EXCEPTION));
 
-		reviewService.deleteReview(reviewId, memberId);
+		reviewService.deleteReview(lectureId, member.getMemberId());
 
-		return BaseResponse.success(SuccessCode.DELETE_SUCCESS, reviewId);
+		return BaseResponse.success(SuccessCode.DELETE_SUCCESS, lectureId);
 	}
 
 	@Operation(summary = "리뷰 수정")
@@ -110,9 +118,11 @@ public class ReviewController {
 	public ResponseEntity<BaseResponse<Integer>> updateReview(
 		@PathVariable("lectureId") int lectureId,
 		@RequestBody ReviewRegisterReq reviewRegisterReq,
-		@RequestHeader("X-My-Int-Header") int memberId) throws IOException {
-		Member member = memberRepository.findById(memberId)
-			.orElseThrow(() -> new BaseExceptionHandler("memberId="+memberId+" 인 사용자를 DB에서 찾을수없습니다.",ErrorCode.NOT_FOUND_USER_EXCEPTION));
+		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+		Member member = memberRepository.findById(memberSecurityDTO.getMemberId())
+			.orElseThrow(() -> new BaseExceptionHandler(
+				"memberId=" + memberSecurityDTO.getMemberId() + " 인 사용자를 DB에서 찾을수없습니다.",
+				ErrorCode.NOT_FOUND_USER_EXCEPTION));
 
 		int reviewId = reviewService.updateReview(lectureId, reviewRegisterReq, member);
 
