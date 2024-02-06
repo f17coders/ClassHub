@@ -75,20 +75,26 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void addInformation(MemberAddInfoReq memberAddInfoReq, Member member)
         throws BaseExceptionHandler, IOException {
+        // 멤버와 직업 정보 가져오기
+        Member memberWithJob = memberRepository.findByIdFetchJoinJob(member.getMemberId())
+            .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+
+        // 기존 직업 정보가 있다면 예외 처리
+        if (memberWithJob.getJob() != null) {
+            throw new BaseExceptionHandler(ErrorCode.FORBIDDEN_ERROR);
+        }
 
         // 희망 직무 설젇
         Job job = jobRepository.findById(memberAddInfoReq.jobId())
-            .orElseThrow(() -> new BaseExceptionHandler(
-                ErrorCode.NOT_FOUND_ERROR));
+            .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
 
         member.setJob(job);
 
         // 관심 태그 설정
-        for (int tagId : memberAddInfoReq.tagList()) {
-            Tag tag = tagRepository.findById(tagId).orElseThrow(() -> new BaseExceptionHandler(
-                ErrorCode.NOT_FOUND_ERROR));
-            memberTagService.registerMemberTag(member, tag);
-        }
+        memberAddInfoReq.tagList().stream()
+            .map(tagId -> tagRepository.findById(tagId)
+                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR)))
+            .forEach(tag -> memberTagService.registerMemberTag(member, tag));
 
         memberRepository.save(member);
     }
