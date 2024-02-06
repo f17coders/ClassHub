@@ -28,6 +28,7 @@ export default function StudyRoomChannelModal({studyId, studyRoomChannel, channe
     //setStudyRoomChannelModify 열렸는지 여부 관리하는 state
     const [studyRoomChannelModify, setStudyRoomChannelModify] = useState(false);
 
+    const accessToken = localStorage.getItem('token');
     
     //모달 열릴 때 실행되는 콜백 함수
     const channelModifyOpen = (channelId) => {
@@ -39,11 +40,14 @@ export default function StudyRoomChannelModal({studyId, studyRoomChannel, channe
     const channelModifyClose = () => {
         setStudyRoomChannelModify(false);
     }
-
     // 채널 정보 가져오기
     useEffect(() => {
         if(studyRoomChannel){
-            axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/channels/${studyId}`)
+            axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/channels/${studyId}`, {
+                headers: {
+                  Authorization: `Bearer ${accessToken}`,
+                },
+              })
             .then((response)=> {
                 setChannels(response.data.result)
                 console.log(response.data.result)
@@ -76,7 +80,7 @@ export default function StudyRoomChannelModal({studyId, studyRoomChannel, channe
                                     channel.isDelete?
                                     <>
                                     <Tooltip title="수정하기">
-                                        <IconButton onClick={channelModifyOpen} >
+                                        <IconButton onClick={() => channelModifyOpen(channel.channelId)}>
                                             <EditNoteIcon/>
                                         </IconButton>
                                     </Tooltip>
@@ -97,7 +101,7 @@ export default function StudyRoomChannelModal({studyId, studyRoomChannel, channe
                 }
                 {/* <Divider sx={{border: "1px solid"}}/>   */}
                 
-                <StudyRoomChannelModify id={channels.channelId} studyRoomChannelModify={studyRoomChannelModify} channelModifyClose={channelModifyClose}/>
+                <StudyRoomChannelModify channelId={selectedChannelId} studyRoomChannelModify={studyRoomChannelModify} channelModifyClose={channelModifyClose}/>
                     
                 </List>
 

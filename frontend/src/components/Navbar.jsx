@@ -70,7 +70,7 @@ function NavbarComponent() {
 		transition: 'font-size 0.3s ease',
 	}
 
-	// const [accessToken, setAccessToken] = useState(null);
+	const [accessToken, setAccessToken] = useState(null);
 	// const getAccessTokenFromRedirectURL = () => {
 	// 	const urlParams = new URLSearchParams(window.location.search);
 	// 	return urlParams.get("Authorization")
@@ -78,31 +78,33 @@ function NavbarComponent() {
 
 
 
-	// const handleLoginClick = () => {
-	// 	window.location.assign('https://i10a810.p.ssafy.io/login/oauth2/code/kakao')
-	// 	const code = new URL(window.location.href).searchParams.get("code")
-	// 	console.log(code)
-	// 	useEffect(() => {
-	// 		const kakaoLogin = async () => {
-	// 			await axios({
-	// 				method: "GET",
-	// 				url: `https://i10a810.p.ssafy.io/api/members/v1`,
-	// 				headers: {
-	// 					Authorization: code
-	// 				},
-	// 			}).then((res) => { 
-	// 				console.log(res)
-	// 				localStorage.setItem("name", res.data.account.kakaoName);
-	// 				navigate("/")
-	// 			})
-	// 		}
-	// 		kakaoLogin()
-	// 	}, [])
-	// }
-		
+	const handleLoginClick = () => {
+		// window.location.href = 'https://i10a810.p.ssafy.io/login/oauth2/code/kakao';
+		setAccessToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDk3ODI4NzcsImlhdCI6MTcwNzE5MDg3Nywicm9sZXMiOlsiUk9MRSJdLCJtZW1iZXJJZCI6IjE4In0.JmmSWf6hDYcpHR96txb6Lt03xrEmMxNIMbW04_pgPz0")
 
+	  };
 
-
+	  useEffect(() => {
+		try {
+		  // 컴포넌트가 마운트되면서 리다이렉트된 URL에서 AccessToken을 처리
+		//   const token = getAccessTokenFromRedirectURL();
+		// const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDk3Nzc3MzEsImlhdCI6MTcwNzE4NTczMSwicm9sZXMiOlsiUk9MRSJdLCJtZW1iZXJJZCI6IjE2In0.azeezniWcI2m35YuTKq9oyO7b3n81Z-Yi4XeSsQ0C5Y";
+		  if (accessToken) {
+			// setAccessToken(token);
+			console.log(accessToken);
+			// console.log(token);
+			localStorage.setItem("token", accessToken);
+			// loadUserInfo(token);
+			// history.push('/main');  // 원하는 페이지로 리다이렉트
+			navigate('/'); //메인 페이지로 리다이렉트
+		  } else {
+			throw new Error('Missing access token');
+		  }
+		} catch (error) {
+		  console.error("카카오 로그인 에러:", error);
+		//   history.push("/");
+		}
+	  }, [accessToken]);
 
 		return (
 			<Appbar
