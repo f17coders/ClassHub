@@ -45,6 +45,8 @@ public class CustomSocialLoginSuccessHandler extends SimpleUrlAuthenticationSucc
                 .queryParam("Authorization", accessToken)
                 .build().toUriString();
 
+        log.info("[CustomSocialLoginSuccessHandler] frontPage = " + frontPage);
+
         getRedirectStrategy()
                 .sendRedirect(request, response, frontPage);
     }
