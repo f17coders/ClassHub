@@ -157,7 +157,7 @@ export default function StudyRoomRecruitList({study}){
     .then((res) => {
         console.log('입장 성공')
         console.log(res)
-        // window.location.reload(); //페이지 새로고침
+        window.location.reload(); //페이지 새로고침
     })
     .catch((err) => console.log(err));
     }
@@ -167,7 +167,7 @@ export default function StudyRoomRecruitList({study}){
             <ListItem>
               <Stack sx={{width: '100%'}}>
                 <Stack direction="row" spacing={1} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'space-around' }}>
-                  <h5 style={{ fontWeight: "bold" }}>{study.title}</h5>
+                  <h3 style={{ fontWeight: "bold" }}>{study.title}</h3>
                   <Stack direction="row" spacing={1}>
                     {study.isPublic == false && (
                       <Tooltip title="참여코드 인증 필요">
