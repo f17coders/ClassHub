@@ -88,9 +88,9 @@ function NavbarComponent() {
 		try {
 		  // 컴포넌트가 마운트되면서 리다이렉트된 URL에서 AccessToken을 처리
 		//   const token = getAccessTokenFromRedirectURL();
-		// const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDk3Nzc3MzEsImlhdCI6MTcwNzE4NTczMSwicm9sZXMiOlsiUk9MRSJdLCJtZW1iZXJJZCI6IjE2In0.azeezniWcI2m35YuTKq9oyO7b3n81Z-Yi4XeSsQ0C5Y";
+			const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDk3Nzc3MzEsImlhdCI6MTcwNzE4NTczMSwicm9sZXMiOlsiUk9MRSJdLCJtZW1iZXJJZCI6IjE2In0.azeezniWcI2m35YuTKq9oyO7b3n81Z-Yi4XeSsQ0C5Y";
 		  if (accessToken) {
-			// setAccessToken(token);
+			setAccessToken(token);
 			console.log(accessToken);
 			// console.log(token);
 			localStorage.setItem("token", accessToken);
@@ -212,9 +212,9 @@ function NavbarComponent() {
 								</Link>
 							)
 						}
-						{/* <Button onClick={handleLoginClick}>
+						<Button onClick={handleLoginClick}>
 							로그인
-						</Button> */}
+						</Button>
 					</Grid>
 				</Grid>
 				<LoginModal open={open} onClose={ModalClose} />

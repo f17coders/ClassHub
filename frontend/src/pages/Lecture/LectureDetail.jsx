@@ -18,6 +18,12 @@ import LectureDetailReviews from '../../components/Lecture/LectureDetailReviews'
 import { useSelector } from 'react-redux'
 import LoginModal from '../../components/LoginModal'
 import Swal from 'sweetalert2'
+import DOMPurify from "dompurify"
+
+import { Accordion } from '@mui/material'
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 // 강의의 상세 내용이 들어가는 페이지 입니다.
 
@@ -85,36 +91,19 @@ function LectureDetail() {
 		setValue2(newValue)
 	}
 
-	// 상세내용 HTML 띄우는 용
-	const [htmlString, setHtmlString] = useState('')
-	const fetchHtmlString = () => {
-		axios.get('https://storage.googleapis.com/classhub/data/udemy/htmlFiles/1.html', {
-			headers: {
-				'Access-Control-Allow-Origin': 'http://localhost:5173'
-			}
-		})
-			.then((res) => {
-				console.log(res)
-				setHtmlString(res.data)
-				console.log(htmlString)
-			})
-			.catch((err) => {
-				console.log(err)
-			})
-	}
 
 	// 강의 가격에 따라서 다르게 출력하는 함수
-	const definePrice = function(price1, price2) {
+	const definePrice = function (price1, price2) {
 		if (price2 == 0) {
 			return (<p>무료강의</p>)
 		} else if (price1 == price2) {
 			return (<p>{price1.toLocaleString()}</p>)
 		} else {
-			return(<div style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
-				<p style={{textDecoration:'line-through', margin:0}}>{price2.toLocaleString()}</p>
-				<EastIcon fontSize='small'/>
-				<p style={{margin:0}}>{price1.toLocaleString()}</p>
-				</div>)
+			return (<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+				<p style={{ textDecoration: 'line-through', margin: 0 }}>{price2.toLocaleString()}</p>
+				<EastIcon fontSize='small' />
+				<p style={{ margin: 0 }}>{price1.toLocaleString()}</p>
+			</div>)
 		}
 	}
 
@@ -125,23 +114,23 @@ function LectureDetail() {
 					<div>
 						<Container style={{ display: 'flex', padding: '20px' }}>
 							<img src={img1} alt="강의 이미지" style={{ width: '300px', height: '250px' }} />
-							<div style={{ padding: '10px', marginLeft:'30px', width: '60%' }}>
-								<div style={{height:'80%', paddingTop:'30px'}}>
-									<p style={{fontSize:'0.9em', margin:'0px'}}>{lecture.categoryName}</p>
-									<p style={{fontSize:'1.8em', fontWeight:800}}>{lecture.lectureName}</p>
-									<div style={{display:'flex', flexDirection:'row'}}>
-										<SellIcon fontSize='small'/><p style={{margin:"0px 4px"}}>가격:</p>{definePrice(lecture.priceOriginal, lecture.priceSale)}
+							<div style={{ padding: '10px', marginLeft: '30px', width: '60%' }}>
+								<div style={{ height: '80%', paddingTop: '30px' }}>
+									<p style={{ fontSize: '0.9em', margin: '0px' }}>{lecture.categoryName}</p>
+									<p style={{ fontSize: '1.8em', fontWeight: 800 }}>{lecture.lectureName}</p>
+									<div style={{ display: 'flex', flexDirection: 'row' }}>
+										<SellIcon fontSize='small' /><p style={{ margin: "0px 4px" }}>가격:</p>{definePrice(lecture.priceOriginal, lecture.priceSale)}
 									</div>
-									<div style={{display:'flex', flexDirection:'row', alignItems:'center', marginTop:'10px'}}>
-										<PersonIcon fontSize='small'/><p style={{margin:"0px 4px"}}>강의자:</p>{lecture.instructor}
+									<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: '10px' }}>
+										<PersonIcon fontSize='small' /><p style={{ margin: "0px 4px" }}>강의자:</p>{lecture.instructor}
 									</div>
 								</div>
-								<div style={{display:'flex', justifyContent:'space-between'}}>
-									<div style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
-										<Rating defaultValue={lecture.combinedRating} precision={0.5} readOnly sx={{margin:0}}/>
-										<p style={{margin:"0 4px"}}>{`(${lecture.combinedRating}) 총 ${lecture.combinedRatingCount}개의 수강평 `}</p>
+								<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+									<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+										<Rating defaultValue={lecture.combinedRating} precision={0.5} readOnly sx={{ margin: 0 }} />
+										<p style={{ margin: "0 4px" }}>{`(${lecture.combinedRating}) 총 ${lecture.combinedRatingCount}개의 수강평 `}</p>
 									</div>
-									
+
 									<div>
 										{/* 좋아요버튼 */}
 										<IconButton size='small' onClick={toggleLike}>
@@ -153,20 +142,19 @@ function LectureDetail() {
 									</div>
 								</div>
 							</div>
-
 						</Container>
 						<Divider sx={{ bgcolor: 'lightgrey' }} />
 
 						{/* GPT강의요약 */}
 						<Container sx={{ marginTop: '20px' }}>
-							<p style={{fontSize:'1.2em', marginBottom:'10px'}}>🤖GPT로 리뷰를 한 줄 요약했어요</p>
-							<Box sx={{ width: '100%'}}>
+							<p style={{ fontSize: '1.2em', marginBottom: '10px' }}>🤖GPT로 리뷰를 한 줄 요약했어요</p>
+							<Box sx={{ width: '100%' }}>
 								<Tabs
 									value={value}
 									onChange={handleChange}
 								>
-									<Tab value={0} label="높은 평점 요약" sx={{fontSize:'1.2em'}}/>
-									<Tab value={1} label="낮은 평점 요약" sx={{fontSize:'1.2em'}} />
+									<Tab value={0} label="높은 평점 요약" sx={{ fontSize: '1.2em' }} />
+									<Tab value={1} label="낮은 평점 요약" sx={{ fontSize: '1.2em' }} />
 								</Tabs>
 								<div style={{ marginTop: "20px" }}>
 									{
@@ -214,6 +202,21 @@ function LectureDetail() {
 // 상세내용
 function Content1(props) {
 	const lecture = props.lecture
+
+	// 상세내용 HTML 띄우는 용
+	const [htmlString, setHtmlString] = useState('')
+	useEffect(() => {
+		if (htmlString == '') {
+			// axios.get(lecture.descriptionDetail)
+			axios.get('https://storage.googleapis.com/classhub/data/udemy/htmlFiles/1.html')
+			.then((res) => {
+				setHtmlString(res.data)
+			})
+			.catch((err) => {
+				console.log(err)
+			})
+		}
+	})
 	return (
 		<div>
 			<div>
@@ -226,7 +229,14 @@ function Content1(props) {
 			</div>
 			<div>
 				<h3>강의 상세 정보</h3>
-				<p>{lecture.descriptionDetail}</p>
+				{
+					htmlString != '' ? (<div
+					style={{overflow:'scroll', width:'100%'}}
+						dangerouslySetInnerHTML={{
+							__html: DOMPurify.sanitize(htmlString),
+						}}
+					/>) : null
+				}
 			</div>
 		</div>
 	)
@@ -236,13 +246,37 @@ function Content1(props) {
 // 커리큘럼
 function Content2(props) {
 	const lecture = props.lecture
+	const curriculum = JSON.parse(lecture.curriculum).curriculum
 	return (
-		<div>
-			<h3>커리큘럼</h3>
-			<p>커리큘럼 내용이 들어갑니다</p>
-			<p>{`커리큘럼 총 시간: ${lecture.totalTime}`}</p>
-			<p>{`커리큘럼: ${lecture.curriculum}`}</p>
-		</div>
+		<Container>
+			<h3>커리큘럼 (총 {lecture.totalTime}시간)</h3>
+			{
+				curriculum.map((theme, idx) =>{
+					return(
+						<Accordion key={idx}>
+							<AccordionSummary
+								expandIcon={<ExpandMoreIcon/>}
+								sx={{backgroundColor:'rgba(128, 128, 128, 0.1)'}}
+							>
+								<p style={{margin:'7px'}}><span style={{fontSize:'1.2em'}}>{theme.title}</span> ({theme.item_count}개의 강의, 총 {theme.time}시간)</p>
+							</AccordionSummary>
+							<AccordionDetails>
+							{
+								theme.items.map((item, idx) => {
+									return(
+										<div key={idx} style={{display:'flex', justifyContent:'space-between'}}>
+											<p>{item.title}</p>
+											<p>{item.time ? (<>{item.time}</>): null}</p>
+										</div>
+									)
+								})
+							}
+							</AccordionDetails>
+						</Accordion>
+					)
+				})
+			}
+		</Container>
 	)
 }
 

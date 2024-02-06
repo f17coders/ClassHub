@@ -13,6 +13,9 @@ import axios from 'axios'
 // 강의 detail에서 리뷰 탭에 들어가는 컴포넌트
 
 function LectureDetailReviews() {
+  // 토큰 가져오기
+  const accessToken = localStorage.getItem('token')
+  
   //정렬관련(우리사이트)
   const [sort1, setSort1] = useState('최신순')
   const handleSort1 = (event) => {
@@ -31,7 +34,11 @@ function LectureDetailReviews() {
   const [page1, setPage1] = useState(0)
   const [totalPage1, setTotalPage1] = useState(null)
   useEffect(() => {
-    axios.get(`https://i10a810.p.ssafy.io/api/reviews/v0/1/classhub?page=${page1}&size=4`)
+    axios.get(`https://i10a810.p.ssafy.io/api/reviews/v0/1/classhub?page=${page1}&size=4`,{
+    headers: {
+      AUTHORIZATION: `Bearer ${accessToken}`
+    }
+  })
       .then((res) => {
         // console.log(res)
         setReview1(res.data.result.reviewResList)
@@ -49,7 +56,11 @@ function LectureDetailReviews() {
   const [page2, setPage2] = useState(0)
   const [totalPage2, setTotalPage2] = useState(null)
   useEffect(() => {
-    axios.get(`https://i10a810.p.ssafy.io/api/reviews/v0/1/site?page=${page2}&size=4`)
+    axios.get(`https://i10a810.p.ssafy.io/api/reviews/v0/1/site?page=${page2}&size=4`,{
+      headers: {
+        AUTHORIZATION: `Bearer ${accessToken}`
+      }
+    })
       .then((res) => {
         console.log(res)
         setReview2(res.data.result.siteReviewResList)

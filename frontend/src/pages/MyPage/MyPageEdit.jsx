@@ -8,6 +8,9 @@ import Swal from 'sweetalert2'
 
 
 function MyPageEdit() {
+	// 토큰 가져오기
+  const accessToken = localStorage.getItem('token')
+
 	// 관심있는 기술
 	const [skills, setSkills] = useState([])
 	// 목표 직무
@@ -17,7 +20,11 @@ function MyPageEdit() {
 	// 처음에 전체 관심있는 기술과 목표직무를 가져온다
 	useEffect(() => {
 		if (skills.length == 0) {
-			axios.get('https://i10a810.p.ssafy.io/api/tags/v1/members')
+			axios.get('https://i10a810.p.ssafy.io/api/tags/v1/members',{
+				headers: {
+					AUTHORIZATION: `Bearer ${accessToken}`
+				}
+			})
 				.then((res) => {
 					let loadedSkills = res.data.result.tagList.map((item) => item)
 					setSkills(loadedSkills)
@@ -25,7 +32,11 @@ function MyPageEdit() {
 				.catch((err) => console.log(err))
 		}
 		if (targetJobs.length == 0) {
-			axios.get('https://i10a810.p.ssafy.io/api/jobs/v1')
+			axios.get('https://i10a810.p.ssafy.io/api/jobs/v1',{
+				headers: {
+					AUTHORIZATION: `Bearer ${accessToken}`
+				}
+			})
 				.then((res) => {
 					let loadedJobs = res.data.result.jobList.map((item) => item)
 					setTargetJobs(loadedJobs)
@@ -82,7 +93,7 @@ function MyPageEdit() {
 				jobId: target[0].jobId
 			}, {
 				headers: {
-					Authorization: 3
+					AUTHORIZATION: `Bearer ${accessToken}`
 				}
 			})
 				.then((res) => {
