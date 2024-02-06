@@ -36,11 +36,15 @@ public class JWTUtil {
                 .signWith(SignatureAlgorithm.HS256, jwtKey.getBytes())
                 .compact();
 
+        log.info("[JWTUtil.java - generateToken(), jwtStr = " + jwtStr);
+
         return jwtStr;
     }
 
     public Map<String, Object> validateToken(String token) {    // 주어진 JWT 토큰이 유효한지 검증하고, 토큰에서 정보를 추출하여 반환
         Map<String, Object> claim = null;
+
+        log.info("[JWTUtil.java - validateToken(), token = " + token);
 
         claim = Jwts.parser()
                 .setSigningKey(jwtKey.getBytes()) // Set Key
