@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Log4j2
 @RestControllerAdvice
 public class GlobalControllerAdvice {
+
     /**
      * [Exception] API 호출 시 '객체' 혹은 '파라미터' 데이터 값이 유효하지 않은 경우
      *
@@ -21,7 +22,8 @@ public class GlobalControllerAdvice {
      * @return ResponseEntity<ErrorResponse>
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    protected ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(
+        MethodArgumentNotValidException ex) {
         ex.printStackTrace();
         log.error("handleMethodArgumentNotValidException", ex);
         BindingResult bindingResult = ex.getBindingResult();
@@ -32,9 +34,9 @@ public class GlobalControllerAdvice {
             sb.append(", ");
         }
         final ErrorResponse response = ErrorResponse.of()
-                .code(ErrorCode.NOT_VALID_ERROR)
-                .message(sb.toString())
-                .build();
+            .code(ErrorCode.NOT_VALID_ERROR)
+            .message(sb.toString())
+            .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -43,10 +45,18 @@ public class GlobalControllerAdvice {
         e.printStackTrace();
         log.error(e.getMessage());
         ErrorResponse response = ErrorResponse.of()
-                .code(ErrorCode.INTERNAL_SERVER_ERROR)
-                .message(e.getMessage())
-                .build();
+            .code(ErrorCode.INTERNAL_SERVER_ERROR)
+            .message(e.getMessage())
+            .build();
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @ExceptionHandler({BaseExceptionHandler.class})
+    protected ResponseEntity<ErrorResponse> handleBaseExceptionHandler(
+        BaseExceptionHandler baseExceptionHandler) {
+
+        return new ResponseEntity<>(new ErrorResponse(baseExceptionHandler.getErrorCode(),
+            baseExceptionHandler.getMessage()), HttpStatus.OK);
     }
 }
