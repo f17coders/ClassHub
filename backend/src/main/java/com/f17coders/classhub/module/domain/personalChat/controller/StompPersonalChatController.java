@@ -39,10 +39,9 @@ public class StompPersonalChatController {
 
     // 개인 메시지 전송
     @MessageMapping(value = "/api/chat/send/{personalChatId}")
-    public void sendMessage(@DestinationVariable String personalChatId, String text,
-        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
+    public void sendMessage(@DestinationVariable String personalChatId, Message messageInput)
         throws IOException {
-        Message message = Message.createMessage(memberSecurityDTO.getMemberId(), text);
+        Message message = Message.createMessage(messageInput.getSender(), messageInput.getText());
 
         log.debug("[StompChatController - sendMessage]: message = {}, to room id = {}", message,
             personalChatId);

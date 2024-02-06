@@ -58,6 +58,7 @@ public class CustomSecurityConfig {
             .authorizeHttpRequests(auth ->
                 auth.requestMatchers("/api/*/v0/**").permitAll()
                     .requestMatchers("/api/*/v0").permitAll()
+                        .requestMatchers("/api/chat/**").permitAll()
                     .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 ->

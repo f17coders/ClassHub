@@ -41,8 +41,10 @@ public class PersonalChatServiceImpl implements PersonalChatService {
 
         for (PersonalChat personalChat : personalChatList) {
 
+            int other = sender == personalChat.getSender() ? personalChat.getReceiver() : personalChat.getSender();
+
             MemberStudyInfoRes memberStudyInfoRes = memberRepository.findMemberStudyInfoResByMemberId(
-                personalChat.getReceiver());
+                    other);
 
             PersonalChatRes personalChatRes = PersonalChatRes.builder()
                 .personalChatId(personalChat.getPersonalChatId())

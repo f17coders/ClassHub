@@ -58,18 +58,16 @@ export default function StudyRoomPrivateMessage() {
 
     // 메시지 전송
     const sendMessage = () => {
-        send(stompClient, newMessage, personalChat.personalChatId);
+        send(stompClient, personalChat.sender, newMessage, personalChat.personalChatId);
         setNewMessage("");
     };
 
-    const isLeftMessage = (message) => {
-        return message.sender !== 10;
-    };
+    // const isLeftMessage = (message) => {
+    //     return message.sender !== ;
+    // };
     
     const getMessageText = (message) => {
-        return isLeftMessage(message)
-        ? `${message.sender}: ${message.text}`
-        : `${message.text}`;
+        return `${message.sender}: ${message.text}`
     };
 
     return(
@@ -81,7 +79,7 @@ export default function StudyRoomPrivateMessage() {
                 {recvList.map((message, index) => (
                     <div
                     key={index}
-                    className={`message ${isLeftMessage(message) ? 'left' : 'right'}`}
+                    // className={`message ${isLeftMessage(message) ? 'left' : 'right'}`}
                 >
                 {getMessageText(message)}
                 </div>
