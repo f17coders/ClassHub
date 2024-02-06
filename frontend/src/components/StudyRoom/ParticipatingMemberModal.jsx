@@ -22,11 +22,15 @@ export default function ParticipatingMemberModal ({ studyId, participatingMember
     const [leader, setLeader] = useState([]); //스터디장 정보
     const [leaderJob, setLeaderJob] = useState('');
     const [studyMembers, setStudyMembers] = useState([]); //스터디 멤버들 정보
-
+    const accessToken = localStorage.getItem('token');
     // 멤버 정보 가져오기
     useEffect(() => {
         if(participatingMember){
-          axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/members/${studyId}`)
+          axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/members/${studyId}`, {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          })
           .then((response)=> {
             //   console.log(response.data.result)
               setLeader(response.data.result.leader);

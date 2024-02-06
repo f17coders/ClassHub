@@ -75,7 +75,11 @@ export default function StudyRoomRecruitList({study}){
       }).then((result) => {
         if(result.isConfirmed){
           // 버튼 클릭 시에만 초대코드 요청
-          axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/invitation-code/${studyId}`)
+          axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/invitation-code/${studyId}`,{
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          })
           .then((result) => {
             setInviteCode(result.data.result);
             console.log(result.data.result);
@@ -140,12 +144,14 @@ export default function StudyRoomRecruitList({study}){
     }
   }
 
+  const accessToken = localStorage.getItem('token');
+
     // 스터디룸 입장
     const enterStudyRoom = (studyId) => {
       axios.post(`http://i10a810.p.ssafy.io:4000/studies/v1/entrance/${studyId}`, null, {
         headers: {
-          AUTHORIZATION: 9
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
     .then((res) => {
         console.log('입장 성공')
