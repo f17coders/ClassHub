@@ -43,7 +43,7 @@ export default function StudyRoomModifyModal({ data, studyModify, studyModifyClo
 
   // 스터디룸 수정 함수
   const modifyStudyRoom = function() {
-    axios.patch('https://i10a810.p.ssafy.io/api/studies/v1',
+    axios.put('https://i10a810.p.ssafy.io/api/studies/v1',
     {
       "studyId" : data.studyId,
       "title": title,
@@ -59,6 +59,7 @@ export default function StudyRoomModifyModal({ data, studyModify, studyModifyClo
     })
     .then((res) => {
       console.log(res)
+      console.log(studyId)
       onModifySuccess()
       // window.location.reload(); //페이지 새로고침
     })

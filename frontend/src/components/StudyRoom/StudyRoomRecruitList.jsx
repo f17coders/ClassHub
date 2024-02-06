@@ -38,8 +38,8 @@ export default function StudyRoomRecruitList({study}){
             text: "참여중인 스터디 목록에서 확인 가능합니다.",
             icon: "success"
           }).then(() =>{
-              enterStudyRoom(studyId);
-              window.location.reload(); //페이지 새로고침
+            enterStudyRoom(studyId);
+              // window.location.reload(); //페이지 새로고침
           });
         } else if (
           result.dismiss === Swal.DismissReason.cancel
@@ -109,15 +109,16 @@ export default function StudyRoomRecruitList({study}){
                 title: '참여 완료되었습니다!',
                 icon: "success"})
               .then(() =>{
+                
                 enterStudyRoom(studyId);
-                window.location.reload(); //페이지 새로고침
+                // window.location.reload(); //페이지 새로고침
               });
             } else{
               MySwal.fire({
                 title: '참여 코드가 일치하지 않습니다.',
                 icon: "warning"})
               .then(() =>{
-                window.location.reload(); //페이지 새로고침
+                // window.location.reload(); //페이지 새로고침
               });
             }
           } else if (
@@ -148,7 +149,7 @@ export default function StudyRoomRecruitList({study}){
 
     // 스터디룸 입장
     const enterStudyRoom = (studyId) => {
-      axios.post(`http://i10a810.p.ssafy.io:4000/studies/v1/entrance/${studyId}`, null, {
+      axios.post(`http://i10a810.p.ssafy.io:4000/api/studies/v1/entrance/${studyId}`, null, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
