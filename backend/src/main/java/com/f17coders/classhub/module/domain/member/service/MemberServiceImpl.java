@@ -81,7 +81,7 @@ public class MemberServiceImpl implements MemberService {
 
         // 기존 직업 정보가 있다면 예외 처리
         if (memberWithJob.getJob() != null) {
-            throw new BaseExceptionHandler(ErrorCode.FORBIDDEN_ERROR);
+            throw new BaseExceptionHandler("기존에 가입한 회원입니다.", ErrorCode.FORBIDDEN_ERROR);
         }
 
         // 희망 직무 설젇
