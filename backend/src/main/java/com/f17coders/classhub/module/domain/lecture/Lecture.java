@@ -94,14 +94,12 @@ public class Lecture extends BaseEntity {
     @OneToMany(mappedBy = "lecture", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<LectureLike> lectureLikeSet = new HashSet<>();
 
-//    TODO : 단방향 연관 관계로 우선 설정 후 필요에 의해서 양방향으로 연관 관계 설정 + 연관 관계 편의 메서드의 위치는 로직에 따라 Many쪽에 있을 수도 있고 One쪽에 있을 수도 있으니 변경 가능//    // Lecture - review 연관 관계
-//    @OneToMany(mappedBy = "lecture", fetch = FetchType.LAZY)
-//    private List<Review> reviewList = new ArrayList<>();
-//
-//    public void putReview(Review review) {  // 연관 관계 편의 메서드
-//        review.setLecture(this);
-//        this.getReviewList().add(review);
-//    }
+	// Lecture - review 연관 관계
+    @OneToMany(mappedBy = "lecture", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviewList = new ArrayList<>();
+
+//    TODO : 단방향 연관 관계로 우선 설정 후 필요에 의해서 양방향으로 연관 관계 설정 + 연관 관계 편의 메서드의 위치는 로직에 따라 Many쪽에 있을 수도 있고 One쪽에 있을 수도 있으니 변경 가능//
+
 //
 //    // Lecture - LectureBuy 연관 관계
 //    @OneToMany(mappedBy = "lecture", fetch = FetchType.LAZY)

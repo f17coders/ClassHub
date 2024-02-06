@@ -100,30 +100,33 @@ public class LectureController {
 		return BaseResponse.success(SuccessCode.INSERT_SUCCESS, lectureId);
 	}
 
-	@Operation(summary = "로그인 유저가 관심있어 하는 태그를 랜덤 1개 골라서, Top5 강의 조회(관심 기술의 Top5 강의 조회)")
-	@GetMapping("/v1/interest-skills")
-	public ResponseEntity<BaseResponse<LectureListTagRes>> get5LecturesByInterestTag(
-		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
-
-		LectureListTagRes lectures = lectureService.getLecturesByInterestTag(
-			memberSecurityDTO.toMember().getMemberId());
-
-		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectures);
-	}
-
-	@Operation(summary = "비로그인 유저대상 인기태그를 랜덤 1개 골라서, Top5 강의 조회(관심 기술의 Top5 강의 조회)")
+	@Operation(summary = "태그를 받아서, 해당 태그의 Top5 강의 조회(관심 기술의 Top5 강의 조회)")
 	@GetMapping("/v0/interest-skills")
-	public ResponseEntity<BaseResponse<LectureListTagRes>> get5LecturesByRandomTag()
-		throws IOException {
-		LectureListTagRes lectures = lectureService.getLecturesByRandomTag();
+	public ResponseEntity<BaseResponse<LectureListTagRes>> get5LecturesByInterestTag(
+		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO,
+		@RequestParam(value = "tagId", required = true) int tagId) throws IOException {
+
+		LectureListTagRes lectures = lectureService.getTop5LecturesByTag(
+			tagId);
 
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectures);
 	}
+
+//	@Operation(summary = "비로그인 유저대상 인기태그를 랜덤 1개 골라서, Top5 강의 조회(관심 기술의 Top5 강의 조회)")
+//	@GetMapping("/v0/interest-skills")
+//	public ResponseEntity<BaseResponse<LectureListTagRes>> get5LecturesByRandomTag()
+//		throws IOException {
+//
+//		LectureListTagRes lectures = lectureService.getLecturesByRandomTag();
+//
+//		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectures);
+//	}
 
 	@Operation(summary = "비로그인 유저에게 인기직무중 랜덤 1개 골라서, 해당 직무 선택 유저들이 수강하는 Top5 강의 조회(관심 직무의 Top5 강의 조회)")
 	@GetMapping("/v0/desired-job")
 	public ResponseEntity<BaseResponse<LectureListJobRes>> get5LecturesByFamousJob(
 	) throws IOException {
+
 		LectureListJobRes lectures = lectureService.getLecturesByFamousJob();
 
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectures);
