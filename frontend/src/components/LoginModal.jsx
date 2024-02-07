@@ -44,7 +44,7 @@ function LoginModal({ open, onClose }) {
 		if (token) {
 			// 세션에 accessToken을 저장해주자
 			dispatch(saveAccessToken(token))
-			console.log(token)
+			// console.log(token)
 		}
 		
 			// 저장한 토큰으로 유저 정보가 있는지 없는지 확인해보자
@@ -58,26 +58,26 @@ function LoginModal({ open, onClose }) {
 	// 토큰을 통해 회원가입이 되어있는지 / 아닌지 판단하고 load해오는 함수
 	const loadUserInfo = () => {
 		if (accessToken) {
-			console.log(accessToken)
+			// console.log(accessToken)
 			axios.get('https://i10a810.p.ssafy.io/api/members/v1', {
 				headers: { Authorization: `Bearer ${accessToken}` }
 			})
 				.then((res) => {
 					// 불러온 유저정보에서 tagList가 비어있다면 -> 추가 정보 입력이 필요함
 					let tmpUser = res.data.result
-					console.log(tmpUser)
+					// console.log(tmpUser)
 					if (tmpUser.job == null) {
-						console.log('회원가입하러가자')
+						// console.log('회원가입하러가자')
 						dispatch(saveUser(tmpUser))
 						navigate('/additionalinfo')
 					} else {
 						// 이미 있는 유저라면 로그인 바로 해주자
-						console.log('로그인이 되어따')
+						// console.log('로그인이 되어따')
 						dispatch(saveUser(tmpUser))
 						dispatch(login())
 						navigate('/')
 					}
-					console.log(res)
+					// console.log(res)
 				})
 				.catch((err) => {
 					console.log(err)
@@ -89,7 +89,7 @@ function LoginModal({ open, onClose }) {
 	// 카카오 로그인
 	const kakaoLogin = function () {
 		let temp = localStorage.getItem('token')
-		console.log(temp)
+		// console.log(temp)
 		// 테스트용
 		if (temp != null) {
 			loadUserInfo()
