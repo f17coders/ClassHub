@@ -25,4 +25,7 @@ public interface CommunityRepositoryCustom {
 
     Long countDistinctFromCommentByMemberJoinCommunity(Member member);
 
+    List<Community> findPageFromCommunityScrapByMemberJoinCommunity(Member member,
+        Pageable pageable);
+
 }

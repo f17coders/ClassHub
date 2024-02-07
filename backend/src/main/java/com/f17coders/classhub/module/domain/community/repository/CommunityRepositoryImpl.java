@@ -114,6 +114,20 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
             .fetch();
     }
 
+    @Override
+    public List<Community> findPageFromCommunityScrapByMemberJoinCommunity(Member member,
+        Pageable pageable) {
+        return queryFactory
+            .select(community)
+            .from(communityScrap)
+            .leftJoin(communityScrap.community, community)
+            .where(communityScrap.member.eq(member))
+            .orderBy(communityScrap.createTime.desc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+    }
+
     private BooleanExpression containsKeyword(String keyword) {
         return keyword != null ? community.title.contains(keyword)
             .or(community.content.contains(keyword)) : null;

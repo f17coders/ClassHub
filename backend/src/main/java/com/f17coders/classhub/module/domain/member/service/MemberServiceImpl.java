@@ -5,6 +5,7 @@ import com.f17coders.classhub.global.exception.code.ErrorCode;
 import com.f17coders.classhub.module.domain.comment.repository.CommentRepository;
 import com.f17coders.classhub.module.domain.community.Community;
 import com.f17coders.classhub.module.domain.community.repository.CommunityRepository;
+import com.f17coders.classhub.module.domain.communityScrap.repository.CommunityScrapRepository;
 import com.f17coders.classhub.module.domain.job.Job;
 import com.f17coders.classhub.module.domain.job.dto.response.JobRes;
 import com.f17coders.classhub.module.domain.job.repository.JobRepository;
@@ -41,6 +42,8 @@ public class MemberServiceImpl implements MemberService {
     private final MemberTagRepository memberTagRepository;
     private final StudyRepository studyRepository;
     private final CommentRepository commentRepository;
+    private final CommunityScrapRepository communityScrapRepository;
+
 
     private final MemberTagService memberTagService;
 
@@ -172,7 +175,20 @@ public class MemberServiceImpl implements MemberService {
         long communitySize = communityRepository.countDistinctFromCommentByMemberJoinCommunity(
             member);
 
-        System.out.println("communitySize = " + communitySize);
+        long totalPages = (long) (Math.ceil((double) communitySize / pageable.getPageSize()));
+
+        return getMemberCommunityListRes(communityList, totalPages);
+    }
+
+    @Override
+    public MemberCommunityListRes getScrapCommunityList(Member member, Pageable pageable)
+        throws BaseExceptionHandler {
+        List<Community> communityList = communityRepository.findPageFromCommunityScrapByMemberJoinCommunity(
+            member, pageable);
+
+//        total Page 계산
+        long communitySize = communityScrapRepository.countByMember(member);
+
         long totalPages = (long) (Math.ceil((double) communitySize / pageable.getPageSize()));
 
         return getMemberCommunityListRes(communityList, totalPages);

@@ -88,9 +88,21 @@ public class MemberController {
 
     @Operation(summary = "내가 작성한 댓글의 글 목록 조회")
     @GetMapping("/v1/communities/comments")
-    public ResponseEntity<BaseResponse<MemberCommunityListRes>> getCommentCommunityList(Pageable pageable,
+    public ResponseEntity<BaseResponse<MemberCommunityListRes>> getCommentCommunityList(
+        Pageable pageable,
         @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
         MemberCommunityListRes communityList = memberService.getCommentCommunityList(
+            memberSecurityDTO.toMember(), pageable);
+
+        return BaseResponse.success(SuccessCode.SELECT_SUCCESS, communityList);
+    }
+
+    @Operation(summary = "내가 스크랩한 글 목록 조회")
+    @GetMapping("/v1/communities/scraps")
+    public ResponseEntity<BaseResponse<MemberCommunityListRes>> getScrapCommunityList(
+        Pageable pageable,
+        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+        MemberCommunityListRes communityList = memberService.getScrapCommunityList(
             memberSecurityDTO.toMember(), pageable);
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, communityList);
