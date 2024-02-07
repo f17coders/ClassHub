@@ -75,6 +75,15 @@ public class MemberController {
         return BaseResponse.success(SuccessCode.DELETE_SUCCESS, memberSecurityDTO.getMemberId());
     }
 
+    @Operation(summary = "내가 작성한 글 목록 조회")
+    @GetMapping("/v1/communities/my")
+    public ResponseEntity<BaseResponse<MemberCommunityListRes>> getCommunityList(Pageable pageable,
+        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+        MemberCommunityListRes communityList = memberService.getCommunityList(
+            memberSecurityDTO.toMember(), pageable);
+
+        return BaseResponse.success(SuccessCode.SELECT_SUCCESS, communityList);
+    }
 
     @Operation(summary = "내가 참여중인 스터디 목록 조회")
     @GetMapping("/v1/studies/participation")
