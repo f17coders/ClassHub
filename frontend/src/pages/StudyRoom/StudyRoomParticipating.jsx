@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useParams, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux"
 import { styled } from '@mui/material/styles';
 import { Menu, MenuItem, Avatar, ListItemIcon, Backdrop, Alert, Pagination, TextField, Button, Stack, Box, List, ListItemButton, Grid, Typography, Divider, IconButton, Tooltip } from '@mui/material'
 import axios from 'axios'
@@ -21,12 +22,13 @@ import ParticipatingRoomList from '../../components/StudyRoom/ParticipatingRoomL
 
 // 참여중인 스터디 상세 페이지
 export default function StudyRoomParticipating(){
+  // 토큰
+  let accessToken = useSelector((state) => state.accessToken)
   const MySwal = withReactContent(Swal);
   const { studyId } = useParams();
   const navigate = useNavigate();
   const [inviteCode, setInviteCode] = useState('');
   const [channels, setChannels] = useState([]);
-  const accessToken = localStorage.getItem('token');
 
 
     // 스터디룸 채널정보 가져오기
@@ -41,7 +43,7 @@ export default function StudyRoomParticipating(){
         setChannels(response.data.result)
     })
     .catch((err) => console.log(err))
-  },[])
+  },[studyId])
 
   const [data, setData] = useState([])
   // 스터디룸 ID로 상세정보 가져오기
@@ -130,6 +132,7 @@ export default function StudyRoomParticipating(){
     if(data.isPublic){
       MySwal.fire({
         title: "해당 스터디룸은 공개상태입니다.",
+        text: "초대코드 없이 입장 가능합니다."
       })
     }
     //비공개방이면

@@ -5,12 +5,15 @@ import { TextField, Stack, FormControl, OutlinedInput, Button} from '@mui/materi
 import axios from 'axios';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { useSelector } from "react-redux"
+
 
 export default function StudyRoomChannelModify({channelId, studyId, channelModifyClose, editingChannelId, setEditingChannelId}){
   const MySwal = withReactContent(Swal);
   const navigate = useNavigate();
   const [content, setContent] = useState(''); //수정될 채널명
-  const accessToken = localStorage.getItem('token');
+  // 토큰
+  let accessToken = useSelector((state) => state.accessToken)
   const [hasError, setHasError] = useState(false); // 입력값이 10자 이상인지 여부를 추적
   const [isNull, setIsNull] = useState(false); // 입력값이 null인지 여부를 추적
 

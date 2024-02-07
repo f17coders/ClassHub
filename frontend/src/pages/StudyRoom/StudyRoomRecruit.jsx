@@ -10,17 +10,25 @@ import StudyRoomRecruitList from '../../components/StudyRoom/StudyRoomRecruitLis
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { useSelector } from "react-redux"
 
 // 스터디 모집하는 페이지
 export default function StudyRoomRecruit() {
   const MySwal = withReactContent(Swal);
   const [data, setData] = useState([])
-  const accessToken = localStorage.getItem('token');
+  // 토큰
+  let accessToken = useSelector((state) => state.accessToken)
 
+  // 현재 페이지를 나타내는 state
+  const [currentPage, setCurrentPage] = useState(1);
+  // 페이지 당 항목 수
+  const itemsPerPage = 4;
+  //전체 페이지 수
+  const [totalPages, setTotalPages] = useState(1);
 
   // 처음에 axios 요청으로 전체 목록 가져오기
 	useEffect(() => {
-    axios.get('https://i10a810.p.ssafy.io/api/studies/v1', {
+    axios.get(`https://i10a810.p.ssafy.io/api/studies/v1?page=${currentPage-1}&size=${itemsPerPage}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -28,10 +36,18 @@ export default function StudyRoomRecruit() {
     .then((response)=> {
         console.log(response.data.result.studyList)
         setData(response.data.result.studyList)
+        console.log("현재페이지: "+currentPage)
+        setCurrentPage(currentPage)
+
+        let totalPages = response.data.result.totalPages;
+        console.log("전체페이지 수: "+totalPages)
+        setTotalPages(totalPages)
+
+        console.log("페이지 당 항목 수: " + itemsPerPage)
         // console.log(data)
     })
     .catch((err) => console.log(err))
-  }, [])
+  }, [currentPage])
 
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const handleListItemClick = (event, index) => {
@@ -73,16 +89,8 @@ export default function StudyRoomRecruit() {
     SetStudyCreate(false);
   };
 
-
-  // 현재 페이지를 나타내는 state
-  const [currentPage, setCurrentPage] = useState(1);
-  // 페이지 당 항목 수
-  const itemsPerPage = 5;
-
   // 현재 페이지에 해당하는 항목만 가져오는 함수
   const getCurrentItems = () => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
 
     // 선택된 인덱스에 따라 모집 상태를 필터링\
     const filteringData = function(data) {
@@ -97,7 +105,7 @@ export default function StudyRoomRecruit() {
           return data
         }
     }
-    const filteredData = filteringData(data).slice(startIndex, endIndex)
+    const filteredData = filteringData(data);
     return filteredData.map((study, index) => 
     (
       <StudyRoomRecruitList
@@ -180,7 +188,7 @@ export default function StudyRoomRecruit() {
             zIndex: 1, // 다른 요소 위에 표시하기 위해 zIndex 사용
           }}>
             <Pagination
-              count={Math.ceil(10 / itemsPerPage)} // 전체 페이지 수
+              count={totalPages} // 전체 페이지 수
               color="primary"
               page={currentPage}
               onChange={(event, value) => setCurrentPage(value)}

@@ -1,12 +1,15 @@
 import React, { useState, useEffect  } from 'react';
 import { getPersonalChat, send } from "../../common/chat.js";
 import {useParams} from 'react-router-dom'
+import { useSelector } from "react-redux"
 import SockJS from "sockjs-client/dist/sockjs";
 import { Client } from "@stomp/stompjs";
 
 const accessToken = localStorage.getItem('token');
 // 스터디룸 개인 메시지
 export default function StudyRoomPrivateMessage() {
+    // 토큰
+	let accessToken = useSelector((state) => state.accessToken)
 
     const [recvList, setRecvList] = useState([]);
     const { personalChatId } = useParams();

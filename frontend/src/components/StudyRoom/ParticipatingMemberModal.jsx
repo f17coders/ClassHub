@@ -6,6 +6,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 import {registPersonalChat} from "../../common/chat.js"
 import {useNavigate} from 'react-router-dom'
+import { useSelector } from "react-redux"
+
 const style = {
     position: 'absolute',
     top: '40%',
@@ -24,7 +26,8 @@ export default function ParticipatingMemberModal ({ studyId, participatingMember
     const [leader, setLeader] = useState([]); //스터디장 정보
     const [leaderJob, setLeaderJob] = useState('');
     const [studyMembers, setStudyMembers] = useState([]); //스터디 멤버들 정보
-    const accessToken = localStorage.getItem('token');
+    // 토큰
+	  let accessToken = useSelector((state) => state.accessToken)
 
     const [personalChatId, setPersonalChatId] = useState();
     const navigate = useNavigate();
@@ -115,9 +118,9 @@ export default function ParticipatingMemberModal ({ studyId, participatingMember
                         {/* 일반 멤버들 */}
                         {
                             studyMembers.map((member, memberIndex) => (
-                              <>
+                              <React.Fragment key={member.memberId}>
                                 <Divider/>                  
-                                <ListItem key={member.memberId}>
+                                <ListItem >
                                   <ListItemAvatar>
                                     <Avatar alt={member.nickname} src={member.profileImage} />
                                   </ListItemAvatar>
@@ -145,7 +148,7 @@ export default function ParticipatingMemberModal ({ studyId, participatingMember
                                         </IconButton>
                                     </Tooltip>
                                 </ListItem>
-                              </>
+                              </React.Fragment>
                             )) }
                         
                         
