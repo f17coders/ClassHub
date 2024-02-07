@@ -20,7 +20,7 @@ function Search() {
 	}
 
 	const search = function() {
-		axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?&keyword=${keyword}`)	
+		axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?&keyword=${keyword}&order=ranking&page=0&size=16`)	
 		.then((res) => {
 			console.log('이거 실행됨')
 			// 검색결과를 저장하고
