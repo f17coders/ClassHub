@@ -153,7 +153,7 @@ public class MemberServiceImpl implements MemberService {
             member, pageable);
 
 //        total Page 계산
-        long communitySize = communityRepository.countByMemberMemberId(member.getMemberId());
+        long communitySize = communityRepository.countByMember(member);
         long totalPages = (long) (Math.ceil((double) communitySize / pageable.getPageSize()));
 
         List<MemberCommunityDetailRes> memberCommunityDetailResList = communityList.stream()
