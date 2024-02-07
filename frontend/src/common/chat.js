@@ -4,7 +4,7 @@ const accessToken = localStorage.getItem('token');
 // 채팅방 얻기
 const getPersonalChat = (personalChatId) => {
 
-    return axios.get(`http://localhost:8080/api/personal-chat/v1/${personalChatId}`,{
+    return axios.get(`https://i10a810.p.ssafy.io/api/personal-chat/v1/${personalChatId}`,{
         headers: {
             Authorization: `Bearer ${accessToken}`,
         }
@@ -21,7 +21,7 @@ const getPersonalChat = (personalChatId) => {
 
 // 채팅방 얻기, 없으면 생성
 const registPersonalChat = (receiver) => {
-    return axios.post(`http://localhost:8080/api/personal-chat/v1`,{
+    return axios.post(`https://i10a810.p.ssafy.io/api/personal-chat/v1`,{
         "receiver": receiver,
     }, {
         headers: {

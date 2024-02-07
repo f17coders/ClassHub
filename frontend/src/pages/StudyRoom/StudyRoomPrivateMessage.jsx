@@ -16,7 +16,7 @@ export default function StudyRoomPrivateMessage() {
     const [ currentUser, setCurrentUser ] = useState("");
 
     const chatPrivateConnect = () => {
-        const serverURL = `http://localhost:8080/api/chat`;
+        const serverURL = `https://i10a810.p.ssafy.io/api/chat`;
     
         let socket = new SockJS(serverURL);
         let client = new Client({ 

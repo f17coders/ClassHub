@@ -26,7 +26,7 @@ export default function PrivateMessageList(){
 
     // 현재 채팅한 멤버 목록 가져오기
     useEffect(() => {
-      axios.get(`http://localhost:8080/api/personal-chat/v1`, {
+      axios.get(`https://i10a810.p.ssafy.io/api/personal-chat/v1`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         }
