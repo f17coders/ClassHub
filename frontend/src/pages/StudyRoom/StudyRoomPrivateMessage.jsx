@@ -5,13 +5,14 @@ import { useSelector } from "react-redux"
 import SockJS from "sockjs-client/dist/sockjs";
 import { Client } from "@stomp/stompjs";
 import SendIcon from '@mui/icons-material/Send';
-import { ListItem, Avatar, ListItemAvatar, ListItemText, Backdrop, Alert, Pagination, TextField, Button, Stack, Box, List, ListItemButton, Grid, Typography, Divider, IconButton, Tooltip } from '@mui/material'
+import { ListItem, Avatar, ListItemAvatar, ListItemText, CircularProgress, Alert, TextField, Button, Stack, Box, List, ListItemButton, Grid, Typography, Divider, IconButton, Tooltip } from '@mui/material'
 
 // 스터디룸 개인 메시지
 export default function StudyRoomPrivateMessage() {
     // 토큰
 	let accessToken = useSelector((state) => state.accessToken)
 
+    const [isLoading, setIsLoading] = useState(true);
     const [recvList, setRecvList] = useState([]);
     const { personalChatId } = useParams();
     const [stompClient, setStompClient] = useState(null);
@@ -38,6 +39,7 @@ export default function StudyRoomPrivateMessage() {
     const chatPrivateConnect = () => {
         const serverURL = `https://i10a810.p.ssafy.io/api/chat`;
     
+        setIsLoading(true);
         let socket = new SockJS(serverURL);
         let client = new Client({ 
             connectHeaders: {
@@ -51,8 +53,15 @@ export default function StudyRoomPrivateMessage() {
             (res) => {
                 setRecvList(prevRecvList => [...prevRecvList, JSON.parse(res.body)]);
             });
+            setIsLoading(false);
         };
+
         client.activate(); // 클라이언트 활성화
+        // 연결 오류 발생 시 처리
+        client.onStompError = (frame) => {
+            console.error('WebSocket 연결 오류:', frame);
+            setTimeout(client.activate(), 5000); //
+        };
         setStompClient(client);
     }
     // 연결
@@ -60,7 +69,7 @@ export default function StudyRoomPrivateMessage() {
     useEffect(() =>  {
         const fetchData = async () => {
             try {
-                const personalChat = await getPersonalChat(personalChatId);
+                const personalChat = await getPersonalChat(accessToken, personalChatId);
                 setPersonalChat(personalChat);
                 setRecvList(personalChat.messageList);
             } catch (error) {
@@ -68,7 +77,6 @@ export default function StudyRoomPrivateMessage() {
             }
         };
         fetchData();
-        
     }, [personalChatId]);
 
     useEffect(() => {
@@ -223,7 +231,12 @@ export default function StudyRoomPrivateMessage() {
                 )) }
                 </Box>
                 {/* 채팅 작성 */}
-                <Box sx={{ width:"100%", height:"10%", display: 'flex', justifyContent:'flex-start', alignItems: 'flex-start' }}>
+                {isLoading ? 
+                    <React.Fragment>
+                        <CircularProgress sx={{ width:"100%", height:"10%", margin: "auto"}} />
+                        {/* <Divider sx={{my: 2}}>채팅을 연결하는 중입니다. 잠시만 기다려주세요</Divider> */}
+                    </React.Fragment>
+                    : <Box sx={{ width:"100%", height:"10%", display: 'flex', justifyContent:'flex-start', alignItems: 'flex-start' }}>
                     <TextField
                         id="standard-multiline-static"
                         label="채팅을 작성해주세요"
@@ -236,6 +249,8 @@ export default function StudyRoomPrivateMessage() {
                     />
                     <Button sx={{mx: 2}} variant="contained" endIcon={<SendIcon />} onClick={sendMessage}></Button>
                 </Box>
+                }
+                
                 
             </Stack>
             {/* <div className="chat-container">
