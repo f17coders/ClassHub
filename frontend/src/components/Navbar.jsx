@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Appbar from '@mui/material/AppBar'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
+import { Tooltip } from '@mui/material'
 import { Link, useNavigate } from 'react-router-dom'
 import MainLogo from './../assets/MainLogo.png'
 import MenuIcon from '@mui/icons-material/Menu'
@@ -10,6 +11,10 @@ import Menu from '@mui/material/Menu'
 import LoginModal from './LoginModal'
 import { useSelector, useDispatch } from 'react-redux'
 import { motion } from "framer-motion"
+import LogoutIcon from '@mui/icons-material/Logout';
+import { logout } from './../store/store'
+import { logoutUser } from './../store/userSlice'
+import axios from 'axios'
 
 // navbar
 function NavbarComponent() {
@@ -17,7 +22,26 @@ function NavbarComponent() {
 	let isLogin = useSelector((state) => state.isLogin)
 	// 유저정보 가져오기 용
 	let user = useSelector((state) => state.user)
+	const accessToken = useSelector((state) => state.accessToken)
+	const dispatch = useDispatch()
 
+	// 로그아웃(지금은 탈퇴 박아놓음..)
+	const handleLogout = () => {
+		axios.delete('https://i10a810.p.ssafy.io/api/members/v1', {
+			headers: {
+				Authorization: `Bearer ${accessToken}`
+			}
+		})
+		.then((res) => {
+			dispatch(logout())
+			dispatch((logoutUser()))
+			Swal.fire({
+				title: "로그아웃!",
+				icon: "success"
+			  })
+		})
+		.catch((err) => console.log(err))
+	}
 	// 화면 줄었을 때 리스트용(반응형)
 	const [anchorElNav, setAnchorElNav] = useState(null)
 	const handleOpenNavMenu = (event) => {
@@ -159,11 +183,19 @@ function NavbarComponent() {
 								Login
 							</motion.button>
 						) : (
-							<Link to="/mypage">
-								<IconButton>
-									<img src={user.profileImage} alt="profile" style={{ width: '40px', height: '40px', borderRadius: '70%' }} />
-								</IconButton>
-							</Link>
+							<div>
+								<Link to="/mypage">
+									<IconButton>
+										<img src={user.profileImage} alt="profile" style={{ width: '40px', height: '40px', borderRadius: '70%' }} />
+									</IconButton>
+								</Link>
+								<Tooltip title='Logout'>
+									<IconButton onClick={handleLogout}>
+										<LogoutIcon />
+									</IconButton>
+								</Tooltip>
+							</div>
+							
 						)
 					}
 				</Grid>

@@ -21,10 +21,13 @@ let user = createSlice({
         ...state,
         job: action.payload
       }
+    },
+    logoutUser(state) {
+      return null
     }
   }
 })
 
-export let { saveUser, changeUserTagList, changeUserJob } = user.actions
+export let { saveUser, changeUserTagList, changeUserJob, logoutUser } = user.actions
 
 export default user

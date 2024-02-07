@@ -7,42 +7,21 @@ import SendIcon from '@mui/icons-material/Send'
 import LockPersonIcon from '@mui/icons-material/LockPerson';
 import LectureReview from './LectureReview'
 import { useSelector } from 'react-redux'
-import profileImg from './../../assets/Profile.png'
 import axios from 'axios'
 import UpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { green } from '@mui/material/colors'
 import Fab from '@mui/material/Fab';
+import Swal from 'sweetalert2'
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 // 강의 detail에서 리뷰 탭에 들어가는 컴포넌트
 
-function LectureDetailReviews({lecture}) {
+function LectureDetailReviews({ lecture }) {
   // 로그인 확인용
   let isLogin = useSelector((state) => state.isLogin)
   // 토큰
   let accessToken = useSelector((state) => state.accessToken)
-
-  // 리뷰를 쓸 수 있는지 없는지 ? 
-  // 쓸 수 있다면 1, 없다면 2
-  const [check, setCheck] = useState(1)
-
-  // // 만약 내 리뷰가 있다면, 가져오기
-  // useEffect(() => {
-  //   axios.get(`https://i10a810.p.ssafy.io/api/reviews/v1/1`, {
-  //     headers: {
-  //       Authorization: `Bearer ${accessToken}`
-  //     }
-  //   })
-  //     .then((res) => {
-  //       // 만약 없다면 어떻게 뜨는지 모르겠다
-  //       // 우선 가져와보고,
-  //       console.log(res)
-  //       setMyReview(res.data.result)
-  //     })
-  //     .catch((err) => console.log(err))
-  // }, [])
-
-
-
 
   //정렬관련(우리사이트)
   const [sort1, setSort1] = useState('최신순')
@@ -168,7 +147,7 @@ function LectureDetailReviews({lecture}) {
           {
             isLogin == true ? (
               <div>
-                <CreateReview check={check} lecture={lecture}/>
+                <CreateReview lecture={lecture} />
               </div>
             ) : null
           }
@@ -221,7 +200,7 @@ function LectureDetailReviews({lecture}) {
           {fab.icon}
         </Fab>
       </Tooltip>
-      
+
     </div>
   )
 }
@@ -229,13 +208,45 @@ function LectureDetailReviews({lecture}) {
 
 
 // 리뷰 작성 창
-function CreateReview({check, lecture}) {
+function CreateReview({ lecture }) {
   // 유저 가져오기
   let user = useSelector((state) => state.user)
   // 토큰
   let accessToken = useSelector((state) => state.accessToken)
 
-  const userName = '망글곰'
+  // 작성 했는지 안했는지 확인용
+  const [wrote, setWrote] = useState(false)
+
+  // 샀는지 안샀는지 체크용
+  const [buy, setBuy] = useState(false)
+
+  // 만약 내 리뷰가 있다면, 가져오기
+  useEffect(() => {
+    axios.get(`https://i10a810.p.ssafy.io/api/reviews/v1/${lecture.lectureId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
+      .then((res) => {
+        const result = res.data.result
+        if (result.isBuyed) {
+          if (result.isExist) {
+            // 내 강의 + 씀
+            setWrote(true)
+            setBuy(true)
+            setRate(result.score)
+            setReview(result.content)
+          } else if (result.isExist == false) {
+            // 내 강의 + 안 씀
+            setBuy(true)
+          }
+        } else if (result.isBuyed == false) {
+          // 안 삼
+          setBuy(false)
+        }
+      })
+      .catch((err) => console.log(err))
+  }, [])
 
   // 호버용 변수들
   const [isHover, setIsHover] = useState(false)
@@ -248,25 +259,81 @@ function CreateReview({check, lecture}) {
 
   // 별점용
   const [rate, setRate] = useState(0)
-
+  
+  // 리뷰 수정하기
+  const [editing, setEditing] = useState(false)
+  const handelEdit = function() {
+    setEditing(true)
+    setWrote(false)
+  }
 
   // 리뷰쓰는용
-  const [review, setReview] =useState('')
+  const [review, setReview] = useState('')
   const makeReview = function (event) {
     const input = event.target.value
     setReview(input)
   }
 
-  const submitReview = function() {
-    axios.post(`https://i10a810.p.ssafy.io/api/reviews/v1/${lecture.lectureId}`,{
+  const submitReview = function () {
+    if (editing) {
+      // 여기는 수정
+      axios.patch(`https://i10a810.p.ssafy.io/api/reviews/v1/${lecture.lectureId}`, {
+        "score": rate,
+        "content": review
+      }, {
+        headers: { Authorization: `Bearer ${accessToken}` }
+      })
+        .then((res) => {
+          setWrote(true)
+          Swal.fire({
+            title: "리뷰 수정 완료!",
+            icon: "success"
+          })
+        })
+        .catch((err) => console.log(err))
+    } else {
+      // 여기는 처음 작성
+      axios.post(`https://i10a810.p.ssafy.io/api/reviews/v1/${lecture.lectureId}`, {
+      "score": rate,
+      "content": review
+    }, {
       headers: { Authorization: `Bearer ${accessToken}` }
-    },{
-      "score" : rate,
-      "content" : review
     })
-    .then((res) => console.log('리뷰작성완료'))
+      .then((res) => {
+        console.log(res)
+        if (res.data.status == 500) {
+          Swal.fire({
+            title: "이미 작성했습니다",
+            text: "해당 강의에 대한 리뷰를 이미 작성했습니다",
+            icon: "warning"
+          })
+        }
+        if (res.data.status == 201) {
+          setWrote(true)
+          Swal.fire({
+            title: "리뷰 작성 완료!",
+            icon: "success"
+          })
+        }
+      })
+      .catch((err) => console.log(err))
+    } 
+  }
+
+  // 리뷰 삭제하기
+  const deleteReview = function() {
+    axios.delete(`https://i10a810.p.ssafy.io/api/reviews/v1/${lecture.lectureId}`, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    })
+    .then((res) => {
+      Swal.fire({
+        title: "리뷰 삭제 완료!",
+        icon: "success"
+      })
+    })
     .catch((err) => console.log(err))
   }
+
 
   // 전체 틀 스타일
   const divStyle = {
@@ -296,50 +363,96 @@ function CreateReview({check, lecture}) {
     transition: 'transform 0.5s ease',
   }
   return (
-    <div style={divStyle} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <div >
       {
-        // 내가 산 강의가 아니라면, 안보이게 해주기
-        check == 2 ? (
-          <div style={divStyle2}
-          >
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <LockPersonIcon sx={{ color: 'white' }} fontSize='large' />
-              <p style={{ textAlign: 'center', color: 'white', fontSize: '1.4em' }}>강의 구매 후 작성할 수 있습니다!</p>
+        wrote ? (
+          <div style={{
+            position: 'relative',
+            width: '90%',
+            height: 'inherit',
+            backgroundColor: 'rgba(128, 128, 128, 0.05)',
+            borderRadius: '2%',
+            padding: '10px',
+            boxShadow: isHover ? '0 0 5px rgba(0, 0, 0, 0.1)' : 'none',
+            position: 'relative'
+          }}>
+            
+            <div style={{ display: 'flex', justifyContent: 'space-around', margin: '10px 0px' }}>
+              <Avatar src={user.profileImage} alt="profileImg" sx={{ width: 50, height: 50 }} />
+              <div style={{ display: 'flex', flexDirection: 'column', width: '75%' }}>
+                {user.nickname}
+                <div>
+                  <Rating name="read-only" value={rate} readOnly size='small' />
+                </div>
+              </div>
+            </div>
+            <div style={{ padding: '10px' }}>
+              {review}
+            </div>
+            <p style={{position: 'absolute', top: -10, right: 20, color: 'lightgrey'}}>내가 작성한 리뷰</p>
+            <div style={{ position: 'absolute', bottom: 10, right: 10 }}>
+              <div style={{display:'flex'}}>
+                <Tooltip title='수정하기'>
+                  <IconButton onClick={handelEdit}>
+                    <EditIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title='삭제하기'>
+                  <IconButton onClick={deleteReview}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+              </div>
+              
             </div>
           </div>
-        ) : null
-      }
-      {/* 리뷰작성하는 곳 */}
-      <div style={{ display: 'flex', justifyContent: 'space-around', margin: '10px 0px' }}>
-        <Avatar src={profileImg} alt="profileImg" sx={{ width: 70, height: 70 }} />
-        <div style={{ display: 'flex', flexDirection: 'column', width: '70%', marginTop: '10px' }}>
-          {userName}
-          <div>
-            {/* 별점  */}
-            <Rating
-              value={rate}
-              onChange={(event, newValue) => {
-                setRate(newValue);
-              }}
+        ) : (<div style={divStyle} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+          {
+            // 내가 산 강의가 아니라면, 안보이게 해주기
+            buy == false ? (
+              <div style={divStyle2}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <LockPersonIcon sx={{ color: 'white' }} fontSize='large' />
+                  <p style={{ textAlign: 'center', color: 'white', fontSize: '1.4em' }}>강의 구매 후 작성할 수 있습니다!</p>
+                </div>
+              </div>
+            ) : null
+          }
+          {/* 리뷰작성하는 곳 */}
+          <div style={{ display: 'flex', justifyContent: 'space-around', margin: '10px 0px' }}>
+            <Avatar src={user.profileImage} alt="profileImg" sx={{ width: 70, height: 70 }} />
+            <div style={{ display: 'flex', flexDirection: 'column', width: '70%', marginTop: '10px' }}>
+              {user.nickname}
+              <div>
+                {/* 별점  */}
+                <Rating
+                  value={rate}
+                  onChange={(event, newValue) => {
+                    setRate(newValue);
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+          {/* 리뷰 쓰는 곳 */}
+          <div style={{ padding: '10px', position: 'relative' }}>
+            <TextField
+              label="리뷰작성하기"
+              multiline
+              rows={4}
+              sx={{ width: '100%' }}
+              onChange={makeReview}
             />
+            <IconButton onClick={submitReview} aria-label="등록" sx={{ position: 'absolute', bottom: 20, right: 25 }}>
+              <Tooltip title="리뷰 작성">
+                <SendIcon />
+              </Tooltip>
+            </IconButton>
           </div>
         </div>
-      </div>
-      {/* 리뷰 쓰는 곳 */}
-      <div style={{ padding: '10px', position: 'relative' }}>
-        <TextField
-          label="리뷰작성하기"
-          multiline
-          rows={4}
-          sx={{ width: '100%' }}
-          onChange={makeReview}
-        />
-        <IconButton onClick={submitReview} aria-label="등록" sx={{ position: 'absolute', bottom: 20, right: 25 }}>
-          <Tooltip title="리뷰 작성">
-            <SendIcon />
-          </Tooltip>
-        </IconButton>
-      </div>
+        )
+      }
+
     </div>
   )
 }
