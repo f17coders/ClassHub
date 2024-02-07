@@ -10,28 +10,9 @@ function Home() {
 	// 로그인 확인용
 	let isLogin = useSelector((state) => state.isLogin)
 
+	// 유저정보 가져오자
+	let userInfo = useSelector((state) => state.user) 
 
-	// 로그인이 되었다면, 회원 정보 가져오기
-	const [userInfo, setUesrInfo] = useState(null)
-	useEffect(() => {
-		if (isLogin == true) {
-			if (userInfo == null) {
-				axios.get('https://i10a810.p.ssafy.io/api/members/v1', {
-					headers: {
-						// 여기에 회원 아이디가 들어감
-						AUTHORIZATION: 3
-					}
-				})
-					.then((res) => {
-						console.log(res.data.result)
-						setUesrInfo(res.data.result)
-					})
-					.catch((err) => console.log(err))
-			}
-		} else {
-			setUesrInfo(null)
-		}
-	}, [isLogin])
 	return (
 		<div>
 			<Banner />
