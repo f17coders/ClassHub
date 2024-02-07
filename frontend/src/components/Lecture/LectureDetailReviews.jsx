@@ -13,9 +13,9 @@ import axios from 'axios'
 // 강의 detail에서 리뷰 탭에 들어가는 컴포넌트
 
 function LectureDetailReviews() {
-  // 토큰 가져오기
-  const accessToken = localStorage.getItem('token')
-  
+  // 토큰
+  let accessToken = useSelector((state) => state.accessToken)
+
   //정렬관련(우리사이트)
   const [sort1, setSort1] = useState('최신순')
   const handleSort1 = (event) => {
@@ -28,17 +28,36 @@ function LectureDetailReviews() {
   }
 
 
+  // 내 리뷰 작성
+  const [myReview, setMyReview] = useState(null)
+
+  // 만약 내 리뷰가 있다면, 가져오기
+  useEffect(() => {
+    axios.get(`https://i10a810.p.ssafy.io/api/reviews/v1/1`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
+      .then((res) => {
+        // 만약 없다면 어떻게 뜨는지 모르겠다
+        // 우선 가져와보고,
+        console.log(res)
+        setMyReview(res.data.result)
+      })
+      .catch((err) => console.log(err))
+  }, [])
+
   // 리뷰데이터(임시)
   // classhub에서 쓴 리뷰
   const [review1, setReview1] = useState([])
   const [page1, setPage1] = useState(0)
   const [totalPage1, setTotalPage1] = useState(null)
   useEffect(() => {
-    axios.get(`https://i10a810.p.ssafy.io/api/reviews/v0/1/classhub?page=${page1}&size=4`,{
-    headers: {
-      AUTHORIZATION: `Bearer ${accessToken}`
-    }
-  })
+    axios.get(`https://i10a810.p.ssafy.io/api/reviews/v0/1/classhub?page=${page1}&size=4`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
       .then((res) => {
         // console.log(res)
         setReview1(res.data.result.reviewResList)
@@ -49,16 +68,16 @@ function LectureDetailReviews() {
   const setNextPage1 = function () {
     let nextPage = page1 + 1
     setPage1(nextPage)
-  } 
+  }
 
   // 다른 사이트의 리뷰
   const [review2, setReview2] = useState([])
   const [page2, setPage2] = useState(0)
   const [totalPage2, setTotalPage2] = useState(null)
   useEffect(() => {
-    axios.get(`https://i10a810.p.ssafy.io/api/reviews/v0/1/site?page=${page2}&size=4`,{
+    axios.get(`https://i10a810.p.ssafy.io/api/reviews/v0/1/site?page=${page2}&size=4`, {
       headers: {
-        AUTHORIZATION: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`
       }
     })
       .then((res) => {
@@ -71,7 +90,7 @@ function LectureDetailReviews() {
   const setNextPage2 = function () {
     let nextPage = page2 + 1
     setPage2(nextPage)
-  } 
+  }
 
   // 로그인 했는지 확인하기
   // 로그인 확인용
@@ -101,7 +120,11 @@ function LectureDetailReviews() {
           {
             isLogin == true ? (
               <div>
-                <CreateReview />
+                { // 만약 내 리뷰가 있다면 그냥 바로 보여주자
+                  myReview == null ? (<CreateReview />): (
+                    <LectureReview review={myReview} from={1} />
+                  )
+                }
               </div>
             ) : null
           }
@@ -114,7 +137,7 @@ function LectureDetailReviews() {
             ))
           }
           {
-            page1 + 1 == totalPage1 ? (null) : (<Button variant="outlined" onClick={setNextPage1} sx={{width:'90%'}}>더 보기</Button>)
+            page1 + 1 == totalPage1 ? (null) : (<Button variant="outlined" onClick={setNextPage1} sx={{ width: '90%' }}>더 보기</Button>)
           }
         </div>
       </div>
@@ -143,10 +166,10 @@ function LectureDetailReviews() {
                 {/* 다른사이트에서 가는거는 from을 2로 설정해서 주기 */}
                 <LectureReview review={item} from={2} />
               </div>))
-            }</div>) : null
+          }</div>) : null
           }
           {
-            page1 + 1 == totalPage1 ? (null) : (<Button variant="outlined" onClick={setNextPage2} sx={{width:'90%'}}>더 보기</Button>)
+            page1 + 1 == totalPage1 ? (null) : (<Button variant="outlined" onClick={setNextPage2} sx={{ width: '90%' }}>더 보기</Button>)
           }
         </div>
       </div>
@@ -160,7 +183,7 @@ function LectureDetailReviews() {
 // 로그인 하면 보이고, 산 강의일 때만 작성이 가능함
 function CreateReview() {
   const userName = '망글곰'
-  // 산 강의인지 확인
+  // 산 강의인지 확인 -> API필요함, 유저 정보 필요함
   const [isMine, setIsMine] = useState(true)
   const [check, setCheck] = useState(1)
 
@@ -181,7 +204,7 @@ function CreateReview() {
   }
 
   // 별점용
-  const [value, setValue] = useState(0)
+  const [rate, setRate] = useState(0)
 
   // 전체 틀 스타일
   const divStyle = {
@@ -232,9 +255,9 @@ function CreateReview() {
           <div>
             {/* 별점  */}
             <Rating
-              value={value}
+              value={rate}
               onChange={(event, newValue) => {
-                setValue(newValue);
+                setRate(newValue);
               }}
             />
           </div>

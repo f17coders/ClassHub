@@ -1,16 +1,17 @@
 import Button from '@mui/material/Button'
 import { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import axios from 'axios'
 import Swal from 'sweetalert2'
-
+import { saveUser, changeUserTagList, changeUserJob } from './../../store/userSlice'
 
 
 function MyPageEdit() {
-	// 토큰 가져오기
-  const accessToken = localStorage.getItem('token')
-
+	 // 토큰
+	 let accessToken = useSelector((state) => state.accessToken)
+	 const dispatch = useDispatch()
 	// 관심있는 기술
 	const [skills, setSkills] = useState([])
 	// 목표 직무
@@ -22,7 +23,7 @@ function MyPageEdit() {
 		if (skills.length == 0) {
 			axios.get('https://i10a810.p.ssafy.io/api/tags/v1/members',{
 				headers: {
-					AUTHORIZATION: `Bearer ${accessToken}`
+					Authorization: `Bearer ${accessToken}`
 				}
 			})
 				.then((res) => {
@@ -32,9 +33,9 @@ function MyPageEdit() {
 				.catch((err) => console.log(err))
 		}
 		if (targetJobs.length == 0) {
-			axios.get('https://i10a810.p.ssafy.io/api/jobs/v1',{
+			axios.get('https://i10a810.p.ssafy.io/api/jobs/v0',{
 				headers: {
-					AUTHORIZATION: `Bearer ${accessToken}`
+					Authorization: `Bearer ${accessToken}`
 				}
 			})
 				.then((res) => {
@@ -89,14 +90,17 @@ function MyPageEdit() {
 		if (valid) {
 			// 유효할 때 수정 요청 보내기
 			axios.put('https://i10a810.p.ssafy.io/api/members/v1', {
-				tagList: interstedSkills.map((skill) => skill.tagId),
-				jobId: target[0].jobId
+				'tagList': interstedSkills.map((skill) => skill.tagId),
+				'jobId': target[0].jobId
 			}, {
 				headers: {
 					AUTHORIZATION: `Bearer ${accessToken}`
 				}
 			})
 				.then((res) => {
+					console.log(res)
+					dispatch(changeUserTagList(interstedSkills))
+					dispatch(changeUserJob(target[0]))
 					Swal.fire({
 						title: "정보 수정 완료",
 						icon: "success"

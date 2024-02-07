@@ -19,8 +19,11 @@ function MyPage() {
 	let isLogin = useSelector((state) => state.isLogin)
 	let [user, setUser] = useState(null)
 
-	// 처음에 회원 정보 가져오기
-	const accessToken = localStorage.getItem('token')
+	// 토큰
+	let accessToken = useSelector((state) => state.accessToken)
+
+
+	// 회원정보가 지속적으로 수정됨(서버에서 정보 가져오자)
 	useEffect(() => {
 		if (user == null) {
 			axios.get('https://i10a810.p.ssafy.io/api/members/v1', {
@@ -41,7 +44,7 @@ function MyPage() {
 		if (user == null) {
 			axios.get('https://i10a810.p.ssafy.io/api/members/v1/studies/participation', {
 				headers: {
-					AUTHORIZATION: `Bearer ${accessToken}`
+					Authorization: `Bearer ${accessToken}`
 				}
 			})
 				.then((res) => {
@@ -65,8 +68,7 @@ function MyPage() {
 			setRecommendLectures(prevState => ({
 				...prevState, 
 				[res.data.result.job.name]: res.data.result.lectureList 
-		}));
-			console.log(recommendLectures)
+		}))
 		})
 	}, [user])
 
