@@ -2,12 +2,16 @@ package com.f17coders.classhub.module.domain.member.service;
 
 import com.f17coders.classhub.global.exception.BaseExceptionHandler;
 import com.f17coders.classhub.global.exception.code.ErrorCode;
+import com.f17coders.classhub.module.domain.community.Community;
+import com.f17coders.classhub.module.domain.community.repository.CommunityRepository;
 import com.f17coders.classhub.module.domain.job.Job;
 import com.f17coders.classhub.module.domain.job.dto.response.JobRes;
 import com.f17coders.classhub.module.domain.job.repository.JobRepository;
 import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.member.dto.request.MemberAddInfoReq;
 import com.f17coders.classhub.module.domain.member.dto.request.MemberUpdateInfoReq;
+import com.f17coders.classhub.module.domain.member.dto.response.MemberCommunityDetailRes;
+import com.f17coders.classhub.module.domain.member.dto.response.MemberCommunityListRes;
 import com.f17coders.classhub.module.domain.member.dto.response.MemberGetInfoRes;
 import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
 import com.f17coders.classhub.module.domain.memberTag.MemberTag;
@@ -21,6 +25,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +36,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final JobRepository jobRepository;
     private final TagRepository tagRepository;
+    private final CommunityRepository communityRepository;
     private final MemberTagRepository memberTagRepository;
     private final MemberTagService memberTagService;
     private final StudyRepository studyRepository;
@@ -138,5 +144,30 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public List<StudyBaseRes> getStudyList(Member member) throws BaseExceptionHandler, IOException {
         return studyRepository.findStudyFetchJoinStudyMemberByMemberId(member.getMemberId());
+    }
+
+    @Override
+    public MemberCommunityListRes getCommunityList(Member member, Pageable pageable)
+        throws BaseExceptionHandler {
+        List<Community> communityList = communityRepository.findAllByMemberIdWithPaging(
+            member.getMemberId(), pageable);
+
+//        total Page 계산
+        long communitySize = communityRepository.countByMemberMemberId(member.getMemberId());
+        long totalPages = (long) (Math.ceil((double) communitySize / pageable.getPageSize()));
+
+        List<MemberCommunityDetailRes> memberCommunityDetailResList = communityList.stream()
+            .map(community -> MemberCommunityDetailRes.builder()
+                .communityId(community.getCommunityId())
+                .title(community.getTitle())
+                .content(community.getContent())
+                .createdAt(community.getCreateTime())
+                .build())
+            .collect(Collectors.toList());
+
+        return MemberCommunityListRes.builder()
+            .communityList(memberCommunityDetailResList)
+            .totalPages(totalPages)
+            .build();
     }
 }

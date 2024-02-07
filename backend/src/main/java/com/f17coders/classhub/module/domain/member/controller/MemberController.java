@@ -2,9 +2,9 @@ package com.f17coders.classhub.module.domain.member.controller;
 
 import com.f17coders.classhub.global.api.response.BaseResponse;
 import com.f17coders.classhub.global.exception.code.SuccessCode;
-import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.member.dto.request.MemberAddInfoReq;
 import com.f17coders.classhub.module.domain.member.dto.request.MemberUpdateInfoReq;
+import com.f17coders.classhub.module.domain.member.dto.response.MemberCommunityListRes;
 import com.f17coders.classhub.module.domain.member.dto.response.MemberGetInfoRes;
 import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
 import com.f17coders.classhub.module.domain.member.service.MemberService;
@@ -14,16 +14,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,7 +41,8 @@ public class MemberController {
     @GetMapping("/v1")
     public ResponseEntity<BaseResponse<MemberGetInfoRes>> getInformation(
         @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
-        MemberGetInfoRes memberGetInfoRes = memberService.getInformation(memberSecurityDTO.toMember());
+        MemberGetInfoRes memberGetInfoRes = memberService.getInformation(
+            memberSecurityDTO.toMember());
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, memberGetInfoRes);
     }
@@ -89,7 +90,8 @@ public class MemberController {
     @GetMapping("/v1/studies/participation")
     public ResponseEntity<BaseResponse<List<StudyBaseRes>>> getStudyList(
         @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
-        List<StudyBaseRes> studyBaseResList = memberService.getStudyList(memberSecurityDTO.toMember());
+        List<StudyBaseRes> studyBaseResList = memberService.getStudyList(
+            memberSecurityDTO.toMember());
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, studyBaseResList);
     }

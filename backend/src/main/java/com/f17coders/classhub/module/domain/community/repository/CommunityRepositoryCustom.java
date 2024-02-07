@@ -15,5 +15,7 @@ public interface CommunityRepositoryCustom {
 
     Community findByCommunityIdFetchJoinCommunityTag(int communityId);
 
+    List<Community> findAllByMemberIdWithPaging(int memberId, Pageable pageable);
+
     public List<Integer> getCommunityIdList(List<Tag> tagList, String keyword, Pageable pageable);
 }
