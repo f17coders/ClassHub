@@ -11,13 +11,13 @@ let isLogin = createSlice({
     login(state) {
       return true
     },
-    logout(state){
+    logout(state) {
       return false
     }
   }
 })
 
-export let {login, logout} = isLogin.actions
+export let { login, logout } = isLogin.actions
 
 
 // 토큰 저장
@@ -31,7 +31,7 @@ const accessToken = createSlice({
   }
 })
 
-export let {saveAccessToken} = accessToken.actions
+export let { saveAccessToken } = accessToken.actions
 
 
 
@@ -53,13 +53,14 @@ export let { addElement, deleteElement } = compareLectures.actions
 
 // 여긴 강의 검색용 변수들이 들어감!
 let searchParams = createSlice({
-  name:'searchParams',
+  name: 'searchParams',
   initialState: {
     category: null,
     tags: [],
     keyword: null,
     level: 'ALL',
     site: null,
+    order: 'ranking',
     page: 0,
     size: 16,
   },
@@ -102,7 +103,7 @@ let searchParams = createSlice({
       }
     },
     // 레벨 변경
-    changeLevel(state, action){
+    changeLevel(state, action) {
       if (action.payload == '입문') {
         return {
           ...state,
@@ -129,11 +130,11 @@ let searchParams = createSlice({
       } else {
         return {
           ...state,
-          level:'ALL'
+          level: 'ALL'
         }
       }
     },
-    changeSite(state, action){
+    changeSite(state, action) {
       if (action.payload == '인프런') {
         return {
           ...state,
@@ -156,15 +157,37 @@ let searchParams = createSlice({
         }
       }
     },
-    changePage(state,action) {
+    changePage(state, action) {
       return {
         ...state,
         page: action.payload
       }
-    }
-  }
-})
-export let {changeCategory, addTags, deleteTags, changeKeyword, changeLevel,changeSite, changePage } = searchParams.actions
+    },
+    changeOrder(state, action) {
+      if (action.payload == '별점순') {
+        return {
+          ...state,
+          order: 'ranking'
+        }
+      } else if (action.payload == '추천순') {
+        return {
+          ...state,
+          order: 'recommend'
+        }
+      } else if (action.payload == '낮은 가격순') {
+        return {
+          ...state,
+          order: 'lowest-price'
+        }
+      } else if (action.payload == '높은 가격순') {
+        return {
+          ...state,
+          order: 'highest-price'
+        }
+      }
+    }}
+    })
+export let { changeCategory, addTags, deleteTags, changeKeyword, changeLevel, changeSite, changePage, changeOrder } = searchParams.actions
 
 // 강의 검색 결과
 let lectureResult = createSlice({
@@ -180,7 +203,7 @@ export let { searchResult } = lectureResult.actions
 
 // 강의 페이지를 메인페이지에서 출발해서 갈때를 확인하는 용도
 let fromMain = createSlice({
-  name:'fromMain',
+  name: 'fromMain',
   initialState: false,
   reducers: {
     setFromMainTrue(state) {
@@ -216,7 +239,7 @@ const persistedReducer = persistReducer(
 
 const store = configureStore({
   reducer: persistedReducer,
-	middleware: getDefaultMiddleware => getDefaultMiddleware({serializableCheck: false}),
+  middleware: getDefaultMiddleware => getDefaultMiddleware({ serializableCheck: false }),
   devTools: process.env.NODE_ENV !== 'production'
 });
 

@@ -64,7 +64,8 @@ function CompareButton() {
       >
         <DialogContent>
           <Container sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-            <p style={{ fontSize: '1.7em', fontWeight: '600', marginBottom: '40px', marginTop: '20px' }}>강의 비교</p>
+            <p style={{ fontSize: '1.7em', fontWeight: '600', marginTop: '20px', marginBottom:'0px' }}>강의 비교</p>
+            <p sytle={{ marginTop:'5px', marginBottom: '40px'}}>비교하고 싶은 강의를 추가해서 한 눈에 비교해보세요!</p>
             <Grid container spacing={3} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px' }}>
               {compareLectures.map((lecture, idx) => (
                 <Grid item xs={4} key={idx}>

@@ -13,7 +13,7 @@ import NorthIcon from '@mui/icons-material/North';
 import Box from '@mui/material/Box'
 import { useState, useEffect  } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { addTags, deleteTags, changeLevel, changeSite } from '../../store/store'
+import { addTags, deleteTags, changeLevel, changeSite, changeOrder } from '../../store/store'
 import axios from 'axios'
 
 // 강의 검색창 (+ 태그 선택까지)
@@ -119,6 +119,7 @@ function LectureSearch() {
 	const [sort, setSort] = useState('')
 	const handleSort = (event) => {
 		setSort(event.target.value)
+		dispatch(changeOrder(event.target.value))
 	}
 
 
@@ -280,14 +281,15 @@ function LectureSearch() {
 				<Grid item sx={{ marginRight: '20px' }}>
 					<FormControl sx={{ minWidth: '170px' }} fullWidth size='small'>
 						<Select
-							defaultValue={'최신순'}
+							defaultValue={'별점순'}
 							onChange={handleSort}
 							inputProps={{ 'aria-label': 'Without label' }}
 							sx={{ color: 'grey' }}
 						>
-							<MenuItem value='최신순'>최신순</MenuItem>
-							<MenuItem value='가격순'>가격순</MenuItem>
-							<MenuItem value='할인률높은순'>할인률높은순</MenuItem>
+							<MenuItem value='별점순'>별점순</MenuItem>
+							<MenuItem value='추천순'>추천순</MenuItem>
+							<MenuItem value='낮은 가격순'>낮은 가격순</MenuItem>
+							<MenuItem value='높은 가격순'>높은 가격순</MenuItem>
 						</Select>
 					</FormControl>
 				</Grid>
