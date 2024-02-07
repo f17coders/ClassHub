@@ -6,9 +6,13 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { useSelector } from "react-redux"
+
 
 export default function CommunityModify(){
   const MySwal = withReactContent(Swal);
+  // 토큰
+	let accessToken = useSelector((state) => state.accessToken)
 
   const [title, setTitle] = useState(''); //제목
   const [content, setContent] = useState(''); //내용
@@ -83,8 +87,8 @@ export default function CommunityModify(){
   useEffect(() => {
       axios.get(`https://i10a810.p.ssafy.io/api/communities/v0/details/${communityId}`, {
         headers: {
-          Authorization: '10'
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
         .then((response) => {
           // 받아온 데이터를 필요에 맞게 처리합니다.
@@ -103,8 +107,8 @@ export default function CommunityModify(){
     "tagList": tagList
   }, {
     headers: {
-      Authorization: '10'
-    }
+      Authorization: `Bearer ${accessToken}`,
+    },
   })
   .then(()=> {
     console.log('게시물 수정완료')

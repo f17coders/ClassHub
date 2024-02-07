@@ -8,6 +8,8 @@ import Dns from '@mui/icons-material/Dns';
 import Public from '@mui/icons-material/Public';
 import ImageIcon from '@mui/icons-material/Image';
 import axios from 'axios';
+import { useSelector } from "react-redux"
+
 
 // 내가 참여중인 스터디 목록 조회(왼쪽 사이드메뉴에서)
 export default function ParticipatingRoomList({studyId}){
@@ -18,7 +20,8 @@ export default function ParticipatingRoomList({studyId}){
     setSelectedIndex(index);
   };
 
-  const accessToken = localStorage.getItem('token');
+  // 토큰
+  let accessToken = useSelector((state) => state.accessToken)
 
   // 참여중인 스터디 목록 데이터 -> API에서 받아올것!
   useEffect(() => {

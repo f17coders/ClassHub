@@ -9,6 +9,8 @@ import axios from 'axios';
 import StudyRoomChannelModify from './StudyRoomChannelModify';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { useSelector } from "react-redux"
+
 
 const style = {
     position: 'absolute',
@@ -34,7 +36,8 @@ export default function StudyRoomChannelModal({studyId, studyRoomChannel, channe
     //setStudyRoomChannelModify 열렸는지 여부 관리하는 state
     const [studyRoomChannelModify, setStudyRoomChannelModify] = useState(false);
     const [editingChannelId, setEditingChannelId] = useState(null); // 수정 중인 채널의 ID를 저장
-    const accessToken = localStorage.getItem('token');
+    // 토큰
+	  let accessToken = useSelector((state) => state.accessToken)
     const [hasError, setHasError] = useState(false); // 입력값이 10자 이상인지 여부를 추적
     const [isNull, setIsNull] = useState(false); // 입력값이 null인지 여부를 추적
 

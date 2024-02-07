@@ -6,8 +6,12 @@ import SouthIcon from '@mui/icons-material/South'
 import NorthIcon from '@mui/icons-material/North';
 import Box from '@mui/material/Box'
 import axios from 'axios'
+import { useSelector } from "react-redux"
+
 
 export default function CommunitySearch() {
+	// 토큰
+	let accessToken = useSelector((state) => state.accessToken)
 	// // 태그 검색
 	// const Tags = ['HTML/CSS', 'JavaScript', 'Node.js', 'React', 'Python','Java','Spring','Spring Boot', 'SQL', 'Django', 'React Native']
 

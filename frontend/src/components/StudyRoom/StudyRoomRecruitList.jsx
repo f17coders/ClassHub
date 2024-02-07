@@ -11,9 +11,13 @@ import withReactContent from 'sweetalert2-react-content'
 import axios from 'axios';
 import {registPersonalChat} from "../../common/chat.js"
 import {useNavigate} from 'react-router-dom'
+import { useSelector } from "react-redux"
+
 
 export default function StudyRoomRecruitList({study}){
   const MySwal = withReactContent(Swal);
+  // 토큰
+  let accessToken = useSelector((state) => state.accessToken)
   const [studyId, setStudyId] = useState('');
   const [status, setStatus] = useState(false) //방 공개여부
   const [inviteCode, setInviteCode] = useState(''); //초대코드
@@ -155,8 +159,6 @@ export default function StudyRoomRecruitList({study}){
       })
     }
   }
-
-  const accessToken = localStorage.getItem('token');
 
     // 스터디룸 입장
     const enterStudyRoom = (studyId) => {
