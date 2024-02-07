@@ -162,7 +162,7 @@ export default function StudyRoomRecruitList({study}){
 
     // 스터디룸 입장
     const enterStudyRoom = (studyId) => {
-      axios.post(`https://i10a810.p.ssafy.io:4000/api/studies/v1/entrance/${studyId}`, null, {
+      axios.post(`https://i10a810.p.ssafy.io/api/studies/v1/entrance/${studyId}`, null, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
