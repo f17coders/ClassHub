@@ -6,7 +6,7 @@ import SockJS from "sockjs-client/dist/sockjs";
 import { Client } from "@stomp/stompjs";
 import SendIcon from '@mui/icons-material/Send';
 import { ListItem, Avatar, ListItemAvatar, ListItemText, Backdrop, Alert, Pagination, TextField, Button, Stack, Box, List, ListItemButton, Grid, Typography, Divider, IconButton, Tooltip } from '@mui/material'
-const accessToken = localStorage.getItem('token');
+
 // 스터디룸 개인 메시지
 export default function StudyRoomPrivateMessage() {
     // 토큰

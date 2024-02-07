@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { useSelector } from "react-redux"
 
-const accessToken = localStorage.getItem('token');
+let accessToken = useSelector((state) => state.accessToken)
 // 채팅방 얻기
 const getPersonalChat = (personalChatId) => {
 
