@@ -10,4 +10,5 @@ public interface MemberRepositoryCustom {
     Optional<Member> findByIdFetchJoinJob(int memberId);
 
     List<MemberStudyInfoRes> findMemberFetchJoinStudyMemberByStudyId(int studyId);
+    MemberStudyInfoRes findMemberStudyInfoResByMemberId(int memberId);
 }
