@@ -37,7 +37,7 @@ public class TagController {
     }
 
     @Operation(summary = "멤버 기준 해시태그 목록 조회")
-    @GetMapping("/v1/members")
+    @GetMapping("/v0/members")
     public ResponseEntity<BaseResponse<TagListRes>> getTagListOrderMember() {
         TagListRes tagListRes = tagService.getTagListOrderMember();
 
