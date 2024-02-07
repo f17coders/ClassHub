@@ -9,16 +9,6 @@ import Public from '@mui/icons-material/Public';
 import ImageIcon from '@mui/icons-material/Image';
 import axios from 'axios';
 
-// 사이드바 메뉴
-// const data = [
-//     { icon: <People />, label: '정유경', date: 'Jan 22, 2024' },
-//     { icon: <Dns />, label: '김예지', date: 'Jan 19, 2024' },
-//     { icon: <PermMedia />, label: '정승환', date: 'Jan 12, 2024' },
-//     { icon: <Public />, label: '하동준', date: 'Jan 2, 2024' },
-//     { icon: <Public />, label: '남수진', date: 'Jan 2, 2024' },
-//     { icon: <Public />, label: '김지현', date: 'Jan 2, 2024' },
-//   ];
-
 export default function PrivateMessageList(){
     // 사이드바 메뉴 열기
     const [open, setOpen] = React.useState(true);
@@ -43,7 +33,7 @@ export default function PrivateMessageList(){
       })
       .then((res) => {
         setData(res.data.result)
-        console.log(res.data.result)
+        console.log(res.data)
       })
       .catch((err) => console.log(err))
     },[])

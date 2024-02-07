@@ -2,6 +2,7 @@ package com.f17coders.classhub.module.domain.personalChat.controller;
 
 import com.f17coders.classhub.module.domain.member.service.MemberService;
 import com.f17coders.classhub.module.domain.message.Message;
+import com.f17coders.classhub.module.domain.message.dto.request.MessageReq;
 import com.f17coders.classhub.module.domain.message.service.MessageService;
 import com.f17coders.classhub.module.domain.personalChat.PersonalChat;
 import com.f17coders.classhub.module.domain.personalChat.service.PersonalChatService;
@@ -39,13 +40,11 @@ public class StompPersonalChatController {
 
     // 개인 메시지 전송
     @MessageMapping(value = "/api/chat/send/{personalChatId}")
-    public void sendMessage(@DestinationVariable String personalChatId, Message messageInput)
+    public void sendMessage(@DestinationVariable String personalChatId, Message messageReq)
         throws IOException {
-        Message message = Message.createMessage(messageInput.getSender(), messageInput.getText());
+        log.debug("[StompChatController - sendMessage]: room id = {}", personalChatId);
 
-        log.debug("[StompChatController - sendMessage]: message = {}, to room id = {}", message,
-            personalChatId);
-        messageService.registerPersonalMessage(personalChatId, message);
+        Message message = messageService.registerPersonalMessage(personalChatId, messageReq);
 
         template.convertAndSend("/sub/" + personalChatId, message);
     }

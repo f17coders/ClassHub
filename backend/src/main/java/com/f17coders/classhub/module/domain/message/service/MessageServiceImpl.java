@@ -2,6 +2,7 @@ package com.f17coders.classhub.module.domain.message.service;
 
 import com.f17coders.classhub.global.exception.BaseExceptionHandler;
 import com.f17coders.classhub.module.domain.message.Message;
+import com.f17coders.classhub.module.domain.message.dto.request.MessageReq;
 import com.f17coders.classhub.module.domain.message.repository.MessageRepository;
 import com.f17coders.classhub.module.domain.personalChat.PersonalChat;
 import com.f17coders.classhub.module.domain.personalChat.repository.PersonalChatRepository;
@@ -21,9 +22,10 @@ public class MessageServiceImpl implements MessageService{
 //    }
 
     @Override
-    public String registerPersonalMessage(String personalChatId, Message message)
+    public Message registerPersonalMessage(String personalChatId, Message messageReq)
         throws BaseExceptionHandler, IOException {
 
+        Message message = Message.createMessage(messageReq.getSender(), messageReq.getText());
         PersonalChat personalChat = personalChatRepository.findById(personalChatId).get();
 
         messageRepository.save(message);
@@ -31,6 +33,6 @@ public class MessageServiceImpl implements MessageService{
 
         personalChatRepository.save(personalChat);
 
-        return message.getMessageId();
+        return message;
     }
 }

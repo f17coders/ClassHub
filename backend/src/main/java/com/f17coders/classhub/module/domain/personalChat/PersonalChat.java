@@ -3,6 +3,7 @@ package com.f17coders.classhub.module.domain.personalChat;
 import com.f17coders.classhub.module.domain.MongoBaseEntity;
 import com.f17coders.classhub.module.domain.message.Message;
 import java.util.List;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,15 +22,15 @@ public class PersonalChat extends MongoBaseEntity {
     private String personalChatId;
 
     @Field(name = "receiver")
-    private int receiver;
+    private Map<String, String> receiver;
 
     @Field(name ="sender")
-    private int sender;
+    private Map<String, String> sender;
 
     @DBRef
     private List<Message> messageList;
 
-    public static PersonalChat createPersonalChat(int receiver, int sender, List<Message> message) {
+    public static PersonalChat createPersonalChat(Map<String, String> receiver, Map<String, String> sender, List<Message> message) {
         PersonalChat personalChat = new PersonalChat();
 
         personalChat.setReceiver(receiver);

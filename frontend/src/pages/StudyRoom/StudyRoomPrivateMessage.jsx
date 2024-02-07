@@ -13,6 +13,7 @@ export default function StudyRoomPrivateMessage() {
     const [stompClient, setStompClient] = useState(null);
     const [ newMessage, setNewMessage] = useState("");
     const [ personalChat, setPersonalChat ] = useState("");
+    const [ currentUser, setCurrentUser ] = useState("");
 
     const chatPrivateConnect = () => {
         const serverURL = `http://localhost:8080/api/chat`;
@@ -50,6 +51,7 @@ export default function StudyRoomPrivateMessage() {
     }, [personalChatId]);
 
     useEffect(() => {
+        console.log("개인")
         console.log(personalChat)
         chatPrivateConnect();
     }, [personalChat]);
@@ -67,7 +69,7 @@ export default function StudyRoomPrivateMessage() {
     // };
     
     const getMessageText = (message) => {
-        return `${message.sender}: ${message.text}`
+        return `${message.sender.nickname}: ${message.text}`
     };
 
     return(

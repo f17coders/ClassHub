@@ -10,6 +10,7 @@ const getPersonalChat = (personalChatId) => {
         }
     })
     .then((res) => {
+        console.log(res.data.result);
         return res.data.result;
     })
     .catch((err) => {
@@ -45,10 +46,7 @@ const send = (stompClient, sender,message, personalChatId) => {
         };
         stompClient.publish({
             destination: "/pub/api/chat/send/" + personalChatId,
-            body: JSON.stringify(msg),
-            headers: {
-                "Authorization": "Bearer " + accessToken,
-            }
+            body: JSON.stringify(msg)
         });
 
     } else {

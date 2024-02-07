@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import axios from 'axios';
+import {registPersonalChat} from "../../common/chat.js"
+import {useNavigate} from 'react-router-dom'
 
 export default function StudyRoomRecruitList({study}){
   const MySwal = withReactContent(Swal);
@@ -16,6 +18,15 @@ export default function StudyRoomRecruitList({study}){
   const [status, setStatus] = useState(false) //방 공개여부
   const [inviteCode, setInviteCode] = useState(''); //초대코드
   const [inputValue, setInputValue] = useState(''); //입력한 초대코드
+  const [personalChatId, setPersonalChatId] = useState();
+  const navigate = useNavigate();
+  
+  const registChat = (receiver) => {
+    registPersonalChat(receiver).then(personalChatId => {
+      setPersonalChatId(personalChatId);
+      navigate(`/studyroom/message/${personalChatId}`)
+    });
+  }
 
   //입장 확인 Dialog용(공개방 전용)
   const handleEnterDialogOpen = (studyId) =>{
@@ -210,7 +221,8 @@ export default function StudyRoomRecruitList({study}){
                     
                   <Stack direction="row">
                     <Tooltip title="1:1 대화하기">
-                      <IconButton edge="end" aria-label="1:1 대화">
+                      <IconButton edge="end" aria-label="1:1 대화"  
+                        onClick={() => {registChat(study.studyLeaderId);}}>
                         <ChatIcon />
                       </IconButton>
                     </Tooltip>

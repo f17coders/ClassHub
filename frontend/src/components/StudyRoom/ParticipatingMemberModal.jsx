@@ -29,7 +29,10 @@ export default function ParticipatingMemberModal ({ studyId, participatingMember
     const navigate = useNavigate();
     
     const registChat = (receiver) => {
-      setPersonalChatId(registPersonalChat(receiver));
+      registPersonalChat(receiver).then(personalChatId => {
+        setPersonalChatId(personalChatId);
+        navigate(`/studyroom/message/${personalChatId}`)
+      });
     }
 
     // 멤버 정보 가져오기
@@ -97,7 +100,6 @@ export default function ParticipatingMemberModal ({ studyId, participatingMember
                             <Tooltip title="개인 메시지 보내기">
                                 <IconButton onClick={() => {
                                             registChat(leader.memberId);
-                                            navigate(`/studyroom/message/${personalChatId}`);
                                 }}>
                                     <ChatIcon/>
                                 </IconButton>
@@ -132,7 +134,7 @@ export default function ParticipatingMemberModal ({ studyId, participatingMember
                                 <Tooltip title="개인 메시지 보내기">
                                     <IconButton onClick={() => {
                                             registChat(member.memberId);
-                                            navigate(`/studyroom/message/${personalChatId}`);
+                                            // navigate(`/studyroom/message/${personalChatId}`);
                                           }}>
                                         <ChatIcon />
                                     </IconButton>

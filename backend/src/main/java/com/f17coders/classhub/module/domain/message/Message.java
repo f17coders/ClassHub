@@ -1,6 +1,7 @@
 package com.f17coders.classhub.module.domain.message;
 
 import com.f17coders.classhub.module.domain.MongoBaseEntity;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,9 +20,9 @@ public class Message extends MongoBaseEntity {
 
     private String text;
 
-    private int sender;
+    private Map<String, String> sender;
 
-    static public Message createMessage(int sender, String text) {
+    static public Message createMessage(Map<String, String> sender, String text) {
         Message message = new Message();
 
         message.setSender(sender);

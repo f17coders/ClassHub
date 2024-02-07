@@ -57,12 +57,14 @@ public class PersonalChatController {
             memberSecurityDTO.getMemberId());
 
         String personalChatId;
-        if (personalChat == null) { // 존재하지 않을 경우, 생성
-            personalChatService.registerPersonalChat(personalChatReq.receiver(),
-                memberSecurityDTO.getMemberId());
-        }
 
-        personalChatId = personalChat.getPersonalChatId();
+        if (personalChat == null) { // 존재하지 않을 경우, 생성
+            personalChatId = personalChatService.registerPersonalChat(personalChatReq.receiver(),
+                memberSecurityDTO.toMember());
+        } else {
+            personalChatId = personalChat.getPersonalChatId();
+        }
+        System.out.println(personalChatId);
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, personalChatId);
     }
 
@@ -74,7 +76,7 @@ public class PersonalChatController {
         throws IOException {
 
         // 채팅방 조회
-        PersonalChat personalChat = personalChatService.readPersonalChat(personalChatId);
+        PersonalChat personalChat = personalChatService.readPersonalChat(personalChatId, memberSecurityDTO.toMember());
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, personalChat);
     }
