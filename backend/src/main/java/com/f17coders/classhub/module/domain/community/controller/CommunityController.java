@@ -59,7 +59,7 @@ public class CommunityController {
         @PathVariable("communityId") int communityId, @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
         throws IOException {
         CommunityReadRes communityReadRes = communityService.readCommunity(communityId,
-            memberSecurityDTO.toMember());
+            memberSecurityDTO != null ? memberSecurityDTO.toMember() : null);
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, communityReadRes);
     }
