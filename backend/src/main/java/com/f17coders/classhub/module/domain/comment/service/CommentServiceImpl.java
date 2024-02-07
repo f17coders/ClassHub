@@ -1,6 +1,7 @@
 package com.f17coders.classhub.module.domain.comment.service;
 
 import com.f17coders.classhub.global.exception.BaseExceptionHandler;
+import com.f17coders.classhub.global.exception.code.ErrorCode;
 import com.f17coders.classhub.module.domain.comment.Comment;
 import com.f17coders.classhub.module.domain.comment.dto.request.CommentRegisterReq;
 import com.f17coders.classhub.module.domain.comment.dto.request.CommentUpdateReq;
@@ -28,10 +29,11 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public int registerComment(int communityId, CommentRegisterReq commentRegisterReq,
         Member member) throws BaseExceptionHandler, IOException {
-        Optional<Community> community = communityRepository.findById(communityId);
+        Community community = communityRepository.findById(communityId)
+            .orElseThrow(() -> new BaseExceptionHandler
+                ("존재하지 않는 게시글입니다.", ErrorCode.NOT_FOUND_ERROR));
 
-        Comment comment = Comment.createComment(commentRegisterReq.content(), member,
-            community.get());
+        Comment comment = Comment.createComment(commentRegisterReq.content(), member, community);
 
         Comment saveComment = commentRepository.save(comment);
 
@@ -40,17 +42,22 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void updateComment(int commentId, CommentUpdateReq commentUpdateReq, Member member) {
-        Optional<Comment> comment = commentRepository.findById(commentId);
+        Comment comment = commentRepository.findById(commentId)
+            .orElseThrow(() -> new BaseExceptionHandler
+                ("존재하지 않는 댓글입니다.", ErrorCode.NOT_FOUND_ERROR));
 
-        comment.get().setContent(commentUpdateReq.content());
+        comment.setContent(commentUpdateReq.content());
 
-        commentRepository.save(comment.get());
+        commentRepository.save(comment);
     }
 
     @Override
     public void deleteComment(int commentId, Member member) {
-        Optional<Comment> comment = commentRepository.findById(commentId);
-        commentRepository.delete(comment.get());
+        Comment comment = commentRepository.findById(commentId)
+            .orElseThrow(() -> new BaseExceptionHandler
+                ("존재하지 않는 댓글입니다.", ErrorCode.NOT_FOUND_ERROR));
+
+        commentRepository.delete(comment);
     }
 
     @Override

@@ -26,6 +26,8 @@ const LightTooltip = styled(({ className, ...props }) => (
 }))
 
 function LectureCard({ lecture }) {
+	// 토큰
+	let accessToken = useSelector((state) => state.accessToken)
 	const navigate = useNavigate()
 	let dispatch = useDispatch()
 	// 로그인 확인용
@@ -50,12 +52,20 @@ function LectureCard({ lecture }) {
 	const toggleLike = () => {
 		if (isLogin == true) {
 			if (like == false) {
-				axios.post(`https://i10a810.p.ssafy.io/api/lectures/v1/likes/${lecture.lectureId}`)
+				axios.post(`https://i10a810.p.ssafy.io/api/lectures/v1/likes/${lecture.lectureId}`, {
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				})
 					.then((res) => console.log('좋아요를 눌렀어요'))
 					.catch((err) => console.log(err))
 				setLike(true)
 			} else {
-				axios.delete(`https://i10a810.p.ssafy.io/api/lectures/v1/unlikes/${lecture.lectureId}`)
+				axios.delete(`https://i10a810.p.ssafy.io/api/lectures/v1/unlikes/${lecture.lectureId}`, {
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				})
 					.then((res) => console.log('좋아요 취소'))
 					.catch((err) => console.log(err))
 				setLike(false)

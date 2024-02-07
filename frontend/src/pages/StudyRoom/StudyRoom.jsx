@@ -3,10 +3,7 @@ import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
 import { Container, Grid, Box, Button, Hidden, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ListItemAvatar,Avatar , Paper,IconButton,Tooltip  } from "@mui/material";
 import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
 import Home from '@mui/icons-material/Home';
-import People from '@mui/icons-material/People';
-import PermMedia from '@mui/icons-material/PermMedia';
-import Dns from '@mui/icons-material/Dns';
-import Public from '@mui/icons-material/Public';
+import { useSelector } from "react-redux"
 import PrivateMessageList from "../../components/StudyRoom/PrivateMessageList";
 import ParticipatingRoomList from "../../components/StudyRoom/ParticipatingRoomList";
 
@@ -26,6 +23,8 @@ const FireNav = styled(List)({
 
 // 스터디룸 홈페이지
 export default function StudyRoom() {
+    // 토큰
+	  let accessToken = useSelector((state) => state.accessToken)
     // const [open, setOpen] = useState(false);
     const [windowSize, setWindowSize] = useState(window.innerWidth);
     const navigate = useNavigate();

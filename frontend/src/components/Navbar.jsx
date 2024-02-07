@@ -1,35 +1,24 @@
 import { useState, useEffect } from 'react'
 import Appbar from '@mui/material/AppBar'
 import Grid from '@mui/material/Grid'
-import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import { Link, useNavigate } from 'react-router-dom'
 import MainLogo from './../assets/MainLogo.png'
 import MenuIcon from '@mui/icons-material/Menu'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
 import LoginModal from './LoginModal'
 import { useSelector, useDispatch } from 'react-redux'
-import profile from './../assets/Profile.png'
-import Switch from '@mui/material/Switch'
-import { toggleLogin } from '../store/store'
-import Lecture from './../pages/Lecture/Lecture'
+import { motion } from "framer-motion"
 
-const pages = [
-	{ name: 'Lecture', url: 'lecture' },
-	{ name: 'Community', url: 'community' },
-	{ name: 'Study Room', url: 'studyroom' }
-]
 // navbar
-
 function NavbarComponent() {
-	const navigate = useNavigate();
-	const dispatch = useDispatch()
 	// 로그인 체크용
 	let isLogin = useSelector((state) => state.isLogin)
+	// 유저정보 가져오기 용
+	let user = useSelector((state) => state.user)
 
-	// 화면 줄었을 때 리스트용
+	// 화면 줄었을 때 리스트용(반응형)
 	const [anchorElNav, setAnchorElNav] = useState(null)
 	const handleOpenNavMenu = (event) => {
 		setAnchorElNav(event.currentTarget);
@@ -60,64 +49,85 @@ function NavbarComponent() {
 		textDecoration: 'none',
 		color: 'black',
 		fontSize: '1.3em',
-		fontWeight: '550',
+		fontWeight: '600',
 		transition: 'font-size 0.3s ease'
 	}
 	const linkStyle2 = {
 		textDecoration: 'none',
 		color: 'black',
 		fontSize: '1.2em',
-		fontWeight: '550',
+		fontWeight: '600',
 		transition: 'font-size 0.3s ease',
 	}
 
-	const [accessToken, setAccessToken] = useState('');
-	const handleLoginClick = () => {
-		console.log('로그인 버튼 클릭')
-		window.location.href = 'https://i10a810.p.ssafy.io/login/oauth2/authorization/kakao';
-	  };
+	return (
+		<Appbar
+			position='static'
+			color='transparent'
+			sx={{
+				padding: '10px 0px',
+				height: '65px'
+			}}
+		>
+			<Grid container alignItems="center">
+				<Grid item xs={1}></Grid>
+				<Grid item xs={9} sx={{ display: 'flex', alignItems: 'center' }}>
+					<Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
+						<Link to='/'>
+							<img src={MainLogo} alt='HOME' style={{ width: '220px', marginRight: '20px', marginTop: '3px' }}></img>
+						</Link>
+						{
+							navItem.map((item, idx) => (
+								<div key={idx} style={{ margin: '0px 15px' }}>
+									<Link to={item.link}
+										style={idx == activeIndex ? { ...linkStyle, color: 'RGB(83, 96, 245)' } : linkStyle}
+										onMouseEnter={() => handleMouseEnter(idx)}
+										onMouseLeave={handleMouseLeave}
+										onClick={() => handleClick(idx)}
+									>
+										{item.name}
+									</Link>
+								</div>
+							))
+						}
+					</Box>
 
-	  useEffect(() => {
-			setAccessToken(new URL(window.location.href).searchParams.get(
-				'Authorization'
-			));
-			console.log(accessToken);
-
-		    if(accessToken) {
-			console.log('useEffect 실행')
-			try {
-				//   setAccessToken(code);
-				  console.log(accessToken)
-				  localStorage.setItem("token", accessToken);
-				// loadUserInfo(code);
-				  navigate('/');
-			  } catch (error) {
-				console.error("카카오 로그인 에러:", error);
-			  }
-		}
-	  }, [accessToken]);
-
-		return (
-			<Appbar
-				position='static'
-				color='transparent'
-				sx={{
-					padding: '10px 0px',
-					height: '75px'
-				}}
-			>
-				<Grid container alignItems="center">
-					<Grid item xs={1}></Grid>
-					<Grid item xs={9} sx={{ display: 'flex', alignItems: 'center' }}>
-						<Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
-							<Link to='/'>
-								<img src={MainLogo} alt='HOME' style={{ width: '220px', marginRight: '20px' }}></img>
-							</Link>
+					<Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center' }}>
+						<IconButton
+							size="large"
+							aria-label="account of current user"
+							aria-controls="menu-appbar"
+							aria-haspopup="true"
+							onClick={handleOpenNavMenu}
+							color="inherit"
+						>
+							<MenuIcon />
+						</IconButton>
+						<Link to='/' >
+							<img src={MainLogo} alt='HOME' style={{ width: '150px', marginRight: '20px', marginTop: '3px' }}></img>
+						</Link>
+						<Menu
+							anchorEl={anchorElNav}
+							anchorOrigin={{
+								vertical: 'bottom',
+								horizontal: 'left',
+							}}
+							keepMounted
+							transformOrigin={{
+								vertical: 'top',
+								horizontal: 'left',
+							}}
+							open={Boolean(anchorElNav)}
+							onClose={handleCloseNavMenu}
+							sx={{
+								display: { xs: 'block', md: 'none' },
+							}}
+						>
 							{
 								navItem.map((item, idx) => (
-									<div key={idx} style={{ margin: '0px 15px' }}>
+									<div key={idx} style={{ margin: '10px 15px' }}>
 										<Link to={item.link}
-											style={idx == activeIndex ? { ...linkStyle, color: 'RGB(83, 96, 245)' } : linkStyle}
+											style={idx == activeIndex ? { ...linkStyle2, color: 'RGB(83, 96, 245)' } : linkStyle2}
 											onMouseEnter={() => handleMouseEnter(idx)}
 											onMouseLeave={handleMouseLeave}
 											onClick={() => handleClick(idx)}
@@ -127,90 +137,40 @@ function NavbarComponent() {
 									</div>
 								))
 							}
-						</Box>
-
-						<Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center' }}>
-							<IconButton
-								size="large"
-								aria-label="account of current user"
-								aria-controls="menu-appbar"
-								aria-haspopup="true"
-								onClick={handleOpenNavMenu}
-								color="inherit"
-							>
-								<MenuIcon />
-							</IconButton>
-							<Link to='/' >
-								<img src={MainLogo} alt='HOME' style={{ width: '150px', marginRight: '20px', paddingTop: '10px' }}></img>
-							</Link>
-							<Menu
-								id="menu-appbar"
-								anchorEl={anchorElNav}
-								anchorOrigin={{
-									vertical: 'bottom',
-									horizontal: 'left',
-								}}
-								keepMounted
-								transformOrigin={{
-									vertical: 'top',
-									horizontal: 'left',
-								}}
-								open={Boolean(anchorElNav)}
-								onClose={handleCloseNavMenu}
-								sx={{
-									display: { xs: 'block', md: 'none' },
-								}}
-							>
-								{
-									navItem.map((item, idx) => (
-										<div key={idx} style={{ margin: '10px 15px' }}>
-											<Link to={item.link}
-												style={idx == activeIndex ? { ...linkStyle2, color: 'RGB(83, 96, 245)' } : linkStyle2}
-												onMouseEnter={() => handleMouseEnter(idx)}
-												onMouseLeave={handleMouseLeave}
-												onClick={() => handleClick(idx)}
-											>
-												{item.name}
-											</Link>
-										</div>
-									))
-								}
-
-								{/* {pages.map((page) => (
-								<MenuItem key={page.url} onClick={handleCloseNavMenu}>
-									<Link to={'/' + page.url}>
-										<Button sx={{color:'black'}}>{page.name}</Button>
-									</Link>
-								</MenuItem>
-							))} */}
-							</Menu>
-						</Box>
-
-						{/* 테스트용 로그인 토글 스위치 */}
-						<Box><Switch onChange={() => dispatch(toggleLogin())} /></Box>
-
-					</Grid>
-
-					<Grid item xs={1}>
-						{
-							isLogin == false ? (
-								<Button onClick={ModalOpen}>Login</Button>
-							) : (
-								<Link to="/mypage">
-									<IconButton>
-										<img src={profile} alt="profile" style={{ width: '40px', borderRadius: '70%' }} />
-									</IconButton>
-								</Link>
-							)
-						}
-						<Button onClick={handleLoginClick}>
-							로그인
-						</Button>
-					</Grid>
+						</Menu>
+					</Box>
 				</Grid>
-				<LoginModal open={open} onClose={ModalClose} />
-			</Appbar>
-		)
-	}
 
-	export default NavbarComponent
+				<Grid item xs={1}>
+					{
+						isLogin == false ? (
+							<motion.button
+								onClick={ModalOpen}
+								style={{
+									backgroundColor: 'white',
+									border: 'none',
+									textDecoration: 'none',
+									color: 'black',
+									fontSize: '1.3em',
+									fontWeight: '300',
+								}}
+								whileHover={{ color: 'RGB(83, 96, 245)', cursor: 'pointer'}}
+							>
+								Login
+							</motion.button>
+						) : (
+							<Link to="/mypage">
+								<IconButton>
+									<img src={user.profileImage} alt="profile" style={{ width: '40px', height: '40px', borderRadius: '70%' }} />
+								</IconButton>
+							</Link>
+						)
+					}
+				</Grid>
+			</Grid>
+			<LoginModal open={open} onClose={ModalClose} />
+		</Appbar>
+	)
+}
+
+export default NavbarComponent

@@ -8,10 +8,11 @@ import CommunityList from '../../components/Community/CommunityList';
 import CommunitySearch from '../../components/Community/CommunitySearch';
 import CommunityListAlignment from '../../components/Community/CommunityListAlignment';
 import axios from 'axios';
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
 
 function Community() {
-
+  // 토큰
+  let accessToken = useSelector((state) => state.accessToken)
   // 전체 글
   const [articles, setArticles] = useState([])
   // 현재 페이지를 나타내는 state
@@ -25,7 +26,11 @@ function Community() {
 
   // 전체 글 조회
 	useEffect(() => {
-    axios.get(`https://i10a810.p.ssafy.io/api/communities/v0?page=${currentPage-1}&size=${itemsPerPage}&sort=${alignList}`)
+    axios.get(`https://i10a810.p.ssafy.io/api/communities/v0?page=${currentPage-1}&size=${itemsPerPage}&sort=${alignList}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
     .then((response)=> {
         console.log(response.data.result.communityList)
         // let copy = [...articles, ...response.data.result.communityList]

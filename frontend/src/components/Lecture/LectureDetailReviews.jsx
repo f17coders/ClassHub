@@ -9,24 +9,74 @@ import LectureReview from './LectureReview'
 import { useSelector } from 'react-redux'
 import profileImg from './../../assets/Profile.png'
 import axios from 'axios'
+import UpIcon from '@mui/icons-material/KeyboardArrowUp';
+import { green } from '@mui/material/colors'
+import Fab from '@mui/material/Fab';
 
 // 강의 detail에서 리뷰 탭에 들어가는 컴포넌트
 
-function LectureDetailReviews() {
-  // 토큰 가져오기
-  const accessToken = localStorage.getItem('token')
-  
+function LectureDetailReviews({lecture}) {
+  // 로그인 확인용
+  let isLogin = useSelector((state) => state.isLogin)
+  // 토큰
+  let accessToken = useSelector((state) => state.accessToken)
+
+  // 리뷰를 쓸 수 있는지 없는지 ? 
+  // 쓸 수 있다면 1, 없다면 2
+  const [check, setCheck] = useState(1)
+
+  // // 만약 내 리뷰가 있다면, 가져오기
+  // useEffect(() => {
+  //   axios.get(`https://i10a810.p.ssafy.io/api/reviews/v1/1`, {
+  //     headers: {
+  //       Authorization: `Bearer ${accessToken}`
+  //     }
+  //   })
+  //     .then((res) => {
+  //       // 만약 없다면 어떻게 뜨는지 모르겠다
+  //       // 우선 가져와보고,
+  //       console.log(res)
+  //       setMyReview(res.data.result)
+  //     })
+  //     .catch((err) => console.log(err))
+  // }, [])
+
+
+
+
   //정렬관련(우리사이트)
   const [sort1, setSort1] = useState('최신순')
+  const [order1, setOrder1] = useState('latest')
+  // 정렬이 바뀌면 처음부터 보자
   const handleSort1 = (event) => {
+    setReview1([])
+    setPage1(0)
     setSort1(event.target.value)
-  }
-  //정렬관련(다른사이트)
-  const [sort2, setSort2] = useState('최신순')
-  const handleSort2 = (event) => {
-    setSort2(event.target.value)
+    if (event.target.value == '최신순') {
+      setOrder1('latest')
+    }
+    if (event.target.value == '높은 평점순') {
+      setOrder1('highest-ranking')
+    }
+    if (event.target.value == '낮은 평점순') {
+      setOrder1('lowest-ranking')
+    }
   }
 
+  //정렬관련(다른사이트)
+  const [sort2, setSort2] = useState('높은 평점순')
+  const [order2, setOrder2] = useState('highest-ranking')
+  const handleSort2 = (event) => {
+    setReview2([])
+    setPage2(0)
+    setSort2(event.target.value)
+    if (event.target.value == '높은 평점순') {
+      setOrder2('highest-ranking')
+    }
+    if (event.target.value == '낮은 평점순') {
+      setOrder2('lowest-ranking')
+    }
+  }
 
   // 리뷰데이터(임시)
   // classhub에서 쓴 리뷰
@@ -34,48 +84,65 @@ function LectureDetailReviews() {
   const [page1, setPage1] = useState(0)
   const [totalPage1, setTotalPage1] = useState(null)
   useEffect(() => {
-    axios.get(`https://i10a810.p.ssafy.io/api/reviews/v0/1/classhub?page=${page1}&size=4`,{
-    headers: {
-      AUTHORIZATION: `Bearer ${accessToken}`
-    }
-  })
+    axios.get(`https://i10a810.p.ssafy.io/api/reviews/v0/1/classhub?page=${page1}&size=4&order=${order1}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
       .then((res) => {
-        // console.log(res)
-        setReview1(res.data.result.reviewResList)
+        let nextReviews = [...review1, ...res.data.result.reviewResList]
+        setReview1(nextReviews)
         setTotalPage1(res.data.result.totalPages)
       })
       .catch((err) => console.log(err))
-  }, [page1])
+  }, [page1, order1])
   const setNextPage1 = function () {
     let nextPage = page1 + 1
     setPage1(nextPage)
-  } 
+  }
 
   // 다른 사이트의 리뷰
   const [review2, setReview2] = useState([])
   const [page2, setPage2] = useState(0)
   const [totalPage2, setTotalPage2] = useState(null)
   useEffect(() => {
-    axios.get(`https://i10a810.p.ssafy.io/api/reviews/v0/1/site?page=${page2}&size=4`,{
+    axios.get(`https://i10a810.p.ssafy.io/api/reviews/v0/1/site?page=${page2}&size=4&order=${order2}`, {
       headers: {
-        AUTHORIZATION: `Bearer ${accessToken}`
+        Authorization: `Bearer ${accessToken}`
       }
     })
       .then((res) => {
-        console.log(res)
-        setReview2(res.data.result.siteReviewResList)
+        let nextReviews = [...review2, ...res.data.result.siteReviewResList]
+        setReview2(nextReviews)
         setTotalPage2(res.data.result.totalPages)
       })
       .catch((err) => console.log(err))
-  }, [page2])
+  }, [page2, order2])
   const setNextPage2 = function () {
     let nextPage = page2 + 1
     setPage2(nextPage)
-  } 
+  }
 
-  // 로그인 했는지 확인하기
-  // 로그인 확인용
-  let isLogin = useSelector((state) => state.isLogin)
+  // 위로가기 버튼
+  const goTop = () => {
+    window.scrollTo(0, 0)
+    handleClose()
+  }
+  const fab = {
+    color: 'inherit',
+    sx: {
+      position: 'fixed',
+      bottom: 32,
+      left: 32,
+      color: 'common.white',
+      bgcolor: green[500],
+      '&:hover': {
+        bgcolor: green[600],
+      }
+    },
+    icon: <UpIcon />,
+    label: 'Expand',
+  }
 
   return (
     <div style={{ display: 'flex' }}>
@@ -91,8 +158,8 @@ function LectureDetailReviews() {
               value={sort1}
             >
               <MenuItem value='최신순'>최신순</MenuItem>
-              <MenuItem value='평점높은순'>평점높은순</MenuItem>
-              <MenuItem value='평점낮은순'>평점낮은순</MenuItem>
+              <MenuItem value='높은 평점순'>평점 높은순</MenuItem>
+              <MenuItem value='낮은 평점순'>평점 낮은순</MenuItem>
             </Select>
           </FormControl>
         </div>
@@ -101,7 +168,7 @@ function LectureDetailReviews() {
           {
             isLogin == true ? (
               <div>
-                <CreateReview />
+                <CreateReview check={check} lecture={lecture}/>
               </div>
             ) : null
           }
@@ -114,7 +181,7 @@ function LectureDetailReviews() {
             ))
           }
           {
-            page1 + 1 == totalPage1 ? (null) : (<Button variant="outlined" onClick={setNextPage1} sx={{width:'90%'}}>더 보기</Button>)
+            page1 + 1 == totalPage1 ? (null) : (<Button variant="outlined" onClick={setNextPage1} sx={{ width: '90%' }}>더 보기</Button>)
           }
         </div>
       </div>
@@ -129,9 +196,8 @@ function LectureDetailReviews() {
               sx={{ color: 'grey' }}
               value={sort2}
             >
-              <MenuItem value='최신순'>최신순</MenuItem>
-              <MenuItem value='평점높은순'>평점높은순</MenuItem>
-              <MenuItem value='평점낮은순'>평점낮은순</MenuItem>
+              <MenuItem value='높은 평점순'>평점 높은순</MenuItem>
+              <MenuItem value='낮은 평점순'>평점 낮은순</MenuItem>
             </Select>
           </FormControl>
         </div>
@@ -143,13 +209,19 @@ function LectureDetailReviews() {
                 {/* 다른사이트에서 가는거는 from을 2로 설정해서 주기 */}
                 <LectureReview review={item} from={2} />
               </div>))
-            }</div>) : null
+          }</div>) : null
           }
           {
-            page1 + 1 == totalPage1 ? (null) : (<Button variant="outlined" onClick={setNextPage2} sx={{width:'90%'}}>더 보기</Button>)
+            page2 + 1 == totalPage2 ? (null) : (<Button variant="outlined" onClick={setNextPage2} sx={{ width: '90%' }}>더 보기</Button>)
           }
         </div>
       </div>
+      <Tooltip title='맨 위로'>
+        <Fab sx={fab.sx} color={fab.color} onClick={goTop}>
+          {fab.icon}
+        </Fab>
+      </Tooltip>
+      
     </div>
   )
 }
@@ -157,19 +229,13 @@ function LectureDetailReviews() {
 
 
 // 리뷰 작성 창
-// 로그인 하면 보이고, 산 강의일 때만 작성이 가능함
-function CreateReview() {
-  const userName = '망글곰'
-  // 산 강의인지 확인
-  const [isMine, setIsMine] = useState(true)
-  const [check, setCheck] = useState(1)
+function CreateReview({check, lecture}) {
+  // 유저 가져오기
+  let user = useSelector((state) => state.user)
+  // 토큰
+  let accessToken = useSelector((state) => state.accessToken)
 
-  // 안보이는 경우(2인경우) => 내 강의가 아닐 경우
-  useEffect(() => {
-    if (isMine == false) {
-      setCheck(2)
-    }
-  }, [])
+  const userName = '망글곰'
 
   // 호버용 변수들
   const [isHover, setIsHover] = useState(false)
@@ -181,7 +247,26 @@ function CreateReview() {
   }
 
   // 별점용
-  const [value, setValue] = useState(0)
+  const [rate, setRate] = useState(0)
+
+
+  // 리뷰쓰는용
+  const [review, setReview] =useState('')
+  const makeReview = function (event) {
+    const input = event.target.value
+    setReview(input)
+  }
+
+  const submitReview = function() {
+    axios.post(`https://i10a810.p.ssafy.io/api/reviews/v1/${lecture.lectureId}`,{
+      headers: { Authorization: `Bearer ${accessToken}` }
+    },{
+      "score" : rate,
+      "content" : review
+    })
+    .then((res) => console.log('리뷰작성완료'))
+    .catch((err) => console.log(err))
+  }
 
   // 전체 틀 스타일
   const divStyle = {
@@ -232,9 +317,9 @@ function CreateReview() {
           <div>
             {/* 별점  */}
             <Rating
-              value={value}
+              value={rate}
               onChange={(event, newValue) => {
-                setValue(newValue);
+                setRate(newValue);
               }}
             />
           </div>
@@ -247,8 +332,9 @@ function CreateReview() {
           multiline
           rows={4}
           sx={{ width: '100%' }}
+          onChange={makeReview}
         />
-        <IconButton aria-label="등록" sx={{ position: 'absolute', bottom: 20, right: 25 }}>
+        <IconButton onClick={submitReview} aria-label="등록" sx={{ position: 'absolute', bottom: 20, right: 25 }}>
           <Tooltip title="리뷰 작성">
             <SendIcon />
           </Tooltip>

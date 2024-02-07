@@ -7,8 +7,6 @@ import { Carousel } from 'react-responsive-carousel'
 // 홈페이지 메인 배너
 
 function Banner() {
-	// const [activeItemIndex, setActiveItemIndex] = useState(0)
-
 	return (
 		<div>
 			<Carousel

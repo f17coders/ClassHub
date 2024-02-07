@@ -9,6 +9,7 @@ import static com.f17coders.classhub.module.domain.member.QMember.member;
 import static com.f17coders.classhub.module.domain.tag.QTag.tag;
 
 import com.f17coders.classhub.module.domain.community.Community;
+import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.member.QMember;
 import com.f17coders.classhub.module.domain.tag.Tag;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -26,7 +27,8 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
     }
 
     @Override
-    public Community findCommunityByCommunityIdForCommunityReadRes(int communityId) {   // TODO : 한번에 모든 것을 다 가져오기 vs id를 통해 여러번으로 받기 vs 한방쿼리로 프로젝션
+    public Community findCommunityByCommunityIdForCommunityReadRes(
+        int communityId) {   // TODO : 한번에 모든 것을 다 가져오기 vs id를 통해 여러번으로 받기 vs 한방쿼리로 프로젝션
         QMember communityMember = new QMember("communityMember");
         QMember commentMember = new QMember("commentMember");
 
@@ -65,6 +67,17 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
     }
 
     @Override
+    public List<Community> findAllByMemberWithPaging(Member member, Pageable pageable) {
+        return queryFactory
+            .selectFrom(community)
+            .where(community.member.eq(member))
+            .orderBy(community.createTime.desc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+    }
+
+    @Override
     public List<Integer> getCommunityIdList(List<Tag> tagList, String keyword, Pageable pageable) {
         return queryFactory
             .select(community.communityId)
@@ -72,6 +85,44 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
 //            .leftJoin(community.communityTagSet, communityTag).fetchJoin()
 //            .leftJoin(communityTag.tag, tag).fetchJoin()
             .where(containsKeyword(keyword))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+    }
+
+    @Override
+    public Long countDistinctFromCommentByMemberJoinCommunity(Member member) {
+        return queryFactory
+            .select(community.countDistinct())
+            .from(comment)
+            .leftJoin(comment.community, community)
+            .where(comment.member.eq(member))
+            .fetchOne();
+    }
+
+    @Override
+    public List<Community> findPageFromCommentByMemberJoinCommunity(Member member,
+        Pageable pageable) {
+        return queryFactory
+            .select(community).distinct()
+            .from(comment)
+            .leftJoin(comment.community, community)
+            .where(comment.member.eq(member))
+            .orderBy(comment.createTime.desc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+    }
+
+    @Override
+    public List<Community> findPageFromCommunityScrapByMemberJoinCommunity(Member member,
+        Pageable pageable) {
+        return queryFactory
+            .select(community)
+            .from(communityScrap)
+            .leftJoin(communityScrap.community, community)
+            .where(communityScrap.member.eq(member))
+            .orderBy(communityScrap.createTime.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();

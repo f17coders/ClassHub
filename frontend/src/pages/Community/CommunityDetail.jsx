@@ -15,8 +15,12 @@ import axios from 'axios';
 import DOMPurify from "dompurify";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { useSelector } from "react-redux"
 
 export default function CommunityDetail(){
+    // 토큰
+	let accessToken = useSelector((state) => state.accessToken)
+
     const navigate = useNavigate();
     const MySwal = withReactContent(Swal);
 
@@ -37,8 +41,8 @@ export default function CommunityDetail(){
     useEffect(() => {
         axios.get(`https://i10a810.p.ssafy.io/api/communities/v0/details/${communityId}`, {
             headers: {
-              Authorization: '10'
-            }
+              Authorization: `Bearer ${accessToken}`,
+            },
           })
           .then((response) => {
             // 받아온 데이터 필요에 맞게 처리
@@ -56,8 +60,8 @@ export default function CommunityDetail(){
     const deleteData = (communityId) =>{
         axios.delete(`https://i10a810.p.ssafy.io/api/communities/v1/${communityId}`, {
             headers: {
-              Authorization: '10'
-            }
+              Authorization: `Bearer ${accessToken}`,
+            },
           })
         .then((response) => {
             console.log('게시물 삭제 성공')
@@ -71,8 +75,8 @@ export default function CommunityDetail(){
     const postLike = (communityId) => {
         axios.post(`https://i10a810.p.ssafy.io/api/communities/v1/likes/${communityId}`, {
             headers: {
-              Authorization: '10'
-            }
+              Authorization: `Bearer ${accessToken}`,
+            },
           })
         .then(() => {
             console.log('좋아요 등록 성공')
@@ -85,8 +89,8 @@ export default function CommunityDetail(){
     const deleteLike = (communityId) => {
         axios.delete(`https://i10a810.p.ssafy.io/api/communities/v1/unlikes/${communityId}`, {
             headers: {
-              Authorization: '10'
-            }
+              Authorization: `Bearer ${accessToken}`,
+            },
           })
         .then(() => {
             console.log('좋아요 취소 성공')
@@ -99,8 +103,8 @@ export default function CommunityDetail(){
     const postScrap = (communityId) => {
         axios.post(`https://i10a810.p.ssafy.io/api/communities/v1/scrap/${communityId}`, {
             headers: {
-              Authorization: '10'
-            }
+              Authorization: `Bearer ${accessToken}`,
+            },
           })
         .then(() => {
             console.log('게시글 스크랩 성공')
@@ -113,8 +117,8 @@ export default function CommunityDetail(){
     const deleteScrap = (communityId) => {
         axios.delete(`https://i10a810.p.ssafy.io/api/communities/v1/unscrap/${communityId}`, {
             headers: {
-              Authorization: '10'
-            }
+              Authorization: `Bearer ${accessToken}`,
+            },
           })
         .then(() => {
             console.log('스크랩 취소 성공')

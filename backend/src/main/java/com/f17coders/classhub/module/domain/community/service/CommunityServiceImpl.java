@@ -76,7 +76,8 @@ public class CommunityServiceImpl implements CommunityService {
         List<CommentDetailRes> commentDetailResList = new ArrayList<>();
 
         for (Comment comment : community.getCommentList()) {
-            CommentDetailRes commentDetailRes = commentService.convertToCommentListRes(comment, member);    // TODO : 람다식으로 구현 가능 여부 확인
+            CommentDetailRes commentDetailRes = commentService.convertToCommentListRes(comment,
+                member);    // TODO : 람다식으로 구현 가능 여부 확인
             commentDetailResList.add(commentDetailRes);
         }
 
@@ -111,7 +112,6 @@ public class CommunityServiceImpl implements CommunityService {
         throws BaseExceptionHandler, IOException {
 
         List<Tag> tagList = new ArrayList<>();
-
 
         if (tags != null) {
 //            tagList = getTagList(tags);        // TODO : 필터링 기능 구현 필요

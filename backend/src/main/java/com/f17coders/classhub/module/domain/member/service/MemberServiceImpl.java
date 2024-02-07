@@ -2,12 +2,18 @@ package com.f17coders.classhub.module.domain.member.service;
 
 import com.f17coders.classhub.global.exception.BaseExceptionHandler;
 import com.f17coders.classhub.global.exception.code.ErrorCode;
+import com.f17coders.classhub.module.domain.comment.repository.CommentRepository;
+import com.f17coders.classhub.module.domain.community.Community;
+import com.f17coders.classhub.module.domain.community.repository.CommunityRepository;
+import com.f17coders.classhub.module.domain.communityScrap.repository.CommunityScrapRepository;
 import com.f17coders.classhub.module.domain.job.Job;
 import com.f17coders.classhub.module.domain.job.dto.response.JobRes;
 import com.f17coders.classhub.module.domain.job.repository.JobRepository;
 import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.member.dto.request.MemberAddInfoReq;
 import com.f17coders.classhub.module.domain.member.dto.request.MemberUpdateInfoReq;
+import com.f17coders.classhub.module.domain.member.dto.response.MemberCommunityDetailRes;
+import com.f17coders.classhub.module.domain.member.dto.response.MemberCommunityListRes;
 import com.f17coders.classhub.module.domain.member.dto.response.MemberGetInfoRes;
 import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
 import com.f17coders.classhub.module.domain.memberTag.MemberTag;
@@ -21,6 +27,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,9 +38,14 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final JobRepository jobRepository;
     private final TagRepository tagRepository;
+    private final CommunityRepository communityRepository;
     private final MemberTagRepository memberTagRepository;
-    private final MemberTagService memberTagService;
     private final StudyRepository studyRepository;
+    private final CommentRepository commentRepository;
+    private final CommunityScrapRepository communityScrapRepository;
+
+
+    private final MemberTagService memberTagService;
 
     @Override
     public MemberGetInfoRes getInformation(Member member)
@@ -111,7 +123,7 @@ public class MemberServiceImpl implements MemberService {
         // 희망 직무 조회
         Job job = jobRepository.findById(memberUpdateInfoReq.jobId())
             .orElseThrow(() -> new BaseExceptionHandler
-                ("존재하지 않는 태그입니다.",
+                ("존재하지 않는 직무입니다.",
                     ErrorCode.NOT_FOUND_ERROR));
 
         // 기존 희망 직무 삭제 및 새 희망 직무 설정
@@ -131,7 +143,71 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public void withDraw(Member member) throws BaseExceptionHandler {
+        memberRepository.delete(memberRepository.findById(member.getMemberId()).get());
+    }
+
+    @Override
     public List<StudyBaseRes> getStudyList(Member member) throws BaseExceptionHandler, IOException {
         return studyRepository.findStudyFetchJoinStudyMemberByMemberId(member.getMemberId());
+    }
+
+    @Override
+    public MemberCommunityListRes getCommunityList(Member member, Pageable pageable)
+        throws BaseExceptionHandler {
+        List<Community> communityList = communityRepository.findAllByMemberWithPaging(
+            member, pageable);
+
+//        total Page 계산
+        long communitySize = communityRepository.countByMember(member);
+        long totalPages = (long) (Math.ceil((double) communitySize / pageable.getPageSize()));
+
+        return getMemberCommunityListRes(communityList, totalPages);
+    }
+
+    @Override
+    public MemberCommunityListRes getCommentCommunityList(Member member, Pageable pageable)
+        throws BaseExceptionHandler {
+        List<Community> communityList = communityRepository.findPageFromCommentByMemberJoinCommunity(
+            member, pageable);
+
+//        total Page 계산
+        long communitySize = communityRepository.countDistinctFromCommentByMemberJoinCommunity(
+            member);
+
+        long totalPages = (long) (Math.ceil((double) communitySize / pageable.getPageSize()));
+
+        return getMemberCommunityListRes(communityList, totalPages);
+    }
+
+    @Override
+    public MemberCommunityListRes getScrapCommunityList(Member member, Pageable pageable)
+        throws BaseExceptionHandler {
+        List<Community> communityList = communityRepository.findPageFromCommunityScrapByMemberJoinCommunity(
+            member, pageable);
+
+//        total Page 계산
+        long communitySize = communityScrapRepository.countByMember(member);
+
+        long totalPages = (long) (Math.ceil((double) communitySize / pageable.getPageSize()));
+
+        return getMemberCommunityListRes(communityList, totalPages);
+    }
+
+    private static MemberCommunityListRes getMemberCommunityListRes(List<Community> communityList,
+        long totalPages) {
+        List<MemberCommunityDetailRes> memberCommunityDetailResList = communityList.stream()
+            .map(community -> MemberCommunityDetailRes.builder()
+                .communityId(community.getCommunityId())
+                .title(community.getTitle())
+                .content(community.getContent())
+                .createdAt(community.getCreateTime())
+                .build())
+            .collect(Collectors.toList());
+
+        return MemberCommunityListRes.builder()
+            .communityList(memberCommunityDetailResList)
+            .totalPages(totalPages)
+            .build();
     }
 }

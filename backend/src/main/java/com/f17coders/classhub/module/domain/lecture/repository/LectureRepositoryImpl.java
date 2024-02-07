@@ -3,6 +3,7 @@ package com.f17coders.classhub.module.domain.lecture.repository;
 import static com.f17coders.classhub.module.domain.category.QCategory.category;
 import static com.f17coders.classhub.module.domain.job.QJob.job;
 import static com.f17coders.classhub.module.domain.lecture.QLecture.lecture;
+import static com.f17coders.classhub.module.domain.lectureBuy.QLectureBuy.lectureBuy;
 import static com.f17coders.classhub.module.domain.member.QMember.member;
 import static com.f17coders.classhub.module.domain.lectureLike.QLectureLike.lectureLike;
 import static com.f17coders.classhub.module.domain.lectureTag.QLectureTag.lectureTag;
@@ -14,9 +15,11 @@ import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListDeta
 import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListJobRes;
 import com.f17coders.classhub.module.domain.lecture.dto.response.LectureReadLectureLikeCountRes;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -108,6 +111,7 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 
 	public List<LectureListDetailLectureLikeCountRes> findLecturesBySearchCond(Integer categoryId,
 		String tags, String keyword, String level, String site, String order, Pageable pageable) {
+
 		List<LectureListDetailLectureLikeCountRes> lectureListDetailLectureLikeCountRes = queryFactory.select(
 				Projections.constructor(LectureListDetailLectureLikeCountRes.class,
 					lecture.lectureId,
@@ -136,23 +140,21 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 						category.categoryId,
 						category.categoryName
 					),
-					Expressions.numberTemplate(Integer.class, "{0}",
+					Expressions.numberTemplate(Integer.class,
+						"{0}",
 						JPAExpressions
 							.select(lectureLike.lecture.lectureId.count())
 							.from(lectureLike)
 							.where(lecture.lectureId.eq(lectureLike.lecture.lectureId))
 							.groupBy(lecture.lectureId)).as("lectureLikeCount")
-				))
+				)
+			)
 			.from(lecture)
 			.where(searchCond(categoryId, tags, keyword, level, site))
+			.orderBy(orderExpression(order))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
-
-//		for (LectureListDetailLectureLikeCountRes ll : lectureListDetailLectureLikeCountRes) {
-//			System.out.println(ll);
-//			break;
-//		}
 
 		return lectureListDetailLectureLikeCountRes;
 
@@ -198,7 +200,7 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 				))
 			.from(lectureLike)
 			.innerJoin(lectureLike.lecture, lecture)
-			.innerJoin(lecture.category,category)
+			.innerJoin(lecture.category, category)
 			.where(lecture.lectureId.in(
 				JPAExpressions
 					.select(lectureTag.lecture.lectureId)
@@ -215,6 +217,7 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 
 	@Override
 	public List<LectureListDetailLectureLikeCountRes> findTop5LecturesWithJobId(int jobId) {
+
 		List<LectureListDetailLectureLikeCountRes> lectureListJobResList = queryFactory.select(
 				Projections.constructor(LectureListDetailLectureLikeCountRes.class,
 					lecture.lectureId,
@@ -243,7 +246,8 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 						category.categoryId,
 						category.categoryName
 					),
-					Expressions.numberTemplate(Integer.class, "{0}",
+					Expressions.numberTemplate(Integer.class,
+						"{0}",
 						JPAExpressions
 							.select(lectureLike.lecture.lectureId.count())
 							.from(lectureLike)
@@ -254,7 +258,7 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 			.innerJoin(lectureLike.member, member)
 			.innerJoin(member.job, job)
 			.innerJoin(lectureLike.lecture, lecture)
-			.innerJoin(lecture.category,category)
+			.innerJoin(lecture.category, category)
 			.where(member.job.jobId.eq(jobId))
 			.groupBy(lectureLike.lecture)
 			.orderBy(lectureLike.lecture.lectureId.count().desc())
@@ -262,6 +266,52 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 			.fetch();
 
 		return lectureListJobResList;
+	}
+
+	private OrderSpecifier orderExpression(String order) {
+
+		NumberExpression<Float> combinedRating = Expressions.numberTemplate(Float.class,
+			"CASE WHEN {1}=0 AND {3}=0 THEN 0 "
+				+
+				"WHEN {1} < 10 THEN ROUND( ({0} * 0.2 + {2} * {3} * 0.8) / ({1} * 0.2 + {3} * 0.8), 1) "
+				+
+				"ELSE ROUND(({0} * 0.5 + {2} * {3} * 0.5) / ({1} * 0.5 + {3} * 0.5), 1) END",
+			lecture.reviewSum, lecture.reviewCount, lecture.siteReviewRating,
+			lecture.siteReviewCount);
+
+		NumberExpression<Integer> lectureLikeCount = Expressions.numberTemplate(Integer.class,
+			"{0}",
+			JPAExpressions
+				.select(lectureLike.lecture.lectureId.count())
+				.from(lectureLike)
+				.where(lecture.lectureId.eq(lectureLike.lecture.lectureId))
+				.groupBy(lecture.lectureId));
+
+		NumberExpression<Integer> lectureBuyCount = Expressions.numberTemplate(Integer.class,
+			"{0}",
+			JPAExpressions
+				.select(lectureBuy.lecture.lectureId.count())
+				.from(lectureBuy)
+				.where(lecture.lectureId.eq(lectureBuy.lecture.lectureId))
+				.groupBy(lecture.lectureId));
+
+		NumberExpression<Integer> combinedRatingCount = Expressions.numberTemplate(Integer.class,
+			"{0} + {1}", lecture.reviewCount,
+			lecture.siteReviewCount);
+
+		if (order.equals("ranking")) {
+			return combinedRating.desc();
+		} else if (order.equals("highest-price")) {
+			return lecture.priceSale.desc();
+		} else if (order.equals("lowest-price")) {
+			return lecture.priceSale.asc();
+		} else {
+			return Expressions.numberTemplate(Float.class,
+				"COALESCE({0},0)*0.2 + COALESCE({1},0)*0.3 + COALESCE({2},0)*0.25 + COALESCE({3},0)*0.15 + COALESCE({4},0)*0.1",
+				lectureLikeCount, lectureBuyCount, lecture.siteStudentCount,
+				combinedRating, combinedRatingCount).desc();
+		}
+
 	}
 
 	private BooleanExpression categoryIdEq(Integer categoryId) {
@@ -281,6 +331,7 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 	private BooleanExpression siteEq(String site) {
 		return StringUtils.hasText(site) ? lecture.siteType.eq(SiteType.valueOf(site)) : null;
 	}
+
 
 	private List<Integer> getIntegerListFromString(String text) {
 		if (StringUtils.hasText(text)) {

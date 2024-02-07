@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CommunityScrapRepository extends JpaRepository<CommunityScrap, Integer> {
+
     Optional<CommunityScrap> findByCommunity_CommunityIdAndMember(int communityId, Member member);
 
-    int countByCommunity_CommunityId(int communityId);
+    long countByMember(Member member);
 }

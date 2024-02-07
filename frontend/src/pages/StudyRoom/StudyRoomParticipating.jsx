@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useParams, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux"
 import { styled } from '@mui/material/styles';
 import { Menu, MenuItem, Avatar, ListItemIcon, Backdrop, Alert, Pagination, TextField, Button, Stack, Box, List, ListItemButton, Grid, Typography, Divider, IconButton, Tooltip } from '@mui/material'
 import axios from 'axios'
@@ -17,15 +18,17 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import ParticipatingMemberModal from '../../components/StudyRoom/ParticipatingMemberModal';
 import StudyRoomChannelModal from '../../components/StudyRoom/StudyRoomChannelModal';
+import ParticipatingRoomList from '../../components/StudyRoom/ParticipatingRoomList';
 
 // 참여중인 스터디 상세 페이지
 export default function StudyRoomParticipating(){
+  // 토큰
+  let accessToken = useSelector((state) => state.accessToken)
   const MySwal = withReactContent(Swal);
   const { studyId } = useParams();
   const navigate = useNavigate();
   const [inviteCode, setInviteCode] = useState('');
   const [channels, setChannels] = useState([]);
-  const accessToken = localStorage.getItem('token');
 
 
     // 스터디룸 채널정보 가져오기
@@ -40,7 +43,7 @@ export default function StudyRoomParticipating(){
         setChannels(response.data.result)
     })
     .catch((err) => console.log(err))
-  },[])
+  },[studyId])
 
   const [data, setData] = useState([])
   // 스터디룸 ID로 상세정보 가져오기
@@ -53,7 +56,6 @@ export default function StudyRoomParticipating(){
     .then((response)=> {
         console.log(response.data.result)
         setData(response.data.result)
-        // console.log(data)
     })
     .catch((err) => console.log(err))
   }, [studyId])
@@ -130,6 +132,7 @@ export default function StudyRoomParticipating(){
     if(data.isPublic){
       MySwal.fire({
         title: "해당 스터디룸은 공개상태입니다.",
+        text: "초대코드 없이 입장 가능합니다."
       })
     }
     //비공개방이면
@@ -196,6 +199,26 @@ export default function StudyRoomParticipating(){
     });
   };
 
+  <ParticipatingRoomList studyId={studyId}/>
+
+  //스터디룸 나가기
+  const studyLeave = (studyId) => {
+    axios.delete(`https://i10a810.p.ssafy.io/api/studies/v1/exit/${studyId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    .then((res) => {
+      //나가기 성공 alert 띄우기
+
+
+      //스터디룸 홈으로 navigate
+      navigate('/studyroom');
+      window.location.reload();
+    })
+    .catch((err) => console.log(err))
+  }
+
   // 스터디룸 삭제
   const exitStudyRoom = (studyId) =>{
     axios.delete(`https://i10a810.p.ssafy.io/api/studies/v1/${studyId}`, {
@@ -204,8 +227,8 @@ export default function StudyRoomParticipating(){
       },
     })
     .then((res) => {
-      console.log(studyId + ' 삭제됨')
-      console.log(res)
+      //스터디룸 홈으로 navigate
+      navigate('/studyroom');
       window.location.reload();
     })
     .catch((err) => console.log(err))
@@ -281,9 +304,9 @@ export default function StudyRoomParticipating(){
             <MenuItem onClick={participatingMemberOpen}>
               <ListItemIcon>
                 <AccountCircleIcon />
-              </ListItemIcon>참여중인 멤버 보기
+              </ListItemIcon>참여중인 멤버
             </MenuItem>
-            <MenuItem onClick={channelModalOpen}>
+            <MenuItem onClick={() => {channelModalOpen();}}>
               <ListItemIcon>
                 <EditIcon  />
               </ListItemIcon>
@@ -304,7 +327,7 @@ export default function StudyRoomParticipating(){
               </ListItemIcon>
               스터디룸 정보 수정
             </MenuItem>
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={() => studyLeave(studyId)}>
               <ListItemIcon>
                 <Logout />
               </ListItemIcon>

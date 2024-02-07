@@ -8,6 +8,8 @@ import Dns from '@mui/icons-material/Dns';
 import Public from '@mui/icons-material/Public';
 import ImageIcon from '@mui/icons-material/Image';
 import axios from 'axios';
+import { useSelector } from "react-redux"
+
 
 export default function PrivateMessageList(){
     // 사이드바 메뉴 열기
@@ -22,7 +24,8 @@ export default function PrivateMessageList(){
 
 
 
-    const accessToken = localStorage.getItem('token');
+    // 토큰
+	  let accessToken = useSelector((state) => state.accessToken)
 
     // 현재 채팅한 멤버 목록 가져오기
     useEffect(() => {

@@ -3,6 +3,8 @@ import { Alert, Backdrop,  ToggleButton, Button, Modal, Stack, TextField, Autoco
 import axios from 'axios';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { useSelector } from "react-redux"
+
 
 const style = {
     position: 'absolute',
@@ -43,7 +45,8 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
     const [descriptionError, setDescriptionError] = useState(false);
     const [tagListError, setTagListError] = useState(false);
 
-    const accessToken = localStorage.getItem('token');
+    // 토큰
+	  let accessToken = useSelector((state) => state.accessToken)
     // 생성 함수
     const createStudyRoom = function() {
       // console.log(lectureId)
