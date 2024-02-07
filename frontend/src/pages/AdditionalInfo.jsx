@@ -27,9 +27,7 @@ function AdditionalInfo() {
 	useEffect(() => {
 		if (skills.length == 0) {
       // 지금은 내가 지정한 태그가 없어서 에러가 뜸
-			axios.get('https://i10a810.p.ssafy.io/api/tags/v1/members', {
-				headers: { Authorization: `Bearer ${accessToken}` }
-			})
+			axios.get('https://i10a810.p.ssafy.io/api/tags/v0/members')
 				.then((res) => {
 					let loadedSkills = res.data.result.tagList.map((item) => item)
 					setSkills(loadedSkills)
@@ -115,20 +113,8 @@ function AdditionalInfo() {
 	}
 
   // Modal창 스타일
-const style = {
-	position: 'absolute',
-	top: '50%',
-	left: '50%',
-	transform: 'translate(-50%, -50%)',
-	width: 500,
-	bgcolor: 'background.paper',
-	border: '1px solid #000',
-	boxShadow: 24,
-	p: 4,
-}
-
 	return (
-		<Box sx={style}>
+		<Box>
 			<div style={{
 				display: 'flex',
 				padding: "70px 0px 100px 0px",
