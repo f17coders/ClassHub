@@ -19,5 +19,8 @@ public interface MemberService {
     public void updateInformation(MemberUpdateInfoReq memberUpdateInfoReq, Member member)
         throws BaseExceptionHandler, IOException;
 
+    public void withDraw(Member member) throws BaseExceptionHandler;
+
+
     public List<StudyBaseRes> getStudyList(Member member) throws BaseExceptionHandler, IOException;
 }

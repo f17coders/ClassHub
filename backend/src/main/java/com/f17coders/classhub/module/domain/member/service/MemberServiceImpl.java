@@ -131,6 +131,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public void withDraw(Member member) throws BaseExceptionHandler {
+        memberRepository.delete(memberRepository.findById(member.getMemberId()).get());
+    }
+
+    @Override
     public List<StudyBaseRes> getStudyList(Member member) throws BaseExceptionHandler, IOException {
         return studyRepository.findStudyFetchJoinStudyMemberByMemberId(member.getMemberId());
     }
