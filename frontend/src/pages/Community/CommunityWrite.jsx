@@ -6,9 +6,13 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { useSelector } from "react-redux"
+
 
 export default function CommunityWrite(){
   const MySwal = withReactContent(Swal);
+  // 토큰
+	let accessToken = useSelector((state) => state.accessToken)
 
   const [title, setTitle] = useState(''); //제목
   const [content, setContent] = useState(''); //내용
@@ -99,8 +103,8 @@ export default function CommunityWrite(){
         "tagList": tagList
       }, {
         headers: {
-          Authorization: '10'
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
       .then((res)=> {
         console.log(res)

@@ -9,8 +9,12 @@ import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
 import axios from 'axios';
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import { useSelector } from "react-redux"
+
 
 export default function CommunityReplyModify({comment}){
+  // 토큰
+  let accessToken = useSelector((state) => state.accessToken)
   const navigate = useNavigate();
   const [content, setContent] = useState('');
   const MySwal = withReactContent(Swal);
@@ -56,8 +60,8 @@ export default function CommunityReplyModify({comment}){
         "content": content,
       }, {
         headers: {
-          Authorization: '10'
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
       .then((res) => {
         console.log(res)

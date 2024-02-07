@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, Backdrop,  ToggleButton, Button, Modal, Stack, TextField, Autocomplete, Box, Typography, Container, createFilterOptions} from '@mui/material';
 import axios from 'axios';
+import { useSelector } from "react-redux"
+
 
 const style = {
     position: 'absolute',
@@ -39,7 +41,8 @@ export default function StudyRoomModifyModal({ data, studyModify, studyModifyClo
   const [descriptionError, setDescriptionError] = useState(false);
   const [tagListError, setTagListError] = useState(false);
 
-  const accessToken = localStorage.getItem('token');
+  // 토큰
+  let accessToken = useSelector((state) => state.accessToken)
 
   // 스터디룸 수정 함수
   const modifyStudyRoom = function() {
