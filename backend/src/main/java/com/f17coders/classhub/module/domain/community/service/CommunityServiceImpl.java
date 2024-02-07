@@ -35,7 +35,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CommunityServiceImpl implements CommunityService {
 
-    // TODO : Repository도 받고 Service도 받는게 맞는 방식인가??
     private final CommunityRepository communityRepository;
     private final TagRepository tagRepository;
     private final CommunityTagRepository communityTagRepository;
@@ -56,6 +55,8 @@ public class CommunityServiceImpl implements CommunityService {
 
         // TagId를 이용하여 Community Tag 등록
         List<Integer> tagListReq = communityRegisterReq.tagList();
+
+
 
         for (int tagId : tagListReq) {
             Tag tag = tagRepository.findById(tagId)

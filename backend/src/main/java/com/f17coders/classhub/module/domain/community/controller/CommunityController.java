@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "community", description = "커뮤니티 API - Member, Tag 관련 아직 적용 안 되어있음")
+@Tag(name = "community", description = "커뮤니티 API")
 @RestController
 @RequestMapping("/api/communities")
 @RequiredArgsConstructor
