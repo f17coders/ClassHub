@@ -17,6 +17,7 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 import ParticipatingMemberModal from '../../components/StudyRoom/ParticipatingMemberModal';
 import StudyRoomChannelModal from '../../components/StudyRoom/StudyRoomChannelModal';
+import ParticipatingRoomList from '../../components/StudyRoom/ParticipatingRoomList';
 
 // 참여중인 스터디 상세 페이지
 export default function StudyRoomParticipating(){
@@ -53,7 +54,6 @@ export default function StudyRoomParticipating(){
     .then((response)=> {
         console.log(response.data.result)
         setData(response.data.result)
-        // console.log(data)
     })
     .catch((err) => console.log(err))
   }, [studyId])
@@ -196,6 +196,26 @@ export default function StudyRoomParticipating(){
     });
   };
 
+  <ParticipatingRoomList studyId={studyId}/>
+
+  //스터디룸 나가기
+  const studyLeave = (studyId) => {
+    axios.delete(`https://i10a810.p.ssafy.io/api/studies/v1/exit/${studyId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    .then((res) => {
+      //나가기 성공 alert 띄우기
+
+
+      //스터디룸 홈으로 navigate
+      navigate('/studyroom');
+      window.location.reload();
+    })
+    .catch((err) => console.log(err))
+  }
+
   // 스터디룸 삭제
   const exitStudyRoom = (studyId) =>{
     axios.delete(`https://i10a810.p.ssafy.io/api/studies/v1/${studyId}`, {
@@ -204,8 +224,8 @@ export default function StudyRoomParticipating(){
       },
     })
     .then((res) => {
-      console.log(studyId + ' 삭제됨')
-      console.log(res)
+      //스터디룸 홈으로 navigate
+      navigate('/studyroom');
       window.location.reload();
     })
     .catch((err) => console.log(err))
@@ -281,9 +301,9 @@ export default function StudyRoomParticipating(){
             <MenuItem onClick={participatingMemberOpen}>
               <ListItemIcon>
                 <AccountCircleIcon />
-              </ListItemIcon>참여중인 멤버 보기
+              </ListItemIcon>참여중인 멤버
             </MenuItem>
-            <MenuItem onClick={channelModalOpen}>
+            <MenuItem onClick={() => {channelModalOpen();}}>
               <ListItemIcon>
                 <EditIcon  />
               </ListItemIcon>
@@ -304,7 +324,7 @@ export default function StudyRoomParticipating(){
               </ListItemIcon>
               스터디룸 정보 수정
             </MenuItem>
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={() => studyLeave(studyId)}>
               <ListItemIcon>
                 <Logout />
               </ListItemIcon>

@@ -10,7 +10,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import axios from 'axios';
 
 // 내가 참여중인 스터디 목록 조회(왼쪽 사이드메뉴에서)
-export default function ParticipatingRoomList(){
+export default function ParticipatingRoomList({studyId}){
   const [data, setData] = useState([]);
 
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
@@ -33,7 +33,7 @@ export default function ParticipatingRoomList(){
       // window.location.reload(); //페이지 새로고침
     })
     .catch((err) => console.log(err))
-  },[]);
+  },[studyId]);
 
   // 사이드바 메뉴 열기
   const [open, setOpen] = React.useState(true);
