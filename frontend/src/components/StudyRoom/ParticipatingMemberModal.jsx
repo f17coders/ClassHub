@@ -3,7 +3,8 @@ import { Badge, Divider, List, ListItem,ListItemAvatar, Avatar,ListItemText, But
 import ChatIcon from '@mui/icons-material/Chat';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import axios from 'axios';
-
+import {registPersonalChat} from "../../common/chat.js"
+import {useNavigate} from 'react-router-dom'
 const style = {
     position: 'absolute',
     top: '45%',
@@ -23,6 +24,17 @@ export default function ParticipatingMemberModal ({ studyId, participatingMember
     const [leaderJob, setLeaderJob] = useState('');
     const [studyMembers, setStudyMembers] = useState([]); //스터디 멤버들 정보
     const accessToken = localStorage.getItem('token');
+
+    const [personalChatId, setPersonalChatId] = useState();
+    const navigate = useNavigate();
+    
+    const registChat = (receiver) => {
+      registPersonalChat(receiver).then(personalChatId => {
+        setPersonalChatId(personalChatId);
+        navigate(`/studyroom/message/${personalChatId}`)
+      });
+    }
+
     // 멤버 정보 가져오기
     useEffect(() => {
         if(participatingMember){
@@ -86,7 +98,9 @@ export default function ParticipatingMemberModal ({ studyId, participatingMember
                                 }
                             />
                             <Tooltip title="개인 메시지 보내기">
-                                <IconButton >
+                                <IconButton onClick={() => {
+                                            registChat(leader.memberId);
+                                }}>
                                     <ChatIcon/>
                                 </IconButton>
                             </Tooltip>
@@ -118,8 +132,11 @@ export default function ParticipatingMemberModal ({ studyId, participatingMember
                                 }
                               />
                                 <Tooltip title="개인 메시지 보내기">
-                                    <IconButton >
-                                        <ChatIcon/>
+                                    <IconButton onClick={() => {
+                                            registChat(member.memberId);
+                                            // navigate(`/studyroom/message/${personalChatId}`);
+                                          }}>
+                                        <ChatIcon />
                                     </IconButton>
                                 </Tooltip>
                             </ListItem>

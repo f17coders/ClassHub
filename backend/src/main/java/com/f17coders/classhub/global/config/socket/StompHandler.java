@@ -1,63 +1,57 @@
-package com.f17coders.classhub.module.security.filter;
+package com.f17coders.classhub.global.config.socket;
 
 import com.f17coders.classhub.global.util.JWTUtil;
+
+import java.util.Map;
+import java.util.Objects;
+
 import com.f17coders.classhub.module.security.APIUserDetailsService;
 import com.f17coders.classhub.module.security.exception.AccessTokenException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureException;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Map;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.stomp.StompCommand;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
+import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.stereotype.Component;
 
-@Log4j2
+@Component
 @RequiredArgsConstructor
-public class TokenCheckFilter extends OncePerRequestFilter {
-
-    private final APIUserDetailsService apiUserDetailsService;
+@Order(Ordered.HIGHEST_PRECEDENCE + 99)
+public class StompHandler implements ChannelInterceptor {
     private final JWTUtil jwtUtil;
-
+    private final APIUserDetailsService apiUserDetailsService;
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-        FilterChain filterChain) throws ServletException, IOException {
-        String path = request.getRequestURI();
-        if (!path.startsWith("/api") || path.matches("/api/.*/v0(/.*)?") || path.matches("/api/chat(/.*)?")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-        try {
-            Map<String, Object> payload = validateAccessToken(request);
-            if (Objects.isNull(payload)) {
-                filterChain.doFilter(request, response);
-                return;
-            }
+    public Message<?> preSend(Message<?> message, MessageChannel channel) {
+        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
 
+        if (StompCommand.CONNECT.equals(accessor.getCommand())) {
+            Map<String, Object> payload = validateAccessToken(
+                Objects.requireNonNull(accessor.getFirstNativeHeader("Authorization")));
+
+            System.out.println(payload);
             String memberId = (String) payload.get("memberId");
 
             UserDetails userDetails = apiUserDetailsService.loadUserByUsername(memberId);
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                userDetails, null, userDetails.getAuthorities()
+                    userDetails, null, userDetails.getAuthorities()
             );
 
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            filterChain.doFilter(request, response);
-        } catch (AccessTokenException e) {
-            e.sendResponseError(response);
         }
+        return message;
     }
 
-    private Map<String, Object> validateAccessToken(HttpServletRequest request) {
-        String headStr = request.getHeader("Authorization");
+    private Map<String, Object> validateAccessToken(String headStr) {
         if (Objects.isNull(headStr)) {
             throw new AccessTokenException(AccessTokenException.TOKEN_ERROR.UNACCEPT);
         }
