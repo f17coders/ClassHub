@@ -16,7 +16,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.util.List;
-import javassist.bytecode.annotation.MemberValue;
 import org.springframework.data.domain.Pageable;
 
 public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
@@ -86,6 +85,30 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
 //            .leftJoin(community.communityTagSet, communityTag).fetchJoin()
 //            .leftJoin(communityTag.tag, tag).fetchJoin()
             .where(containsKeyword(keyword))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+    }
+
+    @Override
+    public Long countDistinctFromCommentByMemberJoinCommunity(Member member) {
+        return queryFactory
+            .select(community.countDistinct())
+            .from(comment)
+            .leftJoin(comment.community, community)
+            .where(comment.member.eq(member))
+            .fetchOne();
+    }
+
+    @Override
+    public List<Community> findPageFromCommentByMemberJoinCommunity(Member member,
+        Pageable pageable) {
+        return queryFactory
+            .select(community).distinct()
+            .from(comment)
+            .leftJoin(comment.community, community)
+            .where(comment.member.eq(member))
+            .orderBy(comment.createTime.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();

@@ -2,6 +2,7 @@ package com.f17coders.classhub.module.domain.member.service;
 
 import com.f17coders.classhub.global.exception.BaseExceptionHandler;
 import com.f17coders.classhub.global.exception.code.ErrorCode;
+import com.f17coders.classhub.module.domain.comment.repository.CommentRepository;
 import com.f17coders.classhub.module.domain.community.Community;
 import com.f17coders.classhub.module.domain.community.repository.CommunityRepository;
 import com.f17coders.classhub.module.domain.job.Job;
@@ -38,8 +39,10 @@ public class MemberServiceImpl implements MemberService {
     private final TagRepository tagRepository;
     private final CommunityRepository communityRepository;
     private final MemberTagRepository memberTagRepository;
-    private final MemberTagService memberTagService;
     private final StudyRepository studyRepository;
+    private final CommentRepository commentRepository;
+
+    private final MemberTagService memberTagService;
 
     @Override
     public MemberGetInfoRes getInformation(Member member)
@@ -156,6 +159,27 @@ public class MemberServiceImpl implements MemberService {
         long communitySize = communityRepository.countByMember(member);
         long totalPages = (long) (Math.ceil((double) communitySize / pageable.getPageSize()));
 
+        return getMemberCommunityListRes(communityList, totalPages);
+    }
+
+    @Override
+    public MemberCommunityListRes getCommentCommunityList(Member member, Pageable pageable)
+        throws BaseExceptionHandler {
+        List<Community> communityList = communityRepository.findPageFromCommentByMemberJoinCommunity(
+            member, pageable);
+
+//        total Page 계산
+        long communitySize = communityRepository.countDistinctFromCommentByMemberJoinCommunity(
+            member);
+
+        System.out.println("communitySize = " + communitySize);
+        long totalPages = (long) (Math.ceil((double) communitySize / pageable.getPageSize()));
+
+        return getMemberCommunityListRes(communityList, totalPages);
+    }
+
+    private static MemberCommunityListRes getMemberCommunityListRes(List<Community> communityList,
+        long totalPages) {
         List<MemberCommunityDetailRes> memberCommunityDetailResList = communityList.stream()
             .map(community -> MemberCommunityDetailRes.builder()
                 .communityId(community.getCommunityId())

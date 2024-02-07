@@ -28,6 +28,9 @@ public interface MemberService {
 
     public MemberCommunityListRes getCommunityList(Member member, Pageable pageable)
         throws BaseExceptionHandler;
+
+    public MemberCommunityListRes getCommentCommunityList(Member member, Pageable pageable)
+        throws BaseExceptionHandler;
 }
 
 

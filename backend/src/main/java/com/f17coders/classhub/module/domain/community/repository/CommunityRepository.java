@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface CommunityRepository extends JpaRepository<Community, Integer>,
     CommunityRepositoryCustom {
 
-    Long countByMember(Member member);
+    long countByMember(Member member);
 }
