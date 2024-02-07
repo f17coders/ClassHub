@@ -6,6 +6,7 @@ import com.f17coders.classhub.global.exception.code.ErrorCode;
 import com.f17coders.classhub.global.exception.code.SuccessCode;
 import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
+import com.f17coders.classhub.module.domain.review.dto.response.MyReviewStatusRes;
 import com.f17coders.classhub.module.domain.review.dto.response.ReviewListRes;
 import com.f17coders.classhub.module.domain.review.dto.request.ReviewRegisterReq;
 import com.f17coders.classhub.module.domain.review.dto.response.ReviewRes;
@@ -67,9 +68,9 @@ public class ReviewController {
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, siteReviewListRes);
 	}
 
-	@Operation(summary = "해당 강의에 내가 작성한 리뷰가 있다면 가져옵니다.")
+	@Operation(summary = "해당 강의에 내가 작성한 리뷰가 있다면 가져옵니다. 또 내가 산 강의인지를 판단합니다.")
 	@GetMapping("/v1/{lectureId}")
-	public ResponseEntity<BaseResponse<ReviewRes>> getMyLectureReview(
+	public ResponseEntity<BaseResponse<MyReviewStatusRes>> getMyLectureReview(
 		@PathVariable("lectureId") int lectureId,
 		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
 		Member member = memberRepository.findById(memberSecurityDTO.getMemberId())
@@ -77,7 +78,7 @@ public class ReviewController {
 				"memberId=" + memberSecurityDTO.getMemberId() + " 인 사용자를 DB에서 찾을수없습니다.",
 				ErrorCode.NOT_FOUND_USER_EXCEPTION));
 
-		ReviewRes review = reviewService.getMyLectureReview(lectureId, member);
+		MyReviewStatusRes review = reviewService.getMyLectureReview(lectureId, member);
 
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, review);
 	}

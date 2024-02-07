@@ -4,9 +4,12 @@ import com.f17coders.classhub.global.exception.BaseExceptionHandler;
 import com.f17coders.classhub.global.exception.code.ErrorCode;
 import com.f17coders.classhub.module.domain.lecture.Lecture;
 import com.f17coders.classhub.module.domain.lecture.repository.LectureRepository;
+import com.f17coders.classhub.module.domain.lectureBuy.repository.LectureBuyRepository;
+import com.f17coders.classhub.module.domain.lectureLike.repository.LectureLikeRepository;
 import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.member.dto.response.MemberNickNameImageRes;
 import com.f17coders.classhub.module.domain.review.Review;
+import com.f17coders.classhub.module.domain.review.dto.response.MyReviewStatusRes;
 import com.f17coders.classhub.module.domain.review.dto.response.ReviewListRes;
 import com.f17coders.classhub.module.domain.review.dto.request.ReviewRegisterReq;
 import com.f17coders.classhub.module.domain.review.dto.response.ReviewRes;
@@ -30,6 +33,7 @@ public class ReviewServiceImpl implements ReviewService {
 	private final ReviewRepository reviewRepository;
 	private final SiteReviewRepository siteReviewRepository;
 	private final LectureRepository lectureRepository;
+	private final LectureBuyRepository lectureBuyRepository;
 
 	@Override
 	public ReviewListRes getReviewList(int lectureId, String order, Pageable pageable) {
@@ -123,28 +127,50 @@ public class ReviewServiceImpl implements ReviewService {
 	}
 
 	@Override
-	public ReviewRes getMyLectureReview(int lectureId, Member member) {
+	public MyReviewStatusRes getMyLectureReview(int lectureId, Member member) {
+
+		if (lectureBuyRepository.countByMember_MemberIdAndLecture_LectureId(member.getMemberId(),
+			lectureId) == 0) {
+			// 구매하지 않음.
+			return MyReviewStatusRes.builder()
+				.isBuyed(false)
+				.isExist(false)
+				.build();
+		}
+
+		// 구매했음
 		Optional<Review> isReviewExist = reviewRepository.findByMember_MemberIdAndLecture_LectureId(
 			member.getMemberId(), lectureId);
 		if (!isReviewExist.isPresent()) {
 			// 아직 작성한 리뷰가 없다.
-			throw new BaseExceptionHandler("아직 리뷰가 존재하지 않습니다.", ErrorCode.NOT_FOUND_ITEM_EXCEPTION);
+			return MyReviewStatusRes.builder()
+				.isBuyed(true)
+				.isExist(false)
+				.build();
 		}
+
+		// 구매 및 작성 리뷰 존재
 
 		Review review = isReviewExist.get();
 		String replacedImageUrl = "https://simage-kr.uniqlo.com/goods/31/11/77/82/414920_COL_COL99_1000.jpg";
-
-		return ReviewRes.builder()
-			.reviewId(review.getReviewId())
-			.reviewId(review.getLecture().getLectureId())
-			.member(MemberNickNameImageRes.builder()
-				.nickname(member.getNickname())
-				.profileImage(
-					member.getProfileImage() == null ? replacedImageUrl : member.getProfileImage())
-				.build())
-			.createTime(review.getUpdateTime())
-			.score(review.getScore())
-			.content(review.getContent())
+		return MyReviewStatusRes.builder()
+			.isBuyed(true)
+			.isExist(true)
+			.reviewRes(
+				ReviewRes.builder()
+					.reviewId(review.getReviewId())
+					.reviewId(review.getLecture().getLectureId())
+					.member(MemberNickNameImageRes.builder()
+						.nickname(member.getNickname())
+						.profileImage(
+							member.getProfileImage() == null ? replacedImageUrl
+								: member.getProfileImage())
+						.build())
+					.createTime(review.getUpdateTime())
+					.score(review.getScore())
+					.content(review.getContent())
+					.build()
+			)
 			.build();
 	}
 }
