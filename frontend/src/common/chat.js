@@ -10,7 +10,6 @@ const getPersonalChat = (personalChatId) => {
         }
     })
     .then((res) => {
-        console.log(res.data.result);
         return res.data.result;
     })
     .catch((err) => {
