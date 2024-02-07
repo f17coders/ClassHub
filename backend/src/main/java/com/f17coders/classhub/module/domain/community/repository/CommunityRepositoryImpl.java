@@ -11,7 +11,6 @@ import static com.f17coders.classhub.module.domain.tag.QTag.tag;
 import com.f17coders.classhub.module.domain.community.Community;
 import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.member.QMember;
-import com.f17coders.classhub.module.domain.tag.Tag;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -78,13 +77,29 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
     }
 
     @Override
-    public List<Integer> getCommunityIdList(List<Tag> tagList, String keyword, Pageable pageable) {
+    public Long countPageByKeywordAndTagIdListJoinCommunityTagJoinTag(List<Integer> tagIdList,
+        String keyword, Pageable pageable) {
         return queryFactory
-            .select(community.communityId)
+            .select(community.count())
             .from(community)
-//            .leftJoin(community.communityTagSet, communityTag).fetchJoin()
-//            .leftJoin(communityTag.tag, tag).fetchJoin()
-            .where(containsKeyword(keyword))
+            .leftJoin(community.communityTagSet, communityTag)
+            .leftJoin(communityTag.tag, tag)
+            .where(containsKeyword(keyword), inTagIdList(tagIdList))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetchOne();
+    }
+
+    @Override
+    public List<Community> findPageByKeywordAndTagIdListJoinCommunityTagJoinTag(
+        List<Integer> tagIdList, String keyword, Pageable pageable) {
+        return queryFactory
+            .select(community)
+            .from(community)
+            .leftJoin(community.communityTagSet, communityTag).fetchJoin()
+            .leftJoin(communityTag.tag, tag).fetchJoin()
+            .where(containsKeyword(keyword), inTagIdList(tagIdList))
+            .orderBy(community.createTime.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
@@ -131,5 +146,9 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
     private BooleanExpression containsKeyword(String keyword) {
         return keyword != null ? community.title.contains(keyword)
             .or(community.content.contains(keyword)) : null;
+    }
+
+    private BooleanExpression inTagIdList(List<Integer> tagIdList) {
+        return tagIdList.size() != 0 ? tag.tagId.in(tagIdList) : null;
     }
 }

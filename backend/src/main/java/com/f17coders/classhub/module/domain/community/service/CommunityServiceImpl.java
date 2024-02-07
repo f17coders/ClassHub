@@ -22,7 +22,9 @@ import com.f17coders.classhub.module.domain.tag.dto.response.TagRes;
 import com.f17coders.classhub.module.domain.tag.repository.TagRepository;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
@@ -107,50 +109,40 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
-    public CommunityListRes getCommunityList(String tags, String keyword,
-        Pageable pageable)
-        throws BaseExceptionHandler, IOException {
+    public CommunityListRes getCommunityList(String tags, String keyword, Pageable pageable)
+        throws BaseExceptionHandler, IOException {  // TODO : 반드시 최적화 필요
 
-        List<Tag> tagList = new ArrayList<>();
+        List<Integer> tagIdList = getTagList(tags);
 
-        if (tags != null) {
-//            tagList = getTagList(tags);        // TODO : 필터링 기능 구현 필요
-        }
+        long totalCommunities = communityRepository.countPageByKeywordAndTagIdListJoinCommunityTagJoinTag(
+            tagIdList, keyword, pageable);
 
-        List<Integer> communityIdList = communityRepository.getCommunityIdList(tagList, keyword,
-            pageable);
+        long totalPages = (long) Math.ceil((double) totalCommunities / pageable.getPageSize());
 
-        List<CommunityListDetailRes> communityListDetailResList = new ArrayList<>();
-
-        for (int communityId : communityIdList) {  // TODO : batch를 이용하여 최적화 가능 예상
-            Community community = communityRepository.findCommunityByCommunityIdForCommunityListRes(
-                communityId);
-
-            // Tag -> TagRes로 변환
-            List<TagRes> tagResList = new ArrayList<>();
-            for (CommunityTag communityTag : community.getCommunityTagSet()) {
-                TagRes tagRes = TagRes.builder()
-                    .tagId(communityTag.getTag().getTagId())
-                    .name(communityTag.getTag().getName())
-                    .build();
-                tagResList.add(tagRes);
-            }
-
-            CommunityListDetailRes communityListDetailRes = CommunityListDetailRes.builder()
-                .communityId(community.getCommunityId()).title(community.getTitle())
+        List<CommunityListDetailRes> communityListDetailResList = communityRepository.findPageByKeywordAndTagIdListJoinCommunityTagJoinTag(
+                tagIdList, keyword,
+                pageable).stream()
+            .map(community -> CommunityListDetailRes.builder()
+                .communityId(community.getCommunityId())
+                .title(community.getTitle())
                 .content(community.getContent())
                 .memberNickname(community.getMember().getNickname())
                 .commentCount(community.getCommentList().size())
                 .likeCount(community.getCommunityLikeSet().size())
                 .scrapCount(community.getCommunityScrapSet().size())
-                .tagList(tagResList)
                 .createdAt(community.getCreateTime())
-                .build();
+                .tagList(community.getCommunityTagSet().stream()
+                    .map(communityTag -> TagRes.builder()
+                        .tagId(communityTag.getTag().getTagId())
+                        .name(communityTag.getTag().getName())
+                        .build())
+                    .toList())
+                .build())
+            .collect(Collectors.toList());
 
-            communityListDetailResList.add(communityListDetailRes);
-        }
-
-        return CommunityListRes.builder().communityList(communityListDetailResList).totalPages(5)
+        return CommunityListRes.builder()
+            .communityList(communityListDetailResList)
+            .totalPages(totalPages)
             .build();
     }
 
@@ -192,17 +184,14 @@ public class CommunityServiceImpl implements CommunityService {
         communityRepository.delete(community);
     }
 
-    private List<Tag> getTagList(String tags) {
-        // tag 목록 문자열로부터 tag List를 받아옴
-        List<Tag> tagList = new ArrayList<>();
-
-        String[] tagIdList = tags.split("\\|");
-        for (String tagIdStr : tagIdList) {
-            Tag tag = tagRepository.findById(Integer.parseInt(tagIdStr))
-                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
-            tagList.add(tag);
+    private List<Integer> getTagList(String tags) { // tag 목록 문자열로부터 tagId List를 받아옴
+        if (tags == null) {
+            return new ArrayList<>();
+        } else {
+            return Arrays.stream(tags.split("\\|"))
+                .map(Integer::parseInt)
+                .collect(Collectors.toList());
         }
-        return tagList;
     }
 
     private static boolean isWriter(Member member, Community community) {
