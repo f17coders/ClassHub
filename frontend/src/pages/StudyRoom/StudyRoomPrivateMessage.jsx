@@ -5,7 +5,7 @@ import { useSelector } from "react-redux"
 import SockJS from "sockjs-client/dist/sockjs";
 import { Client } from "@stomp/stompjs";
 import SendIcon from '@mui/icons-material/Send';
-import { ListItem, Avatar, ListItemAvatar, ListItemText, Backdrop, Alert, Pagination, TextField, Button, Stack, Box, List, ListItemButton, Grid, Typography, Divider, IconButton, Tooltip } from '@mui/material'
+import { ListItem, Avatar, ListItemAvatar, ListItemText, CircularProgress, Alert, TextField, Button, Stack, Box, List, ListItemButton, Grid, Typography, Divider, IconButton, Tooltip } from '@mui/material'
 
 // 스터디룸 개인 메시지
 export default function StudyRoomPrivateMessage() {
@@ -232,8 +232,11 @@ export default function StudyRoomPrivateMessage() {
                 </Box>
                 {/* 채팅 작성 */}
                 {isLoading ? 
-                    <Divider sx={{my: 2}}>채팅을 연결하는 중입니다. 잠시만 기다려주세요</Divider> : null}
-                <Box sx={{ width:"100%", height:"10%", display: 'flex', justifyContent:'flex-start', alignItems: 'flex-start' }}>
+                    <React.Fragment>
+                        <CircularProgress sx={{ width:"100%", height:"10%", margin: "auto"}} />
+                        {/* <Divider sx={{my: 2}}>채팅을 연결하는 중입니다. 잠시만 기다려주세요</Divider> */}
+                    </React.Fragment>
+                    : <Box sx={{ width:"100%", height:"10%", display: 'flex', justifyContent:'flex-start', alignItems: 'flex-start' }}>
                     <TextField
                         id="standard-multiline-static"
                         label="채팅을 작성해주세요"
@@ -246,6 +249,8 @@ export default function StudyRoomPrivateMessage() {
                     />
                     <Button sx={{mx: 2}} variant="contained" endIcon={<SendIcon />} onClick={sendMessage}></Button>
                 </Box>
+                }
+                
                 
             </Stack>
             {/* <div className="chat-container">
