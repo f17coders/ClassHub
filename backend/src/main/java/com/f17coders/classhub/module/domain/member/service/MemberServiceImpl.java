@@ -123,7 +123,7 @@ public class MemberServiceImpl implements MemberService {
         // 희망 직무 조회
         Job job = jobRepository.findById(memberUpdateInfoReq.jobId())
             .orElseThrow(() -> new BaseExceptionHandler
-                ("존재하지 않는 태그입니다.",
+                ("존재하지 않는 직무입니다.",
                     ErrorCode.NOT_FOUND_ERROR));
 
         // 기존 희망 직무 삭제 및 새 희망 직무 설정
