@@ -9,9 +9,9 @@ import org.springframework.data.domain.Pageable;
 
 public interface ReviewService {
 
-	ReviewListRes getReviewList(int lectureId, Pageable pageable);
+	ReviewListRes getReviewList(int lectureId, String order, Pageable pageable);
 
-	SiteReviewListRes getSiteReviewList(int lectureId, Pageable pageable);
+	SiteReviewListRes getSiteReviewList(int lectureId, String order, Pageable pageable);
 
 	int registerReview(int lectureId, ReviewRegisterReq reviewRegisterReq, Member member);
 

@@ -43,14 +43,14 @@ public class ReviewController {
 
 	private final MemberRepository memberRepository;
 
-	@Operation(summary = "우리 사이트 리뷰 조회 - sort사용금지")
+	@Operation(summary = "우리 사이트 리뷰 조회")
 	@GetMapping("/v0/{lectureId}/classhub")
 	public ResponseEntity<BaseResponse<ReviewListRes>> getReviewList(
 		@PathVariable("lectureId") int lectureId,
 		@RequestParam(value = "order", required = false) String order,
 		Pageable pageable) throws IOException {
 
-		ReviewListRes reviewListRes = reviewService.getReviewList(lectureId, pageable);
+		ReviewListRes reviewListRes = reviewService.getReviewList(lectureId, order, pageable);
 
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, reviewListRes);
 	}
@@ -62,7 +62,7 @@ public class ReviewController {
 		@RequestParam(value = "order", required = false) String order,
 		Pageable pageable) throws IOException {
 
-		SiteReviewListRes siteReviewListRes = reviewService.getSiteReviewList(lectureId, pageable);
+		SiteReviewListRes siteReviewListRes = reviewService.getSiteReviewList(lectureId, order, pageable);
 
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, siteReviewListRes);
 	}

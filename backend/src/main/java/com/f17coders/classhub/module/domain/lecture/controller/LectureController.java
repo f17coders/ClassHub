@@ -62,7 +62,7 @@ public class LectureController {
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectureReadRes);
 	}
 
-	@Operation(summary = "강의 목록 조회 - 더미 데이터 구현(태그,order미구현)")
+	@Operation(summary = "강의 목록 조회 - 더미 데이터 구현")
 	@GetMapping("/v0")
 	public ResponseEntity<BaseResponse<LectureListRes>> getLectureList(
 		@RequestParam(value = "category", required = false) Integer categoryId,
@@ -85,7 +85,11 @@ public class LectureController {
 	public ResponseEntity<BaseResponse<Integer>> likeCommunity(
 		@PathVariable("lectureId") int lectureId,
 		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
-		lectureLikeService.likeLecture(lectureId, memberSecurityDTO.toMember());
+
+		Member member = memberRepository.findById(memberSecurityDTO.getMemberId())
+			.orElseThrow(()->new BaseExceptionHandler("해당하는 유저를 찾을수없습니다.", ErrorCode.NOT_FOUND_USER_EXCEPTION));
+
+		lectureLikeService.likeLecture(lectureId, member);
 
 		return BaseResponse.success(SuccessCode.INSERT_SUCCESS, lectureId);
 	}
@@ -95,7 +99,11 @@ public class LectureController {
 	public ResponseEntity<BaseResponse<Integer>> unLikeCommunity(
 		@PathVariable("lectureId") int lectureId,
 		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
-		lectureLikeService.unLikeLecture(lectureId, memberSecurityDTO.toMember());
+
+		Member member = memberRepository.findById(memberSecurityDTO.getMemberId())
+			.orElseThrow(()->new BaseExceptionHandler("해당하는 유저를 찾을수없습니다.", ErrorCode.NOT_FOUND_USER_EXCEPTION));
+
+		lectureLikeService.unLikeLecture(lectureId, member);
 
 		return BaseResponse.success(SuccessCode.INSERT_SUCCESS, lectureId);
 	}
