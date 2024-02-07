@@ -9,12 +9,14 @@ import static com.f17coders.classhub.module.domain.member.QMember.member;
 import static com.f17coders.classhub.module.domain.tag.QTag.tag;
 
 import com.f17coders.classhub.module.domain.community.Community;
+import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.member.QMember;
 import com.f17coders.classhub.module.domain.tag.Tag;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import java.util.List;
+import javassist.bytecode.annotation.MemberValue;
 import org.springframework.data.domain.Pageable;
 
 public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
@@ -66,10 +68,10 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
     }
 
     @Override
-    public List<Community> findAllByMemberIdWithPaging(int memberId, Pageable pageable) {
+    public List<Community> findAllByMemberWithPaging(Member member, Pageable pageable) {
         return queryFactory
             .selectFrom(community)
-            .where(community.member.memberId.eq(memberId))
+            .where(community.member.eq(member))
             .orderBy(community.createTime.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())

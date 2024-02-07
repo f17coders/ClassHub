@@ -149,8 +149,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberCommunityListRes getCommunityList(Member member, Pageable pageable)
         throws BaseExceptionHandler {
-        List<Community> communityList = communityRepository.findAllByMemberIdWithPaging(
-            member.getMemberId(), pageable);
+        List<Community> communityList = communityRepository.findAllByMemberWithPaging(
+            member, pageable);
 
 //        total Page 계산
         long communitySize = communityRepository.countByMemberMemberId(member.getMemberId());
