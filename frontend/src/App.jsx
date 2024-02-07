@@ -18,6 +18,7 @@ import MyPageLecture from './pages/MyPage/MyPageLecture'
 import MyPageLike from './pages/MyPage/MyPageLike'
 import MyPageCommunity from './pages/MyPage/MyPageCommunity'
 import MyPageEdit from './pages/MyPage/MyPageEdit'
+import AdditionalInfo from './pages/AdditionalInfo'
 import {createTheme, ThemeProvider} from '@mui/material'
 
 
@@ -46,7 +47,7 @@ function App() {
             <Route index element={<StudyRoomRecruit />} />
             <Route path="recruit" element={<StudyRoomRecruit />} />
             <Route path="participating/:studyId" element={<StudyRoomParticipating/>} />
-            <Route path="message" element={<StudyRoomPrivateMessage />} />
+            <Route path="message/:personalChatId" element={<StudyRoomPrivateMessage />} />
           </Route>
           <Route path='/mypage' element={<MyPage/>}>
             <Route index element={<MyPageLecture/>} />
@@ -55,6 +56,7 @@ function App() {
             <Route path='community' element={<MyPageCommunity/>} />
             <Route path='edit' element={<MyPageEdit/>} />
           </Route>
+          <Route path='/additionalinfo' element={<AdditionalInfo/>}></Route>
           <Route path='*' element={<div>없는 페이지에요</div>}/>
         </Routes>
       </div>

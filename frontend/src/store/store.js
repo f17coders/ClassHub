@@ -6,15 +6,34 @@ import user from './userSlice.js'
 // 로그인 된 상태인지 확인용
 let isLogin = createSlice({
   name: 'isLogin',
-  initialState: true,
+  initialState: false,
   reducers: {
-    toggleLogin(state) {
-      return !state
+    login(state) {
+      return true
+    },
+    logout(state){
+      return false
     }
   }
 })
 
-export let {toggleLogin} = isLogin.actions
+export let {login, logout} = isLogin.actions
+
+
+// 토큰 저장
+const accessToken = createSlice({
+  name: 'accessToken',
+  initialState: null,
+  reducers: {
+    saveAccessToken(state, action) {
+      return action.payload
+    }
+  }
+})
+
+export let {saveAccessToken} = accessToken.actions
+
+
 
 // 강의 비교용
 let compareLectures = createSlice({
@@ -179,13 +198,14 @@ const persistConfig = {
   key: 'root',
   storage: storageSession,
   // 로컬에 저장하고 싶은 애만 빼주기
-  whitelist: ['isLogin','compareLectures', 'user']
-};
+  whitelist: ['isLogin', 'compareLectures', 'user', 'accessToken']
+}
 
 const persistedReducer = persistReducer(
   persistConfig,
   combineReducers({
     isLogin: isLogin.reducer,
+    accessToken: accessToken.reducer,
     compareLectures: compareLectures.reducer,
     searchParams: searchParams.reducer,
     user: user.reducer,

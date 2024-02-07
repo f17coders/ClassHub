@@ -28,6 +28,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // 강의의 상세 내용이 들어가는 페이지 입니다.
 
 function LectureDetail() {
+	// 토큰
+	let accessToken = useSelector((state) => state.accessToken)
 	// id가져오기
 	const { lectureId } = useParams()
 
@@ -56,12 +58,20 @@ function LectureDetail() {
 	const toggleLike = () => {
 		if (isLogin == true) {
 			if (like == false) {
-				axios.post(`https://i10a810.p.ssafy.io/api/lectures/v1/likes/${lecture.lectureId}`)
+				axios.post(`https://i10a810.p.ssafy.io/api/lectures/v1/likes/${lecture.lectureId}`, {
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				})
 					.then((res) => console.log('좋아요를 눌렀어요'))
 					.catch((err) => console.log(err))
 				setLike(true)
 			} else {
-				axios.delete(`https://i10a810.p.ssafy.io/api/lectures/v1/unlikes/${lecture.lectureId}`)
+				axios.delete(`https://i10a810.p.ssafy.io/api/lectures/v1/unlikes/${lecture.lectureId}`, {
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				})
 					.then((res) => console.log('좋아요 취소'))
 					.catch((err) => console.log(err))
 				setLike(false)

@@ -31,7 +31,7 @@ public class TokenCheckFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
         FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
-        if (!path.startsWith("/api") || path.matches("/api/.*/v0(/.*)?")) {
+        if (!path.startsWith("/api") || path.matches("/api/.*/v0(/.*)?") || path.matches("/api/chat(/.*)?")) {
             filterChain.doFilter(request, response);
             return;
         }

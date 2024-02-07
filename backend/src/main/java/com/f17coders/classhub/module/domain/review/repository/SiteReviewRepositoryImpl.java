@@ -1,8 +1,10 @@
 package com.f17coders.classhub.module.domain.review.repository;
 
+import static com.f17coders.classhub.module.domain.review.QReview.review;
 import static com.f17coders.classhub.module.domain.review.QSiteReview.siteReview;
 
 import com.f17coders.classhub.module.domain.review.dto.response.SiteReviewRes;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -22,7 +24,7 @@ public class SiteReviewRepositoryImpl implements SiteReviewRepositoryCustom {
 
 
 	@Override
-	public List<SiteReviewRes> findSiteReviewsByLectureId(int lectureId, Pageable pageable) {
+	public List<SiteReviewRes> findSiteReviewsByLectureId(int lectureId, String order, Pageable pageable) {
 		return queryFactory.select(Projections.constructor(SiteReviewRes.class,
 				siteReview.siteReviewId,
 				siteReview.lecture.lectureId,
@@ -32,6 +34,7 @@ public class SiteReviewRepositoryImpl implements SiteReviewRepositoryCustom {
 			))
 			.from(siteReview)
 			.where(siteReview.lecture.lectureId.eq(lectureId))
+			.orderBy(orderExpression(order))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
 			.fetch();
@@ -44,5 +47,13 @@ public class SiteReviewRepositoryImpl implements SiteReviewRepositoryCustom {
 			.from(siteReview)
 			.where(siteReview.lecture.lectureId.eq(lectureId))
 			.fetchFirst());
+	}
+
+	private OrderSpecifier orderExpression(String order) {
+		if (order.equals("lowest-ranking")) {
+			return siteReview.score.asc();
+		}
+		return siteReview.score.desc();
+
 	}
 }
