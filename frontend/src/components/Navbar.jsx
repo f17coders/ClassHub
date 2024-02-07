@@ -8,28 +8,18 @@ import MainLogo from './../assets/MainLogo.png'
 import MenuIcon from '@mui/icons-material/Menu'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
 import LoginModal from './LoginModal'
 import { useSelector, useDispatch } from 'react-redux'
 import profile from './../assets/Profile.png'
-import Switch from '@mui/material/Switch'
-import { toggleLogin } from '../store/store'
-import Lecture from './../pages/Lecture/Lecture'
 
-const pages = [
-	{ name: 'Lecture', url: 'lecture' },
-	{ name: 'Community', url: 'community' },
-	{ name: 'Study Room', url: 'studyroom' }
-]
 // navbar
-
 function NavbarComponent() {
-	const navigate = useNavigate();
-	const dispatch = useDispatch()
 	// 로그인 체크용
 	let isLogin = useSelector((state) => state.isLogin)
+	// 유저정보 가져오기 용
+	let user = useSelector((state) => state.user)
 
-	// 화면 줄었을 때 리스트용
+	// 화면 줄었을 때 리스트용(반응형)
 	const [anchorElNav, setAnchorElNav] = useState(null)
 	const handleOpenNavMenu = (event) => {
 		setAnchorElNav(event.currentTarget);
@@ -70,32 +60,6 @@ function NavbarComponent() {
 		fontWeight: '550',
 		transition: 'font-size 0.3s ease',
 	}
-
-	const [accessToken, setAccessToken] = useState('');
-	const handleLoginClick = () => {
-		console.log('로그인 버튼 클릭')
-		window.location.href = 'https://i10a810.p.ssafy.io/login/oauth2/authorization/kakao';
-	  };
-
-	  useEffect(() => {
-			setAccessToken(new URL(window.location.href).searchParams.get(
-				'Authorization'
-			));
-			console.log(accessToken);
-
-		    if(accessToken) {
-			console.log('useEffect 실행')
-			try {
-				//   setAccessToken(code);
-				  console.log(accessToken)
-				  localStorage.setItem("token", accessToken);
-				// loadUserInfo(code);
-				  navigate('/');
-			  } catch (error) {
-				console.error("카카오 로그인 에러:", error);
-			  }
-		}
-	  }, [accessToken]);
 
 		return (
 			<Appbar
@@ -175,20 +139,8 @@ function NavbarComponent() {
 										</div>
 									))
 								}
-
-								{/* {pages.map((page) => (
-								<MenuItem key={page.url} onClick={handleCloseNavMenu}>
-									<Link to={'/' + page.url}>
-										<Button sx={{color:'black'}}>{page.name}</Button>
-									</Link>
-								</MenuItem>
-							))} */}
 							</Menu>
 						</Box>
-
-						{/* 테스트용 로그인 토글 스위치 */}
-						<Box><Switch onChange={() => dispatch(toggleLogin())} /></Box>
-
 					</Grid>
 
 					<Grid item xs={1}>
@@ -198,14 +150,14 @@ function NavbarComponent() {
 							) : (
 								<Link to="/mypage">
 									<IconButton>
-										<img src={profile} alt="profile" style={{ width: '40px', borderRadius: '70%' }} />
+										<img src={user.profileImage} alt="profile" style={{ width: '40px', borderRadius: '70%' }} />
 									</IconButton>
 								</Link>
 							)
 						}
-						<Button onClick={handleLoginClick}>
+						{/* <Button onClick={handleLoginClick}>
 							로그인
-						</Button>
+						</Button> */}
 					</Grid>
 				</Grid>
 				<LoginModal open={open} onClose={ModalClose} />
