@@ -11,7 +11,7 @@ import img1 from './../../assets/Lecture/Lecture2.png'
 import CompareButton from './../../components/CompareButton'
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
-import { changeCategory, changeKeyword, searchResult, setFromMainFalse, changePage } from '../../store/store'
+import { changeCategory, changeKeyword, searchResult, setFromMainFalse, changePage, changeOrder } from '../../store/store'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import axios from 'axios'
 
@@ -43,9 +43,10 @@ function Lecture() {
 	// 검색하기
 	useEffect(() => {
 		if (fromMain == false) {
-			axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?${searchParams.category ? 'category=' + searchParams.category.categoryId : ''}${searchParams.tags.length ? '&tags=' + searchParams.tags.map(tag => tag.tagId).join('%7C%7C') : ''}${searchParams.keyword ? '&keyword=' + searchParams.keyword : ''}${searchParams.level != 'ALL' ? '&level=' + searchParams.level : ''}${searchParams.site ? '&site=' + searchParams.site : ''}&page=${searchParams.page}&size=16`)
+			axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?${searchParams.category ? 'category=' + searchParams.category.categoryId : ''}${searchParams.tags.length ? '&tags=' + searchParams.tags.map(tag => tag.tagId).join('%7C%7C') : ''}${searchParams.keyword ? '&keyword=' + searchParams.keyword : ''}${searchParams.level != 'ALL' ? '&level=' + searchParams.level : ''}${searchParams.site ? '&site=' + searchParams.site : ''}&order=${searchParams.order}&page=${searchParams.page}&size=16`)
 			.then((res) => {
 				console.log(`${res.config.url}으로 요청 보냄`)
+				console.log(res.data)
 				setTotalPages(res.data.result.totalPages)
 				dispatch(searchResult(res.data.result.lectureList))
 			}).catch((err) =>

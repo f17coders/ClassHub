@@ -21,11 +21,7 @@ function MyPageEdit() {
 	// 처음에 전체 관심있는 기술과 목표직무를 가져온다
 	useEffect(() => {
 		if (skills.length == 0) {
-			axios.get('https://i10a810.p.ssafy.io/api/tags/v1/members',{
-				headers: {
-					Authorization: `Bearer ${accessToken}`
-				}
-			})
+			axios.get('https://i10a810.p.ssafy.io/api/tags/v0/members')
 				.then((res) => {
 					let loadedSkills = res.data.result.tagList.map((item) => item)
 					setSkills(loadedSkills)
