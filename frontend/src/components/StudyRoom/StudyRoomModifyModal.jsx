@@ -59,9 +59,8 @@ export default function StudyRoomModifyModal({ data, studyModify, studyModifyClo
     })
     .then((res) => {
       console.log(res)
-      console.log(studyId)
       onModifySuccess()
-      // window.location.reload(); //페이지 새로고침
+      window.location.reload(); //페이지 새로고침
     })
     .catch((err) => console.log(err))
   }

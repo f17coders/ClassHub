@@ -25,7 +25,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     public Optional<Member> findByIdFetchJoinJob(int memberId) {
         Member memberEntity = queryFactory
             .selectFrom(member)
-            .join(member.job, job).fetchJoin()
+            .leftJoin(member.job, job).fetchJoin()
             .where(member.memberId.eq(memberId))
             .fetchOne();
 

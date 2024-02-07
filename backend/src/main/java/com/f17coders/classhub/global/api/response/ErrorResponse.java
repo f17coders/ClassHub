@@ -20,7 +20,7 @@ public class ErrorResponse {
     private String reason;
 
     @Builder(builderMethodName = "of")
-    protected ErrorResponse(final ErrorCode code, final String message) {
+    public ErrorResponse(final ErrorCode code, final String message) {
         Objects.requireNonNull(code);
         this.status = code.getStatus();
         this.code = code.getDivisionCode();

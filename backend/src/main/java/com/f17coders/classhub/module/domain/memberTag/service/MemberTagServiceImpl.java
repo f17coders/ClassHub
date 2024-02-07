@@ -18,7 +18,7 @@ public class MemberTagServiceImpl implements MemberTagService {
     private final MemberTagRepository memberTagRepository;
 
     @Override
-    public void registerMemberTag(Member member, Tag tag) throws BaseExceptionHandler, IOException {
+    public void registerMemberTag(Member member, Tag tag){
         MemberTag memberTag = MemberTag.createMemberTag(member, tag);
 
         MemberTag saveMemberTag = memberTagRepository.save(memberTag);

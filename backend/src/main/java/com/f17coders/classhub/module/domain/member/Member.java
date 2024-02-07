@@ -8,7 +8,9 @@ import com.f17coders.classhub.module.domain.communityScrap.CommunityScrap;
 import com.f17coders.classhub.module.domain.job.Job;
 import com.f17coders.classhub.module.domain.lectureLike.LectureLike;
 import com.f17coders.classhub.module.domain.memberTag.MemberTag;
+import com.f17coders.classhub.module.domain.review.Review;
 import com.f17coders.classhub.module.domain.studyMember.StudyMember;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -88,7 +90,7 @@ public class Member extends BaseEntity {
     private List<CommunityScrap> communityScrapList = new ArrayList<>();
 
     // Member - MemberTag 연관 관계
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MemberTag> memberTagList = new ArrayList<>();
 
     // Member - StudyMember 연관관계
@@ -98,6 +100,10 @@ public class Member extends BaseEntity {
     // Member - LectureLike 연관 관계
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<LectureLike> lectureLikeList = new ArrayList<>();
+
+    // Member - review 연관 관계
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<Review> reviewList = new ArrayList<>();
 
     public void putMemberTag(MemberTag memberTag) {  // 연관 관계 편의 메서드
         memberTag.setMember(this);
@@ -113,7 +119,8 @@ public class Member extends BaseEntity {
     }
 
     @Builder(builderMethodName = "fromUser", buildMethodName = "get")
-    public Member(int memberId, String socialId, String nickname, String profileImage, String provider) {
+    public Member(int memberId, String socialId, String nickname, String profileImage,
+        String provider) {
         this.memberId = memberId;
         this.socialId = socialId;
         this.nickname = nickname;
@@ -128,6 +135,8 @@ public class Member extends BaseEntity {
         member.setProfileImage(profileImage);
         return member;
     }
+
+
 
 //    TODO : 단방향 연관 관계로 우선 설정 후 필요에 의해서 양방향으로 연관 관계 설정 + 연관 관계 편의 메서드의 위치는 로직에 따라 Many쪽에 있을 수도 있고 One쪽에 있을 수도 있으니 변경 가능
 //    // Member - review 연관 관계

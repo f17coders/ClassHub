@@ -8,6 +8,7 @@ import MainLogo from './../assets/MainLogo.png'
 import MenuIcon from '@mui/icons-material/Menu'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 import LoginModal from './LoginModal'
 import { useSelector, useDispatch } from 'react-redux'
 import profile from './../assets/Profile.png'
@@ -70,39 +71,29 @@ function NavbarComponent() {
 		transition: 'font-size 0.3s ease',
 	}
 
-	const [accessToken, setAccessToken] = useState(null);
-	// const getAccessTokenFromRedirectURL = () => {
-	// 	const urlParams = new URLSearchParams(window.location.search);
-	// 	return urlParams.get("Authorization")
-	// };
-
-
-
+	const [accessToken, setAccessToken] = useState('');
 	const handleLoginClick = () => {
-		// window.location.href = 'https://i10a810.p.ssafy.io/login/oauth2/code/kakao';
-		setAccessToken("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDk3ODI4NzcsImlhdCI6MTcwNzE5MDg3Nywicm9sZXMiOlsiUk9MRSJdLCJtZW1iZXJJZCI6IjE4In0.JmmSWf6hDYcpHR96txb6Lt03xrEmMxNIMbW04_pgPz0")
-
+		console.log('로그인 버튼 클릭')
+		window.location.href = 'https://i10a810.p.ssafy.io/login/oauth2/authorization/kakao';
 	  };
 
 	  useEffect(() => {
-		try {
-		  // 컴포넌트가 마운트되면서 리다이렉트된 URL에서 AccessToken을 처리
-		//   const token = getAccessTokenFromRedirectURL();
-		// const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3MDk3Nzc3MzEsImlhdCI6MTcwNzE4NTczMSwicm9sZXMiOlsiUk9MRSJdLCJtZW1iZXJJZCI6IjE2In0.azeezniWcI2m35YuTKq9oyO7b3n81Z-Yi4XeSsQ0C5Y";
-		  if (accessToken) {
-			// setAccessToken(token);
+			setAccessToken(new URL(window.location.href).searchParams.get(
+				'Authorization'
+			));
 			console.log(accessToken);
-			// console.log(token);
-			localStorage.setItem("token", accessToken);
-			// loadUserInfo(token);
-			// history.push('/main');  // 원하는 페이지로 리다이렉트
-			navigate('/'); //메인 페이지로 리다이렉트
-		  } else {
-			throw new Error('Missing access token');
-		  }
-		} catch (error) {
-		  console.error("카카오 로그인 에러:", error);
-		//   history.push("/");
+
+		    if(accessToken) {
+			console.log('useEffect 실행')
+			try {
+				//   setAccessToken(code);
+				  console.log(accessToken)
+				  localStorage.setItem("token", accessToken);
+				// loadUserInfo(code);
+				  navigate('/');
+			  } catch (error) {
+				console.error("카카오 로그인 에러:", error);
+			  }
 		}
 	  }, [accessToken]);
 
@@ -212,9 +203,9 @@ function NavbarComponent() {
 								</Link>
 							)
 						}
-						{/* <Button onClick={handleLoginClick}>
+						<Button onClick={handleLoginClick}>
 							로그인
-						</Button> */}
+						</Button>
 					</Grid>
 				</Grid>
 				<LoginModal open={open} onClose={ModalClose} />

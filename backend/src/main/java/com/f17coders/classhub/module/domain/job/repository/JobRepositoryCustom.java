@@ -6,4 +6,5 @@ import java.util.List;
 public interface JobRepositoryCustom {
 
     public List<Job> findJobByKeywordFetchJoinMemberOrderByMemberSize(String keyword);
+
 }
