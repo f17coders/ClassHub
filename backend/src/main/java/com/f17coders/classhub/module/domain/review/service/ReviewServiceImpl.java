@@ -33,7 +33,8 @@ public class ReviewServiceImpl implements ReviewService {
 
 	@Override
 	public ReviewListRes getReviewList(int lectureId, String order, Pageable pageable) {
-		List<ReviewRes> reviewList = reviewRepository.findReviewsByLectureIdJoinMemberId(lectureId,order,
+		List<ReviewRes> reviewList = reviewRepository.findReviewsByLectureIdJoinMemberId(lectureId,
+			order,
 			pageable);
 
 		int totalPages = (int) Math.ceil(
