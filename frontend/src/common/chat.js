@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { useSelector } from "react-redux"
 
-let accessToken = useSelector((state) => state.accessToken)
+
 // 채팅방 얻기
 const getPersonalChat = (personalChatId) => {
-
+    let accessToken = useSelector((state) => state.accessToken)
     return axios.get(`https://i10a810.p.ssafy.io/api/personal-chat/v1/${personalChatId}`,{
         headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -21,6 +21,7 @@ const getPersonalChat = (personalChatId) => {
 
 // 채팅방 얻기, 없으면 생성
 const registPersonalChat = (receiver) => {
+    let accessToken = useSelector((state) => state.accessToken)
     return axios.post(`https://i10a810.p.ssafy.io/api/personal-chat/v1`,{
         "receiver": receiver,
     }, {
