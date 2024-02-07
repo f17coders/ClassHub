@@ -56,15 +56,12 @@ public class CommunityServiceImpl implements CommunityService {
         // TagId를 이용하여 Community Tag 등록
         List<Integer> tagListReq = communityRegisterReq.tagList();
 
-
-
-        for (int tagId : tagListReq) {
-            Tag tag = tagRepository.findById(tagId)
-                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
-
-            CommunityTag communityTag = CommunityTag.createCommunityTag(community, tag);
-            communityTagRepository.save(communityTag);
-        }
+        tagListReq.stream()
+            .map(tagId -> tagRepository.findById(tagId)
+                .orElseThrow(
+                    () -> new BaseExceptionHandler("존재하지 않는 태그입니다.", ErrorCode.NOT_FOUND_ERROR)))
+            .map(tag -> CommunityTag.createCommunityTag(community, tag))
+            .forEach(communityTag -> communityTagRepository.save(communityTag));
 
         return saveCommunity.getCommunityId();
     }
@@ -76,24 +73,17 @@ public class CommunityServiceImpl implements CommunityService {
             communityId);
 
         // 댓글 목록
-        List<CommentDetailRes> commentDetailResList = new ArrayList<>();
-
-        for (Comment comment : community.getCommentList()) {
-            CommentDetailRes commentDetailRes = commentService.convertToCommentListRes(comment,
-                member);    // TODO : 람다식으로 구현 가능 여부 확인
-            commentDetailResList.add(commentDetailRes);
-        }
+        List<CommentDetailRes> commentDetailResList = community.getCommentList().stream()
+            .map(comment -> commentService.convertToCommentListRes(comment, member))
+            .collect(Collectors.toList());
 
         // 커뮤니티 태그 조회
-        List<TagRes> tagResList = new ArrayList<>();
-        for (CommunityTag communityTag : community.getCommunityTagSet()) {
-            TagRes tagRes = TagRes.builder()
+        List<TagRes> tagResList = community.getCommunityTagSet().stream()
+            .map(communityTag -> TagRes.builder()
                 .tagId(communityTag.getTag().getTagId())
                 .name(communityTag.getTag().getName())
-                .build();
-
-            tagResList.add(tagRes);
-        }
+                .build())
+            .collect(Collectors.toList());
 
         return CommunityReadRes.builder()
             .communityId(communityId)
@@ -164,14 +154,11 @@ public class CommunityServiceImpl implements CommunityService {
         community.setContent(content);
 
         // 새로운 관심 태그 설정
-        for (int tagId : communityUpdateReq.tagList()) {
-            Tag tag = tagRepository.findById(tagId)
-                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
-
-            CommunityTag communityTag = CommunityTag.createCommunityTag(community,
-                tag);    // TODO : 추후 Bulk Insert??
-            communityTagRepository.save(communityTag);
-        }
+        communityUpdateReq.tagList().stream()
+            .map(tagId -> tagRepository.findById(tagId)
+                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR)))
+            .map(tag -> CommunityTag.createCommunityTag(community, tag))
+            .forEach(communityTag -> communityTagRepository.save(communityTag));
     }
 
     @Override
