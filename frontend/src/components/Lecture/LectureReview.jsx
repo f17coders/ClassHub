@@ -15,9 +15,10 @@ import elepent from './../../assets/ProfileIamge/코끼리.jpg'
 // 리뷰 한개의 컴포넌트
 
 
-function LectureReview({review, from }) {
+function LectureReview({review, from}) {
   // 로그인 확인용
   let isLogin = useSelector((state) => state.isLogin)
+  let user = useSelector((state) => state.user)
   
   // check가 1이면 보이고, 2면 보인다
   // from이 1이면 우리 사이트 리뷰, 2면 다른 사이트 리뷰
@@ -49,11 +50,17 @@ function LectureReview({review, from }) {
 
  // 처음에 설정해 준 값만 들어가게 수정
   useEffect(() => {
-    const reviewUser = from === 1 ? review.member.nickname : `${adjective} ${animal}`
-    const reviewUserImg = from === 1 ? review.member.profileImage : randomImage[animal]
     // reviewUser와 reviewUserImg 값을 업데이트
-    setReviewUser(reviewUser)
-    setReviewUserImg(reviewUserImg)
+    if (from == 1) {
+      setReviewUser(review.member.nickname)
+      setReviewUserImg(review.member.profileImage)
+    } else if (from == 2) {
+      setReviewUser(`${adjective} ${animal}`)
+      setReviewUserImg(randomImage[animal])
+    } else {
+      setReviewUser(user.nickname)
+      setReviewUserImg(user.profileImage)
+    }
   }, [])
 
   // 호버용 변수들

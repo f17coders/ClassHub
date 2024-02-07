@@ -1,6 +1,6 @@
 import Banner from './../components/Home/Banner'
 import Search from './../components/Home/Search'
-import Recommend from './../components/Home/Recommend'
+import Recommend from '../components/Home/RecommendJob'
 import CompareButton from './../components/CompareButton'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
@@ -17,6 +17,7 @@ function Home() {
 		<div>
 			<Banner />
 			<Search />
+			<Recommend />
 			{/* {
 				isLogin ? (<div>{
 					userInfo != null ? (<div>

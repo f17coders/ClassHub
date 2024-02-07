@@ -140,7 +140,7 @@ function LectureCard({ lecture }) {
 					</div>
 					{/* 해시태그들(2개까지만) */}
 					<div>
-						{
+						{/* {
 							lecture.tagList.length == 1 ? (<div>{
 								<Chip size="small" label={`# ${lecture.tagList[0].name}`}></Chip>
 							}</div>) : (<div>{
@@ -149,7 +149,7 @@ function LectureCard({ lecture }) {
 									<Chip size="small" label={`# ${lecture.tagList[1].name}`}></Chip>
 								</div>) : null
 							}</div>)
-						}
+						} */}
 					</div>
 				</div>
 			</CardContent>
