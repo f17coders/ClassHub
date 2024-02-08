@@ -39,7 +39,7 @@ export default function CommunityDetail(){
     const { communityId } = useParams();
     // 게시글 상세 조회
     useEffect(() => {
-        axios.get(`https://i10a810.p.ssafy.io/api/communities/v0/details/${communityId}`, {
+        axios.get(`https://i10a810.p.ssafy.io/api/communities/v1/details/${communityId}`, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
