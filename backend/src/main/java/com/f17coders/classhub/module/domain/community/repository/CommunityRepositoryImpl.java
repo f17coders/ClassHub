@@ -76,15 +76,13 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
 
     @Override
     public Long countPageByKeywordAndTagIdListJoinCommunityTagJoinTag(List<Integer> tagIdList,
-        String keyword, Pageable pageable) {
+        String keyword) {
         return queryFactory
             .select(community.count())
             .from(community)
             .leftJoin(community.communityTagSet, communityTag)
             .leftJoin(communityTag.tag, tag)
             .where(containsKeyword(keyword), inTagIdList(tagIdList))
-            .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
             .fetchOne();
     }
 

@@ -18,8 +18,8 @@ public interface CommunityRepositoryCustom {
 
     List<Community> findAllByMemberWithPaging(Member member, Pageable pageable);
 
-    Long countPageByKeywordAndTagIdListJoinCommunityTagJoinTag(List<Integer> tagIdList,
-        String keyword, Pageable pageable);
+    public Long countPageByKeywordAndTagIdListJoinCommunityTagJoinTag(List<Integer> tagIdList,
+        String keyword);
 
     List<Community> findPageByKeywordAndTagIdListJoinCommunityTagJoinTag(List<Integer> tagIdList,
         String keyword, Pageable pageable);
