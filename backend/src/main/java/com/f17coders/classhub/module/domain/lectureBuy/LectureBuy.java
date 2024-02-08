@@ -2,6 +2,7 @@ package com.f17coders.classhub.module.domain.lectureBuy;
 
 import com.f17coders.classhub.module.domain.BaseEntity;
 import com.f17coders.classhub.module.domain.lecture.Lecture;
+import com.f17coders.classhub.module.domain.lectureLike.LectureLike;
 import com.f17coders.classhub.module.domain.member.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -24,9 +25,28 @@ public class LectureBuy extends BaseEntity {
     @Setter
     private Member member;
 
+    public void putMember(Member member) {
+        this.member = member;
+        member.getLectureBuyList().add(this);
+    }
+
     // LectureBuy - Lecture 연관 관계 매핑
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lecture_id")
     @Setter
     private Lecture lecture;
+
+    public void putLecture(Lecture lecture) {
+        this.lecture = lecture;
+        lecture.getLectureBuySet().add(this);
+    }
+
+    public static LectureBuy createLectureBuy(Lecture lecture, Member member) {
+        LectureBuy lectureBuy = new LectureBuy();
+
+        lectureBuy.putLecture(lecture);
+        lectureBuy.putMember(member);
+
+        return lectureBuy;
+    }
 }

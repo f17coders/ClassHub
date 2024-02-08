@@ -268,6 +268,144 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 		return lectureListJobResList;
 	}
 
+	@Override
+	public List<LectureListDetailLectureLikeCountRes> findLecturesByMemberJoinLectureBuy(
+		int memberId,
+		Pageable pageable) {
+
+		List<LectureListDetailLectureLikeCountRes> lectureListDetailLectureLikeCountRes = queryFactory.select(
+				Projections.constructor(LectureListDetailLectureLikeCountRes.class,
+					lecture.lectureId,
+					lecture.name,
+					lecture.siteType,
+					lecture.instructor,
+					Expressions.stringTemplate(
+						"COALESCE({0}, 'https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791187395027.jpg')",
+						lecture.image).as("image"),
+					lecture.level,
+					Expressions.numberTemplate(Float.class,
+						"CASE WHEN {1}=0 AND {3}=0 THEN 0 "
+							+
+							"WHEN {1} < 10 THEN ROUND( ({0} * 0.2 + {2} * {3} * 0.8) / ({1} * 0.2 + {3} * 0.8), 1) "
+							+
+							"ELSE ROUND(({0} * 0.5 + {2} * {3} * 0.5) / ({1} * 0.5 + {3} * 0.5), 1) END",
+						lecture.reviewSum, lecture.reviewCount, lecture.siteReviewRating,
+						lecture.siteReviewCount).as("combinedRating"),
+					Expressions.numberTemplate(Integer.class, "{0} + {1}", lecture.reviewCount,
+						lecture.siteReviewCount).as("combinedRatingCount"),
+					lecture.priceOriginal,
+					lecture.priceSale,
+					lecture.descriptionSummary,
+					lecture.totalTime,
+					Projections.constructor(CategoryRes.class,
+						category.categoryId,
+						category.categoryName
+					),
+					Expressions.numberTemplate(Integer.class,
+						"{0}",
+						JPAExpressions
+							.select(lectureLike.lecture.lectureId.count())
+							.from(lectureLike)
+							.where(lecture.lectureId.eq(lectureLike.lecture.lectureId))
+							.groupBy(lecture.lectureId)).as("lectureLikeCount")
+				)
+			)
+			.from(lecture)
+			.where(lecture.lectureId.in(JPAExpressions
+				.select(lectureBuy.lecture.lectureId)
+				.from(lectureBuy)
+				.where(lectureBuy.member.memberId.eq(memberId))
+				.orderBy(lectureBuy.updateTime.desc())
+			))
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.fetch();
+
+		return lectureListDetailLectureLikeCountRes;
+	}
+
+	@Override
+	public List<LectureListDetailLectureLikeCountRes> findLecturesByMemberJoinLectureLike(
+		int memberId,
+		Pageable pageable) {
+
+		List<LectureListDetailLectureLikeCountRes> lectureListDetailLectureLikeCountRes = queryFactory.select(
+				Projections.constructor(LectureListDetailLectureLikeCountRes.class,
+					lecture.lectureId,
+					lecture.name,
+					lecture.siteType,
+					lecture.instructor,
+					Expressions.stringTemplate(
+						"COALESCE({0}, 'https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791187395027.jpg')",
+						lecture.image).as("image"),
+					lecture.level,
+					Expressions.numberTemplate(Float.class,
+						"CASE WHEN {1}=0 AND {3}=0 THEN 0 "
+							+
+							"WHEN {1} < 10 THEN ROUND( ({0} * 0.2 + {2} * {3} * 0.8) / ({1} * 0.2 + {3} * 0.8), 1) "
+							+
+							"ELSE ROUND(({0} * 0.5 + {2} * {3} * 0.5) / ({1} * 0.5 + {3} * 0.5), 1) END",
+						lecture.reviewSum, lecture.reviewCount, lecture.siteReviewRating,
+						lecture.siteReviewCount).as("combinedRating"),
+					Expressions.numberTemplate(Integer.class, "{0} + {1}", lecture.reviewCount,
+						lecture.siteReviewCount).as("combinedRatingCount"),
+					lecture.priceOriginal,
+					lecture.priceSale,
+					lecture.descriptionSummary,
+					lecture.totalTime,
+					Projections.constructor(CategoryRes.class,
+						category.categoryId,
+						category.categoryName
+					),
+					Expressions.numberTemplate(Integer.class,
+						"{0}",
+						JPAExpressions
+							.select(lectureLike.lecture.lectureId.count())
+							.from(lectureLike)
+							.where(lecture.lectureId.eq(lectureLike.lecture.lectureId))
+							.groupBy(lecture.lectureId)).as("lectureLikeCount")
+				)
+			)
+			.from(lecture)
+			.where(lecture.lectureId.in(JPAExpressions
+				.select(lectureLike.lecture.lectureId)
+				.from(lectureLike)
+				.where(lectureLike.member.memberId.eq(memberId))
+				.orderBy(lectureLike.updateTime.desc())
+			))
+			.offset(pageable.getOffset())
+			.limit(pageable.getPageSize())
+			.fetch();
+
+		return lectureListDetailLectureLikeCountRes;
+	}
+
+	@Override
+	public int countLectureBuyByMember(int memberId) {
+		return Math.toIntExact(queryFactory
+			.select(lecture.count())
+			.from(lecture)
+			.where(lecture.lectureId.in(JPAExpressions
+				.select(lectureBuy.lecture.lectureId)
+				.from(lectureBuy)
+				.where(lectureBuy.member.memberId.eq(memberId))
+			))
+			.fetchFirst());
+	}
+
+	@Override
+	public int countLectureLikeByMember(int memberId) {
+		return Math.toIntExact(queryFactory
+			.select(lecture.count())
+			.from(lecture)
+			.where(lecture.lectureId.in(JPAExpressions
+				.select(lectureLike.lecture.lectureId)
+				.from(lectureLike)
+				.where(lectureLike.member.memberId.eq(memberId))
+			))
+			.fetchFirst());
+	}
+
 	private OrderSpecifier orderExpression(String order) {
 
 		NumberExpression<Float> combinedRating = Expressions.numberTemplate(Float.class,

@@ -9,6 +9,10 @@ import com.f17coders.classhub.module.domain.communityScrap.repository.CommunityS
 import com.f17coders.classhub.module.domain.job.Job;
 import com.f17coders.classhub.module.domain.job.dto.response.JobRes;
 import com.f17coders.classhub.module.domain.job.repository.JobRepository;
+import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListDetailLectureLikeCountRes;
+import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListDetailRes;
+import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListRes;
+import com.f17coders.classhub.module.domain.lecture.repository.LectureRepository;
 import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.member.dto.request.MemberAddInfoReq;
 import com.f17coders.classhub.module.domain.member.dto.request.MemberUpdateInfoReq;
@@ -24,6 +28,7 @@ import com.f17coders.classhub.module.domain.study.repository.StudyRepository;
 import com.f17coders.classhub.module.domain.tag.dto.response.TagRes;
 import com.f17coders.classhub.module.domain.tag.repository.TagRepository;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -43,9 +48,8 @@ public class MemberServiceImpl implements MemberService {
     private final StudyRepository studyRepository;
     private final CommentRepository commentRepository;
     private final CommunityScrapRepository communityScrapRepository;
-
-
     private final MemberTagService memberTagService;
+	private final LectureRepository lectureRepository;
 
     @Override
     public MemberGetInfoRes getInformation(Member member)
@@ -123,7 +127,7 @@ public class MemberServiceImpl implements MemberService {
         // 희망 직무 조회
         Job job = jobRepository.findById(memberUpdateInfoReq.jobId())
             .orElseThrow(() -> new BaseExceptionHandler
-                ("존재하지 않는 직무입니다.",
+                ("존재하지 않는 태그입니다.",
                     ErrorCode.NOT_FOUND_ERROR));
 
         // 기존 희망 직무 삭제 및 새 희망 직무 설정
@@ -142,6 +146,96 @@ public class MemberServiceImpl implements MemberService {
             .forEach(tag -> memberTagService.registerMemberTag(member, tag));
     }
 
+	@Override
+	public LectureListRes getBuyedLectureList(int memberId, Pageable pageable)
+		throws BaseExceptionHandler, IOException {
+
+		List<LectureListDetailRes> lectureListDetailResList = new ArrayList<>();
+
+		List<LectureListDetailLectureLikeCountRes> lectureListDetailLectureLikeCountRes = lectureRepository.findLecturesByMemberJoinLectureBuy(
+			memberId, pageable);
+
+		for (LectureListDetailLectureLikeCountRes lecture : lectureListDetailLectureLikeCountRes) {
+			int lectureId = lecture.lectureId();
+
+			List<TagRes> tagList = tagRepository.findTagsByLectureIdFetchJoinLectureTag(lectureId);
+
+			lectureListDetailResList.add(
+				LectureListDetailRes.builder()
+					.lectureId(lecture.lectureId())
+					.lectureName(lecture.lectureName())
+					.siteType(lecture.siteType())
+					.instructor(lecture.instructor())
+					.image(lecture.image())
+					.level(lecture.level())
+					.combinedRating(lecture.combinedRating())
+					.combinedRatingCount(lecture.combinedRatingCount())
+					.priceOriginal(lecture.priceOriginal())
+					.priceSale(lecture.priceSale())
+					.descriptionSummary(lecture.descriptionSummary())  // 한줄요약
+					.totalTime(lecture.totalTime())
+					.category(lecture.category())
+					.tagList(tagList)
+					.lectureLikeCount(lecture.lectureLikeCount())
+					.build()
+			);
+		}
+
+		int totalPages = (int) Math.ceil(
+			(double) lectureRepository.countLectureBuyByMember(memberId) / pageable.getPageSize());
+
+		return LectureListRes
+			.builder()
+			.lectureList(lectureListDetailResList)
+			.totalPages(totalPages)
+			.build();
+
+	}
+
+	@Override
+	public LectureListRes getLikedLectureList(int memberId, Pageable pageable)
+		throws BaseExceptionHandler, IOException {
+
+		List<LectureListDetailRes> lectureListDetailResList = new ArrayList<>();
+
+		List<LectureListDetailLectureLikeCountRes> lectureListDetailLectureLikeCountRes = lectureRepository.findLecturesByMemberJoinLectureLike(
+			memberId, pageable);
+
+		for (LectureListDetailLectureLikeCountRes lecture : lectureListDetailLectureLikeCountRes) {
+			int lectureId = lecture.lectureId();
+
+			List<TagRes> tagList = tagRepository.findTagsByLectureIdFetchJoinLectureTag(lectureId);
+
+			lectureListDetailResList.add(
+				LectureListDetailRes.builder()
+					.lectureId(lecture.lectureId())
+					.lectureName(lecture.lectureName())
+					.siteType(lecture.siteType())
+					.instructor(lecture.instructor())
+					.image(lecture.image())
+					.level(lecture.level())
+					.combinedRating(lecture.combinedRating())
+					.combinedRatingCount(lecture.combinedRatingCount())
+					.priceOriginal(lecture.priceOriginal())
+					.priceSale(lecture.priceSale())
+					.descriptionSummary(lecture.descriptionSummary())  // 한줄요약
+					.totalTime(lecture.totalTime())
+					.category(lecture.category())
+					.tagList(tagList)
+					.lectureLikeCount(lecture.lectureLikeCount())
+					.build()
+			);
+		}
+
+		int totalPages = (int) Math.ceil(
+			(double) lectureRepository.countLectureLikeByMember(memberId) / pageable.getPageSize());
+
+		return LectureListRes
+			.builder()
+			.lectureList(lectureListDetailResList)
+			.totalPages(totalPages)
+			.build();
+	}
     @Override
     public void withDraw(Member member) throws BaseExceptionHandler {
         memberRepository.delete(memberRepository.findById(member.getMemberId()).get());

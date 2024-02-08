@@ -1,6 +1,7 @@
 package com.f17coders.classhub.module.domain.member.service;
 
 import com.f17coders.classhub.global.exception.BaseExceptionHandler;
+import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListRes;
 import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.member.dto.request.MemberAddInfoReq;
 import com.f17coders.classhub.module.domain.member.dto.request.MemberUpdateInfoReq;
@@ -21,10 +22,13 @@ public interface MemberService {
     public void updateInformation(MemberUpdateInfoReq memberUpdateInfoReq, Member member)
         throws BaseExceptionHandler, IOException;
 
-    public void withDraw(Member member) throws BaseExceptionHandler;
+	public List<StudyBaseRes> getStudyList(Member member) throws BaseExceptionHandler, IOException;
 
+	public LectureListRes getBuyedLectureList(int memberId, Pageable pageable)
+		throws BaseExceptionHandler, IOException;
 
-    public List<StudyBaseRes> getStudyList(Member member) throws BaseExceptionHandler, IOException;
+	public LectureListRes getLikedLectureList(int memberId, Pageable pageable)
+		throws BaseExceptionHandler, IOException;public void withDraw(Member member) throws BaseExceptionHandler;
 
     public MemberCommunityListRes getCommunityList(Member member, Pageable pageable)
         throws BaseExceptionHandler;
@@ -35,5 +39,3 @@ public interface MemberService {
     public MemberCommunityListRes getScrapCommunityList(Member member, Pageable pageable)
         throws BaseExceptionHandler;
 }
-
-

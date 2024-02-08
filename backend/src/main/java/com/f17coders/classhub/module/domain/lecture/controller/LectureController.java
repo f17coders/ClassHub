@@ -120,16 +120,6 @@ public class LectureController {
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectures);
 	}
 
-//	@Operation(summary = "비로그인 유저대상 인기태그를 랜덤 1개 골라서, Top5 강의 조회(관심 기술의 Top5 강의 조회)")
-//	@GetMapping("/v0/interest-skills")
-//	public ResponseEntity<BaseResponse<LectureListTagRes>> get5LecturesByRandomTag()
-//		throws IOException {
-//
-//		LectureListTagRes lectures = lectureService.getLecturesByRandomTag();
-//
-//		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectures);
-//	}
-
 	@Operation(summary = "비로그인 유저에게 인기직무중 랜덤 1개 골라서, 해당 직무 선택 유저들이 수강하는 Top5 강의 조회(관심 직무의 Top5 강의 조회)")
 	@GetMapping("/v0/desired-job")
 	public ResponseEntity<BaseResponse<LectureListJobRes>> get5LecturesByFamousJob(
