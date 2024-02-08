@@ -27,15 +27,13 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
 
     @Override
     public Community findCommunityByCommunityIdForCommunityReadRes(
-        int communityId) {   // TODO : 한번에 모든 것을 다 가져오기 vs id를 통해 여러번으로 받기 vs 한방쿼리로 프로젝션
+        int communityId) {   // TODO : 최적화 반드시 필요
         QMember communityMember = new QMember("communityMember");
         QMember commentMember = new QMember("commentMember");
 
         return queryFactory
             .selectFrom(community)
             .leftJoin(community.member, communityMember).fetchJoin()
-            .leftJoin(community.commentList, comment).fetchJoin()
-            .leftJoin(comment.member, commentMember).fetchJoin()
             .leftJoin(community.communityTagSet, communityTag).fetchJoin()
             .leftJoin(communityTag.tag, tag).fetchJoin()
             .where(community.communityId.eq(communityId))

@@ -91,6 +91,7 @@ public class CommunityServiceImpl implements CommunityService {
             .content(community.getContent())
             .memberNickname(community.getMember().getNickname())
             .tagList(tagResList)
+            .commentCount(community.getCommentList().size())
             .commentList(commentDetailResList)
             .canUpdate(isWriter(member, community))
             .canLike(communityLikeService.canLike(community, member))
