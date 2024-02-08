@@ -9,13 +9,11 @@ import com.f17coders.classhub.module.domain.community.dto.response.CommunityRead
 import com.f17coders.classhub.module.domain.community.service.CommunityService;
 import com.f17coders.classhub.module.domain.communityLike.service.CommunityLikeService;
 import com.f17coders.classhub.module.domain.communityScrap.service.CommunityScrapService;
-import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
 import com.f17coders.classhub.module.security.dto.MemberSecurityDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.IOException;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -27,12 +25,11 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "community", description = "커뮤니티 API - Member, Tag 관련 아직 적용 안 되어있음")
+@Tag(name = "community", description = "커뮤니티 API")
 @RestController
 @RequestMapping("/api/communities")
 @RequiredArgsConstructor
@@ -47,19 +44,22 @@ public class CommunityController {
     @Operation(summary = "게시글 등록")
     @PostMapping("/v1")
     public ResponseEntity<BaseResponse<Integer>> registerCommunity(
-        @RequestBody CommunityRegisterReq communityRegisterReq, @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
-        int communityId = communityService.registerCommunity(communityRegisterReq, memberSecurityDTO.toMember());
+        @RequestBody CommunityRegisterReq communityRegisterReq,
+        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+        int communityId = communityService.registerCommunity(communityRegisterReq,
+            memberSecurityDTO.toMember());
 
         return BaseResponse.success(SuccessCode.INSERT_SUCCESS, communityId);
     }
 
     @Operation(summary = "게시글 상세 조회")
-    @GetMapping("/v0/details/{communityId}")
+    @GetMapping("/v1/details/{communityId}")
     public ResponseEntity<BaseResponse<CommunityReadRes>> readCommunity(
-        @PathVariable("communityId") int communityId, @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
+        @PathVariable("communityId") int communityId,
+        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
         throws IOException {
         CommunityReadRes communityReadRes = communityService.readCommunity(communityId,
-            memberSecurityDTO.toMember());
+            memberSecurityDTO != null ? memberSecurityDTO.toMember() : null);
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, communityReadRes);
     }
@@ -79,8 +79,10 @@ public class CommunityController {
     @PatchMapping("/v1/{communityId}")
     public ResponseEntity<BaseResponse<Integer>> updateCommunity(
         @PathVariable("communityId") int communityId,
-        @RequestBody CommunityUpdateReq communityUpdateReq, @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
-        communityService.updateCommunity(communityId, communityUpdateReq, memberSecurityDTO.toMember());
+        @RequestBody CommunityUpdateReq communityUpdateReq,
+        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+        communityService.updateCommunity(communityId, communityUpdateReq,
+            memberSecurityDTO.toMember());
 
         return BaseResponse.success(SuccessCode.UPDATE_SUCCESS, communityId);
     }
@@ -88,7 +90,8 @@ public class CommunityController {
     @Operation(summary = "게시글 삭제")
     @DeleteMapping("/v1/{communityId}")
     public ResponseEntity<BaseResponse<Integer>> deleteCommunity(
-        @PathVariable("communityId") int communityId, @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
+        @PathVariable("communityId") int communityId,
+        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
         throws IOException {
         communityService.deleteCommunity(communityId, memberSecurityDTO.toMember());
 
@@ -98,7 +101,8 @@ public class CommunityController {
     @Operation(summary = "게시글 좋아요")
     @PostMapping("/v1/likes/{communityId}")
     public ResponseEntity<BaseResponse<Integer>> likeCommunity(
-        @PathVariable("communityId") int communityId, @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
+        @PathVariable("communityId") int communityId,
+        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
         throws IOException {
         communityLikeService.likeCommunity(communityId, memberSecurityDTO.toMember());
 
@@ -108,7 +112,8 @@ public class CommunityController {
     @Operation(summary = "게시글 좋아요 취소")
     @DeleteMapping("/v1/unlikes/{communityId}")
     public ResponseEntity<BaseResponse<Integer>> unlikeCommunity(
-        @PathVariable("communityId") int communityId, @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
+        @PathVariable("communityId") int communityId,
+        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
         throws IOException {
         communityLikeService.unlikeCommunity(communityId, memberSecurityDTO.toMember());
 
@@ -118,7 +123,8 @@ public class CommunityController {
     @Operation(summary = "게시글 스크랩")
     @PostMapping("/v1/scrap/{communityId}")
     public ResponseEntity<BaseResponse<Integer>> scrapCommunity(
-        @PathVariable("communityId") int communityId, @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
+        @PathVariable("communityId") int communityId,
+        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
         throws IOException {
         communityScrapService.scrapCommunity(communityId, memberSecurityDTO.toMember());
 
@@ -128,7 +134,8 @@ public class CommunityController {
     @Operation(summary = "게시글 스크랩 취소")      // TODO : 테스트 필요
     @DeleteMapping("/v1/unscrap/{communityId}")
     public ResponseEntity<BaseResponse<Integer>> unlscrapCommunity(
-        @PathVariable("communityId") int communityId, @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
+        @PathVariable("communityId") int communityId,
+        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
         throws IOException {
         communityScrapService.unscrapCommunity(communityId, memberSecurityDTO.toMember());
 

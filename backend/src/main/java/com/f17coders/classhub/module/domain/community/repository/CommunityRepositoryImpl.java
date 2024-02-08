@@ -11,7 +11,6 @@ import static com.f17coders.classhub.module.domain.tag.QTag.tag;
 import com.f17coders.classhub.module.domain.community.Community;
 import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.member.QMember;
-import com.f17coders.classhub.module.domain.tag.Tag;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -28,15 +27,13 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
 
     @Override
     public Community findCommunityByCommunityIdForCommunityReadRes(
-        int communityId) {   // TODO : 한번에 모든 것을 다 가져오기 vs id를 통해 여러번으로 받기 vs 한방쿼리로 프로젝션
+        int communityId) {   // TODO : 최적화 반드시 필요
         QMember communityMember = new QMember("communityMember");
         QMember commentMember = new QMember("commentMember");
 
         return queryFactory
             .selectFrom(community)
             .leftJoin(community.member, communityMember).fetchJoin()
-            .leftJoin(community.commentList, comment).fetchJoin()
-            .leftJoin(comment.member, commentMember).fetchJoin()
             .leftJoin(community.communityTagSet, communityTag).fetchJoin()
             .leftJoin(communityTag.tag, tag).fetchJoin()
             .where(community.communityId.eq(communityId))
@@ -78,13 +75,29 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
     }
 
     @Override
-    public List<Integer> getCommunityIdList(List<Tag> tagList, String keyword, Pageable pageable) {
+    public Long countPageByKeywordAndTagIdListJoinCommunityTagJoinTag(List<Integer> tagIdList,
+        String keyword, Pageable pageable) {
         return queryFactory
-            .select(community.communityId)
+            .select(community.count())
             .from(community)
-//            .leftJoin(community.communityTagSet, communityTag).fetchJoin()
-//            .leftJoin(communityTag.tag, tag).fetchJoin()
-            .where(containsKeyword(keyword))
+            .leftJoin(community.communityTagSet, communityTag)
+            .leftJoin(communityTag.tag, tag)
+            .where(containsKeyword(keyword), inTagIdList(tagIdList))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetchOne();
+    }
+
+    @Override
+    public List<Community> findPageByKeywordAndTagIdListJoinCommunityTagJoinTag(
+        List<Integer> tagIdList, String keyword, Pageable pageable) {
+        return queryFactory
+            .select(community)
+            .from(community)
+            .leftJoin(community.communityTagSet, communityTag).fetchJoin()
+            .leftJoin(communityTag.tag, tag).fetchJoin()
+            .where(containsKeyword(keyword), inTagIdList(tagIdList))
+            .orderBy(community.createTime.desc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
@@ -131,5 +144,9 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
     private BooleanExpression containsKeyword(String keyword) {
         return keyword != null ? community.title.contains(keyword)
             .or(community.content.contains(keyword)) : null;
+    }
+
+    private BooleanExpression inTagIdList(List<Integer> tagIdList) {
+        return tagIdList.size() != 0 ? tag.tagId.in(tagIdList) : null;
     }
 }

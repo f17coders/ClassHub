@@ -7,6 +7,6 @@ import java.util.List;
 @Builder
 public record CommunityListRes(
         List<CommunityListDetailRes> communityList,
-        int totalPages
+        long totalPages
 ) {
 }
