@@ -118,7 +118,7 @@ function Lecture() {
 					{/* 강의 전체 목록 */}
 					<Box sx={{ margin: '20px' }}>
 						{
-							fromMain ? (<p>{searchParams.keyword}에 대한 검색 결과</p>) : null
+							fromMain ? (<p style={{fontSize:'1.3em', textAlign:'center' , fontWeight:'bold'}}>{searchParams.keyword}에 대한 검색 결과</p>) : null
 						}
 						<Grid container spacing={1}>
 							{

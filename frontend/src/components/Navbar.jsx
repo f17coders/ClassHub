@@ -123,7 +123,7 @@ function NavbarComponent() {
 						}
 					</Box>
 
-					<Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center' }}>
+					<Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', height:'65px' }}>
 						<IconButton
 							size="large"
 							aria-label="account of current user"
@@ -172,7 +172,7 @@ function NavbarComponent() {
 					</Box>
 				</Grid>
 
-				<Grid item xs={1}>
+				<Grid item xs={1} sx={{ display:'flex', alignItems:'center'}}>
 					{
 						isLogin == false ? (
 							<motion.button
