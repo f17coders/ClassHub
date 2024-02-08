@@ -116,26 +116,50 @@ export default function StudyRoomRecruitList({study}){
             console.log(result.value)
             setInputValue(result.value)
 
-            //참여코드가 일치하면
-            if(inviteCode == inputValue){
-              console.log(inviteCode)
-              console.log(inputValue)
-              MySwal.fire({
-                title: '참여 완료되었습니다!',
-                icon: "success"})
-              .then(() =>{
-                
-                enterStudyRoom(studyId);
-                // window.location.reload(); //페이지 새로고침
-              });
-            } else{
-              MySwal.fire({
-                title: '참여 코드가 일치하지 않습니다.',
-                icon: "warning"})
-              .then(() =>{
-                // window.location.reload(); //페이지 새로고침
-              });
-            }
+            axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/invitation-code/valid/${studyId}?enterCode=${result.value}`, {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }).then((res)=>{
+              console.log(res.data.result.status)
+              const status = res.data.result.status;
+              if(status === 404){
+                MySwal.fire({
+                  title: '참여 코드가 일치하지 않습니다.',
+                  icon: "warning"})
+                  
+              } else if(status === 200){
+                MySwal.fire({
+                  title: '참여 완료되었습니다!',
+                  icon: "success"})
+                  .then(() =>{
+                    enterStudyRoom(studyId);
+                });
+              }
+              // //참여코드가 일치하면
+              // if(inviteCode == inputValue){
+              //   console.log(inviteCode)
+              //   console.log(inputValue)
+              //   MySwal.fire({
+              //     title: '참여 완료되었습니다!',
+              //     icon: "success"})
+              //   .then(() =>{
+
+              //     enterStudyRoom(studyId);
+              //     // window.location.reload(); //페이지 새로고침
+              //   });
+              // } else{
+              //   MySwal.fire({
+              //     title: '참여 코드가 일치하지 않습니다.',
+              //     icon: "warning"})
+              //   .then(() =>{
+              //     // window.location.reload(); //페이지 새로고침
+              //   });
+              // }
+            })
+            
+
+            
           } else if (
             result.dismiss === Swal.DismissReason.cancel
           ) {
@@ -171,6 +195,19 @@ export default function StudyRoomRecruitList({study}){
         console.log('입장 성공')
         console.log(res)
         window.location.reload(); //페이지 새로고침
+    })
+    .catch((err) => console.log(err));
+    }
+
+    // 초대코드 일치여부
+    const isEnterCodeSame = () => {
+      axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/invitation-code/valid/${studyId}?enterCode=${enterCode}`, null, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
+    .then((res) => {
+        console.log(res)
     })
     .catch((err) => console.log(err));
     }
