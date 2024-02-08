@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
-import { Container, Grid, Box, Button, Hidden, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ListItemAvatar,Avatar , Paper,IconButton,Tooltip  } from "@mui/material";
+import { Container, Grid, Box, Button, Hidden, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ListItemAvatar,Avatar , Paper,IconButton,Tooltip, Typography  } from "@mui/material";
 import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
 import Home from '@mui/icons-material/Home';
 import { useSelector } from "react-redux"
@@ -25,6 +25,8 @@ const FireNav = styled(List)({
 export default function StudyRoom() {
     // 토큰
 	  let accessToken = useSelector((state) => state.accessToken)
+    // 로그인 여부
+    let isLogin = useSelector((state) => state.isLogin)
     // const [open, setOpen] = useState(false);
     const [windowSize, setWindowSize] = useState(window.innerWidth);
     const navigate = useNavigate();
@@ -120,7 +122,18 @@ export default function StudyRoom() {
             
             {/* contentArea */}
             <Grid item backgroundColor="theme.palette.background.paper"  xs={12} sm>
+            {
+              isLogin? (
                 <Outlet/>
+              ) : (
+                <Container sx={{backgroundColor: "gainsboro", width: "100%", height:"80vh", textAlign: "center", justifyContent:"center" ,alignContent:"center"}}>
+                  <Typography variant="h5">
+                    로그인 후 이용 가능합니다!
+                  </Typography>
+                </Container>
+              )
+            }
+                
             </Grid>
 
           </Grid>
