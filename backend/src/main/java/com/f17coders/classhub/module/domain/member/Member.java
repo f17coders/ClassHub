@@ -6,6 +6,7 @@ import com.f17coders.classhub.module.domain.community.Community;
 import com.f17coders.classhub.module.domain.communityLike.CommunityLike;
 import com.f17coders.classhub.module.domain.communityScrap.CommunityScrap;
 import com.f17coders.classhub.module.domain.job.Job;
+import com.f17coders.classhub.module.domain.lectureBuy.LectureBuy;
 import com.f17coders.classhub.module.domain.lectureLike.LectureLike;
 import com.f17coders.classhub.module.domain.memberTag.MemberTag;
 import com.f17coders.classhub.module.domain.review.Review;
@@ -104,6 +105,10 @@ public class Member extends BaseEntity {
     // Member - review 연관 관계
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Review> reviewList = new ArrayList<>();
+
+    // Member - LectureLike 연관 관계
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<LectureBuy> lectureBuyList = new ArrayList<>();
 
     public void putMemberTag(MemberTag memberTag) {  // 연관 관계 편의 메서드
         memberTag.setMember(this);

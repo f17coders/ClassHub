@@ -1,6 +1,7 @@
 package com.f17coders.classhub.module.domain.review.service;
 
 import com.f17coders.classhub.module.domain.member.Member;
+import com.f17coders.classhub.module.domain.review.dto.response.MyReviewStatusRes;
 import com.f17coders.classhub.module.domain.review.dto.response.ReviewListRes;
 import com.f17coders.classhub.module.domain.review.dto.request.ReviewRegisterReq;
 import com.f17coders.classhub.module.domain.review.dto.response.ReviewRes;
@@ -19,7 +20,7 @@ public interface ReviewService {
 
 	void deleteReview(int lectureId, int memberId);
 
-	ReviewRes getMyLectureReview(int lectureId, Member member);
+	MyReviewStatusRes getMyLectureReview(int lectureId, Member member);
 
 
 }

@@ -23,4 +23,10 @@ public interface LectureRepositoryCustom {
 	List<LectureListDetailLectureLikeCountRes> findTop5LecturesWithTagId(int tagId);
 	List<LectureListDetailLectureLikeCountRes> findTop5LecturesWithJobId(int jobId);
 
+	List<LectureListDetailLectureLikeCountRes> findLecturesByMemberJoinLectureBuy(int memberId, Pageable pageable);
+	List<LectureListDetailLectureLikeCountRes> findLecturesByMemberJoinLectureLike(int memberId, Pageable pageable);
+
+	int countLectureBuyByMember(int memberId);
+	int countLectureLikeByMember(int memberId);
+
 }
