@@ -373,8 +373,7 @@ function CreateReview({ lecture }) {
             backgroundColor: 'rgba(128, 128, 128, 0.05)',
             borderRadius: '2%',
             padding: '10px',
-            boxShadow: isHover ? '0 0 5px rgba(0, 0, 0, 0.1)' : 'none',
-            position: 'relative'
+            boxShadow: isHover ? '0 0 5px rgba(0, 0, 0, 0.1)' : 'none'
           }}>
             
             <div style={{ display: 'flex', justifyContent: 'space-around', margin: '10px 0px' }}>
