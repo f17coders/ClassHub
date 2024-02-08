@@ -107,7 +107,7 @@ public class CommunityServiceImpl implements CommunityService {
         List<Integer> tagIdList = getTagList(tags);
 
         long totalCommunities = communityRepository.countPageByKeywordAndTagIdListJoinCommunityTagJoinTag(
-            tagIdList, keyword, pageable);
+            tagIdList, keyword);
 
         long totalPages = (long) Math.ceil((double) totalCommunities / pageable.getPageSize());
 
