@@ -27,11 +27,14 @@ const accessToken = createSlice({
   reducers: {
     saveAccessToken(state, action) {
       return action.payload
+    },
+    deleteAccessToken(state) {
+      return ""
     }
   }
 })
 
-export let { saveAccessToken } = accessToken.actions
+export let { saveAccessToken, deleteAccessToken } = accessToken.actions
 
 
 

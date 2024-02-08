@@ -12,9 +12,10 @@ import LoginModal from './LoginModal'
 import { useSelector, useDispatch } from 'react-redux'
 import { motion } from "framer-motion"
 import LogoutIcon from '@mui/icons-material/Logout';
-import { logout } from './../store/store'
+import { logout, deleteAccessToken } from './../store/store'
 import { logoutUser } from './../store/userSlice'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 // navbar
 function NavbarComponent() {
@@ -25,22 +26,29 @@ function NavbarComponent() {
 	const accessToken = useSelector((state) => state.accessToken)
 	const dispatch = useDispatch()
 
-	// 로그아웃(지금은 탈퇴 박아놓음..)
+	// 로그아웃(isLogin을 false로 바꾸고, 토큰 지우고, 유저정보 지우고)
 	const handleLogout = () => {
-		axios.delete('https://i10a810.p.ssafy.io/api/members/v1', {
-			headers: {
-				Authorization: `Bearer ${accessToken}`
-			}
+		dispatch(logout())
+		dispatch((logoutUser()))
+		deleteAccessToken()
+		Swal.fire({
+			title: "로그아웃",
+			icon: "success"
 		})
-		.then((res) => {
-			dispatch(logout())
-			dispatch((logoutUser()))
-			Swal.fire({
-				title: "로그아웃!",
-				icon: "success"
-			  })
-		})
-		.catch((err) => console.log(err))
+		// axios.delete('https://i10a810.p.ssafy.io/api/members/v1', {
+		// 	headers: {
+		// 		Authorization: `Bearer ${accessToken}`
+		// 	}
+		// })
+		// .then((res) => {
+		// 	dispatch(logout())
+		// 	dispatch((logoutUser()))
+		// 	Swal.fire({
+		// 		title: "로그아웃!",
+		// 		icon: "success"
+		// 	  })
+		// })
+		// .catch((err) => console.log(err))
 	}
 	// 화면 줄었을 때 리스트용(반응형)
 	const [anchorElNav, setAnchorElNav] = useState(null)
@@ -89,16 +97,15 @@ function NavbarComponent() {
 			position='static'
 			color='transparent'
 			sx={{
-				padding: '10px 0px',
 				height: '65px'
 			}}
 		>
-			<Grid container alignItems="center">
+			<Grid container>
 				<Grid item xs={1}></Grid>
-				<Grid item xs={9} sx={{ display: 'flex', alignItems: 'center' }}>
+				<Grid item xs={8} sx={{ display: 'flex', alignItems: 'center', height:'65px' }}>
 					<Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
 						<Link to='/'>
-							<img src={MainLogo} alt='HOME' style={{ width: '220px', marginRight: '20px', marginTop: '3px' }}></img>
+							<img src={MainLogo} alt='HOME' style={{ width: '200px', marginRight: '20px' }}></img>
 						</Link>
 						{
 							navItem.map((item, idx) => (
@@ -128,7 +135,7 @@ function NavbarComponent() {
 							<MenuIcon />
 						</IconButton>
 						<Link to='/' >
-							<img src={MainLogo} alt='HOME' style={{ width: '150px', marginRight: '20px', marginTop: '3px' }}></img>
+							<img src={MainLogo} alt='HOME' style={{ width: '150px', marginRight: '20px'}}></img>
 						</Link>
 						<Menu
 							anchorEl={anchorElNav}
@@ -149,7 +156,7 @@ function NavbarComponent() {
 						>
 							{
 								navItem.map((item, idx) => (
-									<div key={idx} style={{ margin: '10px 15px' }}>
+									<div key={idx} style={{ margin: '0px 15px' }}>
 										<Link to={item.link}
 											style={idx == activeIndex ? { ...linkStyle2, color: 'RGB(83, 96, 245)' } : linkStyle2}
 											onMouseEnter={() => handleMouseEnter(idx)}
