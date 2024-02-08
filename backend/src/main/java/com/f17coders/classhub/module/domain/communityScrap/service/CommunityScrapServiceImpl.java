@@ -43,9 +43,13 @@ public class CommunityScrapServiceImpl implements CommunityScrapService {
 
     @Override
     public boolean canScrap(Community community, Member member) {
-        Optional<CommunityScrap> communityScrap = communityScrapRepository.findByCommunity_CommunityIdAndMember(
-            community.getCommunityId(), member);
+        if (member == null) {
+            return false;
+        } else {
+            Optional<CommunityScrap> communityScrap = communityScrapRepository.findByCommunity_CommunityIdAndMember(
+                community.getCommunityId(), member);
 
-        return communityScrap.isEmpty();
+            return communityScrap.isEmpty();
+        }
     }
 }

@@ -42,9 +42,13 @@ public class CommunityLikeServiceImpl implements CommunityLikeService {
 
     @Override
     public boolean canLike(Community community, Member member) {
-        Optional<CommunityLike> communityLike = communityLikeRepository.findByCommunity_CommunityIdAndMember(
-            community.getCommunityId(), member);
+        if (member == null) {
+            return false;
+        } else {
+            Optional<CommunityLike> communityLike = communityLikeRepository.findByCommunity_CommunityIdAndMember(
+                community.getCommunityId(), member);
 
-        return communityLike.isEmpty();
+            return communityLike.isEmpty();
+        }
     }
 }
