@@ -452,7 +452,6 @@ function CreateReview({ lecture }) {
         </div>
         )
       }
-
     </div>
   )
 }
