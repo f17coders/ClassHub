@@ -20,6 +20,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.f17coders.classhub.global.exception.code.ErrorCode.FORBIDDEN_ERROR_STUDY;
+
 @Log4j2
 @Service
 @RequiredArgsConstructor
@@ -97,7 +99,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     private void memberException(int studyId, int memberId) {
         if (studyMemberRepository.findByStudy_StudyIdAndMember_MemberId(studyId, memberId) == null) {
-            throw new BaseExceptionHandler("스터디 가입자만 접근 가능합니다", ErrorCode.FORBIDDEN_ERROR);
+            throw new BaseExceptionHandler(FORBIDDEN_ERROR_STUDY);
         }
     }
 }

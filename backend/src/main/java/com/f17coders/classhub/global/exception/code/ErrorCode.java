@@ -75,6 +75,7 @@ public enum ErrorCode {
     NOT_FOUND_ARCHIVE_EXCEPTION(404, "B203", "존재하지 않는 아카이브입니다."),
 
     // 스터디룸 관련 에러코드
+    FORBIDDEN_ERROR_STUDY(403, "B304", "스터디 가입자만 접근 가능합니다"),
     // 스터디장 권한이 없음
     FORBIDDEN_ERROR_LEADER(403, "B303", "스터디장 권한이 필요합니다."),
 
