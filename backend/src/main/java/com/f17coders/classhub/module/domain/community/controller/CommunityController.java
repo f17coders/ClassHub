@@ -46,6 +46,16 @@ public class CommunityController {
         return BaseResponse.success(SuccessCode.INSERT_SUCCESS, communityId);
     }
 
+    @Operation(summary = "게시글 상세 조회 - 비로그인")
+    @GetMapping("/v0/details/{communityId}")
+    public ResponseEntity<BaseResponse<CommunityReadRes>> readCommunitywithoutMember(
+        @PathVariable("communityId") int communityId)
+        throws IOException {
+        CommunityReadRes communityReadRes = communityService.readCommunity(communityId, null);
+
+        return BaseResponse.success(SuccessCode.SELECT_SUCCESS, communityReadRes);
+    }
+
     @Operation(summary = "게시글 상세 조회")
     @GetMapping("/v1/details/{communityId}")
     public ResponseEntity<BaseResponse<CommunityReadRes>> readCommunity(
