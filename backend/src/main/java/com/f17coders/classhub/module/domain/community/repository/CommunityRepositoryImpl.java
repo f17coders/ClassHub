@@ -11,11 +11,17 @@ import static com.f17coders.classhub.module.domain.tag.QTag.tag;
 import com.f17coders.classhub.module.domain.community.Community;
 import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.member.QMember;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
 
@@ -89,17 +95,25 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
     @Override
     public List<Community> findPageByKeywordAndTagIdListJoinCommunityTagJoinTag(
         List<Integer> tagIdList, String keyword, Pageable pageable) {
-        return queryFactory
+        JPAQuery<Community> query = queryFactory
             .select(community)
             .from(community)
             .leftJoin(community.communityTagList, communityTag).fetchJoin()
             .leftJoin(communityTag.tag, tag).fetchJoin()
             .where(containsKeyword(keyword), inTagIdList(tagIdList))
-            .orderBy(community.createTime.desc())
             .offset(pageable.getOffset())
-            .limit(pageable.getPageSize())
-            .fetch();
+            .limit(pageable.getPageSize());
+
+        for (Sort.Order o : pageable.getSort()) {
+            PathBuilder pathBuilder = new PathBuilder(community.getType(), community.getMetadata());
+            OrderSpecifier orderSpecifier = new OrderSpecifier(
+                o.isAscending() ? Order.ASC : Order.DESC, pathBuilder.get(o.getProperty()));
+            query.orderBy(orderSpecifier);
+        }
+
+        return query.fetch();
     }
+
 
     @Override
     public Long countDistinctFromCommentByMemberJoinCommunity(Member member) {
@@ -146,5 +160,19 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
 
     private BooleanExpression inTagIdList(List<Integer> tagIdList) {
         return tagIdList.size() != 0 ? tag.tagId.in(tagIdList) : null;
+    }
+
+    //0rderSpecifier 구현
+    private List<OrderSpecifier> getOrderSpecifier(Sort sort) {
+        List<OrderSpecifier> orders = new ArrayList<>();
+
+        // Sort
+        sort.stream().forEach(order -> {
+            Order direction = order.isAscending() ? Order.ASC : Order.DESC;
+            String prop = order.getProperty();
+            PathBuilder orderByExpression = new PathBuilder(Community.class, "community");
+            orders.add(new OrderSpecifier(direction, orderByExpression.get(prop)));
+        });
+        return orders;
     }
 }
