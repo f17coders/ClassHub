@@ -4,6 +4,7 @@ import com.f17coders.classhub.global.api.response.ErrorResponse;
 import com.f17coders.classhub.global.exception.code.ErrorCode;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -37,7 +38,8 @@ public class GlobalControllerAdvice {
             .code(ErrorCode.NOT_VALID_ERROR)
             .message(sb.toString())
             .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatus()));
     }
 
     @ExceptionHandler({Exception.class})
@@ -49,14 +51,18 @@ public class GlobalControllerAdvice {
             .message(e.getMessage())
             .build();
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatus()));
     }
 
     @ExceptionHandler({BaseExceptionHandler.class})
     protected ResponseEntity<ErrorResponse> handleBaseExceptionHandler(
         BaseExceptionHandler baseExceptionHandler) {
 
-        return new ResponseEntity<>(new ErrorResponse(baseExceptionHandler.getErrorCode(),
-            baseExceptionHandler.getMessage()), HttpStatus.OK);
+        ErrorResponse response = ErrorResponse.of()
+                .code(baseExceptionHandler.getErrorCode())
+                .message(baseExceptionHandler.getMessage())
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatusCode.valueOf(response.getStatus()));
     }
 }

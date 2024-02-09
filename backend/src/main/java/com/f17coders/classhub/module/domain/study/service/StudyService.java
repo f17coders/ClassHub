@@ -16,18 +16,20 @@ import java.io.IOException;
 public interface StudyService {
 
     int registerStudy(StudyRegisterReq studyRegisterReq, Member member)
-        throws BaseExceptionHandler, IOException;
+            throws BaseExceptionHandler, IOException;
 
     StudyReadTagRes readStudy(int studyId) throws BaseExceptionHandler, IOException;
 
     StudyListRes getStudyList(String keyword, Pageable pageable)
-        throws BaseExceptionHandler, IOException;
+            throws BaseExceptionHandler;
 
-    void updateStudy(StudyUpdateReq studyUpdateReq) throws BaseExceptionHandler, IOException;
+    void updateStudy(StudyUpdateReq studyUpdateReq, int memberId) throws BaseExceptionHandler;
 
-    void deleteStudy(int studyId) throws BaseExceptionHandler, IOException;
+    void deleteStudy(int studyId, int memberId) throws BaseExceptionHandler;
 
-    int getEnterCode(int studyId) throws BaseExceptionHandler, IOException;
+    int getEnterCodeLeader(int studyId, int memberId) throws BaseExceptionHandler;
 
-    StudyMemberListRes getStudyMemberList(int studyId) throws BaseExceptionHandler, IOException;
+    boolean isValidEnterCode(int studyId, int enterCode) throws BaseExceptionHandler;
+
+    StudyMemberListRes getStudyMemberList(int studyId) throws BaseExceptionHandler;
 }

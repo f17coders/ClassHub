@@ -56,10 +56,13 @@ public class Study extends BaseEntity {
     @JoinColumn(name = "study_Leader_id")
     private Member studyLeader;
 
+    public void setEnterCode() {
+        this.enterCode = makeEnterCode();
+    }
 
     public static Study createStudy(String title, Integer capacity, String description,
-        boolean isPublic,
-        Lecture lecture, Member studyLeader) {
+                                    boolean isPublic,
+                                    Lecture lecture, Member studyLeader) {
         Study study = new Study();
 
         study.setTitle(title);
@@ -70,7 +73,7 @@ public class Study extends BaseEntity {
         study.setStudyLeader(studyLeader);
 
         if (!isPublic) {
-            study.setEnterCode(makeEnterCode());
+            study.setEnterCode();
         }
         return study;
     }
@@ -81,8 +84,7 @@ public class Study extends BaseEntity {
         Random random = new Random();
 
         // 100000부터 999999까지의 범위에서 랜덤 숫자 생성
-        int randNum = random.nextInt(900000) + 100000;
-        return randNum;
+        return random.nextInt(900000) + 100000;
     }
 }
 
