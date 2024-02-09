@@ -27,10 +27,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Log4j2
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor    // TODO : Transactional 처리
 public class CommunityServiceImpl implements CommunityService {
 
     private final CommunityRepository communityRepository;
@@ -64,10 +65,14 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
+    @Transactional
     public CommunityReadRes readCommunity(int communityId, Member member)
         throws BaseExceptionHandler, IOException {
         Community community = communityRepository.findCommunityByCommunityIdForCommunityReadRes(
             communityId);
+
+        // 조회 수 증가
+        updateViewCount(community);
 
         // 댓글 목록
         List<CommentDetailRes> commentDetailResList = community.getCommentList().stream()
@@ -95,6 +100,7 @@ public class CommunityServiceImpl implements CommunityService {
             .content(community.getContent())
             .memberNickname(community.getMember().getNickname())
             .tagList(tagResList)
+            .viewCount(community.getViewCount())
             .commentCount(community.getCommentList().size())
             .commentList(commentDetailResList)
             .canUpdate(isCommunityWriter(member, community))
@@ -107,7 +113,6 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public CommunityListRes getCommunityList(String tags, String keyword, Pageable pageable)
         throws BaseExceptionHandler, IOException {  // TODO : 반드시 최적화 필요
-
         List<Integer> tagIdList = getTagList(tags);
 
         long totalCommunities = communityRepository.countPageByKeywordAndTagIdListJoinCommunityTagJoinTag(
@@ -187,15 +192,19 @@ public class CommunityServiceImpl implements CommunityService {
         }
     }
 
-    private static boolean isCommunityWriter(Member member, Community community) {
+    private void updateViewCount(Community community) {
+        community.setViewCount(community.getViewCount() + 1);
+    }
+
+    private boolean isCommunityWriter(Member member, Community community) {
         return community.getMember().getMemberId() == member.getMemberId();
     }
 
-    private static boolean isCommentWriter(Member member, Comment comment) {
+    private boolean isCommentWriter(Member member, Comment comment) {
         return comment.getMember().getMemberId() == member.getMemberId();
     }
 
-    private static void checkAuthority(Member member, Community community) {
+    private void checkAuthority(Member member, Community community) {
         if (!community.getMember().equals(member)) {
             throw new BaseExceptionHandler(ErrorCode.FORBIDDEN_ERROR);
         }
