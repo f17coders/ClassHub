@@ -59,20 +59,4 @@ public class CommentServiceImpl implements CommentService {
 
         commentRepository.delete(comment);
     }
-
-    @Override
-    public CommentDetailRes convertToCommentListRes(Comment comment, Member member) {
-        return CommentDetailRes.builder()
-            .commentId(comment.getCommentId())
-            .content(comment.getContent())
-            .memberNickname(comment.getMember().getNickname())
-            .memberProfileImg(comment.getMember().getProfileImage())
-            .canUpdate(isWriter(member, comment))
-            .createdAt(comment.getCreateTime())
-            .build();
-    }
-
-    private static boolean isWriter(Member member, Comment comment) {
-        return comment.getMember().equals(member);
-    }
 }
