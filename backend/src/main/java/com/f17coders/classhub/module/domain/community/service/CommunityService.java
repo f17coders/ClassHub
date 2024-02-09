@@ -28,4 +28,8 @@ public interface CommunityService {
     void likeCommunity(int communityId, Member member) throws BaseExceptionHandler;
 
     void unlikeCommunity(int communityId, Member member) throws BaseExceptionHandler;
+
+    void scrapCommunity(int communityId, Member member) throws BaseExceptionHandler, IOException;
+
+    void unscrapCommunity(int communityId, Member member) throws BaseExceptionHandler, IOException;
 }

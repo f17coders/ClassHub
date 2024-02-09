@@ -13,7 +13,8 @@ import com.f17coders.classhub.module.domain.community.dto.response.CommunityRead
 import com.f17coders.classhub.module.domain.community.repository.CommunityRepository;
 import com.f17coders.classhub.module.domain.communityLike.CommunityLike;
 import com.f17coders.classhub.module.domain.communityLike.repository.CommunityLikeRepository;
-import com.f17coders.classhub.module.domain.communityScrap.service.CommunityScrapService;
+import com.f17coders.classhub.module.domain.communityScrap.CommunityScrap;
+import com.f17coders.classhub.module.domain.communityScrap.repository.CommunityScrapRepository;
 import com.f17coders.classhub.module.domain.communityTag.CommunityTag;
 import com.f17coders.classhub.module.domain.communityTag.repository.CommunityTagRepository;
 import com.f17coders.classhub.module.domain.member.Member;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -39,8 +41,7 @@ public class CommunityServiceImpl implements CommunityService {
     private final TagRepository tagRepository;
     private final CommunityTagRepository communityTagRepository;
     private final CommunityLikeRepository communityLikeRepository;
-
-    private final CommunityScrapService communityScrapService;
+    private final CommunityScrapRepository communityScrapRepository;
 
     @Override
     public int registerCommunity(CommunityRegisterReq communityRegisterReq, Member member)
@@ -106,7 +107,7 @@ public class CommunityServiceImpl implements CommunityService {
             .commentList(commentDetailResList)
             .canUpdate(isCommunityWriter(member, community))
             .canLike(canLike(community, member))
-            .canScrap(communityScrapService.canScrap(community, member))
+            .canScrap(canScrap(community, member))
             .createdAt(community.getCreateTime())
             .build();
     }
@@ -203,6 +204,26 @@ public class CommunityServiceImpl implements CommunityService {
         communityLikeRepository.delete(communityLike);
     }
 
+    @Override
+    public void scrapCommunity(int communityId, Member member)
+        throws BaseExceptionHandler, IOException {
+        Community community = communityRepository.findById(communityId)
+            .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+
+        CommunityScrap communityScrap = CommunityScrap.createCommunityScrap(community, member);
+        communityScrapRepository.save(communityScrap);
+    }
+
+    @Override
+    public void unscrapCommunity(int communityId, Member member)
+        throws BaseExceptionHandler, IOException {
+        CommunityScrap communityScrap = communityScrapRepository.findByCommunity_CommunityIdAndMember(
+                communityId, member)
+            .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+
+        communityScrapRepository.delete(communityScrap);
+    }
+
     private List<Integer> getTagList(String tags) { // tag 목록 문자열로부터 tagId List를 받아옴
         if (tags == null) {
             return new ArrayList<>();
@@ -237,6 +258,17 @@ public class CommunityServiceImpl implements CommunityService {
         } else {
             return communityLikeRepository.findByCommunityAndMember(
                 community, member).isEmpty();
+        }
+    }
+
+    public boolean canScrap(Community community, Member member) {
+        if (member == null) {
+            return false;
+        } else {
+            Optional<CommunityScrap> communityScrap = communityScrapRepository.findByCommunity_CommunityIdAndMember(
+                community.getCommunityId(), member);
+
+            return communityScrap.isEmpty();
         }
     }
 }
