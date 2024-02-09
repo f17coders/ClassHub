@@ -8,13 +8,10 @@ import MainLogo from './../assets/MainLogo.png'
 import MenuIcon from '@mui/icons-material/Menu'
 import IconButton from '@mui/material/IconButton'
 import Menu from '@mui/material/Menu'
-import LoginModal from './LoginModal'
 import { useSelector, useDispatch } from 'react-redux'
-import { motion } from "framer-motion"
 import LogoutIcon from '@mui/icons-material/Logout';
 import { logout, deleteAccessToken } from './../store/store'
 import { logoutUser } from './../store/userSlice'
-import axios from 'axios'
 import Swal from 'sweetalert2'
 
 // navbar
@@ -58,11 +55,6 @@ function NavbarComponent() {
 	const handleCloseNavMenu = () => {
 		setAnchorElNav(null);
 	};
-
-	// 로그인 모달용
-	const [open, setOpen] = useState(false)
-	const ModalOpen = () => setOpen(true)
-	const ModalClose = () => setOpen(false)
 
 	// 메뉴 + 호버링용 변수들
 	const [activeIndex, setActiveIndex] = useState(null);
@@ -175,20 +167,12 @@ function NavbarComponent() {
 				<Grid item xs={1} sx={{ display:'flex', alignItems:'center'}}>
 					{
 						isLogin == false ? (
-							<motion.button
-								onClick={ModalOpen}
-								style={{
-									backgroundColor: 'white',
-									border: 'none',
-									textDecoration: 'none',
-									color: 'black',
-									fontSize: '1.3em',
-									fontWeight: '300',
-								}}
-								whileHover={{ color: 'RGB(83, 96, 245)', cursor: 'pointer'}}
+							<Link 
+								to='/login'
+								style={linkStyle}
 							>
 								Login
-							</motion.button>
+							</Link>
 						) : (
 							<div>
 								<Link to="/mypage">
@@ -207,7 +191,6 @@ function NavbarComponent() {
 					}
 				</Grid>
 			</Grid>
-			<LoginModal open={open} onClose={ModalClose} />
 		</Appbar>
 	)
 }

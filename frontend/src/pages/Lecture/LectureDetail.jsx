@@ -16,7 +16,6 @@ import PersonIcon from '@mui/icons-material/Person'
 import { useParams } from 'react-router-dom'
 import LectureDetailReviews from '../../components/Lecture/LectureDetailReviews'
 import { useSelector } from 'react-redux'
-import LoginModal from '../../components/LoginModal'
 import Swal from 'sweetalert2'
 import DOMPurify from "dompurify"
 
@@ -51,10 +50,6 @@ function LectureDetail() {
 
 	// 강의 좋아요 + 로그인 확인
 	const [like, setLike] = useState(false)
-	// 로그인 모달용
-	const [open, setOpen] = useState(false)
-	const ModalOpen = () => setOpen(true)
-	const ModalClose = () => setOpen(false)
 	const toggleLike = () => {
 		if (isLogin == true) {
 			if (like == false) {
@@ -83,7 +78,7 @@ function LectureDetail() {
 				confirmButtonText: '로그인하러가기'
 			}).then((result) => {
 				if (result.isConfirmed) {
-					ModalOpen()
+					navigator('/login')
 				}
 			})
 		}
@@ -204,7 +199,6 @@ function LectureDetail() {
 					</div>
 				)
 			}
-			<LoginModal open={open} onClose={ModalClose} />
 		</div >
 	)
 }

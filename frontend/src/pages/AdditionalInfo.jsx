@@ -3,6 +3,7 @@ import Button from '@mui/material/Button'
 import { useState, useEffect } from 'react'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
+import { IconButton } from '@mui/material'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { Link, useNavigate } from 'react-router-dom'
@@ -11,13 +12,23 @@ import { saveUser, changeUserTagList, changeUserJob } from '../store/userSlice'
 import { login } from '../store/store'
 
 
-
+const images = [
+	'https://ifh.cc/g/omtSSy.jpg',
+	'https://ifh.cc/g/R4F6cO.jpg',
+	'https://ifh.cc/g/cfSmtq.jpg',
+	'https://ifh.cc/g/08B1bq.jpg',
+	'https://ifh.cc/g/VPaHVN.jpg',
+	'https://ifh.cc/g/cRT91V.jpg',
+	'https://ifh.cc/g/gQgF04.jpg',
+	'https://ifh.cc/g/q0FN73.jpg'
+]
 function AdditionalInfo() {
-  // 토큰
-  let accessToken = useSelector((state) => state.accessToken)
-  const navigate = useNavigate()
+	// 토큰
+	let accessToken = useSelector((state) => state.accessToken)
+	let user = useSelector((state) => state.user)
+	const navigate = useNavigate()
 	const dispatch = useDispatch()
-  // 관심있는 기술
+	// 관심있는 기술
 	const [skills, setSkills] = useState([])
 	// 목표 직무
 	const [targetJobs, setTargetJobs] = useState([])
@@ -26,7 +37,7 @@ function AdditionalInfo() {
 	// 처음에 관심있는 기술과 목표직무를 가져온다
 	useEffect(() => {
 		if (skills.length == 0) {
-      // 지금은 내가 지정한 태그가 없어서 에러가 뜸
+			// 지금은 내가 지정한 태그가 없어서 에러가 뜸
 			axios.get('https://i10a810.p.ssafy.io/api/tags/v0/members')
 				.then((res) => {
 					let loadedSkills = res.data.result.tagList.map((item) => item)
@@ -99,10 +110,10 @@ function AdditionalInfo() {
 				}
 			})
 				.then((res) => {
-          console.log(res)
-          dispatch(changeUserTagList(interstedSkills))
-          dispatch(changeUserJob(target[0]))
-          dispatch(login())
+					console.log(res)
+					dispatch(changeUserTagList(interstedSkills))
+					dispatch(changeUserJob(target[0]))
+					dispatch(login())
 					Swal.fire({
 						title: "회원가입 완료",
 						icon: "success"
@@ -112,7 +123,7 @@ function AdditionalInfo() {
 		}
 	}
 
-  // Modal창 스타일
+	// Modal창 스타일
 	return (
 		<Box>
 			<div style={{
@@ -123,7 +134,22 @@ function AdditionalInfo() {
 				alignItems: "center"
 			}}>
 				<h1>추가 정보</h1>
+
 				<div style={{ marginTop: '20px', width: '70%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+					<div>
+						<IconButton>
+							<img src={user.profileImage} alt="profile" style={{ width: '40px', height: '40px', borderRadius: '70%' }} />
+						</IconButton>
+						{
+							images.map((item, idx) => {
+								return (
+									<IconButton key={idx}>
+										<img src={item} alt="profile" style={{ width: '40px', height: '40px', borderRadius: '70%' }} />
+									</IconButton>
+								)
+							})
+						}
+					</div>
 					{/* 관심기술 */}
 					<div>
 						<div>

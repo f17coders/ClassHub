@@ -108,21 +108,21 @@ function Login() {
   return (
     <Box>
       <div style={{
-        display: 'flex',
-        padding: "70px 30px 100px 30px",
+		marginTop: '10%',
+		display: 'flex',
         flexDirection: 'column',
         justifyContent: "center",
         alignItems: "center"
       }}>
-        <img src={MainLogo} alt="MainLogo" style={{ width: '60%' }} />
+        <img src={MainLogo} alt="MainLogo" style={{ width: '30%' }} />
         <p>ClassHub서비스에 로그인하기</p>
-        <div style={{ display: 'flex', flexDirection: 'row', marginTop: '50px', width: '70%', justifyContent: 'space-around', alignItems: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', marginTop: '50px', width: '20%', justifyContent: 'space-around', alignItems: 'center' }}>
           <div
             onMouseEnter={hoverInGoogle}
             onMouseLeave={hoverOutGoogle}
             style={{ margin: '10px 0px' }}>
             <img src={googleLogo} style={{
-              width: '80px',
+              width: '60px',
               cursor: googleHover ? 'pointer' : 'default',
               scale: googleHover ? '1.1' : '1'
             }} />
@@ -132,7 +132,7 @@ function Login() {
             onMouseLeave={hoverOutNaver}
             style={{ margin: '10px 0px' }}>
             <img src={naverLogo} style={{
-              width: '80px',
+              width: '60px',
               cursor: naverHover ? 'pointer' : 'default',
               scale: naverHover ? '1.1' : '1'
             }} />
@@ -143,7 +143,7 @@ function Login() {
             onMouseLeave={hoverOutKakao}
             style={{ margin: '10px 0px' }}>
             <img src={kakaoLogo} style={{
-              width: '80px',
+              width: '60px',
               cursor: kakaoHover ? 'pointer' : 'default',
               scale: kakaoHover ? '1.1' : '1'
             }} />
