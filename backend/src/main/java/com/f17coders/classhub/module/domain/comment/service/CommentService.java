@@ -20,6 +20,4 @@ public interface CommentService {
         throws BaseExceptionHandler, IOException;
 
     void deleteComment(int commentId, Member member) throws BaseExceptionHandler, IOException;
-
-    public CommentDetailRes convertToCommentListRes(Comment comment, Member member);
 }

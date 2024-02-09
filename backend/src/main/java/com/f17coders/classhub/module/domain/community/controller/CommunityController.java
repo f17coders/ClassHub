@@ -7,9 +7,6 @@ import com.f17coders.classhub.module.domain.community.dto.request.CommunityUpdat
 import com.f17coders.classhub.module.domain.community.dto.response.CommunityListRes;
 import com.f17coders.classhub.module.domain.community.dto.response.CommunityReadRes;
 import com.f17coders.classhub.module.domain.community.service.CommunityService;
-import com.f17coders.classhub.module.domain.communityLike.service.CommunityLikeService;
-import com.f17coders.classhub.module.domain.communityScrap.service.CommunityScrapService;
-import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
 import com.f17coders.classhub.module.security.dto.MemberSecurityDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,9 +34,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommunityController {
 
     private final CommunityService communityService;
-    private final CommunityLikeService communityLikeService;
-    private final CommunityScrapService communityScrapService;
-    private final MemberRepository memberRepository;
 
     @Operation(summary = "게시글 등록")
     @PostMapping("/v1")
@@ -102,9 +96,8 @@ public class CommunityController {
     @PostMapping("/v1/likes/{communityId}")
     public ResponseEntity<BaseResponse<Integer>> likeCommunity(
         @PathVariable("communityId") int communityId,
-        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
-        throws IOException {
-        communityLikeService.likeCommunity(communityId, memberSecurityDTO.toMember());
+        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) {
+        communityService.likeCommunity(communityId, memberSecurityDTO.toMember());
 
         return BaseResponse.success(SuccessCode.INSERT_SUCCESS, communityId);
     }
@@ -115,7 +108,7 @@ public class CommunityController {
         @PathVariable("communityId") int communityId,
         @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
         throws IOException {
-        communityLikeService.unlikeCommunity(communityId, memberSecurityDTO.toMember());
+        communityService.unlikeCommunity(communityId, memberSecurityDTO.toMember());
 
         return BaseResponse.success(SuccessCode.DELETE_SUCCESS, communityId);
     }
@@ -126,7 +119,7 @@ public class CommunityController {
         @PathVariable("communityId") int communityId,
         @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
         throws IOException {
-        communityScrapService.scrapCommunity(communityId, memberSecurityDTO.toMember());
+        communityService.scrapCommunity(communityId, memberSecurityDTO.toMember());
 
         return BaseResponse.success(SuccessCode.INSERT_SUCCESS, communityId);
     }
@@ -137,7 +130,7 @@ public class CommunityController {
         @PathVariable("communityId") int communityId,
         @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO)
         throws IOException {
-        communityScrapService.unscrapCommunity(communityId, memberSecurityDTO.toMember());
+        communityService.unscrapCommunity(communityId, memberSecurityDTO.toMember());
 
         return BaseResponse.success(SuccessCode.DELETE_SUCCESS, communityId);
     }

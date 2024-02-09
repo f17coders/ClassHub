@@ -3,8 +3,10 @@ package com.f17coders.classhub.module.domain.community.repository;
 import com.f17coders.classhub.module.domain.community.Community;
 import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.tag.Tag;
+import com.querydsl.core.types.OrderSpecifier;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 public interface CommunityRepositoryCustom {
 
@@ -31,5 +33,4 @@ public interface CommunityRepositoryCustom {
 
     List<Community> findPageFromCommunityScrapByMemberJoinCommunity(Member member,
         Pageable pageable);
-
 }

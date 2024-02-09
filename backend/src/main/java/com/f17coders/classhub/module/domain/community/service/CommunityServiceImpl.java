@@ -4,7 +4,6 @@ import com.f17coders.classhub.global.exception.BaseExceptionHandler;
 import com.f17coders.classhub.global.exception.code.ErrorCode;
 import com.f17coders.classhub.module.domain.comment.Comment;
 import com.f17coders.classhub.module.domain.comment.dto.response.CommentDetailRes;
-import com.f17coders.classhub.module.domain.comment.service.CommentService;
 import com.f17coders.classhub.module.domain.community.Community;
 import com.f17coders.classhub.module.domain.community.dto.request.CommunityRegisterReq;
 import com.f17coders.classhub.module.domain.community.dto.request.CommunityUpdateReq;
@@ -12,36 +11,37 @@ import com.f17coders.classhub.module.domain.community.dto.response.CommunityList
 import com.f17coders.classhub.module.domain.community.dto.response.CommunityListRes;
 import com.f17coders.classhub.module.domain.community.dto.response.CommunityReadRes;
 import com.f17coders.classhub.module.domain.community.repository.CommunityRepository;
-import com.f17coders.classhub.module.domain.communityLike.service.CommunityLikeService;
-import com.f17coders.classhub.module.domain.communityScrap.service.CommunityScrapService;
+import com.f17coders.classhub.module.domain.communityLike.CommunityLike;
+import com.f17coders.classhub.module.domain.communityLike.repository.CommunityLikeRepository;
+import com.f17coders.classhub.module.domain.communityScrap.CommunityScrap;
+import com.f17coders.classhub.module.domain.communityScrap.repository.CommunityScrapRepository;
 import com.f17coders.classhub.module.domain.communityTag.CommunityTag;
 import com.f17coders.classhub.module.domain.communityTag.repository.CommunityTagRepository;
 import com.f17coders.classhub.module.domain.member.Member;
-import com.f17coders.classhub.module.domain.tag.Tag;
 import com.f17coders.classhub.module.domain.tag.dto.response.TagRes;
 import com.f17coders.classhub.module.domain.tag.repository.TagRepository;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Log4j2
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor    // TODO : Transactional 처리
 public class CommunityServiceImpl implements CommunityService {
 
     private final CommunityRepository communityRepository;
     private final TagRepository tagRepository;
     private final CommunityTagRepository communityTagRepository;
-
-    private final CommunityLikeService communityLikeService;
-    private final CommunityScrapService communityScrapService;
-    private final CommentService commentService;
+    private final CommunityLikeRepository communityLikeRepository;
+    private final CommunityScrapRepository communityScrapRepository;
 
     @Override
     public int registerCommunity(CommunityRegisterReq communityRegisterReq, Member member)
@@ -67,18 +67,29 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     @Override
+    @Transactional
     public CommunityReadRes readCommunity(int communityId, Member member)
         throws BaseExceptionHandler, IOException {
         Community community = communityRepository.findCommunityByCommunityIdForCommunityReadRes(
             communityId);
 
+        // 조회 수 증가
+        updateViewCount(community);
+
         // 댓글 목록
         List<CommentDetailRes> commentDetailResList = community.getCommentList().stream()
-            .map(comment -> commentService.convertToCommentListRes(comment, member))
+            .map(comment -> CommentDetailRes.builder()
+                .commentId(comment.getCommentId())
+                .content(comment.getContent())
+                .memberNickname(comment.getMember().getNickname())
+                .memberProfileImg(comment.getMember().getProfileImage())
+                .canUpdate(isCommentWriter(member, comment))
+                .createdAt(comment.getCreateTime())
+                .build())
             .collect(Collectors.toList());
 
         // 커뮤니티 태그 조회
-        List<TagRes> tagResList = community.getCommunityTagSet().stream()
+        List<TagRes> tagResList = community.getCommunityTagList().stream()
             .map(communityTag -> TagRes.builder()
                 .tagId(communityTag.getTag().getTagId())
                 .name(communityTag.getTag().getName())
@@ -91,11 +102,12 @@ public class CommunityServiceImpl implements CommunityService {
             .content(community.getContent())
             .memberNickname(community.getMember().getNickname())
             .tagList(tagResList)
+            .viewCount(community.getViewCount())
             .commentCount(community.getCommentList().size())
             .commentList(commentDetailResList)
-            .canUpdate(isWriter(member, community))
-            .canLike(communityLikeService.canLike(community, member))
-            .canScrap(communityScrapService.canScrap(community, member))
+            .canUpdate(isCommunityWriter(member, community))
+            .canLike(canLike(community, member))
+            .canScrap(canScrap(community, member))
             .createdAt(community.getCreateTime())
             .build();
     }
@@ -103,7 +115,6 @@ public class CommunityServiceImpl implements CommunityService {
     @Override
     public CommunityListRes getCommunityList(String tags, String keyword, Pageable pageable)
         throws BaseExceptionHandler, IOException {  // TODO : 반드시 최적화 필요
-
         List<Integer> tagIdList = getTagList(tags);
 
         long totalCommunities = communityRepository.countPageByKeywordAndTagIdListJoinCommunityTagJoinTag(
@@ -123,7 +134,7 @@ public class CommunityServiceImpl implements CommunityService {
                 .likeCount(community.getCommunityLikeSet().size())
                 .scrapCount(community.getCommunityScrapSet().size())
                 .createdAt(community.getCreateTime())
-                .tagList(community.getCommunityTagSet().stream()
+                .tagList(community.getCommunityTagList().stream()
                     .map(communityTag -> TagRes.builder()
                         .tagId(communityTag.getTag().getTagId())
                         .name(communityTag.getTag().getName())
@@ -149,7 +160,7 @@ public class CommunityServiceImpl implements CommunityService {
 
         String title = communityUpdateReq.title();
         String content = communityUpdateReq.content();
-        community.getCommunityTagSet().clear();
+        community.getCommunityTagList().clear();
 
         community.setTitle(title);
         community.setContent(content);
@@ -173,6 +184,46 @@ public class CommunityServiceImpl implements CommunityService {
         communityRepository.delete(community);
     }
 
+    @Override
+    public void likeCommunity(int communityId, Member member)
+        throws BaseExceptionHandler {
+        Community community = communityRepository.findById(communityId)
+            .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+
+        CommunityLike communityLike = CommunityLike.createCommunityLike(community, member);
+        communityLikeRepository.save(communityLike);
+    }
+
+    @Override
+    public void unlikeCommunity(int communityId, Member member)
+        throws BaseExceptionHandler {
+        CommunityLike communityLike = communityLikeRepository.findByCommunity_CommunityIdAndMember(
+                communityId, member)
+            .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+
+        communityLikeRepository.delete(communityLike);
+    }
+
+    @Override
+    public void scrapCommunity(int communityId, Member member)
+        throws BaseExceptionHandler, IOException {
+        Community community = communityRepository.findById(communityId)
+            .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+
+        CommunityScrap communityScrap = CommunityScrap.createCommunityScrap(community, member);
+        communityScrapRepository.save(communityScrap);
+    }
+
+    @Override
+    public void unscrapCommunity(int communityId, Member member)
+        throws BaseExceptionHandler, IOException {
+        CommunityScrap communityScrap = communityScrapRepository.findByCommunity_CommunityIdAndMember(
+                communityId, member)
+            .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+
+        communityScrapRepository.delete(communityScrap);
+    }
+
     private List<Integer> getTagList(String tags) { // tag 목록 문자열로부터 tagId List를 받아옴
         if (tags == null) {
             return new ArrayList<>();
@@ -183,13 +234,41 @@ public class CommunityServiceImpl implements CommunityService {
         }
     }
 
-    private static boolean isWriter(Member member, Community community) {
-        return community.getMember().equals(member);
+    private void updateViewCount(Community community) {
+        community.setViewCount(community.getViewCount() + 1);
     }
 
-    private static void checkAuthority(Member member, Community community) {
+    private boolean isCommunityWriter(Member member, Community community) {
+        return community.getMember().getMemberId() == member.getMemberId();
+    }
+
+    private boolean isCommentWriter(Member member, Comment comment) {
+        return comment.getMember().getMemberId() == member.getMemberId();
+    }
+
+    private void checkAuthority(Member member, Community community) {
         if (!community.getMember().equals(member)) {
             throw new BaseExceptionHandler(ErrorCode.FORBIDDEN_ERROR);
+        }
+    }
+
+    public boolean canLike(Community community, Member member) {
+        if (member == null) {
+            return false;
+        } else {
+            return communityLikeRepository.findByCommunityAndMember(
+                community, member).isEmpty();
+        }
+    }
+
+    public boolean canScrap(Community community, Member member) {
+        if (member == null) {
+            return false;
+        } else {
+            Optional<CommunityScrap> communityScrap = communityScrapRepository.findByCommunity_CommunityIdAndMember(
+                community.getCommunityId(), member);
+
+            return communityScrap.isEmpty();
         }
     }
 }
