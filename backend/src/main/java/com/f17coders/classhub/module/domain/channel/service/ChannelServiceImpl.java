@@ -97,7 +97,7 @@ public class ChannelServiceImpl implements ChannelService {
 
     private void memberException(int studyId, int memberId) {
         if (studyMemberRepository.findByStudy_StudyIdAndMember_MemberId(studyId, memberId) == null) {
-            throw new BaseExceptionHandler(ErrorCode.NOT_EXISTS_VALUE);
+            throw new BaseExceptionHandler("스터디 가입자만 접근 가능합니다", ErrorCode.FORBIDDEN_ERROR);
         }
     }
 }
