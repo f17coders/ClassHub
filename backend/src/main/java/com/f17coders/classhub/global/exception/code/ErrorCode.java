@@ -71,11 +71,22 @@ public enum ErrorCode {
     NOT_FOUND_USER_EXCEPTION(404, "B200", "존재하지 않는 유저입니다."),
     NOT_FOUND_ITEM_EXCEPTION(404, "B201", "존재하지 않는 아이템입니다."),
     NOT_FOUND_POST_EXCEPTION(404, "B202", "존재하지 않는 글입니다."),
+
     NOT_FOUND_ARCHIVE_EXCEPTION(404, "B203", "존재하지 않는 아카이브입니다."),
 
-    // 이미 가입된 채팅룸
-    PARTICIPATE_FAILED_ALREADY_EXISTS(404, "B300", "이미 가입되어 있습니다."),
-    NOT_EXISTS_VALUE(404, "B301", "가입되어 있지 않습니다."),
+    // 스터디룸 관련 에러코드
+    FORBIDDEN_ERROR_STUDY(403, "B304", "스터디 가입자만 접근 가능합니다"),
+    // 스터디장 권한이 없음
+    FORBIDDEN_ERROR_LEADER(403, "B303", "스터디장 권한이 필요합니다."),
+
+    // 스터디룸이 존재하지 않음
+    NOT_FOUND_STUDY_EXCEPTION(404, "B300", "존재하지 않는 스터디룸입니다."),
+    // 이미 가입된 스터디룸
+    PARTICIPATE_FAILED_ALREADY_EXISTS(404, "B301", "이미 가입되어 있습니다."),
+    NOT_EXISTS_VALUE(404, "B302", "가입되어 있지 않습니다."),
+
+    NOT_VALID_CODE(404, "B303", "코드가 일치하지 않습니다."),
+
     // Transaction Update Error
     UPDATE_ERROR(200, "B300", "Update Transaction Error Exception"),
 
