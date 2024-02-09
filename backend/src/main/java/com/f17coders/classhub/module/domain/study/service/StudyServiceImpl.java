@@ -20,6 +20,7 @@ import com.f17coders.classhub.module.domain.studyTag.repository.StudyTagReposito
 import com.f17coders.classhub.module.domain.tag.Tag;
 import com.f17coders.classhub.module.domain.tag.dto.response.TagRes;
 import com.f17coders.classhub.module.domain.tag.repository.TagRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.f17coders.classhub.global.exception.code.ErrorCode.*;
 
 @Log4j2
 @Service
@@ -43,8 +46,9 @@ public class StudyServiceImpl implements StudyService {
     private final ChannelRepository channelRepository;
 
     @Override
+    @Transactional
     public int registerStudy(StudyRegisterReq studyRegisterReq, Member member)
-        throws BaseExceptionHandler, IOException {
+            throws BaseExceptionHandler {
 
         String title = studyRegisterReq.title();
         int capacity = studyRegisterReq.capacity();
@@ -61,6 +65,10 @@ public class StudyServiceImpl implements StudyService {
         for (int tagId : studyRegisterReq.tagList()) {
 
             Tag tag = tagRepository.findTagByTagId(tagId);
+
+            if (tag == null) {
+                throw new BaseExceptionHandler("태그가 존재하지 않습니다.", NOT_FOUND_ERROR);
+            }
 
             StudyTag studyTag = StudyTag.createStudyTag(tag);
             studyTag.putStudy(study);
@@ -82,7 +90,7 @@ public class StudyServiceImpl implements StudyService {
 
         for (int i = 0; i < BasicChannelName.length; i++) {
             Channel channel = Channel.createChannel(BasicChannelName[i], study.getStudyId(),
-                new ArrayList<>(), isDeleteList[i]);
+                    new ArrayList<>(), isDeleteList[i]);
             channelRepository.save(channel);
         }
 
@@ -90,33 +98,35 @@ public class StudyServiceImpl implements StudyService {
     }
 
     @Override
-    public StudyReadTagRes readStudy(int studyId) throws BaseExceptionHandler, IOException {
+    public StudyReadTagRes readStudy(int studyId) throws BaseExceptionHandler {
         StudyReadRes studyReadRes = studyRepository.findStudyByStudyIdFetchJoinLecture(
-            studyId);
+                studyId);
+
+        if (studyReadRes == null) {
+            throw new BaseExceptionHandler(NOT_FOUND_STUDY_EXCEPTION);
+        }
 
         List<TagRes> tagList = tagRepository.findTagByStudyIdFetchJoinStudyTag(studyId);
 
-        StudyReadTagRes studyReadTagRes = StudyReadTagRes.builder()
-            .studyId(studyId)
-            .title(studyReadRes.title())
-            .currentMembers(studyReadRes.currentMembers())
-            .capacity(studyReadRes.capacity())
-            .studyLeaderId(studyReadRes.studyLeaderId())
-            .description(studyReadRes.description())
-            .isPublic(studyReadRes.isPublic())
-            .tagList(tagList)
-            .lecture(studyReadRes.lecture())
-            .build();
-
-        return studyReadTagRes;
+        return StudyReadTagRes.builder()
+                .studyId(studyId)
+                .title(studyReadRes.title())
+                .currentMembers(studyReadRes.currentMembers())
+                .capacity(studyReadRes.capacity())
+                .studyLeaderId(studyReadRes.studyLeaderId())
+                .description(studyReadRes.description())
+                .isPublic(studyReadRes.isPublic())
+                .tagList(tagList)
+                .lecture(studyReadRes.lecture())
+                .build();
     }
 
     @Override
     public StudyListRes getStudyList(String keyword, Pageable pageable)
-        throws BaseExceptionHandler, IOException {
+            throws BaseExceptionHandler {
 
         List<StudyReadRes> studyReadResList = studyRepository.findStudyByKeywordFetchJoinLecture(
-            keyword, pageable);
+                keyword, pageable);
         int totalStudy = studyRepository.countStudyByKeyword(keyword); // 전체 목록 개수
 
         int totalPages = (int) Math.ceil((double) totalStudy / pageable.getPageSize());
@@ -129,29 +139,30 @@ public class StudyServiceImpl implements StudyService {
             int studyId = study.studyId();
 
             studyReadTagResList.add(
-                StudyReadTagRes.builder()
-                    .studyId(studyId)
-                    .title(study.title())
-                    .currentMembers(study.currentMembers())
-                    .capacity(study.capacity())
-                    .studyLeaderId(study.studyLeaderId())
-                    .description(study.description())
-                    .isPublic(study.isPublic())
-                    .lecture(study.lecture())
-                    .tagList(tagRepository.findTagByStudyIdFetchJoinStudyTag(studyId))
-                    .build()
+                    StudyReadTagRes.builder()
+                            .studyId(studyId)
+                            .title(study.title())
+                            .currentMembers(study.currentMembers())
+                            .capacity(study.capacity())
+                            .studyLeaderId(study.studyLeaderId())
+                            .description(study.description())
+                            .isPublic(study.isPublic())
+                            .lecture(study.lecture())
+                            .tagList(tagRepository.findTagByStudyIdFetchJoinStudyTag(studyId))
+                            .build()
             );
         }
 
         return StudyListRes.builder()
-            .studyList(studyReadTagResList)
-            .totalPages(totalPages)
-            .build();
+                .studyList(studyReadTagResList)
+                .totalPages(totalPages)
+                .build();
     }
 
     @Override
-    public void updateStudy(StudyUpdateReq studyUpdateReq)
-        throws BaseExceptionHandler, IOException {
+    @Transactional
+    public void updateStudy(StudyUpdateReq studyUpdateReq, int memberId)
+            throws BaseExceptionHandler {
 
         int studyId = studyUpdateReq.studyId();
         String title = studyUpdateReq.title();
@@ -164,9 +175,23 @@ public class StudyServiceImpl implements StudyService {
 
         Study study = studyRepository.findByStudyId(studyId);
 
+        if (study == null) {
+            throw new BaseExceptionHandler(NOT_FOUND_STUDY_EXCEPTION);
+        }
+
+        if (study.getStudyLeader().getMemberId() != memberId) {
+            throw new BaseExceptionHandler(FORBIDDEN_ERROR_LEADER);
+        }
+
         study.setTitle(title);
         study.setCapacity(capacity);
         study.setLecture(lecture);
+
+        // 공개방 -> 비공개방 전환시 참여코드 재생성
+        if (!isPublic && study.isPublic()) {
+            study.setEnterCode();
+        }
+
         study.setPublic(isPublic);
         study.setDescription(description);
 
@@ -187,28 +212,68 @@ public class StudyServiceImpl implements StudyService {
     }
 
     @Override
-    public void deleteStudy(int studyId) throws BaseExceptionHandler, IOException {
+    @Transactional
+    public void deleteStudy(int studyId, int memberId) throws BaseExceptionHandler {
 
         Study study = studyRepository.findByStudyId(studyId);
+
+        if (study == null) {
+            throw new BaseExceptionHandler(NOT_FOUND_STUDY_EXCEPTION);
+        }
+
+        if (study.getStudyLeader().getMemberId() != memberId) {
+            throw new BaseExceptionHandler(FORBIDDEN_ERROR_LEADER);
+        }
 
         studyRepository.delete(study);
     }
 
     @Override
-    public int getEnterCode(int studyId) throws BaseExceptionHandler, IOException {
-        return studyRepository.findEnterCodeByStudyId(studyId);
+    public int getEnterCodeLeader(int studyId, int memberId) throws BaseExceptionHandler {
+
+        Study study = studyRepository.findByStudyId(studyId);
+
+        if (study == null) {
+            throw new BaseExceptionHandler(NOT_FOUND_STUDY_EXCEPTION);
+        }
+
+        if (study.getStudyLeader().getMemberId() != memberId) {
+            throw new BaseExceptionHandler(FORBIDDEN_ERROR_LEADER);
+        }
+
+        return study.getEnterCode();
+    }
+
+    @Override
+    public boolean isValidEnterCode(int studyId, int enterCode) throws BaseExceptionHandler {
+
+        Study study = studyRepository.findByStudyId(studyId);
+
+        if (study == null) {
+            throw new BaseExceptionHandler(NOT_FOUND_STUDY_EXCEPTION);
+        }
+
+        if (study.getEnterCode() != enterCode) {
+            throw new BaseExceptionHandler(NOT_VALID_CODE);
+        }
+
+        return true;
     }
 
     @Override
     public StudyMemberListRes getStudyMemberList(int studyId)
-        throws BaseExceptionHandler, IOException {
+            throws BaseExceptionHandler {
 
         Study study = studyRepository.findByStudyId(studyId);
+
+        if (study == null) {
+            throw new BaseExceptionHandler(NOT_FOUND_STUDY_EXCEPTION);
+        }
 
         Member leader = study.getStudyLeader();
 
         List<MemberStudyInfoRes> memberStudyInfoResList = memberRepository.findMemberFetchJoinStudyMemberByStudyId(
-            studyId);
+                studyId);
 
         MemberStudyInfoRes studyLeader = null;
 
@@ -221,8 +286,8 @@ public class StudyServiceImpl implements StudyService {
         memberStudyInfoResList.remove(studyLeader);
 
         return StudyMemberListRes.builder()
-            .leader(studyLeader)
-            .studyMemberList(memberStudyInfoResList).build();
+                .leader(studyLeader)
+                .studyMemberList(memberStudyInfoResList).build();
     }
 
 }

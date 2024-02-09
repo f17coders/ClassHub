@@ -9,5 +9,6 @@ public interface ChannelRepository extends MongoRepository<Channel, String> {
 
     List<ChannelDetailListRes> findByStudyId(int studyId);
 
+    Channel findChannelByChannelId(String channelId);
     void deleteByStudyId(int studyId);
 }

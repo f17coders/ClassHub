@@ -6,11 +6,15 @@ import com.f17coders.classhub.module.domain.channel.dto.request.ChannelRegisterR
 import com.f17coders.classhub.module.domain.channel.dto.request.ChannelUpdateReq;
 import com.f17coders.classhub.module.domain.channel.dto.response.ChannelDetailListRes;
 import com.f17coders.classhub.module.domain.channel.service.ChannelService;
+import com.f17coders.classhub.module.security.dto.MemberSecurityDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,8 +38,8 @@ public class ChannelController {
     @Operation(summary = "채널 등록")
     @PostMapping
     public ResponseEntity<BaseResponse<String>> registerChannel(
-        @RequestBody ChannelRegisterReq channelRegisterReq) {
-        String channelId = channelService.registerChannel(channelRegisterReq);
+            @RequestBody ChannelRegisterReq channelRegisterReq, @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) {
+        String channelId = channelService.registerChannel(channelRegisterReq, memberSecurityDTO.getMemberId());
 
         return BaseResponse.success(SuccessCode.INSERT_SUCCESS, channelId);
     }
@@ -43,8 +47,8 @@ public class ChannelController {
     @Operation(summary = "채널 목록 조회")
     @GetMapping("/{studyId}")
     public ResponseEntity<BaseResponse<List<ChannelDetailListRes>>> getChannelList(
-        @PathVariable int studyId) {
-        List<ChannelDetailListRes> channelList = channelService.getChannelList(studyId);
+            @PathVariable int studyId, @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) {
+        List<ChannelDetailListRes> channelList = channelService.getChannelList(studyId, memberSecurityDTO.getMemberId());
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, channelList);
     }
@@ -52,8 +56,8 @@ public class ChannelController {
     @Operation(summary = "채널 이름 수정")
     @PutMapping
     public ResponseEntity<BaseResponse<String>> updateChannel(
-        @RequestBody ChannelUpdateReq channelUpdateReq) {
-        channelService.updateChannel(channelUpdateReq);
+            @RequestBody ChannelUpdateReq channelUpdateReq, @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) {
+        channelService.updateChannel(channelUpdateReq, memberSecurityDTO.getMemberId());
 
         return BaseResponse.success(SuccessCode.UPDATE_SUCCESS, channelUpdateReq.channelId());
     }
@@ -61,8 +65,8 @@ public class ChannelController {
 
     @Operation(summary = "채널 삭제")
     @DeleteMapping("/{channelId}")
-    public ResponseEntity<BaseResponse<String>> deleteChannel(@PathVariable String channelId) {
-        channelService.deleteChannel(channelId);
+    public ResponseEntity<BaseResponse<String>> deleteChannel(@PathVariable String channelId, @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) {
+        channelService.deleteChannel(channelId, memberSecurityDTO.getMemberId());
 
         return BaseResponse.success(SuccessCode.DELETE_SUCCESS, channelId);
     }
