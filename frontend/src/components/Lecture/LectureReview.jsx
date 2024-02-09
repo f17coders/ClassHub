@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Avatar, Rating } from '@mui/material'
 import LockPersonIcon from '@mui/icons-material/LockPerson';
 import { useSelector } from 'react-redux'
-import LoginModal from './../LoginModal'
+import { useNavigate } from 'react-router-dom';
 import cat from './../../assets/ProfileIamge/고양이.jpg'
 import dog from './../../assets/ProfileIamge/강아지.jpg'
 import bear from './../../assets/ProfileIamge/곰.jpg'
@@ -19,6 +19,7 @@ function LectureReview({review, from}) {
   // 로그인 확인용
   let isLogin = useSelector((state) => state.isLogin)
   let user = useSelector((state) => state.user)
+  const navigate = useNavigate()
   
   // check가 1이면 보이고, 2면 보인다
   // from이 1이면 우리 사이트 리뷰, 2면 다른 사이트 리뷰
@@ -72,11 +73,6 @@ function LectureReview({review, from}) {
     setIsHover(false)
   }
 
-  // 로그인 모달 여는 용
-  const [toggleModal, setToggleModal] = useState(false)
-	const ModalOpen = () => setToggleModal(true)
-	const ModalClose = () => setToggleModal(false)
-
   // 전체 틀 스타일
   const divStyle = {
     width: '90%',
@@ -109,7 +105,7 @@ function LectureReview({review, from}) {
       {
         // 안보일때 = div창 하나로 가려줌
         check == 2 ? (
-          <div style={divStyle2} onClick={ModalOpen}
+          <div style={divStyle2} onClick={navigate('/login')}
           >
             <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
               <LockPersonIcon sx={{color:'white'}} fontSize='large'/>
@@ -133,7 +129,6 @@ function LectureReview({review, from}) {
       <div style={{ padding: '10px' }}>
         {review.content}
       </div>
-      <LoginModal open={toggleModal} onClose={ModalClose} />
     </div>
   )
 }
