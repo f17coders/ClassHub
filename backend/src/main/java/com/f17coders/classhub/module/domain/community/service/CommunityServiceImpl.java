@@ -11,7 +11,8 @@ import com.f17coders.classhub.module.domain.community.dto.response.CommunityList
 import com.f17coders.classhub.module.domain.community.dto.response.CommunityListRes;
 import com.f17coders.classhub.module.domain.community.dto.response.CommunityReadRes;
 import com.f17coders.classhub.module.domain.community.repository.CommunityRepository;
-import com.f17coders.classhub.module.domain.communityLike.service.CommunityLikeService;
+import com.f17coders.classhub.module.domain.communityLike.CommunityLike;
+import com.f17coders.classhub.module.domain.communityLike.repository.CommunityLikeRepository;
 import com.f17coders.classhub.module.domain.communityScrap.service.CommunityScrapService;
 import com.f17coders.classhub.module.domain.communityTag.CommunityTag;
 import com.f17coders.classhub.module.domain.communityTag.repository.CommunityTagRepository;
@@ -37,8 +38,8 @@ public class CommunityServiceImpl implements CommunityService {
     private final CommunityRepository communityRepository;
     private final TagRepository tagRepository;
     private final CommunityTagRepository communityTagRepository;
+    private final CommunityLikeRepository communityLikeRepository;
 
-    private final CommunityLikeService communityLikeService;
     private final CommunityScrapService communityScrapService;
 
     @Override
@@ -104,7 +105,7 @@ public class CommunityServiceImpl implements CommunityService {
             .commentCount(community.getCommentList().size())
             .commentList(commentDetailResList)
             .canUpdate(isCommunityWriter(member, community))
-            .canLike(communityLikeService.canLike(community, member))
+            .canLike(canLike(community, member))
             .canScrap(communityScrapService.canScrap(community, member))
             .createdAt(community.getCreateTime())
             .build();
@@ -182,6 +183,26 @@ public class CommunityServiceImpl implements CommunityService {
         communityRepository.delete(community);
     }
 
+    @Override
+    public void likeCommunity(int communityId, Member member)
+        throws BaseExceptionHandler {
+        Community community = communityRepository.findById(communityId)
+            .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+
+        CommunityLike communityLike = CommunityLike.createCommunityLike(community, member);
+        communityLikeRepository.save(communityLike);
+    }
+
+    @Override
+    public void unlikeCommunity(int communityId, Member member)
+        throws BaseExceptionHandler {
+        CommunityLike communityLike = communityLikeRepository.findByCommunity_CommunityIdAndMember(
+                communityId, member)
+            .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+
+        communityLikeRepository.delete(communityLike);
+    }
+
     private List<Integer> getTagList(String tags) { // tag 목록 문자열로부터 tagId List를 받아옴
         if (tags == null) {
             return new ArrayList<>();
@@ -207,6 +228,15 @@ public class CommunityServiceImpl implements CommunityService {
     private void checkAuthority(Member member, Community community) {
         if (!community.getMember().equals(member)) {
             throw new BaseExceptionHandler(ErrorCode.FORBIDDEN_ERROR);
+        }
+    }
+
+    public boolean canLike(Community community, Member member) {
+        if (member == null) {
+            return false;
+        } else {
+            return communityLikeRepository.findByCommunityAndMember(
+                community, member).isEmpty();
         }
     }
 }

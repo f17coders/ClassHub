@@ -1,6 +1,7 @@
 package com.f17coders.classhub.module.domain.community.service;
 
 import com.f17coders.classhub.global.exception.BaseExceptionHandler;
+import com.f17coders.classhub.module.domain.community.Community;
 import com.f17coders.classhub.module.domain.community.dto.request.CommunityRegisterReq;
 import com.f17coders.classhub.module.domain.community.dto.request.CommunityUpdateReq;
 import com.f17coders.classhub.module.domain.community.dto.response.CommunityListRes;
@@ -23,4 +24,8 @@ public interface CommunityService {
         throws BaseExceptionHandler, IOException;
 
     void deleteCommunity(int id, Member member) throws BaseExceptionHandler, IOException;
+
+    void likeCommunity(int communityId, Member member) throws BaseExceptionHandler;
+
+    void unlikeCommunity(int communityId, Member member) throws BaseExceptionHandler;
 }
