@@ -4,7 +4,6 @@ import com.f17coders.classhub.global.exception.BaseExceptionHandler;
 import com.f17coders.classhub.global.exception.code.ErrorCode;
 import com.f17coders.classhub.module.domain.comment.Comment;
 import com.f17coders.classhub.module.domain.comment.dto.response.CommentDetailRes;
-import com.f17coders.classhub.module.domain.comment.service.CommentService;
 import com.f17coders.classhub.module.domain.community.Community;
 import com.f17coders.classhub.module.domain.community.dto.request.CommunityRegisterReq;
 import com.f17coders.classhub.module.domain.community.dto.request.CommunityUpdateReq;
@@ -83,7 +82,7 @@ public class CommunityServiceImpl implements CommunityService {
             .collect(Collectors.toList());
 
         // 커뮤니티 태그 조회
-        List<TagRes> tagResList = community.getCommunityTagSet().stream()
+        List<TagRes> tagResList = community.getCommunityTagList().stream()
             .map(communityTag -> TagRes.builder()
                 .tagId(communityTag.getTag().getTagId())
                 .name(communityTag.getTag().getName())
@@ -128,7 +127,7 @@ public class CommunityServiceImpl implements CommunityService {
                 .likeCount(community.getCommunityLikeSet().size())
                 .scrapCount(community.getCommunityScrapSet().size())
                 .createdAt(community.getCreateTime())
-                .tagList(community.getCommunityTagSet().stream()
+                .tagList(community.getCommunityTagList().stream()
                     .map(communityTag -> TagRes.builder()
                         .tagId(communityTag.getTag().getTagId())
                         .name(communityTag.getTag().getName())
@@ -154,7 +153,7 @@ public class CommunityServiceImpl implements CommunityService {
 
         String title = communityUpdateReq.title();
         String content = communityUpdateReq.content();
-        community.getCommunityTagSet().clear();
+        community.getCommunityTagList().clear();
 
         community.setTitle(title);
         community.setContent(content);

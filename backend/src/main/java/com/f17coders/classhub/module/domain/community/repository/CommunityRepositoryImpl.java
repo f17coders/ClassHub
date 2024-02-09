@@ -34,7 +34,7 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
         return queryFactory
             .selectFrom(community)
             .leftJoin(community.member, communityMember).fetchJoin()
-            .leftJoin(community.communityTagSet, communityTag).fetchJoin()
+            .leftJoin(community.communityTagList, communityTag).fetchJoin()
             .leftJoin(communityTag.tag, tag).fetchJoin()
             .where(community.communityId.eq(communityId))
             .fetchOne();
@@ -45,7 +45,7 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
         return queryFactory
             .selectFrom(community)
             .leftJoin(community.member, member).fetchJoin()
-            .leftJoin(community.communityTagSet, communityTag).fetchJoin()
+            .leftJoin(community.communityTagList, communityTag).fetchJoin()
             .leftJoin(communityTag.tag, tag).fetchJoin()
             .leftJoin(community.commentList, comment).fetchJoin()
             .leftJoin(community.communityLikeSet, communityLike).fetchJoin()
@@ -58,7 +58,7 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
     public Community findByCommunityIdFetchJoinCommunityTag(int communityId) {
         return queryFactory
             .selectFrom(community)
-            .leftJoin(community.communityTagSet, communityTag).fetchJoin()
+            .leftJoin(community.communityTagList, communityTag).fetchJoin()
             .where(community.communityId.eq(communityId))
             .fetchOne();
     }
@@ -80,7 +80,7 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
         return queryFactory
             .select(community.count())
             .from(community)
-            .leftJoin(community.communityTagSet, communityTag)
+            .leftJoin(community.communityTagList, communityTag)
             .leftJoin(communityTag.tag, tag)
             .where(containsKeyword(keyword), inTagIdList(tagIdList))
             .fetchOne();
@@ -92,7 +92,7 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
         return queryFactory
             .select(community)
             .from(community)
-            .leftJoin(community.communityTagSet, communityTag).fetchJoin()
+            .leftJoin(community.communityTagList, communityTag).fetchJoin()
             .leftJoin(communityTag.tag, tag).fetchJoin()
             .where(containsKeyword(keyword), inTagIdList(tagIdList))
             .orderBy(community.createTime.desc())

@@ -35,7 +35,7 @@ public class CommunityTag extends BaseEntity {
 
     void putCommunity(Community community) {
         this.setCommunity(community);
-        community.getCommunityTagSet().add(this);
+        community.getCommunityTagList().add(this);
     }
 
     // CommunityTag - Tag 연관 관계

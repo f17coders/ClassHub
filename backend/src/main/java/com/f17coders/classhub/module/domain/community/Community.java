@@ -65,7 +65,7 @@ public class Community extends BaseEntity {
 
     // Community - CommunityTag 연관 관계
     @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CommunityTag> communityTagSet = new HashSet<>();   // TODO : 순서 고려 필요
+    private List<CommunityTag> communityTagList = new ArrayList<>();
 
     // Community - Comment 연관 관계
     @OneToMany(mappedBy = "community", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
