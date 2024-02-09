@@ -19,6 +19,7 @@ import MyPageLike from './pages/MyPage/MyPageLike'
 import MyPageCommunity from './pages/MyPage/MyPageCommunity'
 import MyPageEdit from './pages/MyPage/MyPageEdit'
 import AdditionalInfo from './pages/AdditionalInfo'
+import Login from './pages/Login'
 import {createTheme, ThemeProvider} from '@mui/material'
 
 
@@ -56,7 +57,8 @@ function App() {
             <Route path='community' element={<MyPageCommunity/>} />
             <Route path='edit' element={<MyPageEdit/>} />
           </Route>
-          <Route path='/additionalinfo' element={<AdditionalInfo/>}></Route>
+          <Route path='/additionalinfo' element={<AdditionalInfo/>} />
+          <Route path='/login' element={<Login/>} />
           <Route path='*' element={<div>없는 페이지에요</div>}/>
         </Routes>
       </div>
