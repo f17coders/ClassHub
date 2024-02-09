@@ -17,7 +17,6 @@ import com.f17coders.classhub.module.domain.communityScrap.service.CommunityScra
 import com.f17coders.classhub.module.domain.communityTag.CommunityTag;
 import com.f17coders.classhub.module.domain.communityTag.repository.CommunityTagRepository;
 import com.f17coders.classhub.module.domain.member.Member;
-import com.f17coders.classhub.module.domain.tag.Tag;
 import com.f17coders.classhub.module.domain.tag.dto.response.TagRes;
 import com.f17coders.classhub.module.domain.tag.repository.TagRepository;
 import java.io.IOException;
@@ -41,7 +40,6 @@ public class CommunityServiceImpl implements CommunityService {
 
     private final CommunityLikeService communityLikeService;
     private final CommunityScrapService communityScrapService;
-    private final CommentService commentService;
 
     @Override
     public int registerCommunity(CommunityRegisterReq communityRegisterReq, Member member)
@@ -74,7 +72,14 @@ public class CommunityServiceImpl implements CommunityService {
 
         // 댓글 목록
         List<CommentDetailRes> commentDetailResList = community.getCommentList().stream()
-            .map(comment -> commentService.convertToCommentListRes(comment, member))
+            .map(comment -> CommentDetailRes.builder()
+                .commentId(comment.getCommentId())
+                .content(comment.getContent())
+                .memberNickname(comment.getMember().getNickname())
+                .memberProfileImg(comment.getMember().getProfileImage())
+                .canUpdate(isCommentWriter(member, comment))
+                .createdAt(comment.getCreateTime())
+                .build())
             .collect(Collectors.toList());
 
         // 커뮤니티 태그 조회
@@ -93,7 +98,7 @@ public class CommunityServiceImpl implements CommunityService {
             .tagList(tagResList)
             .commentCount(community.getCommentList().size())
             .commentList(commentDetailResList)
-            .canUpdate(isWriter(member, community))
+            .canUpdate(isCommunityWriter(member, community))
             .canLike(communityLikeService.canLike(community, member))
             .canScrap(communityScrapService.canScrap(community, member))
             .createdAt(community.getCreateTime())
@@ -183,8 +188,12 @@ public class CommunityServiceImpl implements CommunityService {
         }
     }
 
-    private static boolean isWriter(Member member, Community community) {
-        return community.getMember().equals(member);
+    private static boolean isCommunityWriter(Member member, Community community) {
+        return community.getMember().getMemberId() == member.getMemberId();
+    }
+
+    private static boolean isCommentWriter(Member member, Comment comment) {
+        return comment.getMember().getMemberId() == member.getMemberId();
     }
 
     private static void checkAuthority(Member member, Community community) {
