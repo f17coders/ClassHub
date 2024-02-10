@@ -18,6 +18,8 @@ import { useSelector } from "react-redux"
 export default function CommunityReply({detailData}){
   // 토큰
   let accessToken = useSelector((state) => state.accessToken)
+  // 로그인 여부
+  let isLogin = useSelector((state) => state.isLogin)
   const navigate = useNavigate();
   const [content, setContent] = useState('');
   const MySwal = withReactContent(Swal);
@@ -29,10 +31,9 @@ export default function CommunityReply({detailData}){
       title: "등록되었습니다!",
       text: "댓글이 정상적으로 등록되었습니다.",
       icon: "success"
-    }).then(() =>{
-      createReply();
-      }
-    )
+    }).then(() => {
+      window.location.reload(); //페이지 새로고침
+    })
   }
 
   // 삭제 확인 Dialog용
@@ -68,25 +69,30 @@ export default function CommunityReply({detailData}){
     });
   };
 
-
+// 댓글 생성 함수
   const createReply = () => {
-    // 댓글 생성 함수
-      axios.post(`https://i10a810.p.ssafy.io/api/comments/v1/${detailData.communityId}`,
-      {
-        "communityId": detailData.communityId,
-        "content": content,
-      }, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then((res) => {
-        console.log(res)
-        navigate(`/community/detail/${detailData.communityId}`)
-        window.location.reload(); //페이지 새로고침
-      })
-      .catch((err) => console.log(err))
-    
+    {
+      isLogin?(
+        axios.post(`https://i10a810.p.ssafy.io/api/comments/v1/${detailData.communityId}`,
+        {
+          "communityId": detailData.communityId,
+          "content": content,
+        }, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then((res) => {
+          console.log(res)
+          navigate(`/community/detail/${detailData.communityId}`)
+          handleCreateDialogOpen();
+        })
+        .catch((err) => console.log(err))
+      ) : (
+        alert('로그인 후 이용해주세요')
+        //로그인 페이지로 이동시키기
+      )
+    }
   }
 
   const deleteReply = (commentId) => {
@@ -135,7 +141,7 @@ export default function CommunityReply({detailData}){
                     onKeyDown={enterKeyPress} //엔터키 눌렀을 때 이벤트 핸들링
                     />
                     <Tooltip title="등록">
-                        <IconButton onClick={() => {handleCreateDialogOpen(); }}>
+                        <IconButton onClick={() => {createReply(); }}>
                             <SendIcon/>
                         </IconButton>
                     </Tooltip>

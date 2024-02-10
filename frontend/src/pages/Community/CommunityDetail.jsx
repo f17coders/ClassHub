@@ -20,6 +20,8 @@ import { useSelector } from "react-redux"
 export default function CommunityDetail(){
     // 토큰
 	let accessToken = useSelector((state) => state.accessToken)
+    // 로그인 여부
+    let isLogin = useSelector((state) => state.isLogin)
 
     const navigate = useNavigate();
     const MySwal = withReactContent(Swal);
@@ -39,21 +41,38 @@ export default function CommunityDetail(){
     const { communityId } = useParams();
     // 게시글 상세 조회
     useEffect(() => {
-        axios.get(`https://i10a810.p.ssafy.io/api/communities/v1/details/${communityId}`, {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          })
-          .then((response) => {
-            // 받아온 데이터 필요에 맞게 처리
-            setDetailData(response.data.result);
-            setCanLike(response.data.result.canLike);
-            setCanScrap(response.data.result.canScrap);
-            setCanUpdate(response.data.result.canUpdate);
-            console.log(response.data.result)
-            console.log(detailData)
-          })
-          .catch((err) => console.log(err));
+        {
+            isLogin? (
+                axios.get(`https://i10a810.p.ssafy.io/api/communities/v1/details/${communityId}`, {
+                    headers: {
+                      Authorization: `Bearer ${accessToken}`,
+                    },
+                  })
+                  .then((response) => {
+                    // 받아온 데이터 필요에 맞게 처리
+                    setDetailData(response.data.result);
+                    setCanLike(response.data.result.canLike);
+                    setCanScrap(response.data.result.canScrap);
+                    setCanUpdate(response.data.result.canUpdate);
+                    console.log(response.data.result)
+                    console.log(detailData)
+                  })
+                  .catch((err) => console.log(err))
+            ) : (
+                axios.get(`https://i10a810.p.ssafy.io/api/communities/v0/details/${communityId}`)
+                  .then((response) => {
+                    // 받아온 데이터 필요에 맞게 처리
+                    setDetailData(response.data.result);
+                    setCanLike(response.data.result.canLike);
+                    setCanScrap(response.data.result.canScrap);
+                    setCanUpdate(response.data.result.canUpdate);
+                    console.log(response.data.result)
+                    console.log(detailData)
+                  })
+                  .catch((err) => console.log(err))
+            )
+        }
+        
       }, [communityId]);
 
     // 게시글 삭제
