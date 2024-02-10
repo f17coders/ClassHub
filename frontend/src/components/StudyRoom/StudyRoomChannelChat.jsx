@@ -21,6 +21,7 @@ export default function StudyRoomPrivateMessage({channel}) {
     
     const chatConnect = () => {
         const serverURL = `https://i10a810.p.ssafy.io/api/chat`;
+        // const serverURL = `http://localhost:8080/api/chat`;
     
         setIsLoading(true);
 
