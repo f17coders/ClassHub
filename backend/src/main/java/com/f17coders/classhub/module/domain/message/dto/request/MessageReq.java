@@ -5,10 +5,8 @@ import lombok.Builder;
 @Builder
 public record MessageReq(
 
-    int sender,
-    String text,
-    int personalChatId
-
+        int sender,
+        String text
 ) {
 
 }
