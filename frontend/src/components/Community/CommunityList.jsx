@@ -57,21 +57,21 @@ export default function CommunityPostList({post}){
                   <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
                     <div style={{marginRight: '1em'}}>
                       <Tooltip title="좋아요">
-                        <div>
+                        <div style={{display:'flex', alignItems:'center'}}>
                           <FavoriteBorderIcon/> <span>{post.likeCount}</span>
                         </div>
                       </Tooltip>
                     </div>
                     <div style={{marginRight: '1em'}}>
                       <Tooltip sx={{marginRight: '1rem'}} title="댓글">
-                        <div>
+                        <div style={{display:'flex', alignItems:'center'}}>
                           <ChatBubbleOutlineIcon/> <span>{post.commentCount}</span>
                         </div>
                       </Tooltip>
                     </div>
                     <div style={{marginRight: '1em'}}>
                       <Tooltip sx={{marginRight: '1rem'}} title="스크랩">
-                        <div>
+                        <div style={{display:'flex', alignItems:'center'}}>
                           <BookmarkBorderIcon/> <span>{post.scrapCount}</span>
                         </div>
                       </Tooltip>
