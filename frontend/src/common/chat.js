@@ -52,8 +52,24 @@ const send = (stompClient, sender,message, personalChatId) => {
     }
 };
 
+const sendChannel = (accessToken, stompClient, message, channelId) => {
+    if (stompClient && stompClient.connected) {
+
+        stompClient.publish({
+            destination: "/pub/api/chat/channel/send/" + channelId,
+            headers: {
+                token: accessToken
+            },
+            body: JSON.stringify(message)
+        });
+    } else {
+        alert("서버 오류로 인해 메시지 전송이 실패하였습니다!");
+    }
+};
+
 export {
     registPersonalChat,
     getPersonalChat,
-    send
+    send,
+    sendChannel
 }
