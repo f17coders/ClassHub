@@ -5,40 +5,27 @@ import { useState, useEffect } from "react"
 import axios from 'axios'
 
 // 홈페이지에서 강의 추천 (직업)
-// 여긴 갈아 엎어야함
 
-function RecommendTag() {
+function RecommendTag({tag}) {
     const isLogin = useSelector((state) => state.isLogin)
     const user = useSelector((state) => state.user)
     const accessToken = useSelector((state) => state.accessToken)
-
     const [lectures, setLectures] = useState([])
 
-    const [job, setJob] = useState('')
-
     useEffect(() => {
-        // 로그인한 유저라면, 
-        if (isLogin) {
-            axios.get('https://i10a810.p.ssafy.io/api/lectures/v1/desired-job', {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            })
-                .then((res) => {
-                    setLectures(res.data.result.lectureList)
-                    setJob(res.data.result.job.name)
-                    console.log(res.data.result)
-                })
-                .catch((err) => console.log(err))
-        } else {
-            axios.get('https://i10a810.p.ssafy.io/api/lectures/v0/desired-job')
-                .then((res) => {
-                    setLectures(res.data.result.lectureList)
-                    setJob(res.data.result.job.name)
-                })
-                .catch((err) => console.log(err))
-        }
-    }, [])
+        console.log(tag)
+        axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0/interest-skills?tagId=${tag.tagId}`, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+        .then((res) => {
+            // 왜 비었지...
+            console.log(res.data.result.lectureList)
+            setLectures(res.data.result.lectureList)
+        })
+        .catch((err) => console.log(err))
+    }, [user])
 
     return (
         <div style={{ margin: "auto", width: "90%", marginTop: "50px" }}>
@@ -46,7 +33,10 @@ function RecommendTag() {
                 lectures.length != 0 ? (
                     <div>
                         <div style={{ textAlign: "center", margin: "10px" }}>
-                            <p style={{ fontWeight: "800", fontSize: "2em" }}>{job} 직무 인기 강의 BEST 5</p>
+                            {
+                                isLogin ? (<p style={{ marginBottom: 0 }}>{user.nickname}님의 관심 기술</p>) : null
+                            }
+                            <p style={{ fontWeight: "800", fontSize: "2em", marginTop: '0' }}>{job} 분야 인기강의</p>
                         </div>
                         <Grid container spacing={{ sm: 1, md: 2 }} justifyContent="center" alignItems="center">
                             {

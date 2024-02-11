@@ -1,22 +1,26 @@
-import Button from '@mui/material/Button'
+import { IconButton, Paper, Chip, Tooltip, Button } from '@mui/material'
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom'
 import { saveUser, changeUserTagList, changeUserJob } from './../../store/userSlice'
+import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
+
 
 
 function MyPageEdit() {
-	 // 토큰
-	 let accessToken = useSelector((state) => state.accessToken)
-	 const dispatch = useDispatch()
+	// 토큰
+	let accessToken = useSelector((state) => state.accessToken)
+	let user = useSelector((state) => state.user)
+	const navigate = useNavigate()
+	const dispatch = useDispatch()
 	// 관심있는 기술
 	const [skills, setSkills] = useState([])
 	// 목표 직무
 	const [targetJobs, setTargetJobs] = useState([])
-
 
 	// 처음에 전체 관심있는 기술과 목표직무를 가져온다
 	useEffect(() => {
@@ -29,7 +33,7 @@ function MyPageEdit() {
 				.catch((err) => console.log(err))
 		}
 		if (targetJobs.length == 0) {
-			axios.get('https://i10a810.p.ssafy.io/api/jobs/v0',{
+			axios.get('https://i10a810.p.ssafy.io/api/jobs/v0', {
 				headers: {
 					Authorization: `Bearer ${accessToken}`
 				}
@@ -72,44 +76,53 @@ function MyPageEdit() {
 	}
 
 	// 전체 유효성 검사
-	const [valid, setValid] = useState(false)
-	const checkValid = function () {
+	const checkValid = async function () {
 		testTargetInput()
-		if (interstedSkills.length < 2 | interstedSkills.length > 10) {
+		if (interstedSkills.length < 2 || interstedSkills.length > 10) {
 			setSkillError(true);
 		}
-		if (skillError | targetError) {
-			setValid(false)
-		} else {
-			setValid(true)
-		}
-		if (valid) {
-			// 유효할 때 수정 요청 보내기
-			axios.put('https://i10a810.p.ssafy.io/api/members/v1', {
-				'tagList': interstedSkills.map((skill) => skill.tagId),
-				'jobId': target[0].jobId
-			}, {
-				headers: {
-					AUTHORIZATION: `Bearer ${accessToken}`
-				}
+		if (skillError || targetError) {
+			Swal.fire({
+				html: "관심기술은 최소 2개, 최대 10개,<br>목표 직무는 1개 지정 필수입니다",
+				icon: "warning"
 			})
-				.then((res) => {
-					console.log(res)
-					dispatch(changeUserTagList(interstedSkills))
-					dispatch(changeUserJob(target[0]))
-					Swal.fire({
-						title: "정보 수정 완료",
-						icon: "success"
-					}).then((a) => window.location.reload())
-				})
-				.catch((err) => console.log(err))
+		} else {
+			try {
+				const res = await axios.put(
+					'https://i10a810.p.ssafy.io/api/members/v1',
+					{
+						tagList: interstedSkills.map((skill) => skill.tagId),
+						jobId: target[0].jobId,
+					},
+					{
+						headers: {
+							AUTHORIZATION: `Bearer ${accessToken}`,
+						},
+					}
+				);
+				dispatch(changeUserTagList(interstedSkills));
+				dispatch(changeUserJob(target[0]));
+				Swal.fire({
+					title: '정보 수정 완료',
+					icon: 'success',
+				}).then((a) => navigate('/mypage'));
+			} catch (err) {
+				console.log(err);
+			}
 		}
 	}
 
 	return (
 		<div>
-			<h2>내 정보 수정하기</h2>
-			<p>회원가입때 입력한 정보를 수정할 수 있어요</p>
+			<div style={{display:'flex', justifyContent:'space-between'}}>
+				<div>
+					<h2>내 정보 수정하기</h2>
+					<p>회원가입때 입력한 정보를 수정할 수 있어요</p>
+				</div>
+				<div style={{ marginRight:' 20%', marginTop:'5%' }}>
+					<Tooltip title='탈퇴하기' sx={{ marginLeft: '' }}><IconButton><MeetingRoomIcon /></IconButton></Tooltip>
+				</div>
+			</div>
 			<div style={{ marginTop: '20px', width: '70%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 				{/* 관심기술 */}
 				<div>

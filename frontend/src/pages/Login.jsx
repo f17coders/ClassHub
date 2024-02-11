@@ -1,4 +1,5 @@
 import Box from '@mui/material/Box'
+import { Paper } from '@mui/material'
 import MainLogo from './../assets/MainLogo.png'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
@@ -78,7 +79,6 @@ function Login() {
 	}
 
 
-
 	// 구글 로그인 버튼 호버용
 	let [googleHover, setGoogleHover] = useState(false)
 	const hoverInGoogle = function () {
@@ -108,46 +108,49 @@ function Login() {
   return (
     <Box>
       <div style={{
-		marginTop: '10%',
-		display: 'flex',
+				marginTop: '10%',
+				display: 'flex',
         flexDirection: 'column',
         justifyContent: "center",
         alignItems: "center"
       }}>
-        <img src={MainLogo} alt="MainLogo" style={{ width: '30%' }} />
-        <p>ClassHub서비스에 로그인하기</p>
-        <div style={{ display: 'flex', flexDirection: 'row', marginTop: '50px', width: '20%', justifyContent: 'space-around', alignItems: 'center' }}>
-          <div
-            onMouseEnter={hoverInGoogle}
-            onMouseLeave={hoverOutGoogle}
-            style={{ margin: '10px 0px' }}>
-            <img src={googleLogo} style={{
-              width: '60px',
-              cursor: googleHover ? 'pointer' : 'default',
-              scale: googleHover ? '1.1' : '1'
-            }} />
-          </div>
-          <div
-            onMouseEnter={hoverInNaver}
-            onMouseLeave={hoverOutNaver}
-            style={{ margin: '10px 0px' }}>
-            <img src={naverLogo} style={{
-              width: '60px',
-              cursor: naverHover ? 'pointer' : 'default',
-              scale: naverHover ? '1.1' : '1'
-            }} />
-          </div>
-          <div
-            onClick={kakaoLogin}
-            onMouseEnter={hoverInKakao}
-            onMouseLeave={hoverOutKakao}
-            style={{ margin: '10px 0px' }}>
-            <img src={kakaoLogo} style={{
-              width: '60px',
-              cursor: kakaoHover ? 'pointer' : 'default',
-              scale: kakaoHover ? '1.1' : '1'
-            }} />
-          </div>
+        <img src={MainLogo} alt="MainLogo" style={{ width: '15%' }} />
+        <p>서비스 이용을 위해 로그인/회원가입을 해주세요</p>
+        <div style={{ display: 'flex', flexDirection: 'column', marginTop: '30px', width: '20%', justifyContent: 'space-around', alignItems: 'center' }}>
+					<Paper 
+					onMouseEnter={hoverInGoogle}
+					onMouseLeave={hoverOutGoogle}
+					style={{
+						display:'flex', 
+						justifyContent:'center',
+						alignItems:'center',
+						backgroundColor:'rgb(242, 242, 242)', 
+						cursor: googleHover ? 'pointer' : 'default',
+						boxShadow: googleHover ? '2px 2px 8px 4px lightgrey' : '2px 2px 4px 2px lightgrey',
+						width:'300px',
+						height:'60px'
+					}}>
+						<img src={googleLogo} style={{width: '50px', height:'50px'}} />
+						<p style={{fontSize:'1.1em', marginLeft:'10px'}}>Google로 로그인하기</p>
+					</Paper>
+					<Paper 
+					onMouseEnter={hoverInKakao}
+					onMouseLeave={hoverOutKakao}
+					onClick={kakaoLogin}
+					style={{
+						display:'flex', 
+						justifyContent:'center',
+						alignItems:'center',
+						backgroundColor:'rgb(254, 229, 0)', 
+						cursor: kakaoHover ? 'pointer' : 'default',
+						boxShadow: kakaoHover ? '2px 2px 8px 4px lightgrey' : '2px 2px 4px 2px lightgrey',
+						width:'300px',
+						height:'60px',
+						marginTop:'20px'
+					}}>
+						<img src={kakaoLogo} style={{width: '50px', height:'50px'}} />
+						<p style={{fontSize:'1.1em', marginLeft:'10px'}}>Google로 로그인하기</p>
+					</Paper>
         </div>
       </div>
     </Box>

@@ -11,21 +11,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import { saveUser, changeUserTagList, changeUserJob } from '../store/userSlice'
 import { login } from '../store/store'
 
-
-const images = [
-	'https://ifh.cc/g/omtSSy.jpg',
-	'https://ifh.cc/g/R4F6cO.jpg',
-	'https://ifh.cc/g/cfSmtq.jpg',
-	'https://ifh.cc/g/08B1bq.jpg',
-	'https://ifh.cc/g/VPaHVN.jpg',
-	'https://ifh.cc/g/cRT91V.jpg',
-	'https://ifh.cc/g/gQgF04.jpg',
-	'https://ifh.cc/g/q0FN73.jpg'
-]
 function AdditionalInfo() {
 	// 토큰
 	let accessToken = useSelector((state) => state.accessToken)
 	let user = useSelector((state) => state.user)
+	let isLogin = useSelector((state) => state.isLogin)
 	const navigate = useNavigate()
 	const dispatch = useDispatch()
 	// 관심있는 기술
@@ -33,6 +23,15 @@ function AdditionalInfo() {
 	// 목표 직무
 	const [targetJobs, setTargetJobs] = useState([])
 
+	// 만약 로그인이 되어있지 않은 사용자라면, 로그인 페이지로 보내주자
+	useEffect(() => {
+		if (isLogin == false) {
+			Swal.fire({
+				title: "로그인이 필요한 페이지입니다!",
+				icon: "warning"
+			}).then((a) => navigate('/login'))
+		}
+	})
 
 	// 처음에 관심있는 기술과 목표직무를 가져온다
 	useEffect(() => {
@@ -98,7 +97,6 @@ function AdditionalInfo() {
 			setValid(true)
 		}
 
-
 		if (valid) {
 			// 유효할 때 가입 요청 보내기
 			axios.post('https://i10a810.p.ssafy.io/api/members/v1', {
@@ -110,7 +108,6 @@ function AdditionalInfo() {
 				}
 			})
 				.then((res) => {
-					console.log(res)
 					dispatch(changeUserTagList(interstedSkills))
 					dispatch(changeUserJob(target[0]))
 					dispatch(login())
@@ -126,128 +123,113 @@ function AdditionalInfo() {
 	// Modal창 스타일
 	return (
 		<Box>
-			<div style={{
-				display: 'flex',
-				padding: "70px 0px 100px 0px",
-				flexDirection: 'column',
-				justifyContent: "center",
-				alignItems: "center"
-			}}>
-				<h1>추가 정보</h1>
-
-				<div style={{ marginTop: '20px', width: '70%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-					<div>
-						<IconButton>
-							<img src={user.profileImage} alt="profile" style={{ width: '40px', height: '40px', borderRadius: '70%' }} />
-						</IconButton>
-						{
-							images.map((item, idx) => {
-								return (
-									<IconButton key={idx}>
-										<img src={item} alt="profile" style={{ width: '40px', height: '40px', borderRadius: '70%' }} />
-									</IconButton>
-								)
-							})
-						}
-					</div>
-					{/* 관심기술 */}
-					<div>
+			{
+				isLogin ? (<div style={{
+					display: 'flex',
+					padding: "70px 0px 100px 0px",
+					flexDirection: 'column',
+					justifyContent: "center",
+					alignItems: "center"
+				}}>
+					<h1>추가 정보</h1>
+					<div style={{ marginTop: '20px', width: '70%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center' }}>
+						{/* 관심기술 */}
 						<div>
-							<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
-								<p style={{ fontWeight: 700 }}>관심 기술</p>
-								<p style={{ fontSize: '0.8em' }}>최소 2개, 최대 10개</p>
+							<div style={{width:"400px"}}>
+								<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
+									<p style={{ fontWeight: 700 }}>관심 기술</p>
+									<p style={{ fontSize: '0.8em' }}>최소 2개, 최대 10개</p>
+								</div>
+								{
+									skillError ? (
+										<Autocomplete
+											required
+											multiple
+											options={skills.map((item) => item.name)}
+											onChange={handleCheckedSkills}
+											size='small'
+											renderInput={(value) => (
+												<TextField
+													{...value}
+													error
+													helperText="관심 기술은 최소 2개, 최대 10개 지정해야합니다"
+													placeholder="관심 기술"
+												/>
+											)}
+										/>
+									) : (
+										<Autocomplete
+											required
+											multiple
+											options={skills.map((item) => item.name)}
+											onChange={handleCheckedSkills}
+											renderInput={(value) => (
+												<TextField
+													{...value}
+													placeholder='관심 기술'
+												/>
+											)}
+										/>
+									)
+								}
 							</div>
-							{
-								skillError ? (
-									<Autocomplete
-										required
-										multiple
-										options={skills.map((item) => item.name)}
-										// value={interstedSkills}
-										onChange={handleCheckedSkills}
-										// getOptionLabel={(option) => option}
-										// filterSelectedOptions
-										// isOptionEqualToValue={(option, value) => option === value}
-										renderInput={(value) => (
-											<TextField
-												{...value}
-												error
-												helperText="관심 기술은 최소 2개, 최대 10개 지정해야합니다"
-												placeholder="관심 기술"
-											/>
-										)}
-									/>
-								) : (
-									<Autocomplete
-										required
-										multiple
-										options={skills.map((item) => item.name)}
-										onChange={handleCheckedSkills}
-										renderInput={(value) => (
-											<TextField
-												{...value}
-												placeholder='관심 기술'
-											/>
-										)}
-									/>
-								)
-							}
-						</div>
 
-						{/* 목표직무 */}
-						<div>
-							<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
-								<p style={{ fontWeight: 700 }}>목표 직무</p>
-								<p style={{ fontSize: '0.8em' }}>1개 지정 필수</p>
+							{/* 목표직무 */}
+							<div style={{width:"400px"}}>
+								<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
+									<p style={{ fontWeight: 700 }}>목표 직무</p>
+									<p style={{ fontSize: '0.8em' }}>1개 지정 필수</p>
+								</div>
+								{
+									targetError ? (
+										<Autocomplete
+											options={targetJobs.map((item) => item.name)}
+											onChange={(event, newValue) => {
+												// skill들 중에 newValue와 같은애를 통채로 저장함
+												const selectedJob = targetJobs.filter((option) => newValue.includes(option.name))
+												setTarget(selectedJob)
+											}}
+											renderInput={(value) => (
+												<TextField
+													error
+													{...value}
+													helperText='목표 직무 지정은 필수입니다.'
+													placeholder="목표 직무"
+												/>
+											)}
+										/>
+									) : (
+										<Autocomplete
+											options={targetJobs.map((item) => item.name)}
+											onChange={(event, newValue) => {
+												// skill들 중에 newValue와 같은애를 통채로 저장함
+												const selectedJob = targetJobs.filter((option) => newValue.includes(option.name))
+												setTarget(selectedJob)
+											}}
+											renderInput={(value) => (
+												<TextField
+													{...value}
+													placeholder="목표 직무"
+												/>
+											)}
+										/>
+									)
+								}
 							</div>
-							{
-								targetError ? (
-									<Autocomplete
-										options={targetJobs.map((item) => item.name)}
-										onChange={(event, newValue) => {
-											// skill들 중에 newValue와 같은애를 통채로 저장함
-											const selectedJob = targetJobs.filter((option) => newValue.includes(option.name))
-											setTarget(selectedJob)
-										}}
-										renderInput={(value) => (
-											<TextField
-												error
-												{...value}
-												helperText='목표 직무 지정은 필수입니다.'
-												placeholder="목표 직무"
-											/>
-										)}
-									/>
-								) : (
-									<Autocomplete
-										options={targetJobs.map((item) => item.name)}
-										onChange={(event, newValue) => {
-											// skill들 중에 newValue와 같은애를 통채로 저장함
-											const selectedJob = targetJobs.filter((option) => newValue.includes(option.name))
-											setTarget(selectedJob)
-										}}
-										renderInput={(value) => (
-											<TextField
-												{...value}
-												placeholder="목표 직무"
-											/>
-										)}
-									/>
-								)
-							}
-						</div>
 
-						{/* 제출 버튼 */}
-						<Button
-							variant="outlined"
-							style={{ marginTop: '20px' }}
-							onClick={checkValid}
-						>
-							가입하기
-						</Button>
+							{/* 제출 버튼 */}
+							<Button
+								variant="outlined"
+								style={{ marginTop: '20px' }}
+								onClick={checkValid}
+							>
+								가입하기
+							</Button>
+						</div>
 					</div>
-				</div>
-			</div>
+				</div>) : null
+			}
+
 		</Box>
 	)
 }
