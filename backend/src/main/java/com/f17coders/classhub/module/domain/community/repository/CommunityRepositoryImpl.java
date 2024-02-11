@@ -34,12 +34,9 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
     @Override
     public Community findCommunityByCommunityIdForCommunityReadRes(
         int communityId) {   // TODO : 최적화 반드시 필요
-        QMember communityMember = new QMember("communityMember");
-        QMember commentMember = new QMember("commentMember");
-
         return queryFactory
             .selectFrom(community)
-            .leftJoin(community.member, communityMember).fetchJoin()
+            .leftJoin(community.member, member).fetchJoin()
             .leftJoin(community.communityTagList, communityTag).fetchJoin()
             .leftJoin(communityTag.tag, tag).fetchJoin()
             .where(community.communityId.eq(communityId))
