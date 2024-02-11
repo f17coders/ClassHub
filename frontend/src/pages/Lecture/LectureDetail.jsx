@@ -51,15 +51,16 @@ function LectureDetail() {
 	// 강의 좋아요 + 로그인 확인
 	const [like, setLike] = useState(false)
 	const toggleLike = () => {
+		console.log(accessToken)
 		if (isLogin == true) {
 			if (like == false) {
-				axios.post(`https://i10a810.p.ssafy.io/api/lectures/v1/likes/${lecture.lectureId}`, {
+				axios.post(`https://i10a810.p.ssafy.io/api/lectures/v1/likes/${lecture.lectureId}`, null, {
 					headers: {
 						Authorization: `Bearer ${accessToken}`
 					}
 				})
 					.then((res) => console.log('좋아요를 눌렀어요'))
-					.catch((err) => console.log(err))
+					.catch((err) => console.log(err));
 				setLike(true)
 			} else {
 				axios.delete(`https://i10a810.p.ssafy.io/api/lectures/v1/unlikes/${lecture.lectureId}`, {
@@ -213,12 +214,12 @@ function Content1(props) {
 		if (htmlString == '') {
 			// axios.get(lecture.descriptionDetail)
 			axios.get('https://storage.googleapis.com/classhub/data/udemy/htmlFiles/1.html')
-			.then((res) => {
-				setHtmlString(res.data)
-			})
-			.catch((err) => {
-				console.log(err)
-			})
+				.then((res) => {
+					setHtmlString(res.data)
+				})
+				.catch((err) => {
+					console.log(err)
+				})
 		}
 	})
 	return (
@@ -235,7 +236,7 @@ function Content1(props) {
 				<h3>강의 상세 정보</h3>
 				{
 					htmlString != '' ? (<div
-					style={{overflow:'scroll', width:'100%'}}
+						style={{ overflow: 'scroll', width: '100%' }}
 						dangerouslySetInnerHTML={{
 							__html: DOMPurify.sanitize(htmlString),
 						}}
@@ -255,26 +256,26 @@ function Content2(props) {
 		<Container>
 			<h3>커리큘럼 (총 {lecture.totalTime}시간)</h3>
 			{
-				curriculum.map((theme, idx) =>{
-					return(
+				curriculum.map((theme, idx) => {
+					return (
 						<Accordion key={idx}>
 							<AccordionSummary
-								expandIcon={<ExpandMoreIcon/>}
-								sx={{backgroundColor:'rgba(128, 128, 128, 0.1)'}}
+								expandIcon={<ExpandMoreIcon />}
+								sx={{ backgroundColor: 'rgba(128, 128, 128, 0.1)' }}
 							>
-								<p style={{margin:'7px'}}><span style={{fontSize:'1.2em'}}>{theme.title}</span> ({theme.item_count}개의 강의, 총 {theme.time}시간)</p>
+								<p style={{ margin: '7px' }}><span style={{ fontSize: '1.2em' }}>{theme.title}</span> ({theme.item_count}개의 강의, 총 {theme.time}시간)</p>
 							</AccordionSummary>
 							<AccordionDetails>
-							{
-								theme.items.map((item, idx) => {
-									return(
-										<div key={idx} style={{display:'flex', justifyContent:'space-between'}}>
-											<p>{item.title}</p>
-											<p>{item.time ? (<>{item.time}</>): null}</p>
-										</div>
-									)
-								})
-							}
+								{
+									theme.items.map((item, idx) => {
+										return (
+											<div key={idx} style={{ display: 'flex', justifyContent: 'space-between' }}>
+												<p>{item.title}</p>
+												<p>{item.time ? (<>{item.time}</>) : null}</p>
+											</div>
+										)
+									})
+								}
 							</AccordionDetails>
 						</Accordion>
 					)
