@@ -57,7 +57,6 @@ function LectureDetailReviews({ lecture }) {
     }
   }
 
-  // 리뷰데이터(임시)
   // classhub에서 쓴 리뷰
   const [review1, setReview1] = useState([])
   const [page1, setPage1] = useState(0)
@@ -85,11 +84,8 @@ function LectureDetailReviews({ lecture }) {
   const [page2, setPage2] = useState(0)
   const [totalPage2, setTotalPage2] = useState(null)
   useEffect(() => {
-    axios.get(`https://i10a810.p.ssafy.io/api/reviews/v0/1/site?page=${page2}&size=4&order=${order2}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    })
+    //&order=${order2} 뒤에 이게 빠진듯
+    axios.get(`https://i10a810.p.ssafy.io/api/reviews/v0/${lecture.lectureId}/site?page=${page2}&size=4&order=${order2}`)
       .then((res) => {
         let nextReviews = [...review2, ...res.data.result.siteReviewResList]
         setReview2(nextReviews)

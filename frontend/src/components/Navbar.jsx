@@ -164,7 +164,7 @@ function NavbarComponent() {
 					</Box>
 				</Grid>
 
-				<Grid item xs={1} sx={{ display:'flex', alignItems:'center'}}>
+				<Grid item xs={2} sx={{ display:'flex', alignItems:'center'}}>
 					{
 						isLogin == false ? (
 							<Link 
@@ -180,7 +180,7 @@ function NavbarComponent() {
 										<img src={user.profileImage} alt="profile" style={{ width: '40px', height: '40px', borderRadius: '70%' }} />
 									</IconButton>
 								</Link>
-								<Tooltip title='Logout'>
+								<Tooltip title='Logout' sx={{display: {xs:'none', md:'inline-block'}}}>
 									<IconButton onClick={handleLogout}>
 										<LogoutIcon />
 									</IconButton>
