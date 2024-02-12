@@ -65,7 +65,7 @@ export default function StudyRoomParticipating(){
   }, [studyId])
 
   const readChannel = (channelId) => {
-    axios.get(`http://localhost:8080/api/studies/v1/channels/details/${channelId}`, {
+    axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/channels/details/${channelId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
