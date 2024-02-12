@@ -36,12 +36,12 @@ function RecommendTag({tag}) {
                             {
                                 isLogin ? (<p style={{ marginBottom: 0 }}>{user.nickname}님의 관심 기술</p>) : null
                             }
-                            <p style={{ fontWeight: "800", fontSize: "2em", marginTop: '0' }}>{job} 분야 인기강의</p>
+                            <p style={{ fontWeight: "800", fontSize: "2em", marginTop: '0' }}>{tag.name} 분야 인기강의</p>
                         </div>
                         <Grid container spacing={{ sm: 1, md: 2 }} justifyContent="center" alignItems="center">
                             {
                                 lectures.map((lecture, idx) => (
-                                    <Grid item xs={6} sm={4} md={3} lg={2} key={idx}>
+                                    <Grid item xs={6} sm={4} md={2} key={idx}>
                                         <LectureCard lecture={lecture} />
                                     </Grid>
                                 ))

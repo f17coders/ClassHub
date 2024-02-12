@@ -68,6 +68,18 @@ let searchParams = createSlice({
     size: 16,
   },
   reducers: {
+    goInitialExceptKeyword(state) {
+      return {
+        ...state,
+        category: null,
+        tags: [],
+        level: null,
+        site: null,
+        order: 'ranking',
+        page: 0,
+        size: 16,
+      }
+    },
     // 카테고리 변경
     changeCategory(state, action) {
       return {
@@ -190,7 +202,7 @@ let searchParams = createSlice({
       }
     }}
     })
-export let { changeCategory, addTags, deleteTags, changeKeyword, changeLevel, changeSite, changePage, changeOrder } = searchParams.actions
+export let { goInitialExceptKeyword, changeCategory, addTags, deleteTags, changeKeyword, changeLevel, changeSite, changePage, changeOrder } = searchParams.actions
 
 // 강의 검색 결과
 let lectureResult = createSlice({

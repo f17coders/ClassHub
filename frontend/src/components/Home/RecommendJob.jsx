@@ -53,7 +53,7 @@ function RecommendJob() {
                         <Grid container spacing={{ sm: 1, md: 2 }} justifyContent="center" alignItems="center">
                             {
                                 lectures.map((lecture, idx) => (
-                                    <Grid item xs={6} sm={4} md={3} lg={2} key={idx}>
+                                    <Grid item xs={6} sm={4} md={2} key={idx}>
                                         <LectureCard lecture={lecture} />
                                     </Grid>
                                 ))

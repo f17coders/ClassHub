@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router'
 import {searchResult} from './../../store/store'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { setFromMainTrue, changeKeyword } from './../../store/store'
+import { setFromMainTrue, changeKeyword, goInitialExceptKeyword } from './../../store/store'
 // 홈페이지 강의 검색창
 
 function Search() {
@@ -22,12 +22,11 @@ function Search() {
 	const search = function() {
 		axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?&keyword=${keyword}&order=ranking&page=0&size=16`)	
 		.then((res) => {
-			console.log('이거 실행됨')
-			// 검색결과를 저장하고
+			// 키워드를 저장하고
 			dispatch(changeKeyword(keyword))
+			// 다른건 초기화 해주면서
+			dispatch(goInitialExceptKeyword())
 			dispatch(searchResult(res.data.result.lectureList))
-			// 메인에서 출발하는걸 알려주면서
-			dispatch(setFromMainTrue())
 			// 강의 페이지로 가자
 			navigate(`/lecture`)
 		}).catch((err) =>
