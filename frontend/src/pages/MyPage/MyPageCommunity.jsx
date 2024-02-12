@@ -1,4 +1,3 @@
-import CommunityPostList from '../../components/Community/CommunityList'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
@@ -45,6 +44,18 @@ function MyPageCommunity() {
   )
 }
 
+
+function Article({post}) {
+  return(
+    <div>
+      <h1>{post.title}</h1>
+      <p>{post.content}</p>
+      <p>{post.createdAt}</p>
+      <p>{post.communityId}</p>
+    </div>
+  )
+}
+
 function MyArticle({accessToken}) {
   const [articles, setArticles] = useState([])
   const [page, setPage] = useState(0)
@@ -60,6 +71,7 @@ function MyArticle({accessToken}) {
       }
     })
       .then((res) => { 
+        console.log(res.data.result)
         setArticles(res.data.result.communityList) 
         setTotalPages(res.data.result.totalPages)
       })
@@ -69,9 +81,9 @@ function MyArticle({accessToken}) {
   return (
     <div>
       {
-        articles.length ? (<div>
+        articles.length > 0 ? (<div>
           {articles.map((article, idx) => {
-            return (<CommunityPostList post={article} key={idx} />)
+            return (<Article post={article} key={idx} />)
           })}
         </div>) : (<p>글이 없습니다!</p>)
       }
@@ -110,7 +122,7 @@ function MyComments({ accessToken }) {
       {
         articles.length ? (<div>
           {articles.map((article, idx) => {
-            return (<CommunityPostList post={article} key={idx} />)
+            return (<Article post={article} key={idx} />)
           })}
         </div>) : (<p>글이 없습니다!</p>)
       }
@@ -148,7 +160,7 @@ function MyScrap({ accessToken }) {
       {
         articles.length ? (<div>
           {articles.map((article, idx) => {
-            return (<CommunityPostList post={article} key={idx} />)
+            return (<Article post={article} key={idx} />)
           })}
         </div>) : (<p>글이 없습니다!</p>)
       }
