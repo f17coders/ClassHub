@@ -173,9 +173,9 @@ export default function StudyRoomParticipating(){
           text: "초대코드가 클립보드에 복사되었습니다.",
           icon: "success"
         });
-        console.log(inviteCode);
+        // console.log(inviteCode);
       } catch (err) {
-        console.log(err.response.data.code)
+        // console.log(err.response.data.code)
         const code = err.response.data.code;
         if(code === 'B303'){
           MySwal.fire({
@@ -307,7 +307,7 @@ export default function StudyRoomParticipating(){
       })
     })
     .catch((err) => {
-      console.log(err.response.data.code)
+      // console.log(err.response.data.code)
       const code = err.response.data.code;
       if(code === 'B303'){
         MySwal.fire({
