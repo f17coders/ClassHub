@@ -5,7 +5,6 @@ import { useState, useEffect } from "react"
 import axios from 'axios'
 
 // 홈페이지에서 강의 추천 (직업)
-// 데이터가 왜 안들어오지..
 
 function RecommendJob() {
     const isLogin = useSelector((state) => state.isLogin)
@@ -27,7 +26,7 @@ function RecommendJob() {
                 .then((res) => {
                     setLectures(res.data.result.lectureList)
                     setJob(res.data.result.job.name)
-                    console.log(res.data.result)
+                    // console.log(res.data.result)
                 })
                 .catch((err) => console.log(err))
         } else {
@@ -46,7 +45,10 @@ function RecommendJob() {
                 lectures.length != 0 ? (
                     <div>
                         <div style={{ textAlign: "center", margin: "10px" }}>
-                            <p style={{ fontWeight: "800", fontSize: "2em" }}>{job} 직무 인기 강의 BEST 5</p>
+                            {
+                                isLogin ? (<p style={{marginBottom:0}}>{user.nickname}님의 관심 직무</p>) : null
+                            }
+                            <p style={{ fontWeight: "800", fontSize: "2em", marginTop:'0' }}>{job} 직무 인기강의</p>
                         </div>
                         <Grid container spacing={{ sm: 1, md: 2 }} justifyContent="center" alignItems="center">
                             {

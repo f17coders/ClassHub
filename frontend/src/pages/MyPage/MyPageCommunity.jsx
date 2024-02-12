@@ -54,7 +54,7 @@ function MyArticle({accessToken}) {
   }
   useEffect(() => {
     console.log(accessToken)
-    axios.get(`https://i10a810.p.ssafy.io/api/members/v1/communities/my?page=${page}&size=4`, {
+    axios.get(`https://i10a810.p.ssafy.io/api/members/v1/communities/my?page=${page}&size=5`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
@@ -94,7 +94,7 @@ function MyComments({ accessToken }) {
     setPage(value)
   }
   useEffect(() => {
-    axios.get(`https://i10a810.p.ssafy.io/api/members/v1/communities/comments?page=${page}&size=4`, {
+    axios.get(`https://i10a810.p.ssafy.io/api/members/v1/communities/comments?page=${page}&size=5`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
@@ -132,7 +132,7 @@ function MyScrap({ accessToken }) {
     setPage(value)
   }
   useEffect(() => {
-    axios.get(`https://i10a810.p.ssafy.io/api/members/v1/communities/scraps?page=${page}&size=4`, {
+    axios.get(`https://i10a810.p.ssafy.io/api/members/v1/communities/scraps?page=${page}&size=5`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }

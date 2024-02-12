@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux"
 import { styled } from '@mui/material/styles';
-import { Menu, MenuItem, Avatar, ListItemIcon, Backdrop, Alert, Pagination, TextField, Button, Stack, Box, List, ListItemButton, Grid, Typography, Divider, IconButton, Tooltip } from '@mui/material'
+import { Menu, MenuItem, Avatar, ListItemIcon, Backdrop, Alert, Pagination, TextField, Button, Stack, Box, List, ListItemButton, Grid, Typography, Divider, IconButton, Tooltip, CircularProgress } from '@mui/material'
 import axios from 'axios'
 import StudyRoomModifyModal from '../../components/StudyRoom/StudyRoomModifyModal';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
@@ -19,6 +19,7 @@ import withReactContent from 'sweetalert2-react-content'
 import ParticipatingMemberModal from '../../components/StudyRoom/ParticipatingMemberModal';
 import StudyRoomChannelModal from '../../components/StudyRoom/StudyRoomChannelModal';
 import ParticipatingRoomList from '../../components/StudyRoom/ParticipatingRoomList';
+import StudyRoomChannelChat from '../../components/StudyRoom/StudyRoomChannelChat';
 
 // 참여중인 스터디 상세 페이지
 export default function StudyRoomParticipating(){
@@ -32,6 +33,9 @@ export default function StudyRoomParticipating(){
 
   const [leader, setLeader] = useState([]);
 
+  const [selectIdx, setSelectIdx] = useState();
+  const [selectChannel, setSelectChannel] = useState(null);
+  const [isSelect, setIsSelect] = useState(false);
 
     // 스터디룸 채널정보 가져오기
 	useEffect(() => {
@@ -43,6 +47,7 @@ export default function StudyRoomParticipating(){
     .then((response)=> {
         console.log(response.data.result)
         setChannels(response.data.result)
+        readChannel(response.data.result[0].channelId);
     })
     .catch((err) => console.log(err))
   },[studyId])
@@ -62,9 +67,23 @@ export default function StudyRoomParticipating(){
     .catch((err) => console.log(err))
   }, [studyId])
 
+  const readChannel = (channelId) => {
+    axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/channels/details/${channelId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    .then((response) => {
+      console.log(response.data.result)
+      setSelectChannel(response.data.result);
+    })
+  }
+
   const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const handleListItemClick = (event, index) => {
+  const handleListItemClick = (event, index, channelId) => {
     setSelectedIndex(index);
+    readChannel(channelId);
+    console.log(channelId);
   };
 
   //StudyRoomChannelModal이 열렸는지 여부 관리하는 state
@@ -415,7 +434,7 @@ export default function StudyRoomParticipating(){
               <ListItemButton
               key={channelIndex}
                 selected={selectedIndex === channelIndex}
-                onClick={(event) => handleListItemClick(event, channelIndex)}
+                onClick={(event) => handleListItemClick(event, channelIndex, channel.channelId)}
                 sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
               >
                  {channel.name}
@@ -436,25 +455,11 @@ export default function StudyRoomParticipating(){
       {/* 채널명 편집 모달 렌더링 */}
       <StudyRoomChannelModal studyId={studyId} studyRoomChannel={studyRoomChannel} channelModalClose={channelModalClose}/>
 
-      {/* 실시간 채팅 들어갈 부분 */}
-      <Grid container sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-
-        <Grid item sx={{ width: '90%' }} >
-          {/* 검색기능 */}
-          <Stack direction="row" spacing={1} margin={1} padding={1}>
-            <TextField size="small" sx={{ width: "100%" }} id="outlined-basic" label="내용을 검색해보세요!" variant="outlined" />
-          </Stack>
-         
-         {/* 채널에 대한 페이지 */}
-         <div style={{textAlign: 'center', fontWeight: 'bold'}}>
-            {/* {
-              data.length > 0 ? getCurrentItems() : null
-            } */}
-            채널에 대한 정보가 들어갑니다.
-          </div>
-        </Grid>
-
-      </Grid>
+      { selectChannel ? (
+        <StudyRoomChannelChat studyId={studyId} channel={selectChannel} />
+      ) : "데이터가 없습니다."
+      }
+      
     </Box>
     )
 }

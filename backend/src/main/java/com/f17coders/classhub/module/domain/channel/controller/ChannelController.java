@@ -2,6 +2,7 @@ package com.f17coders.classhub.module.domain.channel.controller;
 
 import com.f17coders.classhub.global.api.response.BaseResponse;
 import com.f17coders.classhub.global.exception.code.SuccessCode;
+import com.f17coders.classhub.module.domain.channel.Channel;
 import com.f17coders.classhub.module.domain.channel.dto.request.ChannelRegisterReq;
 import com.f17coders.classhub.module.domain.channel.dto.request.ChannelUpdateReq;
 import com.f17coders.classhub.module.domain.channel.dto.response.ChannelDetailListRes;
@@ -70,4 +71,13 @@ public class ChannelController {
 
         return BaseResponse.success(SuccessCode.DELETE_SUCCESS, channelId);
     }
+
+    @Operation(summary = "채널 상세 조회")
+    @GetMapping("/details/{channelId}")
+    public ResponseEntity<BaseResponse<Channel>> readChannel(@PathVariable String channelId, @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) {
+        Channel channel = channelService.readChannel(channelId);
+
+        return BaseResponse.success(SuccessCode.SELECT_SUCCESS, channel);
+    }
+
 }

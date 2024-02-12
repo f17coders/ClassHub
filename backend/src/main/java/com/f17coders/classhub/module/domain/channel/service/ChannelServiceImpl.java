@@ -38,7 +38,7 @@ public class ChannelServiceImpl implements ChannelService {
         String name = channelRegisterReq.name();
         int studyId = channelRegisterReq.studyId();
 
-        studyException(studyId, memberId);
+        studyException(studyId);
         memberException(studyId, memberId);
 
         List<Message> messageList = new ArrayList<>();
@@ -91,7 +91,12 @@ public class ChannelServiceImpl implements ChannelService {
         channelRepository.deleteByStudyId(studyId);
     }
 
-    private void studyException(int studyId, int memberId) {
+    @Override
+    public Channel readChannel(String channelId) throws BaseExceptionHandler {
+        return channelRepository.findChannelByChannelId(channelId);
+    }
+
+    private void studyException(int studyId) {
         if (studyRepository.findByStudyId(studyId) == null) {
             throw new BaseExceptionHandler(ErrorCode.NOT_FOUND_STUDY_EXCEPTION);
         }

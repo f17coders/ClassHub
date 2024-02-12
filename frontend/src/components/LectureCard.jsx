@@ -37,7 +37,7 @@ function LectureCard({ lecture }) {
 	const [hover, setHover] = useState(false)
 	const hoverStyle = {
 		position: 'relative',
-		height: 350,
+		height: 330,
 		cursor: hover ? 'pointer' : 'none',
 		boxShadow: hover ? "0px 8px 12px 0px rgba(0, 0, 0, 0.2)" : 'none',
 	}
@@ -50,15 +50,16 @@ function LectureCard({ lecture }) {
 	const ModalOpen = () => setOpen(true)
 	const ModalClose = () => setOpen(false)
 	const toggleLike = () => {
+		console.log(accessToken)
 		if (isLogin == true) {
 			if (like == false) {
-				axios.post(`https://i10a810.p.ssafy.io/api/lectures/v1/likes/${lecture.lectureId}`, {
+				axios.post(`https://i10a810.p.ssafy.io/api/lectures/v1/likes/${lecture.lectureId}`, null, {
 					headers: {
 						Authorization: `Bearer ${accessToken}`
 					}
 				})
 					.then((res) => console.log('좋아요를 눌렀어요'))
-					.catch((err) => console.log(err))
+					.catch((err) => console.log(err));
 				setLike(true)
 			} else {
 				axios.delete(`https://i10a810.p.ssafy.io/api/lectures/v1/unlikes/${lecture.lectureId}`, {
@@ -77,12 +78,26 @@ function LectureCard({ lecture }) {
 				confirmButtonText: '로그인하러가기'
 			}).then((result) => {
 				if (result.isConfirmed) {
-					ModalOpen()
+					navigator('/login')
 				}
 			})
 		}
 	}
 
+	// 할인 여부에 따라 가격 다르게 표시하는 함수
+	const definePrice = function (price1, price2) {
+		if (price2 == 0) {
+			return (<p>무료강의</p>)
+		} else if (price1 == price2) {
+			return (<p>{price1.toLocaleString()}원</p>)
+		} else {
+			return (<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+				<p style={{ textDecoration: 'line-through', margin: 0 }}>{price2.toLocaleString()}</p>
+				<EastIcon fontSize='small' />
+				<p style={{ margin: 0 }}>{price1.toLocaleString()}</p>
+			</div>)
+		}
+	}
 
 	// 디테일 페이지로 가기	
 	const goDetail = function () {
@@ -102,12 +117,19 @@ function LectureCard({ lecture }) {
 
 	// 강의 담겼을 때 or 3개 다 차면 안된다고 해주기
 	let compareLectures = useSelector((state) => state.compareLectures)
-	function addCart() {
-		if (compareLectures.length < 3) {
-			dispatch(addElement(lecture))
+	function addCart(now) {
+		const isDuplicate = compareLectures.some((compareLecture) => compareLecture.lectureId === now.lectureId);
+		if (isDuplicate) {
+			Swal.fire({
+				icon: "error",
+				title: "이미 추가된 강의입니다",
+				text: "강의는 중복해서 비교할 수 없습니다.",
+			});
+		} else if (compareLectures.length < 3) {
+			dispatch(addElement(lecture));
 			Toast.fire({
 				icon: "success",
-				title: "강의 비교하기에 담겼습니다."
+				title: "강의 비교하기에 담겼습니다.",
 			});
 		} else {
 			Swal.fire({
@@ -130,27 +152,28 @@ function LectureCard({ lecture }) {
 				image={lecture.image}
 				title="lecture image"
 			/>
-			<CardContent style={{ padding: '13px' }}>
+			<CardContent style={{ padding: '10px' }}>
 				<div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
 					<div style={{ height: '70px' }}>
-						<p style={{ fontWeight: '700', fontSize: '1.1em' }}>{lecture.lectureName}</p>
+						<p style={{
+							fontWeight: '700',
+							fontSize: '1.1em',
+							display: '-webkit-box',
+							WebkitBoxOrient: 'vertical',
+							WebkitLineClamp: 2,
+							overflow: 'hidden',
+							textOverflow: 'ellipsis'
+						}}>
+							{lecture.lectureName}
+						</p>
 					</div>
 					<div>
 						<p style={{ marginBottom: '5px' }}>{lecture.instructor}<br /><Rating size='small' value={lecture.combinedRating} readOnly></Rating></p>
 					</div>
-					{/* 해시태그들(2개까지만) */}
 					<div>
-						{/* {
-							lecture.tagList.length == 1 ? (<div>{
-								<Chip size="small" label={`# ${lecture.tagList[0].name}`}></Chip>
-							}</div>) : (<div>{
-								lecture.tagList.length == 2 ? (<div>
-									<Chip size="small" label={`# ${lecture.tagList[0].name}`} sx={{marginRight:'4px', marginBottom:'4px'}}></Chip>
-									<Chip size="small" label={`# ${lecture.tagList[1].name}`}></Chip>
-								</div>) : null
-							}</div>)
-						} */}
+						{definePrice(lecture.priceOriginal, lecture.priceSale)}
 					</div>
+
 				</div>
 			</CardContent>
 			{
@@ -161,24 +184,41 @@ function LectureCard({ lecture }) {
 							position: 'absolute',
 							top: 0,
 							backgroundColor: 'rgba(29, 35, 100, 0.9)',
-							height: 340,
+							height: 330,
 							color: 'white',
 							padding: '15px',
 							display: 'flex',
 							flexDirection: 'column'
 						}}
 					>
-						<div>
-							<p style={{ fontWeight: '700', fontSize: '1.3em', margin: 0 }} onClick={goDetail}>{lecture.lectureName}</p>
+						<div style={{ height: '100px' }} onClick={goDetail}>
+							<p style={{
+								fontWeight: '700', fontSize: '1.3em', margin: 0, display: '-webkit-box',
+								WebkitBoxOrient: 'vertical',
+								WebkitLineClamp: 4,
+								overflow: 'hidden',
+								textOverflow: 'ellipsis'
+							}}>{lecture.lectureName}</p>
 						</div>
 
-						<div style={{ height: '70%' }} onClick={goDetail}>
-							<p>{lecture.descriptionSummary}<br />총 {lecture.totalTime}시간<br />{lecture.level}</p>
+						<div style={{ height: '80px' }} onClick={goDetail}>
+							<p>총 {lecture.totalTime}시간<br />{lecture.level}</p>
 						</div>
-						<div style={{ height: '20%' }} onClick={goDetail}>
-							<Button size="small" sx={{ backgroundColor: 'RGB(83, 96, 245)', color: 'white', borderRadius: '20px', marginRight: '0.5em' }}>#VSCode</Button>
+						<div style={{ height: '40px', overflow: 'hidden' }} onClick={goDetail}>
+							{
+								lecture.tagList ? (<div>
+									{
+										lecture.tagList.map((tag, idx) => {
+											return (
+												<Chip key={idx} color="primary" size="small" label={`# ${tag.name}`} sx={{ margin: '5px' }} />
+											)
+										})
+									}
+								</div>) : null
+
+							}
 						</div>
-						<div style={{ display: 'flex', flexDirection: 'column', width:'20%', marginLeft:'auto', marginBottom:'10px'}}>
+						<div style={{ display: 'flex', flexDirection: 'column', width: '20%', marginLeft: 'auto', marginBottom: '10px' }}>
 							{
 								like ? (
 									<LightTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5], }, },] }, }} placement="left" arrow title="좋아요 취소">
@@ -195,7 +235,7 @@ function LectureCard({ lecture }) {
 								)
 							}
 							<LightTooltip slotProps={{ popper: { modifiers: [{ name: 'offset', options: { offset: [0, -5], }, },] }, }} placement="left" arrow title="강의 비교하기">
-								<IconButton size='small' sx={{ color: 'white' }} onClick={addCart}>
+								<IconButton size='small' sx={{ color: 'white' }} onClick={() => addCart(lecture)}>
 									<BalanceIcon />
 								</IconButton>
 							</LightTooltip>
@@ -203,7 +243,7 @@ function LectureCard({ lecture }) {
 					</div>
 				) : null
 			}
-		<LoginModal open={open} onClose={ModalClose} />
+			<LoginModal open={open} onClose={ModalClose} />
 		</Card>
 	)
 }

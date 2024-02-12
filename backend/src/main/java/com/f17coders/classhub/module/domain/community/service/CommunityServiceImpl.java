@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor    // TODO : Transactional 처리
 public class CommunityServiceImpl implements CommunityService {
+    private final RedisTemplate<String, Integer> redisTemplate;
 
     private final CommunityRepository communityRepository;
     private final TagRepository tagRepository;
@@ -234,8 +236,24 @@ public class CommunityServiceImpl implements CommunityService {
         }
     }
 
+    // 기존 updateViewCount
+//    private void updateViewCount(Community community) {
+//        community.setViewCount(community.getViewCount() + 1);
+//    }
+
+    // Redis를 활용한 updateViewCount
     private void updateViewCount(Community community) {
-        community.setViewCount(community.getViewCount() + 1);
+        String key = "viewCounts::" + community.getCommunityId();
+
+        Boolean hasKey = redisTemplate.hasKey(key);
+
+        if (hasKey != null && hasKey) {
+            // Redis에 해당 key가 존재하면 조회수를 증가시킵니다.
+            redisTemplate.opsForValue().increment(key);
+        } else {
+            // Redis에 해당 key가 존재하지 않으면 새로 만들고 조회수를 1로 설정합니다.
+            redisTemplate.opsForValue().set(key, 1);
+        }
     }
 
     private boolean isCommunityWriter(Member member, Community community) {

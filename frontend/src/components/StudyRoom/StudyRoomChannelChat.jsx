@@ -1,45 +1,31 @@
 import React, { useState, useEffect, useRef  } from 'react';
-import { getPersonalChat, send } from "../../common/chat.js";
-import {useParams} from 'react-router-dom'
+import { sendChannel } from "../../common/chat.js";
 import { useSelector } from "react-redux"
 import SockJS from "sockjs-client/dist/sockjs";
 import { Client } from "@stomp/stompjs";
 import SendIcon from '@mui/icons-material/Send';
 import { ListItem, Avatar, ListItemAvatar, ListItemText, CircularProgress, Alert, TextField, Button, Stack, Box, List, ListItemButton, Grid, Typography, Divider, IconButton, Tooltip } from '@mui/material'
 
-// 스터디룸 개인 메시지
-export default function StudyRoomPrivateMessage() {
+// 스터디룸 단체 메시지
+export default function StudyRoomPrivateMessage({channel}) {
     // 토큰
 	let accessToken = useSelector((state) => state.accessToken)
 
     const [isLoading, setIsLoading] = useState(true);
     const [recvList, setRecvList] = useState([]);
-    const { personalChatId } = useParams();
     const [stompClient, setStompClient] = useState(null);
     const [ newMessage, setNewMessage] = useState("");
-    const [ personalChat, setPersonalChat ] = useState({
-        personalChatId: null,
-        receiver: {
-            memberId: null,
-            nickname: null,
-            profileImage: null
-        },
-        sender: {
-            memberId: null,
-            nickname: null,
-            profileImage: null
-        },
-        messageList: []
-    });
+    const [filteredRecvList, setFilteredRecvList] = useState([]);
 
     // 스크롤바 조정
     const scrollContainerRef = useRef(null);
     
-
-    const chatPrivateConnect = () => {
+    const chatConnect = () => {
         const serverURL = `https://i10a810.p.ssafy.io/api/chat`;
+        // const serverURL = `http://localhost:8080/api/chat`;
     
         setIsLoading(true);
+
         let socket = new SockJS(serverURL);
         let client = new Client({ 
             connectHeaders: {
@@ -48,12 +34,13 @@ export default function StudyRoomPrivateMessage() {
             webSocketFactory: () => socket });
 
         client.onConnect = () => { // 연결이 성공하면 수행할 작업
-            console.log("연결 성공")
-            client.subscribe(`/sub/${personalChatId}`, 
+            
+            client.subscribe(`/sub/${channel.channelId}`, 
             (res) => {
                 setRecvList(prevRecvList => [...prevRecvList, JSON.parse(res.body)]);
             });
             setIsLoading(false);
+            console.log(`${channel.name} 연결 성공`)
         };
 
         client.activate(); // 클라이언트 활성화
@@ -67,32 +54,16 @@ export default function StudyRoomPrivateMessage() {
     // 연결
 
     useEffect(() =>  {
-        if(personalChatId != null) {
-            chatPrivateConnect();
+        if(channel != null) {
+            chatConnect();
+            setRecvList(channel.messageList);
+            setFilteredRecvList(channel.messageList);
         }
-
-        const fetchData = async () => {
-            try {
-                const personalChat = await getPersonalChat(accessToken, personalChatId);
-                setPersonalChat(personalChat);
-                setRecvList(personalChat.messageList);
-            } catch (error) {
-                console.error("Error fetching personal chat:", error);
-            }
-        };
-        fetchData();
-    }, [personalChatId]);
-
-    useEffect(() => {
-        if (scrollContainerRef.current) {
-            scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
-        }
-    }, [personalChat]);
-
+    }, [channel]);
 
     // 메시지 전송
     const sendMessage = () => {
-        send(stompClient, personalChat.sender, newMessage, personalChat.personalChatId);
+        sendChannel(accessToken, stompClient, newMessage, channel.channelId);
         setNewMessage("");
     };
 
@@ -102,23 +73,23 @@ export default function StudyRoomPrivateMessage() {
     }
 
     const formattedMessage = (message) => {
-        return message.split('\n').map((line, index) => (
-            <React.Fragment key={index}>
+        const replacedMessage = message.replace(/\\n/g, '\n');
+        return replacedMessage.split('\n').map((line, index) => (
+            <Typography key={index} component="span" display="block">
                 {line}
-                <br />
-            </React.Fragment>
+            </Typography>
         ));
-    }
+    };
+
     useEffect(() => {
         // 새로운 채팅이 도착할 때마다 스크롤을 자동으로 올립니다.
         if (scrollContainerRef.current) {
             scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
         }
-    }, [recvList]);
+    }, [filteredRecvList]);
 
     const handleKeyPress = (event) => {
         if (event.key === 'Enter' && !event.shiftKey) {
-            console.log(event);
             // Enter 키가 눌렸고, Shift 키가 눌리지 않았을 때
             event.preventDefault(); // 기본 동작인 폼 제출 방지
             event.stopPropagation();
@@ -126,11 +97,41 @@ export default function StudyRoomPrivateMessage() {
         }
     };
     
-    
+    // 메시지 필터링 함수
+    const filterMessages = (filterText) => {
+        if (!filterText.trim()) {
+            // 필터 텍스트가 비어있으면 모든 메시지를 표시
+            setFilteredRecvList(recvList);
+        } else {
+            // 필터 텍스트가 있으면 텍스트가 포함된 메시지만 표시
+            const filteredMessages = recvList.filter(message => message.text.includes(filterText));
+            setFilteredRecvList(filteredMessages);
+        }
+    };
+
+    const handleFilterChange = (event) => {
+        const filterText = event.target.value;
+        filterMessages(filterText);
+    };
     
     return(
-        <List sx={{ display: 'flex',  maxHeight: "80vh" }}>
-            <Stack sx={{ width:"100%", maxHeight: "80vh" , display:"flex", marginTop: 5}}>
+        <List sx={{ display: 'flex-row',  maxHeight: "80vh", width: "100%"}}>
+
+            {/* 검색기능 */}
+            <Stack sx={{ width:"100%", m:1, p: 1, height: "10%"}}>
+                {/* <TextField size="small" sx={{ width: "100%" }} id="outlined-basic" label="내용을 검색해보세요!" variant="outlined" /> */}
+                <TextField
+                    size="small"
+                    sx={{ width: "100%" }}
+                    id="outlined-basic"
+                    label="내용을 검색해보세요!"
+                    variant="outlined"
+                    onChange={handleFilterChange} // 변경된 필터 텍스트에 따라 필터링 함수 호출
+                />
+            </Stack>
+            
+            {/* 채널에 대한 페이지 */}
+            <Stack sx={{ width:"100%", maxHeight: "70%" , display:"flex", marginTop: 5}}>
                 <Box 
                     ref={scrollContainerRef}
                     sx={{ height: "90%",
@@ -138,53 +139,16 @@ export default function StudyRoomPrivateMessage() {
                     position: 'relative',
                     overflow: 'auto',
                     // 스크롤바 숨기기
-                    "-ms-overflow-style": "none", /* IE and Edge */
-                    "scrollbar-width": "none", /* Firefox */
+                    "msOverflowStyle": "none", /* IE and Edge */
+                    "scrollbarWidth": "none", /* Firefox */
                     "&::-webkit-scrollbar": {
                     display: "none" /* Chrome, Safari, and Opera */,
                     },
                     // bgcolor: open ? 'rgba(71, 98, 130, 0.2)' : null, pb: open ? 2 : 0,
                 }}>
-                    <Divider>{personalChatId == null ? "익명" : personalChat.receiver.nickname} 님과의 채팅을 시작하였습니다.</Divider>
                 {
-                    recvList.map((message, index) => (
+                    filteredRecvList.map((message, index) => (
                         <ListItem key={index}>
-                            {message.sender.memberId ===  personalChat.sender.memberId ? (
-                            <React.Fragment>
-                                <ListItemText sx={{textAlign:"right", mx: 2}}
-                                    primary={
-                                        <React.Fragment>
-                                            <Typography
-                                                sx={{ fontSize: 'small', display: 'inline', mx: 1 }}
-                                                component="span"
-                                                variant="body2"
-                                                color="textPrimary"
-                                            >
-                                                {formattedDate(message.createTime)}
-                                            </Typography>
-                                            {message.sender.nickname}
-                                        </React.Fragment>
-                                    }
-                                    secondary={
-                                        <React.Fragment>
-                                            <Typography
-                                                sx={{ display: 'block', my:1 }}
-                                                component="span"
-                                                variant="body2"
-                                                color="text.primary"
-                                            >
-                                                {formattedMessage(message.text)}
-                                            </Typography>
-                                            <Divider varient="middle" />
-                                        </React.Fragment>
-                                    }
-                                />
-                                <ListItemAvatar>
-                                    <Avatar alt={message.sender.nickname} src={message.sender.profileImage} />
-                                </ListItemAvatar>
-                            </React.Fragment>
-                            
-                        ) : (
                             <React.Fragment>
                                 <ListItemAvatar>
                                     <Avatar alt={message.sender.nickname} src={message.sender.profileImage} />
@@ -218,11 +182,13 @@ export default function StudyRoomPrivateMessage() {
                                     }
                                 />
                             </React.Fragment>
-                        )}
                     </ListItem>
                 )) }
                 </Box>
-                {/* 채팅 작성 */}
+                
+            </Stack>  
+            <Stack sx={{height: "20%"}}>
+            {/* 채팅 작성 */}
                 {isLoading ? 
                     <React.Fragment>
                         <CircularProgress sx={{ width:"100%", height:"10%", margin: "auto"}} />
@@ -242,10 +208,8 @@ export default function StudyRoomPrivateMessage() {
                     <Button sx={{mx: 2}} variant="contained" endIcon={<SendIcon />} onClick={sendMessage}></Button>
                 </Box>
                 }
-                
-                
-            </Stack>
-
+            </Stack>       
         </List>
     );
+
 }

@@ -19,7 +19,7 @@ public record CommunityReadRes(
     boolean canUpdate,
     boolean canLike,
     boolean canScrap,
-    LocalDateTime createdAt // TODO : 날짜 어떠한 형식으로 프론트에 전달할 지 상의 필요
+    LocalDateTime createdAt
 ) {
 
 }

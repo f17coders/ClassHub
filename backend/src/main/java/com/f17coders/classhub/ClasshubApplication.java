@@ -7,9 +7,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Date;
 import java.util.TimeZone;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Log4j2
 @SpringBootApplication
+@EnableScheduling
 public class ClasshubApplication {
 	@PostConstruct
 	public void setTimezone(){

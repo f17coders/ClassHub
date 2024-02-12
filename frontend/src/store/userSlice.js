@@ -22,6 +22,7 @@ let user = createSlice({
         job: action.payload
       }
     },
+    // 로그아웃(사용자 정보 null로 다시 바꿔주기)
     logoutUser(state) {
       return null
     }
