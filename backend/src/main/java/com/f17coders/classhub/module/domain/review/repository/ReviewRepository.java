@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface ReviewRepository extends JpaRepository<Review, Integer>, ReviewRepositoryCustom {
 
 	Optional<Review> findByMember_MemberIdAndLecture_LectureId(int memberId, int lectureId);
+
 }

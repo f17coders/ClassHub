@@ -1,9 +1,9 @@
 package com.f17coders.classhub.module.domain.lecture.repository;
 
 import static com.f17coders.classhub.module.domain.category.QCategory.category;
-import static com.f17coders.classhub.module.domain.job.QJob.job;
 import static com.f17coders.classhub.module.domain.lecture.QLecture.lecture;
 import static com.f17coders.classhub.module.domain.lectureBuy.QLectureBuy.lectureBuy;
+import static com.f17coders.classhub.module.domain.lectureSummary.QLectureSummary.lectureSummary;
 import static com.f17coders.classhub.module.domain.member.QMember.member;
 import static com.f17coders.classhub.module.domain.lectureLike.QLectureLike.lectureLike;
 import static com.f17coders.classhub.module.domain.lectureTag.QLectureTag.lectureTag;
@@ -12,14 +12,12 @@ import com.f17coders.classhub.module.domain.category.dto.resource.CategoryRes;
 import com.f17coders.classhub.module.domain.lecture.Level;
 import com.f17coders.classhub.module.domain.lecture.SiteType;
 import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListDetailLectureLikeCountRes;
-import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListJobRes;
 import com.f17coders.classhub.module.domain.lecture.dto.response.LectureReadLectureLikeCountRes;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -72,22 +70,9 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 						category.categoryId,
 						category.categoryName
 					),
-					Expressions.numberTemplate(Integer.class, "{0}",
-						JPAExpressions
-							.select(lectureLike.lecture.lectureId.count())
-							.from(lectureLike)
-							.where(lecture.lectureId.eq(lectureLike.lecture.lectureId))
-							.groupBy(lecture.lectureId)).as("lectureLikeCount"),
-					Expressions.numberTemplate(Float.class,
-						"CASE WHEN {1}=0 AND {3}=0 THEN 0 "
-							+
-							"WHEN {1} < 10 THEN ROUND( ({0} * 0.2 + {2} * {3} * 0.8) / ({1} * 0.2 + {3} * 0.8), 1) "
-							+
-							"ELSE ROUND( ({0} * 0.5 + {2} * {3} * 0.5) / ({1} * 0.5 + {3} * 0.5), 1) END",
-						lecture.reviewSum, lecture.reviewCount, lecture.siteReviewRating,
-						lecture.siteReviewCount).as("combinedRating"),
-					Expressions.numberTemplate(Integer.class, "{0} + {1}", lecture.reviewCount,
-						lecture.siteReviewCount).as("combinedRatingCount"),
+					lectureSummary.lectureLikeCount,
+					lectureSummary.combinedRating,
+					lectureSummary.combinedRatingCount,
 					Expressions.numberTemplate(Float.class,
 						"CASE WHEN {1}=0 OR {0}=0 THEN 0 "
 							+
@@ -105,6 +90,8 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 					lecture.descriptionDetail
 				))
 			.from(lecture)
+			.innerJoin(lectureSummary)
+			.on(lecture.lectureId.eq(lectureSummary.lectureId))
 			.where(lecture.lectureId.eq(lectureId))
 			.fetchOne();
 	}
@@ -122,16 +109,8 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 						"COALESCE({0}, 'https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791187395027.jpg')",
 						lecture.image).as("image"),
 					lecture.level,
-					Expressions.numberTemplate(Float.class,
-						"CASE WHEN {1}=0 AND {3}=0 THEN 0 "
-							+
-							"WHEN {1} < 10 THEN ROUND( ({0} * 0.2 + {2} * {3} * 0.8) / ({1} * 0.2 + {3} * 0.8), 1) "
-							+
-							"ELSE ROUND(({0} * 0.5 + {2} * {3} * 0.5) / ({1} * 0.5 + {3} * 0.5), 1) END",
-						lecture.reviewSum, lecture.reviewCount, lecture.siteReviewRating,
-						lecture.siteReviewCount).as("combinedRating"),
-					Expressions.numberTemplate(Integer.class, "{0} + {1}", lecture.reviewCount,
-						lecture.siteReviewCount).as("combinedRatingCount"),
+					lectureSummary.combinedRating,
+					lectureSummary.combinedRatingCount,
 					lecture.priceOriginal,
 					lecture.priceSale,
 					lecture.descriptionSummary,
@@ -140,16 +119,11 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 						category.categoryId,
 						category.categoryName
 					),
-					Expressions.numberTemplate(Integer.class,
-						"{0}",
-						JPAExpressions
-							.select(lectureLike.lecture.lectureId.count())
-							.from(lectureLike)
-							.where(lecture.lectureId.eq(lectureLike.lecture.lectureId))
-							.groupBy(lecture.lectureId)).as("lectureLikeCount")
-				)
+					lectureSummary.lectureLikeCount)
 			)
 			.from(lecture)
+			.innerJoin(lectureSummary)
+			.on(lecture.lectureId.eq(lectureSummary.lectureId))
 			.where(searchCond(categoryId, tags, keyword, level, site))
 			.orderBy(orderExpression(order))
 			.offset(pageable.getOffset())
@@ -173,16 +147,8 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 						"COALESCE({0}, 'https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791187395027.jpg')",
 						lecture.image).as("image"),
 					lecture.level,
-					Expressions.numberTemplate(Float.class,
-						"CASE WHEN {1}=0 AND {3}=0 THEN 0 "
-							+
-							"WHEN {1} < 10 THEN ROUND( ({0} * 0.2 + {2} * {3} * 0.8) / ({1} * 0.2 + {3} * 0.8), 1) "
-							+
-							"ELSE ROUND(({0} * 0.5 + {2} * {3} * 0.5) / ({1} * 0.5 + {3} * 0.5), 1) END",
-						lecture.reviewSum, lecture.reviewCount, lecture.siteReviewRating,
-						lecture.siteReviewCount).as("combinedRating"),
-					Expressions.numberTemplate(Integer.class, "{0} + {1}", lecture.reviewCount,
-						lecture.siteReviewCount).as("combinedRatingCount"),
+					lectureSummary.combinedRating,
+					lectureSummary.combinedRatingCount,
 					lecture.priceOriginal,
 					lecture.priceSale,
 					lecture.descriptionSummary,
@@ -191,15 +157,11 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 						category.categoryId,
 						category.categoryName
 					),
-					Expressions.numberTemplate(Integer.class, "{0}",
-						JPAExpressions
-							.select(lectureLike.lecture.lectureId.count())
-							.from(lectureLike)
-							.where(lecture.lectureId.eq(lectureLike.lecture.lectureId))
-							.groupBy(lecture.lectureId)).as("lectureLikeCount")
+					lectureSummary.lectureLikeCount
 				))
-			.from(lectureLike)
-			.innerJoin(lectureLike.lecture, lecture)
+			.from(lecture)
+			.innerJoin(lectureSummary)
+			.on(lecture.lectureId.eq(lectureSummary.lectureId))
 			.innerJoin(lecture.category, category)
 			.where(lecture.lectureId.in(
 				JPAExpressions
@@ -228,16 +190,8 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 						"COALESCE({0}, 'https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791187395027.jpg')",
 						lecture.image).as("image"),
 					lecture.level,
-					Expressions.numberTemplate(Float.class,
-						"CASE WHEN {1}=0 AND {3}=0 THEN 0 "
-							+
-							"WHEN {1} < 10 THEN ROUND( ({0} * 0.2 + {2} * {3} * 0.8) / ({1} * 0.2 + {3} * 0.8), 1) "
-							+
-							"ELSE ROUND(({0} * 0.5 + {2} * {3} * 0.5) / ({1} * 0.5 + {3} * 0.5), 1) END",
-						lecture.reviewSum, lecture.reviewCount, lecture.siteReviewRating,
-						lecture.siteReviewCount).as("combinedRating"),
-					Expressions.numberTemplate(Integer.class, "{0} + {1}", lecture.reviewCount,
-						lecture.siteReviewCount).as("combinedRatingCount"),
+					lectureSummary.combinedRating,
+					lectureSummary.combinedRatingCount,
 					lecture.priceOriginal,
 					lecture.priceSale,
 					lecture.descriptionSummary,
@@ -246,18 +200,14 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 						category.categoryId,
 						category.categoryName
 					),
-					Expressions.numberTemplate(Integer.class,
-						"{0}",
-						JPAExpressions
-							.select(lectureLike.lecture.lectureId.count())
-							.from(lectureLike)
-							.where(lecture.lectureId.eq(lectureLike.lecture.lectureId))
-							.groupBy(lecture.lectureId)).as("lectureLikeCount")
+					lectureSummary.lectureLikeCount
 				))
-			.from(lectureLike)
+			.from(lecture)
+			.innerJoin(lectureSummary)
+			.on(lecture.lectureId.eq(lectureSummary.lectureId))
+			.innerJoin(lectureLike)
+			.on(lecture.lectureId.eq(lectureLike.lecture.lectureId))
 			.innerJoin(lectureLike.member, member)
-			.innerJoin(member.job, job)
-			.innerJoin(lectureLike.lecture, lecture)
 			.innerJoin(lecture.category, category)
 			.where(member.job.jobId.eq(jobId))
 			.groupBy(lectureLike.lecture)
@@ -283,16 +233,8 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 						"COALESCE({0}, 'https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791187395027.jpg')",
 						lecture.image).as("image"),
 					lecture.level,
-					Expressions.numberTemplate(Float.class,
-						"CASE WHEN {1}=0 AND {3}=0 THEN 0 "
-							+
-							"WHEN {1} < 10 THEN ROUND( ({0} * 0.2 + {2} * {3} * 0.8) / ({1} * 0.2 + {3} * 0.8), 1) "
-							+
-							"ELSE ROUND(({0} * 0.5 + {2} * {3} * 0.5) / ({1} * 0.5 + {3} * 0.5), 1) END",
-						lecture.reviewSum, lecture.reviewCount, lecture.siteReviewRating,
-						lecture.siteReviewCount).as("combinedRating"),
-					Expressions.numberTemplate(Integer.class, "{0} + {1}", lecture.reviewCount,
-						lecture.siteReviewCount).as("combinedRatingCount"),
+						lectureSummary.combinedRating,
+						lectureSummary.combinedRatingCount,
 					lecture.priceOriginal,
 					lecture.priceSale,
 					lecture.descriptionSummary,
@@ -301,16 +243,12 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 						category.categoryId,
 						category.categoryName
 					),
-					Expressions.numberTemplate(Integer.class,
-						"{0}",
-						JPAExpressions
-							.select(lectureLike.lecture.lectureId.count())
-							.from(lectureLike)
-							.where(lecture.lectureId.eq(lectureLike.lecture.lectureId))
-							.groupBy(lecture.lectureId)).as("lectureLikeCount")
+					lectureSummary.lectureLikeCount
 				)
 			)
 			.from(lecture)
+			.innerJoin(lectureSummary)
+			.on(lecture.lectureId.eq(lectureSummary.lectureId))
 			.where(lecture.lectureId.in(JPAExpressions
 				.select(lectureBuy.lecture.lectureId)
 				.from(lectureBuy)
@@ -339,16 +277,8 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 						"COALESCE({0}, 'https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791187395027.jpg')",
 						lecture.image).as("image"),
 					lecture.level,
-					Expressions.numberTemplate(Float.class,
-						"CASE WHEN {1}=0 AND {3}=0 THEN 0 "
-							+
-							"WHEN {1} < 10 THEN ROUND( ({0} * 0.2 + {2} * {3} * 0.8) / ({1} * 0.2 + {3} * 0.8), 1) "
-							+
-							"ELSE ROUND(({0} * 0.5 + {2} * {3} * 0.5) / ({1} * 0.5 + {3} * 0.5), 1) END",
-						lecture.reviewSum, lecture.reviewCount, lecture.siteReviewRating,
-						lecture.siteReviewCount).as("combinedRating"),
-					Expressions.numberTemplate(Integer.class, "{0} + {1}", lecture.reviewCount,
-						lecture.siteReviewCount).as("combinedRatingCount"),
+					lectureSummary.combinedRating,
+					lectureSummary.combinedRatingCount,
 					lecture.priceOriginal,
 					lecture.priceSale,
 					lecture.descriptionSummary,
@@ -357,16 +287,12 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 						category.categoryId,
 						category.categoryName
 					),
-					Expressions.numberTemplate(Integer.class,
-						"{0}",
-						JPAExpressions
-							.select(lectureLike.lecture.lectureId.count())
-							.from(lectureLike)
-							.where(lecture.lectureId.eq(lectureLike.lecture.lectureId))
-							.groupBy(lecture.lectureId)).as("lectureLikeCount")
+					lectureSummary.lectureLikeCount
 				)
 			)
 			.from(lecture)
+			.innerJoin(lectureSummary)
+			.on(lecture.lectureId.eq(lectureSummary.lectureId))
 			.where(lecture.lectureId.in(JPAExpressions
 				.select(lectureLike.lecture.lectureId)
 				.from(lectureLike)
@@ -406,48 +332,19 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 			.fetchFirst());
 	}
 
-	private OrderSpecifier orderExpression(String order) {
-
-		NumberExpression<Float> combinedRating = Expressions.numberTemplate(Float.class,
-			"CASE WHEN {1}=0 AND {3}=0 THEN 0 "
-				+
-				"WHEN {1} < 10 THEN ROUND( ({0} * 0.2 + {2} * {3} * 0.8) / ({1} * 0.2 + {3} * 0.8), 1) "
-				+
-				"ELSE ROUND(({0} * 0.5 + {2} * {3} * 0.5) / ({1} * 0.5 + {3} * 0.5), 1) END",
-			lecture.reviewSum, lecture.reviewCount, lecture.siteReviewRating,
-			lecture.siteReviewCount);
-
-		NumberExpression<Integer> lectureLikeCount = Expressions.numberTemplate(Integer.class,
-			"{0}",
-			JPAExpressions
-				.select(lectureLike.lecture.lectureId.count())
-				.from(lectureLike)
-				.where(lecture.lectureId.eq(lectureLike.lecture.lectureId))
-				.groupBy(lecture.lectureId));
-
-		NumberExpression<Integer> lectureBuyCount = Expressions.numberTemplate(Integer.class,
-			"{0}",
-			JPAExpressions
-				.select(lectureBuy.lecture.lectureId.count())
-				.from(lectureBuy)
-				.where(lecture.lectureId.eq(lectureBuy.lecture.lectureId))
-				.groupBy(lecture.lectureId));
-
-		NumberExpression<Integer> combinedRatingCount = Expressions.numberTemplate(Integer.class,
-			"{0} + {1}", lecture.reviewCount,
-			lecture.siteReviewCount);
-
+	private OrderSpecifier<?>[] orderExpression(String order) {
 		if (order.equals("ranking")) {
-			return combinedRating.desc();
+			return new OrderSpecifier[] {lectureSummary.combinedRating.desc(), lectureSummary.combinedRatingCount.desc()};
 		} else if (order.equals("highest-price")) {
-			return lecture.priceSale.desc();
+			return new OrderSpecifier[] {lecture.priceSale.desc(), lectureSummary.combinedRating.desc()};
 		} else if (order.equals("lowest-price")) {
-			return lecture.priceSale.asc();
+			return new OrderSpecifier[] {lecture.priceSale.asc(), lectureSummary.combinedRating.desc()};
 		} else {
-			return Expressions.numberTemplate(Float.class,
-				"COALESCE({0},0)*0.2 + COALESCE({1},0)*0.3 + COALESCE({2},0)*0.25 + COALESCE({3},0)*0.15 + COALESCE({4},0)*0.1",
-				lectureLikeCount, lectureBuyCount, lecture.siteStudentCount,
-				combinedRating, combinedRatingCount).desc();
+			return new OrderSpecifier[] {Expressions.numberTemplate(Float.class,
+				"{0}*0.35 + {1}*0.35 + {2}*0.2 + {3}*0.1",
+				lecture.siteStudentCount, lectureSummary.combinedRating, lectureSummary.lectureLikeCount,
+				lectureSummary.combinedRatingCount).desc()
+			};
 		}
 
 	}
