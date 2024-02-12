@@ -15,6 +15,7 @@ export default function StudyRoomPrivateMessage({channel}) {
     const [recvList, setRecvList] = useState([]);
     const [stompClient, setStompClient] = useState(null);
     const [ newMessage, setNewMessage] = useState("");
+    const [filteredRecvList, setFilteredRecvList] = useState([]);
 
     // 스크롤바 조정
     const scrollContainerRef = useRef(null);
@@ -56,6 +57,7 @@ export default function StudyRoomPrivateMessage({channel}) {
         if(channel != null) {
             chatConnect();
             setRecvList(channel.messageList);
+            setFilteredRecvList(channel.messageList);
         }
     }, [channel]);
 
@@ -70,27 +72,62 @@ export default function StudyRoomPrivateMessage({channel}) {
         return `${createDate.getFullYear()}-${(createDate.getMonth() + 1).toString().padStart(2, '0')}-${createDate.getDate().toString().padStart(2, '0')} ${createDate.getHours().toString().padStart(2, '0')}:${createDate.getMinutes().toString().padStart(2, '0')}`;
     }
 
+    const formattedMessage = (message) => {
+        const replacedMessage = message.replace(/\\n/g, '\n');
+        return replacedMessage.split('\n').map((line, index) => (
+            <Typography key={index} component="span" display="block">
+                {line}
+            </Typography>
+        ));
+    };
+
     useEffect(() => {
         // 새로운 채팅이 도착할 때마다 스크롤을 자동으로 올립니다.
         if (scrollContainerRef.current) {
             scrollContainerRef.current.scrollTop = scrollContainerRef.current.scrollHeight;
         }
-    }, [recvList]);
+    }, [filteredRecvList]);
 
-    const handleKeyDown = (event) => {
+    const handleKeyPress = (event) => {
         if (event.key === 'Enter' && !event.shiftKey) {
             // Enter 키가 눌렸고, Shift 키가 눌리지 않았을 때
             event.preventDefault(); // 기본 동작인 폼 제출 방지
+            event.stopPropagation();
             sendMessage();
         }
     };
     
+    // 메시지 필터링 함수
+    const filterMessages = (filterText) => {
+        if (!filterText.trim()) {
+            // 필터 텍스트가 비어있으면 모든 메시지를 표시
+            setFilteredRecvList(recvList);
+        } else {
+            // 필터 텍스트가 있으면 텍스트가 포함된 메시지만 표시
+            const filteredMessages = recvList.filter(message => message.text.includes(filterText));
+            setFilteredRecvList(filteredMessages);
+        }
+    };
+
+    const handleFilterChange = (event) => {
+        const filterText = event.target.value;
+        filterMessages(filterText);
+    };
+    
     return(
-        <Box sx={{ display: 'flex-row',  maxHeight: "80vh", width: "100%"}}>
+        <List sx={{ display: 'flex-row',  maxHeight: "80vh", width: "100%"}}>
 
             {/* 검색기능 */}
             <Stack sx={{ width:"100%", m:1, p: 1, height: "10%"}}>
-                <TextField size="small" sx={{ width: "100%" }} id="outlined-basic" label="내용을 검색해보세요!" variant="outlined" />
+                {/* <TextField size="small" sx={{ width: "100%" }} id="outlined-basic" label="내용을 검색해보세요!" variant="outlined" /> */}
+                <TextField
+                    size="small"
+                    sx={{ width: "100%" }}
+                    id="outlined-basic"
+                    label="내용을 검색해보세요!"
+                    variant="outlined"
+                    onChange={handleFilterChange} // 변경된 필터 텍스트에 따라 필터링 함수 호출
+                />
             </Stack>
             
             {/* 채널에 대한 페이지 */}
@@ -102,15 +139,15 @@ export default function StudyRoomPrivateMessage({channel}) {
                     position: 'relative',
                     overflow: 'auto',
                     // 스크롤바 숨기기
-                    "-ms-overflow-style": "none", /* IE and Edge */
-                    "scrollbar-width": "none", /* Firefox */
+                    "msOverflowStyle": "none", /* IE and Edge */
+                    "scrollbarWidth": "none", /* Firefox */
                     "&::-webkit-scrollbar": {
                     display: "none" /* Chrome, Safari, and Opera */,
                     },
                     // bgcolor: open ? 'rgba(71, 98, 130, 0.2)' : null, pb: open ? 2 : 0,
                 }}>
                 {
-                    recvList.map((message, index) => (
+                    filteredRecvList.map((message, index) => (
                         <ListItem key={index}>
                             <React.Fragment>
                                 <ListItemAvatar>
@@ -138,7 +175,7 @@ export default function StudyRoomPrivateMessage({channel}) {
                                                 variant="body2"
                                                 color="text.primary"
                                             >
-                                                {message.text}
+                                                {formattedMessage(message.text)}
                                             </Typography>
                                             <Divider varient="middle" />
                                         </React.Fragment>
@@ -166,13 +203,13 @@ export default function StudyRoomPrivateMessage({channel}) {
                         sx={{flex: 9, marginLeft: 3}}
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
-                        onKeyDown={handleKeyDown}
+                        onKeyPress={(e) => handleKeyPress(e)}
                     />
                     <Button sx={{mx: 2}} variant="contained" endIcon={<SendIcon />} onClick={sendMessage}></Button>
                 </Box>
                 }
             </Stack>       
-        </Box>
+        </List>
     );
 
 }
