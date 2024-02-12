@@ -236,6 +236,12 @@ public class CommunityServiceImpl implements CommunityService {
         }
     }
 
+    // 기존 updateViewCount
+//    private void updateViewCount(Community community) {
+//        community.setViewCount(community.getViewCount() + 1);
+//    }
+
+    // Redis를 활용한 updateViewCount
     private void updateViewCount(Community community) {
         String key = "viewCounts::" + community.getCommunityId();
 
