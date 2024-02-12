@@ -116,10 +116,12 @@ export default function StudyRoomPrivateMessage() {
         }
     }, [recvList]);
 
-    const handleKeyDown = (event) => {
+    const handleKeyPress = (event) => {
         if (event.key === 'Enter' && !event.shiftKey) {
+            console.log(event);
             // Enter 키가 눌렸고, Shift 키가 눌리지 않았을 때
             event.preventDefault(); // 기본 동작인 폼 제출 방지
+            event.stopPropagation();
             sendMessage();
         }
     };
@@ -127,20 +129,7 @@ export default function StudyRoomPrivateMessage() {
     
     
     return(
-        <Box sx={{ display: 'flex',  maxHeight: "80vh" }}>
-            {/* 개인 채팅
-            <Stack sx={{ width: "20%", direction: "column", justifyContent: "flex-start", alignItems: "center", border:"1px solid lightgray"}}>
-                {/* 상대방 아이콘 */}
-                {/* <Avatar sx={{width: "50%", height: "auto", mt: 5}}
-                    alt={personalChatId == null ? "익명" : personalChat.receiver.nickname} 
-                    src={personalChatId == null ? "익명" : personalChat.receiver.profileImage}>
-                </Avatar>
-                {/* 상대방 이름 */}
-                {/* <Typography sx={{ width: "90%", display: 'flex', justifyContent: 'center', py: 3 }} variant='h6' fontWeight='bold'>
-                    {personalChatId == null ? "익명" : personalChat.receiver.nickname}
-                </Typography>
-            </Stack> */} 
-            {/* 채팅 내용 */}
+        <List sx={{ display: 'flex',  maxHeight: "80vh" }}>
             <Stack sx={{ width:"100%", maxHeight: "80vh" , display:"flex", marginTop: 5}}>
                 <Box 
                     ref={scrollContainerRef}
@@ -222,7 +211,7 @@ export default function StudyRoomPrivateMessage() {
                                                 variant="body2"
                                                 color="text.primary"
                                             >
-                                                {message.text}
+                                                {formattedMessage(message.text)}
                                             </Typography>
                                             <Divider varient="middle" />
                                         </React.Fragment>
@@ -248,7 +237,7 @@ export default function StudyRoomPrivateMessage() {
                         sx={{flex: 9, marginLeft: 3}}
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
-                        onKeyDown={handleKeyDown}
+                        onKeyPress={(e) => handleKeyPress(e)}
                     />
                     <Button sx={{mx: 2}} variant="contained" endIcon={<SendIcon />} onClick={sendMessage}></Button>
                 </Box>
@@ -256,30 +245,7 @@ export default function StudyRoomPrivateMessage() {
                 
                 
             </Stack>
-            {/* <div className="chat-container">
-            {/* <div className="memberId">{memberId}</div> */}
-            {/* <div className="chat-messages">
-                {recvList.map((message, index) => (
-                    <div
-                    key={index}
-                >
-                {getMessageText(message)}
-                </div>
-            ))}
-            </div>
-            <div className="chat-input">
-                <textarea
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                onKeyUp={(e) => {
-                if (e.key === 'Enter') sendMessage();
-            }}
-                placeholder="메세지를 입력하세요"
-            ></textarea>
-            <button type="button" onClick={sendMessage}>⏏︎</button>
-            </div>
-        </div> */}
-        {/* </div> */}
-        </Box>
+
+        </List>
     );
 }
