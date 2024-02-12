@@ -79,6 +79,8 @@ public enum ErrorCode {
     // 스터디장 권한이 없음
     FORBIDDEN_ERROR_LEADER(403, "B303", "스터디장 권한이 필요합니다."),
 
+    LIMIT_EXCEEDED(403, "B305", "이미 모집 인원이 마감되었습니다."),
+
     // 스터디룸이 존재하지 않음
     NOT_FOUND_STUDY_EXCEPTION(404, "B300", "존재하지 않는 스터디룸입니다."),
     // 이미 가입된 스터디룸
