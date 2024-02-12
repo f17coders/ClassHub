@@ -8,10 +8,14 @@ import { useState, useEffect } from 'react'
 import { Outlet, Link, useNavigate } from 'react-router-dom'
 import CompareButton from './../../components/CompareButton'
 import { useSelector } from 'react-redux'
-import LoginModal from '../../components/LoginModal'
 import Swal from 'sweetalert2'
 import axios from 'axios'
-import AddBoxIcon from '@mui/icons-material/AddBox'
+import RefreshIcon from '@mui/icons-material/Refresh';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { EffectCoverflow, Pagination } from 'swiper/modules'
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/pagination';
 
 // 마이페이지 전체 틀
 
@@ -43,20 +47,66 @@ function MyPage() {
 
 	// 나에게 맞는 강의 추천
 	const [recommendLectures, setRecommendLectures] = useState({})
-	useEffect(() => {
-		// 유저정보 수정후 돌아오면
-		setSelectedIndex(null)
-		// 우선 목표직무에 맞는 강의(여기 수정해야함)
-		axios.get('https://i10a810.p.ssafy.io/api/lectures/v1/desired-job', {
-			headers: {
-				AUTHORIZATION: `Bearer ${accessToken}`
-			}
-		})
-			.then((res) => {
-				setRecommendLectures(res.data.result.lectureList)
-			})
-	}, [user])
+	// 목표정보와 관심 기술 중 랜덤으로 하나 골라주는 함수
+	const pickRandom = function() {
+		const temp = [user.job].concat(user.tagList)
+		const picked = temp[Math.floor(Math.random() * temp.length)]
+		console.log(picked)
+		// 선택된 요소의 인덱스 찾기
+		const pickedIndex = temp.findIndex(item => item === picked)
+		return {
+			pick: picked,
+			index: pickedIndex
+		}
+	}
 
+	useEffect(() => {
+		// 유저정보 수정후 돌아올 때, 처음 둘 다
+		setSelectedIndex(null)
+		const pickOne = pickRandom()
+		if (pickOne.index == 0) {
+			axios.get('https://i10a810.p.ssafy.io/api/lectures/v1/desired-job', {
+				headers: {
+					AUTHORIZATION: `Bearer ${accessToken}`
+				}
+			})
+				.then((res) => {
+					setRecommendLectures(res.data.result.lectureList)
+				})
+		} else {
+			axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0/interest-skills?tagId=${pickOne.pick.tagId}`, {
+				headers: {
+					AUTHORIZATION: `Bearer ${accessToken}`
+				}
+			})
+				.then((res) => {
+					setRecommendLectures(res.data.result.lectureList)
+				})
+		}
+	}, [user])
+	
+	const updateTag = function() {
+		const pickOne = pickRandom()
+		if (pickOne.index == 0) {
+			axios.get('https://i10a810.p.ssafy.io/api/lectures/v1/desired-job', {
+				headers: {
+					AUTHORIZATION: `Bearer ${accessToken}`
+				}
+			})
+				.then((res) => {
+					setRecommendLectures(res.data.result.lectureList)
+				})
+		} else {
+			axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0/interest-skills?tagId=${pickOne.pick.tagId}`, {
+				headers: {
+					AUTHORIZATION: `Bearer ${accessToken}`
+				}
+			})
+				.then((res) => {
+					setRecommendLectures(res.data.result.lectureList)
+				})
+		}
+	}
 
 	// 메뉴 + 호버링용 변수들
 	const [activeIndex, setActiveIndex] = useState(null);
@@ -81,11 +131,6 @@ function MyPage() {
 			navigate('/login')
 		})
 	}
-
-	// 이후에 열릴 로그인 모달용
-	const [toggleModal, setToggleModal] = useState(false)
-	const ModalOpen = () => setToggleModal(true)
-	const ModalClose = () => setToggleModal(false)
 
 	// 마이페이지 메뉴 스타일
 	const linkStyle = {
@@ -141,20 +186,25 @@ function MyPage() {
 											<Grid item xs={6} style={{ height: '250px', padding: '10px' }}>
 												<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3px' }}>
 													<p style={{ fontSize: '1.4em', fontWeight: '700', margin: '0px' }}>목표 직무와 관심 기술</p>
-													<Tooltip title="수정하러가기"><IconButton onClick={() => setSelectedIndex(3)}><EditIcon /></IconButton></Tooltip>
+													<Tooltip title="수정하러가기"><IconButton onClick={() => handleClick(3)}><EditIcon /></IconButton></Tooltip>
 												</div>
 												<Paper sx={{ padding: '10px', height: '180px', overflow: 'auto' }}>
-													<p style={{ fontSize: '1.2em', marginTop: '0px' }}><span style={{ color: 'grey' }}>목표직무: </span>{user.job.name}</p>
+													<p style={{ fontSize: '1.2em', marginTop: '0px' }}><span style={{ color: 'grey' }}>목표 직무: </span>{user.job.name}</p>
 													<p style={{ color: 'grey', fontSize: '1.2em', marginBottom: '2px' }}>관심 기술</p>
-													<div>
-														{
-															user.tagList.map((tag, idx) => {
-																return (
-																	<Chip key={idx} size="small" label={`# ${tag.name}`} sx={{ margin: '5px' }}></Chip>
-																)
-															})
-														}
-													</div>
+													{
+														user.tagList.length == 0 ? (<p style={{ fontSize: '0.9em', color: 'lightgrey' }}>관심 기술이 입력되지 않았습니다.<br />위의 수정버튼을 통해 입력해주세요!</p>) : (
+															<div>
+																{
+																	user.tagList.map((tag, idx) => {
+																		return (
+																			<Chip key={idx} size="small" label={`# ${tag.name}`} sx={{ margin: '5px' }}></Chip>
+																		)
+																	})
+																}
+															</div>
+														)
+													}
+
 												</Paper>
 											</Grid>
 											<Grid item xs={6} style={{ height: '250px', padding: '10px' }}>
@@ -164,29 +214,53 @@ function MyPage() {
 												</div>
 												<Paper sx={{ padding: '10px', height: '180px', overflow: 'auto' }}>
 													{
-														studies.map((study, idx) => {
-															return (
-																<Button size='large' fullWidth href={`studyroom/participating/${study.studyId}`} key={idx} sx={{ color: 'black' }}>{study.title}</Button>
-															)
-														})
+														studies.length == 0 ? (<p style={{ fontSize: '0.9em', color: 'lightgrey' }}>현재 참여중인 스터디가 없습니다.<br />위의 버튼을 통해 둘러볼까요?</p>) : (
+															<div>
+																{
+																	studies.map((study, idx) => {
+																		return (
+																			<Button size='large' fullWidth href={`studyroom/participating/${study.studyId}`} key={idx} sx={{ color: 'black' }}>{study.title}</Button>
+																		)
+																	})
+																}
+															</div>
+														)
 													}
+
 												</Paper>
 											</Grid>
 											<Grid item xs={12} style={{ height: '250px', marginTop: '40px' }}>
 												<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3px' }}>
 													<p style={{ fontSize: '1.4em', fontWeight: '700', margin: '0px' }}>나에게 맞는 강의 추천</p>
-													<Tooltip title="더보러가기"><Link to='/lecture'><IconButton><AddBoxIcon /></IconButton></Link></Tooltip>
+													<Tooltip title="새로고침하기"><IconButton onClick={updateTag}><RefreshIcon /></IconButton></Tooltip>
 												</div>
 												<Paper sx={{ padding: '10px', height: '180px' }}>
-													{
-														recommendLectures.length >= 0 ? (<div style={{ display: 'flex' }}>{
-															recommendLectures.map((lecture, idx) => {
-																return (<div key={idx} style={{ margin: '20px' }}>
-																	<MyPageLectureCard lecture={lecture} />
-																</div>)
-															})
-														}</div>) : null
-													}
+													<Swiper
+														effect={'coverflow'}
+														grabCursor={true}
+														centeredSlides={true}
+														slidesPerView={3}
+														coverflowEffect={{
+														  rotate: 50,
+														  stretch: 0,
+														  depth: 100,
+														  modifier: 1,
+														  slideShadows: true,
+														}}
+														pagination={true}
+														modules={[EffectCoverflow, Pagination]}
+														className="mySwiper"
+													>
+														{
+															recommendLectures.length >= 0 ? (<div>{
+																recommendLectures.map((lecture, idx) => {
+																	return (<SwiperSlide key={idx}>
+																		<MyPageLectureCard lecture={lecture} />
+																	</SwiperSlide>)
+																})
+															}</div>) : null
+														}
+													</Swiper>
 												</Paper>
 											</Grid>
 										</Grid>
@@ -199,7 +273,6 @@ function MyPage() {
 				</div>) : needLogin()
 			}
 			<CompareButton />
-			<LoginModal open={toggleModal} onClose={ModalClose} />
 		</Container>
 	)
 }
@@ -209,6 +282,7 @@ export default MyPage
 
 function MyPageLectureCard({ lecture }) {
 	const [hover, setHover] = useState(false)
+	const navigate = useNavigate()
 
 	const goDetail = function () {
 		navigate(`/lecture/detail/${lecture.lectureId}`)
@@ -218,11 +292,11 @@ function MyPageLectureCard({ lecture }) {
 		<div
 			onMouseEnter={() => setHover(true)}
 			onMouseLeave={() => setHover(false)}
-			style={{ position: 'relative' }}
+			style={{ position: 'relative', display:'flex', justifyContent:'center' }}
 		>
 			<img
 				src={lecture.image} alt="강의 이미지"
-				style={{ width: '200px', height:'120px', borderRadius:'7px' }} />
+				style={{ width: '200px', height: '120px', borderRadius: '7px' }} />
 			{hover ? (
 				<div
 					style={{
@@ -232,9 +306,9 @@ function MyPageLectureCard({ lecture }) {
 						color: 'white',
 						padding: '15px',
 						display: 'flex',
-						width:'170px',
-						flexDirection: 'column', 
-						borderRadius:'7px'
+						width: '170px',
+						flexDirection: 'column',
+						borderRadius: '7px'
 					}}
 				>
 					<div style={{ height: '50px' }} onClick={goDetail}>
@@ -248,7 +322,7 @@ function MyPageLectureCard({ lecture }) {
 					</div>
 
 					<div style={{ height: '40px' }} onClick={goDetail}>
-						<p style={{fontSize:'0.7em'}}>총 {lecture.totalTime}시간<br />{lecture.level}</p>
+						<p style={{ fontSize: '0.7em' }}>총 {lecture.totalTime}시간<br />{lecture.level}</p>
 					</div>
 				</div>
 			) : null
