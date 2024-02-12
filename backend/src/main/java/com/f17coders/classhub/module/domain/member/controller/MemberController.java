@@ -71,6 +71,48 @@ public class MemberController {
         return BaseResponse.success(SuccessCode.UPDATE_SUCCESS, memberSecurityDTO.getMemberId());
     }
 
+	@Operation(summary = "회원 탈퇴")
+	@DeleteMapping("/v1")
+	public ResponseEntity<BaseResponse<Integer>> withDraw(
+		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+		memberService.withDraw(memberSecurityDTO.toMember());
+
+		return BaseResponse.success(SuccessCode.DELETE_SUCCESS, memberSecurityDTO.getMemberId());
+	}
+
+	@Operation(summary = "내가 작성한 글 목록 조회")
+	@GetMapping("/v1/communities/my")
+	public ResponseEntity<BaseResponse<MemberCommunityListRes>> getCommunityList(Pageable pageable,
+		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+		MemberCommunityListRes communityList = memberService.getCommunityList(
+			memberSecurityDTO.toMember(), pageable);
+
+		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, communityList);
+	}
+
+	@Operation(summary = "내가 작성한 댓글의 글 목록 조회")
+	@GetMapping("/v1/communities/comments")
+	public ResponseEntity<BaseResponse<MemberCommunityListRes>> getCommentCommunityList(
+		Pageable pageable,
+		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+		MemberCommunityListRes communityList = memberService.getCommentCommunityList(
+			memberSecurityDTO.toMember(), pageable);
+
+		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, communityList);
+	}
+
+	@Operation(summary = "내가 스크랩한 글 목록 조회")
+	@GetMapping("/v1/communities/scraps")
+	public ResponseEntity<BaseResponse<MemberCommunityListRes>> getScrapCommunityList(
+		Pageable pageable,
+		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+		MemberCommunityListRes communityList = memberService.getScrapCommunityList(
+			memberSecurityDTO.toMember(), pageable);
+
+		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, communityList);
+	}
+
+
 	@Operation(summary = "내가 참여중인 스터디 목록 조회")
 	@GetMapping("/v1/studies/participation")
 	public ResponseEntity<BaseResponse<List<StudyBaseRes>>> getStudyList(
