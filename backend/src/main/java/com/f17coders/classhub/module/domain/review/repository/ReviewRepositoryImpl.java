@@ -1,9 +1,11 @@
 package com.f17coders.classhub.module.domain.review.repository;
 
+import static com.f17coders.classhub.module.domain.lecture.QLecture.lecture;
 import static com.f17coders.classhub.module.domain.member.QMember.member;
 import static com.f17coders.classhub.module.domain.review.QReview.review;
 
 import com.f17coders.classhub.module.domain.member.dto.response.MemberNickNameImageRes;
+import com.f17coders.classhub.module.domain.review.dto.response.LectureReviewCountRes;
 import com.f17coders.classhub.module.domain.review.dto.response.ReviewRes;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -55,6 +57,18 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 			.from(review)
 			.where(review.lecture.lectureId.eq(lectureId))
 			.fetchFirst());
+	}
+
+	@Override
+	public List<LectureReviewCountRes> getLectureReviewCounts() {
+		List<LectureReviewCountRes> reviewCountList = queryFactory.select(Projections.constructor(LectureReviewCountRes.class,
+						lecture.lectureId,
+						review.lecture.lectureId.count().castToNum(Integer.class)
+				))
+				.from(review)
+				.groupBy(review.lecture.lectureId)
+				.fetch();
+		return reviewCountList;
 	}
 
 	private OrderSpecifier orderExpression(String order) {
