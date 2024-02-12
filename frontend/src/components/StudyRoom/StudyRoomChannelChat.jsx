@@ -15,11 +15,18 @@ export default function StudyRoomPrivateMessage({channel}) {
     const [recvList, setRecvList] = useState([]);
     const [stompClient, setStompClient] = useState(null);
     const [ newMessage, setNewMessage] = useState("");
-    const [filteredRecvList, setFilteredRecvList] = useState([]);
+    const [searchText, setSearchText] = useState("");
+    const [filteredRecvList, setFilteredRecvList] = useState([]); // 필터링된 결과를 담을 상태 추가
 
     // 스크롤바 조정
     const scrollContainerRef = useRef(null);
     
+    // 검색어 입력 시 메시지 필터링 함수
+    useEffect(() => {
+        const filteredMessages = recvList.filter(message => message.text.includes(searchText));
+        setFilteredRecvList(filteredMessages);
+    }, [searchText, recvList]); 
+
     const chatConnect = () => {
         const serverURL = `https://i10a810.p.ssafy.io/api/chat`;
         // const serverURL = `http://localhost:8080/api/chat`;
@@ -42,7 +49,7 @@ export default function StudyRoomPrivateMessage({channel}) {
             setIsLoading(false);
             console.log(`${channel.name} 연결 성공`)
         };
-
+        
         client.activate(); // 클라이언트 활성화
         // 연결 오류 발생 시 처리
         client.onStompError = (frame) => {
@@ -50,6 +57,7 @@ export default function StudyRoomPrivateMessage({channel}) {
             setTimeout(client.activate(), 5000); //
         };
         setStompClient(client);
+
     }
     // 연결
 
@@ -57,7 +65,6 @@ export default function StudyRoomPrivateMessage({channel}) {
         if(channel != null) {
             chatConnect();
             setRecvList(channel.messageList);
-            setFilteredRecvList(channel.messageList);
         }
     }, [channel]);
 
@@ -97,22 +104,7 @@ export default function StudyRoomPrivateMessage({channel}) {
         }
     };
     
-    // 메시지 필터링 함수
-    const filterMessages = (filterText) => {
-        if (!filterText.trim()) {
-            // 필터 텍스트가 비어있으면 모든 메시지를 표시
-            setFilteredRecvList(recvList);
-        } else {
-            // 필터 텍스트가 있으면 텍스트가 포함된 메시지만 표시
-            const filteredMessages = recvList.filter(message => message.text.includes(filterText));
-            setFilteredRecvList(filteredMessages);
-        }
-    };
-
-    const handleFilterChange = (event) => {
-        const filterText = event.target.value;
-        filterMessages(filterText);
-    };
+    
     
     return(
         <List sx={{ display: 'flex-row',  maxHeight: "80vh", width: "100%"}}>
@@ -126,7 +118,7 @@ export default function StudyRoomPrivateMessage({channel}) {
                     id="outlined-basic"
                     label="내용을 검색해보세요!"
                     variant="outlined"
-                    onChange={handleFilterChange} // 변경된 필터 텍스트에 따라 필터링 함수 호출
+                    onChange={(e) => setSearchText(e.target.value)} 
                 />
             </Stack>
             
