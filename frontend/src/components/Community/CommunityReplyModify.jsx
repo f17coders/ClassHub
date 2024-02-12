@@ -33,13 +33,7 @@ export default function CommunityReplyModify({comment}){
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        MySwal.fire({
-          title: "수정되었습니다!",
-          text: "댓글 수정이 정상적으로 완료되었습니다.",
-          icon: "success"
-        }).then(() =>{
-            modifyReply(commentId);
-        });
+        modifyReply(commentId);
       } else if (
         result.dismiss === Swal.DismissReason.cancel
       ) {
@@ -65,7 +59,13 @@ export default function CommunityReplyModify({comment}){
       })
       .then((res) => {
         console.log(res)
-        window.location.reload(); //페이지 새로고침
+        MySwal.fire({
+          title: "수정되었습니다!",
+          text: "댓글 수정이 정상적으로 완료되었습니다.",
+          icon: "success"
+        }).then(() =>{
+          window.location.reload(); //페이지 새로고침
+        });
       })
       .catch((err) => console.log(err))
     

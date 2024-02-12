@@ -34,17 +34,16 @@ export default function StudyRoomRecruit() {
       },
     })
     .then((response)=> {
-        console.log(response.data.result.studyList)
+        // console.log(response.data.result.studyList)
         setData(response.data.result.studyList)
-        console.log("현재페이지: "+currentPage)
+        // console.log("현재페이지: "+currentPage)
         setCurrentPage(currentPage)
 
         let totalPages = response.data.result.totalPages;
-        console.log("전체페이지 수: "+totalPages)
+        // console.log("전체페이지 수: "+totalPages)
         setTotalPages(totalPages)
 
-        console.log("페이지 당 항목 수: " + itemsPerPage)
-        // console.log(data)
+        // console.log("페이지 당 항목 수: " + itemsPerPage)
     })
     .catch((err) => console.log(err))
   }, [currentPage])
@@ -92,20 +91,17 @@ export default function StudyRoomRecruit() {
   // 현재 페이지에 해당하는 항목만 가져오는 함수
   const getCurrentItems = () => {
 
-    // 선택된 인덱스에 따라 모집 상태를 필터링\
-    const filteringData = function(data) {
-      if (selectedIndex == 1) {
-        return data.filter((study) => {
-          return study.capacity > study.currentMembers
-        })
-      } else if (selectedIndex == 2) {
-        return data.filter((study) => {
-          return study.capacity <= study.currentMembers
-        })} else {
-          return data
-        }
+  // 선택된 인덱스에 따라 모집 상태를 필터링
+  const filteredData = data.filter((study) => {
+    if (selectedIndex === 1) {
+      return study.capacity > study.currentMembers;
+    } else if (selectedIndex === 2) {
+      return study.capacity <= study.currentMembers;
+    } else {
+      return true; // 모든 데이터를 보여줌
     }
-    const filteredData = filteringData(data);
+  });
+  
     return filteredData.map((study, index) => 
     (
       <StudyRoomRecruitList

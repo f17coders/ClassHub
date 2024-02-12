@@ -41,7 +41,7 @@ export default function ParticipatingRoomList({studyId}){
       },
     })
     .then((res) => {
-      console.log(res.data.result)
+      // console.log(res.data.result)
       setData(res.data.result)
       // window.location.reload(); //페이지 새로고침
     })
@@ -63,8 +63,8 @@ export default function ParticipatingRoomList({studyId}){
                 position: 'relative',
                 overflow: 'auto',
                 // 스크롤바 숨기기
-                "-ms-overflow-style": "none", /* IE and Edge */
-                "scrollbar-width": "none", /* Firefox */
+                "msOverflowStyle": "none", /* IE and Edge */
+                "scrollbarWidth": "none", /* Firefox */
                 "&::-webkit-scrollbar": {
                   display: "none" /* Chrome, Safari, and Opera */,
                 },
