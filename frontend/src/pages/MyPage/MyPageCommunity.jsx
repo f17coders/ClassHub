@@ -1,21 +1,26 @@
-import Tabs from '@mui/material/Tabs'
-import Tab from '@mui/material/Tab'
-import Box from '@mui/material/Box'
+import { Tooltip, Tabs, Tab, Box } from '@mui/material'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Stack from '@mui/material/Stack'
 import Pagination from '@mui/material/Pagination'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import TodayIcon from '@mui/icons-material/Today'
+import DOMPurify from "dompurify"
+
+
 
 // 마이페이지 - 내 커뮤니티 창
 
 function MyPageCommunity() {
   // 토큰 가져오기
   const accessToken = useSelector((state) => state.accessToken)
+  // 어떤 메뉴 클릭했는지 확인용
   const [value, setValue] = useState(0)
   const handleChange = (event, newValue) => {
     setValue(newValue)
   }
+
   return (
     <div>
       <h2>내 커뮤니티</h2>
@@ -45,18 +50,30 @@ function MyPageCommunity() {
 }
 
 
-function Article({post}) {
-  return(
-    <div>
-      <h1>{post.title}</h1>
-      <p>{post.content}</p>
-      <p>{post.createdAt}</p>
-      <p>{post.communityId}</p>
+function Article({ post }) {
+  const navigate = useNavigate()
+  // HTML 태그를 제거하여 텍스트로 변환하는 함수
+  const removeHTMLTags = (html) => {
+    const purifiedText = DOMPurify.sanitize(html, { ALLOWED_TAGS: [] });
+    return purifiedText;
+  };
+
+  return (
+    <div onClick={() => { navigate(`/community/detail/${post.communityId}`) }}>
+      <h3 style={{ fontWeight: 'bold' }}>{post.title}</h3>
+      <p>{removeHTMLTags(post.content)}</p>
+      <div style={{ marginRight: '1em' }}>
+        <Tooltip title="작성일자">
+          <div>
+            <TodayIcon /> {post.createdAt}
+          </div>
+        </Tooltip>
+      </div>
     </div>
   )
 }
 
-function MyArticle({accessToken}) {
+function MyArticle({ accessToken }) {
   const [articles, setArticles] = useState([])
   const [page, setPage] = useState(0)
   const [totalPages, setTotalPages] = useState(0)
@@ -70,14 +87,14 @@ function MyArticle({accessToken}) {
         Authorization: `Bearer ${accessToken}`
       }
     })
-      .then((res) => { 
+      .then((res) => {
         console.log(res.data.result)
-        setArticles(res.data.result.communityList) 
+        setArticles(res.data.result.communityList)
         setTotalPages(res.data.result.totalPages)
       })
       .catch((err) => console.log(err))
   }, [page])
-    
+
   return (
     <div>
       {
@@ -111,12 +128,12 @@ function MyComments({ accessToken }) {
         Authorization: `Bearer ${accessToken}`
       }
     })
-      .then((res) => { 
-        setArticles(res.data.result.communityList) 
+      .then((res) => {
+        setArticles(res.data.result.communityList)
         setTotalPages(res.data.result.totalPages)
       }).catch((err) => console.log(err))
   }, [page])
-    
+
   return (
     <div>
       {
@@ -149,12 +166,12 @@ function MyScrap({ accessToken }) {
         Authorization: `Bearer ${accessToken}`
       }
     })
-      .then((res) => { 
-        setArticles(res.data.result.communityList) 
+      .then((res) => {
+        setArticles(res.data.result.communityList)
         setTotalPages(res.data.result.totalPages)
       }).catch((err) => console.log(err))
   }, [page])
-    
+
   return (
     <div>
       {

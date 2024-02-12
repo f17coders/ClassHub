@@ -98,17 +98,17 @@ function LectureDetail() {
 	}
 
 
-	// 강의 가격에 따라서 다르게 출력하는 함수
+	// 할인 여부에 따라 가격 다르게 표시하는 함수
 	const definePrice = function (price1, price2) {
 		if (price2 == 0) {
-			return (<p>무료강의</p>)
+			return (<p style={{color:'rgb(29, 35, 100)', fontWeight:'900'}}>무료강의</p>)
 		} else if (price1 == price2) {
-			return (<p>{price1.toLocaleString()}</p>)
+			return (<p>가격: <span style={{ color:'grey'}}>{price1.toLocaleString()}</span>원</p>)
 		} else {
-			return (<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-				<p style={{ textDecoration: 'line-through', margin: 0 }}>{price2.toLocaleString()}</p>
+			return (<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop:'10px' }}>
+				<p style={{ textDecoration: 'line-through', margin: 0 }}>가격: <span style={{color:'grey'}}>{price2.toLocaleString()}</span></p>
 				<EastIcon fontSize='small' />
-				<p style={{ margin: 0 }}>{price1.toLocaleString()}</p>
+				<p style={{ margin: 0, color:'rgb(29, 35, 100)' }}>{price1.toLocaleString()}원</p>
 			</div>)
 		}
 	}
@@ -119,13 +119,13 @@ function LectureDetail() {
 				lecture == null ? null : (
 					<div>
 						<Container style={{ display: 'flex', padding: '20px' }}>
-							<img src={img1} alt="강의 이미지" style={{ width: '300px', height: '250px' }} />
+							<img src={lecture.image} alt="강의 이미지" style={{ width: '300px', height: '250px' }} />
 							<div style={{ padding: '10px', marginLeft: '30px', width: '60%' }}>
 								<div style={{ height: '80%', paddingTop: '30px' }}>
 									<p style={{ fontSize: '0.9em', margin: '0px' }}>{lecture.categoryName}</p>
 									<p style={{ fontSize: '1.8em', fontWeight: 800 }}>{lecture.lectureName}</p>
-									<div style={{ display: 'flex', flexDirection: 'row' }}>
-										<SellIcon fontSize='small' /><p style={{ margin: "0px 4px" }}>가격:</p>{definePrice(lecture.priceOriginal, lecture.priceSale)}
+									<div style={{ display: 'flex', flexDirection: 'row' , alignItems:'center'}}>
+										<SellIcon fontSize='small' />{definePrice(lecture.priceOriginal, lecture.priceSale)}
 									</div>
 									<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: '10px' }}>
 										<PersonIcon fontSize='small' /><p style={{ margin: "0px 4px" }}>강의자:</p>{lecture.instructor}

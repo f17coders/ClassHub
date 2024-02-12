@@ -29,21 +29,22 @@ function Lecture() {
 	const [keyword, setKeyword] = useState('')
 	const handlekeyword = function (event) {
 		const input = event.target.value
-		setKeyword(input)
+		if (input) {
+			setKeyword(input)
+		}
 	}
 
 	// 페이지네이션용
-	const [page, setPage] =useState(1)
+	const [page, setPage] = useState(1)
 	const handleChange = (event, value) => {
-		dispatch(changePage(value -  1))
-    setPage(value);
-  }
+		dispatch(changePage(value - 1))
+		setPage(value);
+	}
 	const [totalPages, setTotalPages] = useState(10)
 
 	// 검색하기
 	useEffect(() => {
-		if (fromMain == false) {
-			axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?${searchParams.category ? 'category=' + searchParams.category.categoryId : ''}${searchParams.tags.length ? '&tags=' + searchParams.tags.map(tag => tag.tagId).join('%7C%7C') : ''}${searchParams.keyword ? '&keyword=' + searchParams.keyword : ''}${searchParams.level != 'ALL' ? '&level=' + searchParams.level : ''}${searchParams.site ? '&site=' + searchParams.site : ''}&order=${searchParams.order}&page=${searchParams.page}&size=16`)
+		axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?${searchParams.category ? 'category=' + searchParams.category.categoryId : ''}${searchParams.tags.length ? '&tags=' + searchParams.tags.map(tag => tag.tagId).join('%7C%7C') : ''}${searchParams.keyword ? '&keyword=' + searchParams.keyword : ''}${searchParams.level != 'ALL' ? '&level=' + searchParams.level : ''}${searchParams.site ? '&site=' + searchParams.site : ''}&order=${searchParams.order}&page=${searchParams.page}&size=16`)
 			.then((res) => {
 				console.log(`${res.config.url}으로 요청 보냄`)
 				console.log(res.data)
@@ -52,7 +53,6 @@ function Lecture() {
 			}).catch((err) =>
 				console.log(err)
 			)
-		}	
 	}, [searchParams])
 
 
@@ -61,31 +61,26 @@ function Lecture() {
 		dispatch(changeKeyword(keyword))
 	}
 
-	const enterKeyPress = (event) =>{
-    //엔터키 눌렀을 때 등록 함수 호출
-    if(event.key === 'Enter'){
-      event.preventDefault() //기본 동작 방지
-      searchByKeyword()
-    }
-  }
-
-	// 새로고침하면 전체로 바꿔주기
-	useEffect(() => {
-		dispatch(changeCategory(null))
-	}, [])
+	const enterKeyPress = (event) => {
+		//엔터키 눌렀을 때 등록 함수 호출
+		if (event.key === 'Enter') {
+			event.preventDefault() //기본 동작 방지
+			searchByKeyword()
+		}
+	}
 
 	return (
 		<Container>
 			<Grid container sx={{ margin: 'auto', minHeight: '500px', marginTop: '20px' }}>
 				{/* 왼쪽 사이드 바 */}
-				<Grid item sm={4} md={2} sx={{ borderRight: "1px solid lightgrey", paddingRight: '0px' }}>
+				<Grid item md={2} sx={{ display:{md: 'block', xs: 'none'}, borderRight: "1px solid lightgrey", paddingRight: '0px' }}>
 					<Box>
 						{/* 강의 카테고리 체크 */}
 						<LectureCheck />
 					</Box>
 				</Grid>
 				{/* 여기는 검색창과 강의들 */}
-				<Grid item xs={6} sm={7} md={9} sx={{ marginLeft: '30px' }}>
+				<Grid item xs={12} md={9} sx={{ margin: '0px 30px' }}>
 					<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 						{/* 전체 내용 */}
 						<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -118,22 +113,22 @@ function Lecture() {
 					{/* 강의 전체 목록 */}
 					<Box sx={{ margin: '20px' }}>
 						{
-							fromMain ? (<p style={{fontSize:'1.3em', textAlign:'center' , fontWeight:'bold'}}>{searchParams.keyword}에 대한 검색 결과</p>) : null
+							searchParams.keyword ? (<p style={{ fontSize: '1.3em', textAlign: 'center', fontWeight: 'bold' }}>{searchParams.keyword}에 대한 검색 결과</p>) : null
 						}
 						<Grid container spacing={1}>
 							{
 								lectureResult.length > 0 ? (
 									lectureResult.map((item, idx) => {
 										return (
-											<Grid item xs={3} key={idx}>
-											<LectureCard img={img1} lecture={item} />
-										</Grid>
+											<Grid item xs={6} sm={4} md={3} key={idx}>
+												<LectureCard img={img1} lecture={item} />
+											</Grid>
 										)
-										
+
 									})
-								):(
-									<div style={{margin:'auto'}}>
-										<p style={{textAlign:'center'}}>결과가 없습니다!</p>
+								) : (
+									<div style={{ margin: 'auto' }}>
+										<p style={{ textAlign: 'center' }}>결과가 없습니다!</p>
 									</div>
 								)
 							}

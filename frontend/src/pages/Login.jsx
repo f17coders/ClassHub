@@ -30,14 +30,11 @@ function Login() {
 			// 세션에 accessToken을 저장해주자
 			dispatch(saveAccessToken(token))
 		}
+		if (accessToken) {
+			loadUserInfo()
+		}
 		
-			// 저장한 토큰으로 유저 정보가 있는지 없는지 확인해보자
-			if (user == null) {
-				loadUserInfo()
-			}
-			
 	}, [accessToken])
-
 
 	// 토큰을 통해 회원가입이 되어있는지 / 아닌지 판단하고 load해오는 함수
 	const loadUserInfo = () => {
@@ -51,6 +48,7 @@ function Login() {
 					let tmpUser = res.data.result
 					if (tmpUser.job == null) {
 						// console.log('회원가입하러가자')
+						dispatch(login())
 						dispatch(saveUser(tmpUser))
 						navigate('/additionalinfo')
 					} else {
