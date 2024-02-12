@@ -33,7 +33,7 @@ public class SiteReviewRepositoryImpl implements SiteReviewRepositoryCustom {
 				siteReview.content
 			))
 			.from(siteReview)
-			.where(siteReview.lecture.lectureId.eq(lectureId))
+			.where(siteReview.lecture.lectureId.eq(lectureId).and(siteReview.content.ne("")))
 			.orderBy(orderExpression(order))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
@@ -45,7 +45,7 @@ public class SiteReviewRepositoryImpl implements SiteReviewRepositoryCustom {
 		return Math.toIntExact(queryFactory
 			.select(siteReview.count())
 			.from(siteReview)
-			.where(siteReview.lecture.lectureId.eq(lectureId))
+			.where(siteReview.lecture.lectureId.eq(lectureId).and(siteReview.content.ne("")))
 			.fetchFirst());
 	}
 
