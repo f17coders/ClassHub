@@ -3,6 +3,7 @@ package com.f17coders.classhub.module.domain.review.repository;
 import static com.f17coders.classhub.module.domain.lecture.QLecture.lecture;
 import static com.f17coders.classhub.module.domain.member.QMember.member;
 import static com.f17coders.classhub.module.domain.review.QReview.review;
+import static com.f17coders.classhub.module.domain.review.QSiteReview.siteReview;
 
 import com.f17coders.classhub.module.domain.member.dto.response.MemberNickNameImageRes;
 import com.f17coders.classhub.module.domain.review.dto.response.LectureReviewCountRes;
@@ -43,7 +44,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 			.from(review)
 			.innerJoin(member)
 			.on(review.member.memberId.eq(member.memberId))
-			.where(review.lecture.lectureId.eq(lectureId))
+			.where(review.lecture.lectureId.eq(lectureId).and(review.content.ne("")))
 			.orderBy(orderExpression(order))
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize())
@@ -55,7 +56,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 		return Math.toIntExact(queryFactory
 			.select(review.count())
 			.from(review)
-			.where(review.lecture.lectureId.eq(lectureId))
+			.where(review.lecture.lectureId.eq(lectureId).and(review.content.ne("")))
 			.fetchFirst());
 	}
 
