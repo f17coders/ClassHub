@@ -1,4 +1,3 @@
-import img1 from './../../assets/Lecture/Lecture3.png'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import Rating from '@mui/material/Rating';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
@@ -12,6 +11,7 @@ import Divider from '@mui/material/Divider'
 import SellIcon from '@mui/icons-material/Sell'
 import axios from 'axios'
 import EastIcon from '@mui/icons-material/East'
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import PersonIcon from '@mui/icons-material/Person'
 import { useParams } from 'react-router-dom'
 import LectureDetailReviews from '../../components/Lecture/LectureDetailReviews'
@@ -19,7 +19,7 @@ import { useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
 import DOMPurify from "dompurify"
 
-import { Accordion } from '@mui/material'
+import { Accordion, Icon, Tooltip } from '@mui/material'
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -85,6 +85,17 @@ function LectureDetail() {
 		}
 	}
 
+	// 내가 산 강의에 추가
+	const addMyLecture = function() {
+		axios.post(`https://i10a810.p.ssafy.io/api/lectures/v1/buy/${lecture.lectureId}`, null, {
+			headers: {
+				Authorization: `Bearer ${accessToken}`
+			}
+		})
+			.then((res) => console.log('내가 산 강의에 추가완료'))
+			.catch((err) => console.log(err));
+	}
+
 	// 리뷰 요약 탭 제어
 	const [value, setValue] = useState(0)
 	const handleChange = (event, newValue) => {
@@ -137,14 +148,20 @@ function LectureDetail() {
 										<p style={{ margin: "0 4px" }}>{`(${lecture.combinedRating}) 총 ${lecture.combinedRatingCount}개의 수강평 `}</p>
 									</div>
 
-									<div>
-										{/* 좋아요버튼 */}
-										<IconButton size='small' onClick={toggleLike}>
-											{
-												like ? (<FavoriteIcon />) : (<FavoriteBorderIcon />)
-											}
-										</IconButton>
-										{like ? lecture.lectureLikeCount + 1 : lecture.lectureLikeCount}
+									<div style={{display:'flex', flexDirection: 'row', alignItems: 'center'}}>
+										<div style={{marginRight:'15px'}}>
+											{/* 좋아요버튼 */}
+											<IconButton size='small' onClick={toggleLike}>
+												{
+													like ? (<FavoriteIcon />) : (<FavoriteBorderIcon />)
+												}
+											</IconButton>
+											{like ? lecture.lectureLikeCount + 1 : lecture.lectureLikeCount}
+										</div>
+										<div>
+											{/* 내가 산 강의에 추가 */}
+											<Tooltip title='내가 산 강의에 추가하기'><IconButton size='small' onClick={addMyLecture}><AddShoppingCartIcon/></IconButton></Tooltip>
+										</div>
 									</div>
 								</div>
 							</div>

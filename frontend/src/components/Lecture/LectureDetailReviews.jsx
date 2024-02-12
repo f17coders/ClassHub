@@ -156,7 +156,9 @@ function LectureDetailReviews({ lecture }) {
             ))
           }
           {
-            page1 + 1 == totalPage1 ? (null) : (<Button variant="outlined" onClick={setNextPage1} sx={{ width: '90%' }}>더 보기</Button>)
+            page1 + 1 == totalPage1 ? (null) : (<div>{
+                review1.length == 0 ? (<p>작성된 리뷰가 없습니다</p>) : (<Button variant="outlined" onClick={setNextPage1} sx={{ width: '90%' }}>더 보기</Button>)
+              }</div>)
           }
         </div>
       </div>
@@ -187,7 +189,9 @@ function LectureDetailReviews({ lecture }) {
           }</div>) : null
           }
           {
-            page2 + 1 == totalPage2 ? (null) : (<Button variant="outlined" onClick={setNextPage2} sx={{ width: '90%' }}>더 보기</Button>)
+            page2 + 1 == totalPage2 ? (null) : (<div>{
+                review2.length == 0 ? (<p>작성된 리뷰가 없습니다</p>) : (<Button variant="outlined" onClick={setNextPage2} sx={{ width: '90%' }}>더 보기</Button>)
+              }</div>)
           }
         </div>
       </div>
@@ -255,10 +259,11 @@ function CreateReview({ lecture }) {
 
   // 별점용
   const [rate, setRate] = useState(0)
-  
+  const [newRate, setNewRate] = useState(0)
+
   // 리뷰 수정하기
   const [editing, setEditing] = useState(false)
-  const handelEdit = function() {
+  const handelEdit = function () {
     setEditing(true)
     setWrote(false)
   }
@@ -274,7 +279,7 @@ function CreateReview({ lecture }) {
     if (editing) {
       // 여기는 수정
       axios.patch(`https://i10a810.p.ssafy.io/api/reviews/v1/${lecture.lectureId}`, {
-        "score": rate,
+        "score": newRate,
         "content": review
       }, {
         headers: { Authorization: `Bearer ${accessToken}` }
@@ -290,44 +295,46 @@ function CreateReview({ lecture }) {
     } else {
       // 여기는 처음 작성
       axios.post(`https://i10a810.p.ssafy.io/api/reviews/v1/${lecture.lectureId}`, {
-      "score": rate,
-      "content": review
-    }, {
-      headers: { Authorization: `Bearer ${accessToken}` }
-    })
-      .then((res) => {
-        console.log(res)
-        if (res.data.status == 500) {
-          Swal.fire({
-            title: "이미 작성했습니다",
-            text: "해당 강의에 대한 리뷰를 이미 작성했습니다",
-            icon: "warning"
-          })
-        }
-        if (res.data.status == 201) {
-          setWrote(true)
-          Swal.fire({
-            title: "리뷰 작성 완료!",
-            icon: "success"
-          })
-        }
+        "score": rate,
+        "content": review
+      }, {
+        headers: { Authorization: `Bearer ${accessToken}` }
       })
-      .catch((err) => console.log(err))
-    } 
+        .then((res) => {
+          console.log(res)
+          if (res.data.status == 500) {
+            Swal.fire({
+              title: "이미 작성했습니다",
+              text: "해당 강의에 대한 리뷰를 이미 작성했습니다",
+              icon: "warning"
+            })
+          }
+          if (res.data.status == 201) {
+            setWrote(true)
+            Swal.fire({
+              title: "리뷰 작성 완료!",
+              icon: "success"
+            })
+          }
+        })
+        .catch((err) => console.log(err))
+    }
   }
 
   // 리뷰 삭제하기
-  const deleteReview = function() {
+  const deleteReview = function () {
     axios.delete(`https://i10a810.p.ssafy.io/api/reviews/v1/${lecture.lectureId}`, {
       headers: { Authorization: `Bearer ${accessToken}` }
     })
-    .then((res) => {
-      Swal.fire({
-        title: "리뷰 삭제 완료!",
-        icon: "success"
+      .then((res) => {
+        Swal.fire({
+          title: "리뷰 삭제 완료!",
+          icon: "success"
+        }).then((res) => {
+          location.reload(true)
+        })
       })
-    })
-    .catch((err) => console.log(err))
+      .catch((err) => console.log(err))
   }
 
 
@@ -371,7 +378,7 @@ function CreateReview({ lecture }) {
             padding: '10px',
             boxShadow: isHover ? '0 0 5px rgba(0, 0, 0, 0.1)' : 'none'
           }}>
-            
+
             <div style={{ display: 'flex', justifyContent: 'space-around', margin: '10px 0px' }}>
               <Avatar src={user.profileImage} alt="profileImg" sx={{ width: 50, height: 50 }} />
               <div style={{ display: 'flex', flexDirection: 'column', width: '75%' }}>
@@ -384,9 +391,9 @@ function CreateReview({ lecture }) {
             <div style={{ padding: '10px' }}>
               {review}
             </div>
-            <p style={{position: 'absolute', top: -10, right: 20, color: 'lightgrey'}}>내가 작성한 리뷰</p>
+            <p style={{ position: 'absolute', top: -10, right: 20, color: 'lightgrey' }}>내가 작성한 리뷰</p>
             <div style={{ position: 'absolute', bottom: 10, right: 10 }}>
-              <div style={{display:'flex'}}>
+              <div style={{ display: 'flex' }}>
                 <Tooltip title='수정하기'>
                   <IconButton onClick={handelEdit}>
                     <EditIcon />
@@ -398,7 +405,7 @@ function CreateReview({ lecture }) {
                   </IconButton>
                 </Tooltip>
               </div>
-              
+
             </div>
           </div>
         ) : (<div style={divStyle} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
@@ -420,12 +427,22 @@ function CreateReview({ lecture }) {
               {user.nickname}
               <div>
                 {/* 별점  */}
-                <Rating
+                {
+                  editing ? (<Rating
+                    value={newRate}
+                    precision={0.5}
+                    onChange={(event, newValue) => {
+                      setNewRate(newValue);
+                    }}
+                  />) : (<Rating
                   value={rate}
+                  precision={0.5}
                   onChange={(event, newValue) => {
                     setRate(newValue);
                   }}
-                />
+                />)
+                }
+                
               </div>
             </div>
           </div>
