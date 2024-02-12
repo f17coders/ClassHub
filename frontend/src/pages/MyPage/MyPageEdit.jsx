@@ -6,9 +6,9 @@ import Autocomplete from '@mui/material/Autocomplete'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
-import { saveUser, changeUserTagList, changeUserJob } from './../../store/userSlice'
+import { saveUser, changeUserTagList, changeUserJob, logoutUser } from './../../store/userSlice'
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
-
+import { logout, deleteAccessToken } from './../../store/store'
 
 
 function MyPageEdit() {
@@ -112,6 +112,39 @@ function MyPageEdit() {
 		}
 	}
 
+	// 탈퇴 함수
+	const resign = function() {
+		Swal.fire({
+			title: "정말 탈퇴하시겠습니까?",
+			text: "커뮤니티 글과 스터디, 리뷰가 모두 사라집니다",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#d33",
+			cancelButtonColor: "#3085d6",
+			confirmButtonText: "네, 탈퇴할게요",
+			cancelButtonText:'아니요, 계속 이용할게요'
+		  }).then((result) => {
+			if (result.isConfirmed) {
+				navigate('/')
+				axios.delete('https://i10a810.p.ssafy.io/api/members/v1', {
+					headers: {
+						AUTHORIZATION: `Bearer ${accessToken}`
+					}
+				}). then((res) => {
+					dispatch(logout())
+					dispatch(logoutUser())
+					dispatch(deleteAccessToken())
+					Swal.fire({
+						title: "탈퇴 완료",
+						text: "다음에 또 만나요!",
+						icon: "success"
+					})
+				})
+			  .catch((err) => console.log(err))
+			}
+		  });
+	}
+
 	return (
 		<div>
 			<div style={{display:'flex', justifyContent:'space-between'}}>
@@ -120,7 +153,7 @@ function MyPageEdit() {
 					<p>회원가입때 입력한 정보를 수정할 수 있어요</p>
 				</div>
 				<div style={{ marginRight:' 20%', marginTop:'5%' }}>
-					<Tooltip title='탈퇴하기' sx={{ marginLeft: '' }}><IconButton><MeetingRoomIcon /></IconButton></Tooltip>
+					<Tooltip title='서비스 탈퇴하기'><IconButton onClick={() => resign()}><MeetingRoomIcon /></IconButton></Tooltip>
 				</div>
 			</div>
 			<div style={{ marginTop: '20px', width: '70%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>

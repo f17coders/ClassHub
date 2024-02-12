@@ -26,8 +26,8 @@ function NavbarComponent() {
 	// 로그아웃(isLogin을 false로 바꾸고, 토큰 지우고, 유저정보 지우고)
 	const handleLogout = () => {
 		dispatch(logout())
-		dispatch((logoutUser()))
-		deleteAccessToken()
+		dispatch(logoutUser())
+		dispatch(deleteAccessToken())
 		Swal.fire({
 			title: "로그아웃",
 			icon: "success"

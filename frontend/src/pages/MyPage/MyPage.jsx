@@ -23,6 +23,8 @@ function MyPage() {
 	let accessToken = useSelector((state) => state.accessToken)
 	let user = useSelector((state) => state.user)
 
+	const navigate = useNavigate()
+
 	// 참여중인 스터디 목록도 가져오기
 	const [studies, setStudies] = useState([])
 	useEffect(() => {
@@ -76,9 +78,7 @@ function MyPage() {
 			icon: "warning",
 			confirmButtonText: '로그인하러가기'
 		}).then((result) => {
-			if (result.isConfirmed) {
-				ModalOpen()
-			}
+			navigate('/login')
 		})
 	}
 

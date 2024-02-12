@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import LoginModal from './LoginModal.jsx'
+import EastIcon from '@mui/icons-material/East'
 
 // tooltip에 스타일 주기
 const LightTooltip = styled(({ className, ...props }) => (
@@ -45,10 +46,7 @@ function LectureCard({ lecture }) {
 	// 좋아요 + 로그인 안했으면 로그인 하라 하기
 	// 좋아요용 변수
 	const [like, setLike] = useState(false)
-	// 로그인 모달용
-	const [open, setOpen] = useState(false)
-	const ModalOpen = () => setOpen(true)
-	const ModalClose = () => setOpen(false)
+	
 	const toggleLike = () => {
 		console.log(accessToken)
 		if (isLogin == true) {
@@ -87,12 +85,12 @@ function LectureCard({ lecture }) {
 	// 할인 여부에 따라 가격 다르게 표시하는 함수
 	const definePrice = function (price1, price2) {
 		if (price2 == 0) {
-			return (<p>무료강의</p>)
+			return (<p style={{color:'rgb(29, 35, 100)', fontWeight:'900'}}>무료강의</p>)
 		} else if (price1 == price2) {
-			return (<p>{price1.toLocaleString()}원</p>)
+			return (<p style={{ color:'grey' }}>{price1.toLocaleString()}원</p>)
 		} else {
-			return (<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-				<p style={{ textDecoration: 'line-through', margin: 0 }}>{price2.toLocaleString()}</p>
+			return (<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop:'10px' }}>
+				<p style={{ textDecoration: 'line-through', margin: 0, color:'grey' }}>{price2.toLocaleString()}</p>
 				<EastIcon fontSize='small' />
 				<p style={{ margin: 0 }}>{price1.toLocaleString()}</p>
 			</div>)
@@ -168,7 +166,7 @@ function LectureCard({ lecture }) {
 						</p>
 					</div>
 					<div>
-						<p style={{ marginBottom: '5px' }}>{lecture.instructor}<br /><Rating size='small' value={lecture.combinedRating} readOnly></Rating></p>
+						<p style={{ marginBottom: '5px', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{lecture.instructor}<br /><Rating size='small' value={lecture.combinedRating} readOnly></Rating></p>
 					</div>
 					<div>
 						{definePrice(lecture.priceOriginal, lecture.priceSale)}
@@ -210,7 +208,18 @@ function LectureCard({ lecture }) {
 									{
 										lecture.tagList.map((tag, idx) => {
 											return (
-												<Chip key={idx} color="primary" size="small" label={`# ${tag.name}`} sx={{ margin: '5px' }} />
+												<Chip key={idx} color="primary" 
+												size="small" 
+												label={`# ${tag.name}`} 
+												sx={{ margin: '5px', 
+												'& .MuiChip-label': {
+													display:'inline-block',
+													maxWidth:'10ch',
+													whiteSpace: 'nowrap',
+													overflow:'hidden',
+													textOverflow:'hidden'
+												  } 
+												}} />
 											)
 										})
 									}
@@ -243,7 +252,6 @@ function LectureCard({ lecture }) {
 					</div>
 				) : null
 			}
-			<LoginModal open={open} onClose={ModalClose} />
 		</Card>
 	)
 }

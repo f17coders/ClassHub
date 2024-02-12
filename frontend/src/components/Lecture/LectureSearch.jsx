@@ -184,7 +184,7 @@ function LectureSearch() {
 						</Grid>
 						<Grid item style={{ marginLeft: '40px' }}>
 							{
-								recommendTags.slice(0, 3).map((item, idx) => {
+								recommendTags.slice(0, 4).map((item, idx) => {
 									return (
 										<ToggleButton
 											key={idx}
@@ -234,7 +234,7 @@ function LectureSearch() {
 			<Grid container style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 				<Grid item xs={9}>
 					<Grid container>
-						<Grid item>
+						<Grid item sx={{marginRight:'5px'}}>
 							{/* 난이도 */}
 							{
 								levels.map((item, idx) => {
@@ -255,7 +255,7 @@ function LectureSearch() {
 							}
 						</Grid>
 						<Divider orientation="vertical" variant="middle" flexItem />
-						<Grid item style={{ marginLeft: '40px' }}>
+						<Grid item style={{ marginLeft: '5px' }}>
 							{/* 사이트 */}
 							{
 								sites.map((item, idx) => {
@@ -278,8 +278,8 @@ function LectureSearch() {
 					</Grid>
 				</Grid>
 				{/* 정렬 */}
-				<Grid item sx={{ marginRight: '20px' }}>
-					<FormControl sx={{ minWidth: '170px' }} fullWidth size='small'>
+				<Grid item xs={2} sx={{marginRight:'20px'}}>
+					<FormControl fullWidth size='small'>
 						<Select
 							defaultValue={'별점순'}
 							onChange={handleSort}
