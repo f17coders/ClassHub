@@ -4,43 +4,41 @@ import com.f17coders.classhub.global.exception.BaseExceptionHandler;
 import com.f17coders.classhub.global.exception.code.ErrorCode;
 import com.f17coders.classhub.module.domain.job.Job;
 import com.f17coders.classhub.module.domain.job.dto.response.JobRes;
-import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListDetailLectureLikeCountRes;
-import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListDetailRes;
-import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListJobRes;
-import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListRes;
-import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListTagRes;
-import com.f17coders.classhub.module.domain.lecture.dto.response.LectureReadLectureLikeCountRes;
-import com.f17coders.classhub.module.domain.lecture.dto.response.LectureReadRes;
+import com.f17coders.classhub.module.domain.lecture.dto.response.*;
 import com.f17coders.classhub.module.domain.lecture.repository.LectureRepository;
+import com.f17coders.classhub.module.domain.lectureSummary.service.LectureSummaryService;
 import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
 import com.f17coders.classhub.module.domain.memberTag.MemberTag;
 import com.f17coders.classhub.module.domain.memberTag.repository.MemberTagRepository;
 import com.f17coders.classhub.module.domain.tag.Tag;
+import com.f17coders.classhub.module.domain.tag.dto.response.TagListRes;
 import com.f17coders.classhub.module.domain.tag.dto.response.TagRes;
 import com.f17coders.classhub.module.domain.tag.repository.TagRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Log4j2
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class LectureServiceImpl implements LectureService {
+	private final RedisTemplate<String, Integer> redisTemplate;
 
 	private final LectureRepository lectureRepository;
 	private final TagRepository tagRepository;
 	private final MemberTagRepository memberTagRepository;
 	private final MemberRepository memberRepository;
+	private final LectureSummaryService lectureSummaryService;
 
 	@Override
 	public LectureReadRes readLecture(int lectureId) throws BaseExceptionHandler, IOException {
@@ -192,6 +190,7 @@ public class LectureServiceImpl implements LectureService {
 			)
 			.build();
 	}
+
 
 
 }

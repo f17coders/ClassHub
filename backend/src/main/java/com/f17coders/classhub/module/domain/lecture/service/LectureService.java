@@ -7,6 +7,7 @@ import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListJobR
 import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListRes;
 import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListTagRes;
 import com.f17coders.classhub.module.domain.lecture.dto.response.LectureReadRes;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.querydsl.core.Tuple;
 import java.io.IOException;
 import java.util.List;
