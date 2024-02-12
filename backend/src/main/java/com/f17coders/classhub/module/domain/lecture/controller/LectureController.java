@@ -14,6 +14,7 @@ import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListTagR
 import com.f17coders.classhub.module.domain.lecture.dto.response.LectureReadRes;
 import com.f17coders.classhub.module.domain.lecture.repository.LectureRepository;
 import com.f17coders.classhub.module.domain.lecture.service.LectureService;
+import com.f17coders.classhub.module.domain.lectureBuy.service.LectureBuyService;
 import com.f17coders.classhub.module.domain.lectureLike.service.LectureLikeService;
 import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
@@ -50,8 +51,8 @@ public class LectureController {
 
 	private final LectureService lectureService;
 	private final MemberRepository memberRepository;
-	private final LectureRepository lectureRepository;
 	private final LectureLikeService lectureLikeService;
+	private final LectureBuyService lectureBuyService;
 
 	@Operation(summary = "강의 상세 정보 조회")
 	@GetMapping("/v0/details/{lectureId}")
@@ -139,6 +140,20 @@ public class LectureController {
 		LectureListJobRes lectures = lectureService.getLecturesByDesiredJob(memberSecurityDTO.toMember().getMemberId());
 
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectures);
+	}
+
+	@Operation(summary = "강의 구매")
+	@PostMapping("/v1/buy/{lectureId}")
+	public ResponseEntity<BaseResponse<Integer>> buyLecture(
+			@PathVariable("lectureId") int lectureId,
+			@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+
+		Member member = memberRepository.findById(memberSecurityDTO.getMemberId())
+				.orElseThrow(()->new BaseExceptionHandler("해당하는 유저를 찾을수없습니다.", ErrorCode.NOT_FOUND_USER_EXCEPTION));
+
+		lectureBuyService.buyLecture(lectureId, member);
+
+		return BaseResponse.success(SuccessCode.INSERT_SUCCESS, lectureId);
 	}
 
 
