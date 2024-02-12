@@ -9,13 +9,23 @@ import Public from '@mui/icons-material/Public';
 import ImageIcon from '@mui/icons-material/Image';
 import axios from 'axios';
 import { useSelector } from "react-redux"
+import cat from './../../assets/ProfileIamge/고양이.jpg'
+import dog from './../../assets/ProfileIamge/강아지.jpg'
+import bear from './../../assets/ProfileIamge/곰.jpg'
+import raccoon from './../../assets/ProfileIamge/너구리.jpg'
+import lion from './../../assets/ProfileIamge/사자.jpg'
+import monkey from './../../assets/ProfileIamge/원숭이.jpg'
+import rabbit from './../../assets/ProfileIamge/토끼.jpg'
+import elephant from './../../assets/ProfileIamge/코끼리.jpg'
 
+// 랜덤 이미지 파일 경로 배열
+const imagePaths = [cat, dog, bear, raccoon, lion, monkey, rabbit, elephant];
 
 // 내가 참여중인 스터디 목록 조회(왼쪽 사이드메뉴에서)
 export default function ParticipatingRoomList({studyId}){
   const [data, setData] = useState([]);
-
   const [selectedIndex, setSelectedIndex] = React.useState(-1);
+  const [imageIndex, setImageIndex] = useState(0); // 무작위 이미지 인덱스 상태 추가
   const handleListItemClick = (event, index) => {
     setSelectedIndex(index);
   };
@@ -41,6 +51,11 @@ export default function ParticipatingRoomList({studyId}){
   // 사이드바 메뉴 열기
   const [open, setOpen] = React.useState(true);
   const navigate = useNavigate();
+
+  // 이미지 무작위 선택 효과를 위한 이미지 인덱스 설정
+  useEffect(() => {
+    setImageIndex(Math.floor(Math.random() * imagePaths.length));
+  }, [data]);
 
     return(
         <Box sx={{maxHeight: 360,
@@ -95,20 +110,16 @@ export default function ParticipatingRoomList({studyId}){
             <ListItemButton 
               key={itemIndex}
               sx={{ width: '100%', minHeight:'60px' }}
-              selected={selectedIndex === itemIndex}
+              selected={selectedIndex === itemIndex && open}
               onClick={(event) => {
                 handleListItemClick(event, itemIndex);
                 navigate(`participating/${item.studyId}`);
               }}
-            //   onClick={() => {
-            //     navigate(`participating/${item.studyId}`)
-            // }}
               >
                 <ListItem sx={{ py: 0, minHeight: 32, color: 'rgba(255,255,255,.8)' }}>
                   <ListItemAvatar>
-                    <Avatar>
-                      <ImageIcon />
-                    </Avatar>
+                    <Avatar src={imagePaths[itemIndex]}/>
+                    {/* <Avatar src={randomImagePath()}/> */}
                   </ListItemAvatar>
                   <ListItemText primary={item.title}
                   primaryTypographyProps={{ fontSize: 12, fontWeight: 'medium' }} />

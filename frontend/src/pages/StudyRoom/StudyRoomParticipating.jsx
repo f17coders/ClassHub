@@ -30,6 +30,9 @@ export default function StudyRoomParticipating(){
   const navigate = useNavigate();
   const [inviteCode, setInviteCode] = useState('');
   const [channels, setChannels] = useState([]);
+
+  const [leader, setLeader] = useState([]);
+
   const [selectIdx, setSelectIdx] = useState();
   const [selectChannel, setSelectChannel] = useState(null);
   const [isSelect, setIsSelect] = useState(false);
@@ -150,7 +153,8 @@ export default function StudyRoomParticipating(){
     if(data.isPublic){
       MySwal.fire({
         title: "해당 스터디룸은 공개상태입니다.",
-        text: "초대코드 없이 입장 가능합니다."
+        text: "초대코드 없이 입장 가능합니다.",
+        icon: "success"
       })
     }
     //비공개방이면
@@ -171,16 +175,49 @@ export default function StudyRoomParticipating(){
         });
         console.log(inviteCode);
       } catch (err) {
-        console.log(err);
-        MySwal.fire({
-          title: "오류 발생",
-          text: "초대코드를 복사하는 동안 오류가 발생했습니다.",
-          icon: "error"
-        });
+        console.log(err.response.data.code)
+        const code = err.response.data.code;
+        if(code === 'B303'){
+          MySwal.fire({
+            title: "스터디장 권한 필요",
+            text: "초대코드 복사는 스터디장만 가능합니다.",
+            icon: "warning"
+          })
+        } else{
+          alert('알 수 없는 오류. 관리자에게 문의 바람.')
+        }
+        
       }
     }
     
   }
+
+  // 나가기 확인용 Dialog
+  const handleExitDialogOpen = (studyId) => {
+    MySwal.fire({
+      title: "정말 나가시겠습니까?",
+      text: "스터디룸에 대한 정보는 남아있으며, 재참여 가능합니다.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "네, 나갈래요",
+      confirmButtonColor: '#3085d6', // confrim 버튼 색깔 지정
+      cancelButtonText: "아니오, 취소할게요",
+      cancelButtonColor: '#d33', // cancel 버튼 색깔 지정
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        studyLeave(studyId);
+      } else if (
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        MySwal.fire({
+          title: "취소되었습니다",
+          text: "스터디룸 나가기가 취소되었습니다.",
+          icon: "error"
+        });
+      }
+    });
+  };
 
   // 삭제 확인용 Dialog
   const handleDeleteDialogOpen = (studyId) => {
@@ -196,15 +233,7 @@ export default function StudyRoomParticipating(){
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        MySwal.fire({
-          title: "삭제되었습니다!",
-          text: "스터디룸 정보가 정상적으로 삭제되었습니다.",
-          icon: "success"
-        }).then(() =>{
-          exitStudyRoom(studyId);
-          navigate('/studyroom')
-          // window.location.reload();
-        });
+        exitStudyRoom(studyId);
       } else if (
         result.dismiss === Swal.DismissReason.cancel
       ) {
@@ -228,13 +257,31 @@ export default function StudyRoomParticipating(){
     })
     .then((res) => {
       //나가기 성공 alert 띄우기
-
-
-      //스터디룸 홈으로 navigate
-      navigate('/studyroom');
-      window.location.reload();
+      MySwal.fire({
+        title: "나가기 완료",
+        text: "스터디룸에서 정상적으로 퇴장하셨습니다.",
+        icon: "success"
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          //스터디룸 홈으로 navigate
+          navigate('/studyroom');
+          window.location.reload();
+        } 
+      })
     })
-    .catch((err) => console.log(err))
+    .catch((err) => {
+      const code = err.response.data.code;
+      if(code === 'G008'){
+        MySwal.fire({
+          title: "경고",
+          text: "스터디장은 스터디를 나갈 수 없습니다.",
+          icon: "warning"
+        })
+      }else{
+        alert('알수없는 오류. 관리자에게 문의바람.')
+      }
+    })
   }
 
   // 스터디룸 삭제
@@ -245,11 +292,33 @@ export default function StudyRoomParticipating(){
       },
     })
     .then((res) => {
-      //스터디룸 홈으로 navigate
-      navigate('/studyroom');
-      window.location.reload();
+      //스터디룸 삭제 확인 dialog
+      MySwal.fire({
+        title: "삭제되었습니다!",
+        text: "스터디룸 정보가 정상적으로 삭제되었습니다.",
+        icon: "success"
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          //스터디룸 홈으로 navigate
+          navigate('/studyroom');
+          window.location.reload();
+        } 
+      })
     })
-    .catch((err) => console.log(err))
+    .catch((err) => {
+      console.log(err.response.data.code)
+      const code = err.response.data.code;
+      if(code === 'B303'){
+        MySwal.fire({
+          title: "경고",
+          text: "스터디 삭제는 스터디장만 가능합니다.",
+          icon: "warning"
+        })
+      } else{
+        alert('알 수 없는 오류. 관리자에게 문의바람.')
+      }
+    })
   }
 
   //더보기 메뉴 관련
@@ -345,7 +414,7 @@ export default function StudyRoomParticipating(){
               </ListItemIcon>
               스터디룸 정보 수정
             </MenuItem>
-            <MenuItem onClick={() => studyLeave(studyId)}>
+            <MenuItem onClick={() => handleExitDialogOpen(studyId)}>
               <ListItemIcon>
                 <Logout />
               </ListItemIcon>
@@ -381,7 +450,7 @@ export default function StudyRoomParticipating(){
       <StudyRoomModifyModal data={data} studyModify={studyModify} studyModifyClose={studyModifyClose} onModifySuccess={onModifySuccess} />
 
       {/* 참여중인 멤버 보기 모달 렌더링 */}
-      <ParticipatingMemberModal studyId={studyId} participatingMember={participatingMember} participatingMemberClose={participatingMemberClose}/>
+      <ParticipatingMemberModal studyId={studyId} participatingMember={participatingMember} participatingMemberClose={participatingMemberClose} leader={leader}/>
 
       {/* 채널명 편집 모달 렌더링 */}
       <StudyRoomChannelModal studyId={studyId} studyRoomChannel={studyRoomChannel} channelModalClose={channelModalClose}/>
