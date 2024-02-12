@@ -24,17 +24,6 @@ export default function CommunityReply({detailData}){
   const [content, setContent] = useState('');
   const MySwal = withReactContent(Swal);
   const [editingCommentId, setEditingCommentId] = useState(null); // 수정 중인 댓글의 ID를 저장
-  
-  //등록 확인 Dialog용
-  const handleCreateDialogOpen = () =>{
-    MySwal.fire({
-      title: "등록되었습니다!",
-      text: "댓글이 정상적으로 등록되었습니다.",
-      icon: "success"
-    }).then(() => {
-      window.location.reload(); //페이지 새로고침
-    })
-  }
 
   // 삭제 확인 Dialog용
   const handleDeleteDialogOpen = (commentId) => {
@@ -50,13 +39,7 @@ export default function CommunityReply({detailData}){
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        MySwal.fire({
-          title: "삭제되었습니다!",
-          text: "댓글이 정상적으로 삭제되었습니다.",
-          icon: "success"
-        }).then(() =>{
-          deleteReply(commentId);
-        });
+        deleteReply(commentId);        
       } else if (
         result.dismiss === Swal.DismissReason.cancel
       ) {
@@ -72,7 +55,9 @@ export default function CommunityReply({detailData}){
 // 댓글 생성 함수
   const createReply = () => {
     {
-      isLogin?(
+      isLogin?
+      //로그인 되어있다면
+      (
         axios.post(`https://i10a810.p.ssafy.io/api/comments/v1/${detailData.communityId}`,
         {
           "communityId": detailData.communityId,
@@ -84,13 +69,28 @@ export default function CommunityReply({detailData}){
         })
         .then((res) => {
           console.log(res)
-          navigate(`/community/detail/${detailData.communityId}`)
-          handleCreateDialogOpen();
+          // 등록 확인 dialog
+          MySwal.fire({
+            title: "등록되었습니다!",
+            text: "댓글이 정상적으로 등록되었습니다.",
+            icon: "success"
+          })
+          .then(() => {
+            navigate(`/community/detail/${detailData.communityId}`)
+            window.location.reload(); //페이지 새로고침
+          })
         })
         .catch((err) => console.log(err))
       ) : (
-        alert('로그인 후 이용해주세요')
-        //로그인 페이지로 이동시키기
+        MySwal.fire({
+          title: "로그인 필요",
+          text: "로그인 후 댓글을 작성하실 수 있습니다.",
+          icon: "warning"
+        })
+        .then(()=>{
+          //로그인 페이지로 이동시키기
+          navigate('/login')
+        })
       )
     }
   }
@@ -107,10 +107,24 @@ export default function CommunityReply({detailData}){
       })
       .then((res) => {
         console.log(res)
-        navigate(`/community/detail/${detailData.communityId}`)
-        window.location.reload(); //페이지 새로고침
+        MySwal.fire({
+          title: "삭제되었습니다!",
+          text: "댓글이 정상적으로 삭제되었습니다.",
+          icon: "success"
+        })
+        .then(() =>{
+          navigate(`/community/detail/${detailData.communityId}`)
+          window.location.reload(); //페이지 새로고침
+        })
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err)
+        MySwal.fire({
+          title: "댓글 삭제 실패",
+          text: "댓글 삭제 중 오류가 발생했습니다.",
+          icon: "error"
+        })
+      })
     
   }
 
@@ -118,7 +132,7 @@ export default function CommunityReply({detailData}){
     //엔터키 눌렀을 때 등록 함수 호출
     if(event.key === 'Enter'){
       event.preventDefault(); //기본 동작 방지
-      handleCreateDialogOpen();
+      createReply();
     }
   }
   
