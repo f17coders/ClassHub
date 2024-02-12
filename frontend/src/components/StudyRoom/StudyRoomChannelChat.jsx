@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"
 import SockJS from "sockjs-client/dist/sockjs";
 import { Client } from "@stomp/stompjs";
 import SendIcon from '@mui/icons-material/Send';
-import { ListItem, Avatar, ListItemAvatar, ListItemText, CircularProgress, Alert, TextField, Button, Stack, Box, List, ListItemButton, Grid, Typography, Divider, IconButton, Tooltip } from '@mui/material'
+import { ListItem, Avatar, Chip, Link, ListItemAvatar, ListItemText, CircularProgress, Alert, TextField, Button, Stack, Box, List, ListItemButton, Grid, Typography, Divider, IconButton, Tooltip } from '@mui/material'
 
 // 스터디룸 단체 메시지
 export default function StudyRoomPrivateMessage({channel}) {
@@ -79,13 +79,20 @@ export default function StudyRoomPrivateMessage({channel}) {
         return `${createDate.getFullYear()}-${(createDate.getMonth() + 1).toString().padStart(2, '0')}-${createDate.getDate().toString().padStart(2, '0')} ${createDate.getHours().toString().padStart(2, '0')}:${createDate.getMinutes().toString().padStart(2, '0')}`;
     }
 
+
     const formattedMessage = (message) => {
         const replacedMessage = message.replace(/\\n/g, '\n');
-        return replacedMessage.split('\n').map((line, index) => (
-            <Typography key={index} component="span" display="block">
-                {line}
-            </Typography>
-        ));
+
+        if(message.includes('<div')) {
+            return <div dangerouslySetInnerHTML={{ __html: message }} />;
+        } else {
+            return replacedMessage.split('\n').map((line, index) => (
+                <Typography key={index} component="span" display="block">
+                    
+                    {line}
+                </Typography>
+            ));
+        }
     };
 
     useEffect(() => {

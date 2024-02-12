@@ -2,12 +2,15 @@ package com.f17coders.classhub.module.domain.study.service;
 
 import com.f17coders.classhub.global.exception.BaseExceptionHandler;
 import com.f17coders.classhub.module.domain.channel.Channel;
+import com.f17coders.classhub.module.domain.channel.dto.response.ChannelDetailListRes;
 import com.f17coders.classhub.module.domain.channel.repository.ChannelRepository;
 import com.f17coders.classhub.module.domain.lecture.Lecture;
 import com.f17coders.classhub.module.domain.lecture.repository.LectureRepository;
 import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.member.dto.response.MemberStudyInfoRes;
 import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
+import com.f17coders.classhub.module.domain.message.Message;
+import com.f17coders.classhub.module.domain.message.repository.MessageRepository;
 import com.f17coders.classhub.module.domain.study.Study;
 import com.f17coders.classhub.module.domain.study.dto.request.StudyRegisterReq;
 import com.f17coders.classhub.module.domain.study.dto.request.StudyUpdateReq;
@@ -26,9 +29,10 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.f17coders.classhub.global.exception.code.ErrorCode.*;
 
@@ -44,6 +48,7 @@ public class StudyServiceImpl implements StudyService {
     private final TagRepository tagRepository;
     private final StudyTagRepository studyTagRepository;
     private final ChannelRepository channelRepository;
+    private final MessageRepository messageRepository;
 
     @Override
     @Transactional
@@ -61,6 +66,7 @@ public class StudyServiceImpl implements StudyService {
         Study study = Study.createStudy(title, capacity, description, isPublic, lecture, member);
         studyRepository.save(study);
 
+        List<Tag> tagList = new ArrayList<>();
         // 태그 등록
         for (int tagId : studyRegisterReq.tagList()) {
 
@@ -72,6 +78,7 @@ public class StudyServiceImpl implements StudyService {
 
             StudyTag studyTag = StudyTag.createStudyTag(tag);
             studyTag.putStudy(study);
+            tagList.add(tag);
 
             studyTagRepository.save(studyTag);
         }
@@ -88,9 +95,29 @@ public class StudyServiceImpl implements StudyService {
         String[] BasicChannelName = {"공지사항", "학습 인증", "잡담방"};
         boolean[] isDeleteList = {false, true, true};
 
+        String text = makeText(study, tagList, member, lecture);
+
+        Map<String, String> sender = new HashMap<>();
+
+        sender.put("memberId", String.valueOf(member.getMemberId()));
+        sender.put("nickname", member.getNickname());
+        sender.put("profileImage", member.getProfileImage());
+
+        Message message = Message.createMessage(sender, text);
+
+        messageRepository.save(message);
+
         for (int i = 0; i < BasicChannelName.length; i++) {
+
+            List<Message> messageList = new ArrayList<>();
+
+            if(i == 0) {
+                messageList.add(message);
+            }
+
             Channel channel = Channel.createChannel(BasicChannelName[i], study.getStudyId(),
-                    new ArrayList<>(), isDeleteList[i]);
+                    messageList, isDeleteList[i]);
+
             channelRepository.save(channel);
         }
 
@@ -161,7 +188,7 @@ public class StudyServiceImpl implements StudyService {
 
     @Override
     @Transactional
-    public void updateStudy(StudyUpdateReq studyUpdateReq, int memberId)
+    public void updateStudy(StudyUpdateReq studyUpdateReq, Member member)
             throws BaseExceptionHandler {
 
         int studyId = studyUpdateReq.studyId();
@@ -179,7 +206,7 @@ public class StudyServiceImpl implements StudyService {
             throw new BaseExceptionHandler(NOT_FOUND_STUDY_EXCEPTION);
         }
 
-        if (study.getStudyLeader().getMemberId() != memberId) {
+        if (study.getStudyLeader().getMemberId() != member.getMemberId()) {
             throw new BaseExceptionHandler(FORBIDDEN_ERROR_LEADER);
         }
 
@@ -198,6 +225,8 @@ public class StudyServiceImpl implements StudyService {
         // 스터디 태그 삭제
         studyTagRepository.deleteStudyTagsByStudyId(studyId);
 
+        List<Tag> tags = new ArrayList<>();
+
         // 스터디 태그 등록
         for (int tagId : tagList) {
             Tag tag = tagRepository.findTagByTagId(tagId);
@@ -205,10 +234,34 @@ public class StudyServiceImpl implements StudyService {
             StudyTag studyTag = StudyTag.createStudyTag(tag);
             studyTag.putStudy(study);
 
+            tags.add(tag);
             studyTagRepository.save(studyTag);
         }
 
         studyRepository.save(study);
+
+        String text = makeText(study, tags, member, lecture);
+
+        Map<String, String> sender = new HashMap<>();
+
+        sender.put("memberId", String.valueOf(member.getMemberId()));
+        sender.put("nickname", member.getNickname());
+        sender.put("profileImage", member.getProfileImage());
+
+        Message message = Message.createMessage(sender, text);
+        messageRepository.save(message);
+
+        List<ChannelDetailListRes> channel = channelRepository.findByStudyId(studyId);
+
+        for(ChannelDetailListRes channelDetailListRes: channel) {
+            if(!channelDetailListRes.isDelete()) {
+                Channel channel1 = channelRepository.findChannelByChannelId(channelDetailListRes.channelId());
+                channel1.getMessageList().add(message);
+                channelRepository.save(channel1);
+                break;
+            }
+        }
+
     }
 
     @Override
@@ -290,5 +343,23 @@ public class StudyServiceImpl implements StudyService {
                 .studyMemberList(memberStudyInfoResList).build();
     }
 
+    private String makeText(Study study, List<Tag> tagList, Member member, Lecture lecture) {
+        String text = "<div style=\"margin-top: 1px; padding: 8px; border-radius: 1.5px; box-shadow: 0px 0px 5px lightgray;\">" +
+                "<h2 style=\"margin-left: 5px; margin-bottom: 8px;\">"+ study.getTitle() +"</h2>" +
+                "<h4 style=\"margin-left: 5px; margin-bottom: 8px;\">스터디장: "+ member.getNickname() +"</h4>" +
+                "<h3 style=\"margin-left: 5px; margin-bottom: 8px;\">"+study.getDescription()+"</h3>" +
+                "<div style=\"display: flex; flex-wrap: wrap; justify-content: flex-start;\">";
+
+        for(Tag t : tagList ) {
+            text += "<span style=\"margin: 5px; background-color: #1976d2; color: white; padding: 5px; border-radius: 3px; width: 20%;\">"+ t.getName()+"</span>";
+        }
+        text += "</div>" +
+                "<a href=\"" + lecture.getSiteLink() + "\" style=\"color: #1976d2; margin-top: 8px; margin-bottom: 8px; display: block;\">" +
+                lecture.getName() + " 바로가기" +
+                "</a>" +
+                "</div>";
+
+        return text;
+    }
 }
 
