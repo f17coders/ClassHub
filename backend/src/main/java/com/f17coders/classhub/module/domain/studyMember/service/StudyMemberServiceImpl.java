@@ -33,7 +33,7 @@ public class StudyMemberServiceImpl implements StudyMemberService {
             throw new BaseExceptionHandler(NOT_FOUND_STUDY_EXCEPTION);
         }
 
-        if (study.getCapacity() == studyMemberRepository.countByStudy_StudyId(studyId)) {
+        if (study.getCapacity() <= studyMemberRepository.countByStudy_StudyId(studyId)) {
             throw new BaseExceptionHandler(LIMIT_EXCEEDED);
         }
 
