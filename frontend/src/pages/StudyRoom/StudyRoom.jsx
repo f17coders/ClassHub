@@ -53,7 +53,7 @@ export default function StudyRoom() {
 
     return(
         <Container>
-          <Grid container sx={{width:"100%", height:"80vh"}}>
+          <Grid container sx={{width:"100%"}}>
             {/* <Hidden smUp>
             </Hidden> */}
 

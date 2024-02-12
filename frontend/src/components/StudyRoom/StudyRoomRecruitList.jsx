@@ -51,16 +51,6 @@ export default function StudyRoomRecruitList({study}){
         //입장 시
         if(result.isConfirmed){
           enterStudyRoom(studyId);
-          // .then(() => {
-          //   MySwal.fire({
-          //     title: "참여 완료되었습니다!",
-          //     text: "참여중인 스터디 목록에서 확인 가능합니다.",
-          //     icon: "success"
-          //   })
-          // })
-          // .catch((err) =>{
-          //   console.log(err.response.data)
-          // })
         } 
         //입장 취소시
         else if (
@@ -97,21 +87,10 @@ export default function StudyRoomRecruitList({study}){
       })
       .then((result) => {
         if(result.isConfirmed){
-          // 버튼 클릭 시에만 초대코드 요청
-          axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/invitation-code/${studyId}`,{
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          })
-          .then((result) => {
-            setInviteCode(result.data.result);
-            console.log(result.data.result);
-          }).catch((err) => console.log(err))
-
           //참여코드 입력 후 입장 가능
           MySwal.fire({
             title: "참여코드를 입력하세요.",
-            input: "text",
+            input: "number",
             inputAttributes: {
               autocapitalize: "off"
             },
@@ -121,7 +100,6 @@ export default function StudyRoomRecruitList({study}){
             
           }).then((result) => {
           if (result.isConfirmed) {
-            console.log(result.value)
             setInputValue(result.value)
 
             axios.get(`https://i10a810.p.ssafy.io/api/studies/v1/invitation-code/valid/${studyId}?enterCode=${result.value}`, {
@@ -133,21 +111,24 @@ export default function StudyRoomRecruitList({study}){
               console.log(res)
               const status = res.data.status;
               if(status === 200){
-                MySwal.fire({
-                  title: '참여 완료되었습니다!',
-                  icon: "success"})
-                  .then(() =>{
-                    enterStudyRoom(studyId);
-                });
+                enterStudyRoom(studyId);
               }
             })
             .catch((error) => {
-              console.log(error.response.data.code)
+              console.log(error.response.data)
               const code = error.response.data.code;
               if(code === 'B301'){
-                alert('이미 가입되어 있습니다.')
+                MySwal.fire({
+                  title: "경고",
+                  text: "이미 가입된 스터디입니다.",
+                  icon: "warning"
+                })
               } else if(code === 'B303'){
-                alert('코드가 일치하지 않습니다.')
+                MySwal.fire({
+                  title: "참여코드 불일치",
+                  text: "올바른 참여코드를 입력해주세요.",
+                  icon: "error"
+                })
               }else{
                 alert('알수없는 오류. 관리자에게 문의바람')
               }
@@ -187,19 +168,31 @@ export default function StudyRoomRecruitList({study}){
         },
       })
     .then((res) => {
-        console.log('입장 성공')
-        console.log(res)
-        alert('입장 성공')
-        // handleEnterDialogOpen(studyId);
-        window.location.reload(); //페이지 새로고침
+        // console.log(res)
+        MySwal.fire({
+          title: "스터디 참여 완료!",
+          text: "좌측 참여중인 스터디 목록에서 확인 가능합니다.",
+          icon: "success"
+        })
+        .then(() =>{
+          window.location.reload(); //페이지 새로고침
+        })
     })
     .catch((err) => {
       console.log(err.response.data.code)
       const code = err.response.data.code;
       if(code === 'B301'){
-        alert('이미 가입되어 있습니다.')
+        MySwal.fire({
+          title: "경고",
+          text: "이미 가입된 스터디입니다.",
+          icon: "warning"
+        })
       } else if(code === 'B303'){
-        alert('코드가 일치하지 않습니다.')
+        MySwal.fire({
+          title: "참여코드 불일치",
+          text: "올바른 참여코드를 입력해주세요.",
+          icon: "error"
+        })
       }
     })
     }
@@ -218,7 +211,7 @@ export default function StudyRoomRecruitList({study}){
     }
 
     return(
-        <ListItemButton>
+        <ListItemButton onClick={() => {handleEnterDialogOpen(study.studyId)}}>
             <ListItem>
               <Stack sx={{width: '100%'}}>
                 <Stack direction="row" spacing={1} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'space-around' }}>
@@ -273,7 +266,7 @@ export default function StudyRoomRecruitList({study}){
                     
                     <Tooltip title="참여신청">
                       <IconButton edge="end" aria-label="참여신청" 
-                        onClick={() => {handleEnterDialogOpen(study.studyId)}}>
+                        onClick={() => {handleEnterDialogOpen(study.studyId)}} >
                         <LoginIcon />
                       </IconButton>
                     </Tooltip>

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Alert, Backdrop,  ToggleButton, Button, Modal, Stack, TextField, Autocomplete, Box, Typography, Container, createFilterOptions} from '@mui/material';
 import axios from 'axios';
 import { useSelector } from "react-redux"
-
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 const style = {
     position: 'absolute',
@@ -16,9 +17,12 @@ const style = {
     border: '1px solid #000',
     boxShadow: 24,
     p: 4,
+    zIndex: -1
   };
 
 export default function StudyRoomModifyModal({ data, studyModify, studyModifyClose, onModifySuccess }){
+  const MySwal = withReactContent(Swal);
+
   const [value, setValue] = React.useState(null);
   const [selected1, setSelected1] = React.useState(true); //공개 버튼 선택
   const [selected2, setSelected2] = React.useState(false); //비공개 버튼 선택
@@ -61,11 +65,24 @@ export default function StudyRoomModifyModal({ data, studyModify, studyModifyClo
       },
     })
     .then((res) => {
-      console.log(res)
+      // console.log(res)
       onModifySuccess()
       window.location.reload(); //페이지 새로고침
     })
-    .catch((err) => console.log(err))
+    .catch((err) =>{
+      const code = err.response.data.code;
+      if(code === 'B303'){
+        //현재 모달창 닫기
+        studyModifyClose();
+
+        MySwal.fire({
+          title: "경고",
+          text: "스터디장의 권한이 필요합니다.",
+          icon: "warning",
+        })
+      }
+    })
+
   }
     
   // 태그 리스트 가져오기
@@ -151,7 +168,7 @@ export default function StudyRoomModifyModal({ data, studyModify, studyModifyClo
     const handleLectureIdCheck = (event, newLecture) => {
       //newValue는 선택된 옵션을 나타냄
       const selectedLecture = newLecture.lectureId;
-      console.log(selectedLecture)
+      // console.log(selectedLecture)
 
       if(selectedLecture.length === 0){
         setLectureIdError(true);
@@ -184,7 +201,7 @@ export default function StudyRoomModifyModal({ data, studyModify, studyModifyClo
           setSelected2(true);
         }
         setIsPublic(data.isPublic);
-        setTagList([]);
+        setTagList(data.tagList);
         setSelectedLecture(null);
         setTitleError(false);
         setCapacityError(false);
@@ -327,6 +344,7 @@ export default function StudyRoomModifyModal({ data, studyModify, studyModifyClo
                             id="tags-outlined"
                             size='small'
                             options={tagListFromAPI}
+                            value={tagListFromAPI.filter(option => data.tagList.includes(option.tagId))}
                             onChange={handleTagListCheck}
                             getOptionLabel={(option) => option.name}
                             filterSelectedOptions
@@ -346,13 +364,14 @@ export default function StudyRoomModifyModal({ data, studyModify, studyModifyClo
                             id="tags-outlined"
                             size='small'
                             options={tagListFromAPI}
+                            value={tagListFromAPI.filter(option => tagList.includes(option.tagId))}
                             onChange={handleTagListCheck}
                             getOptionLabel={(option) => option.name}
                             filterSelectedOptions
                             renderInput={(value) => (
                               <TextField
                                 {...value}
-                                placeholder="해시태그"
+                                placeholder={data.tagList.map(tag => tag.name).join(", ")}
                               />
                             )}
                           />
@@ -416,7 +435,7 @@ export default function StudyRoomModifyModal({ data, studyModify, studyModifyClo
                             renderInput={(value) => (
                               <TextField
                                 {...value}
-                                placeholder="목표강의를 연결하세요"
+                                placeholder={data.lecture.name}
                               />
                             )}
                             freeSolo
