@@ -73,7 +73,7 @@ let searchParams = createSlice({
         ...state,
         category: null,
         tags: [],
-        level: null,
+        level: 'ALL',
         site: null,
         order: 'ranking',
         page: 0,
@@ -231,6 +231,51 @@ let fromMain = createSlice({
 })
 export let { setFromMainTrue, setFromMainFalse } = fromMain.actions
 
+// 커뮤니티 검색 params
+let commuParams = createSlice({
+  name: 'commuParams',
+  initialState: {
+    sort: 'createTime,desc',
+    keyword: null,
+    tags: []
+  },
+  reducers: {
+    // 정렬 바꾸기
+    setSort(state, action) {
+      return{
+        ...state,
+        sort : action.payload
+      }
+    },
+    // 키워드 바꾸기
+    setKeyWord(state, action) {
+      return{
+        ...state,
+        keyword: action.payload
+      }
+    },
+    // 태그 추가
+    setTagsAdd(state, action) {
+      let copy = [...state.tags, action.payload]
+      return {
+        ...state,
+        tags: copy
+      }
+    },
+    // 태그 삭제
+    setTagsDelete(state, action) {
+      const filteredTags = state.tags.filter((item) => item.name !== action.payload.name);
+      return {
+        ...state,
+        tags: filteredTags
+      }
+    },
+  }
+})
+
+export let {  setSort, setKeyWord, setTagsAdd, setTagsDelete } = commuParams.actions
+
+
 // storage 저장용
 const persistConfig = {
   key: 'root',
@@ -249,6 +294,7 @@ const persistedReducer = persistReducer(
     user: user.reducer,
     lectureResult: lectureResult.reducer,
     fromMain: fromMain.reducer,
+    commuParams: commuParams.reducer
   })
 );
 

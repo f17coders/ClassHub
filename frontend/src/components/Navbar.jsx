@@ -3,6 +3,8 @@ import Appbar from '@mui/material/AppBar'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import { Tooltip } from '@mui/material'
+import Badge from '@mui/material/Badge';
+import MailIcon from '@mui/icons-material/Mail';
 import { Link, useNavigate } from 'react-router-dom'
 import MainLogo from './../assets/MainLogo.png'
 import MenuIcon from '@mui/icons-material/Menu'
@@ -13,7 +15,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { logout, deleteAccessToken } from './../store/store'
 import { logoutUser } from './../store/userSlice'
 import Swal from 'sweetalert2'
-
+import AlarmModal from './AlarmModal'
 // navbar
 function NavbarComponent() {
 	// 로그인 체크용
@@ -22,6 +24,7 @@ function NavbarComponent() {
 	let user = useSelector((state) => state.user)
 	const accessToken = useSelector((state) => state.accessToken)
 	const dispatch = useDispatch()
+	const [showAlarm, setShowAlarm] = useState(false);
 
 	// 로그아웃(isLogin을 false로 바꾸고, 토큰 지우고, 유저정보 지우고)
 	const handleLogout = () => {
@@ -82,6 +85,14 @@ function NavbarComponent() {
 		fontSize: '1.2em',
 		fontWeight: '600',
 		transition: 'font-size 0.3s ease',
+	}
+
+	const openModal = () => {
+		setShowAlarm(true);
+	}
+
+	const closeModal = () => {
+		setShowAlarm(false);
 	}
 
 	return (
@@ -175,6 +186,9 @@ function NavbarComponent() {
 							</Link>
 						) : (
 							<div>
+								<Badge color="primary" variant="dot" sx={{marginRight:2}}>
+									<MailIcon color="black" onClick={openModal} />
+								</Badge>
 								<Link to="/mypage">
 									<IconButton>
 										<img src={user.profileImage} alt="profile" style={{ width: '40px', height: '40px', borderRadius: '70%' }} />
@@ -185,6 +199,7 @@ function NavbarComponent() {
 										<LogoutIcon />
 									</IconButton>
 								</Tooltip>
+								<AlarmModal onOpen={showAlarm} onClose={closeModal} />
 							</div>
 							
 						)

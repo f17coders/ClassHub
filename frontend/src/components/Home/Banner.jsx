@@ -9,6 +9,12 @@ import { Autoplay, Navigation } from 'swiper/modules';
 // 홈페이지 메인 배너
 
 function Banner() {
+	const bannerStyle = {
+		width:'100%',
+		height: 'auto',
+		maxWidth: '100%',
+		maxHeight: '100%'
+	}
 	return (
 		<div>
 			<Swiper 
@@ -20,13 +26,13 @@ function Banner() {
 				disableOnInteraction: false,
 			}}>
 				<SwiperSlide>
-					<img src={banner3}  />
+					<img src={banner3} style={bannerStyle} />
 				</SwiperSlide>
 				<SwiperSlide>
-					<img src={banner2} style={{width:'100%'}} />
+					<img src={banner2} style={bannerStyle} />
 				</SwiperSlide>
 				<SwiperSlide>
-					<img src={banner1} style={{width:'100%'}} />
+					<img src={banner1} style={bannerStyle} />
 				</SwiperSlide>
 			</Swiper>
 		</div>

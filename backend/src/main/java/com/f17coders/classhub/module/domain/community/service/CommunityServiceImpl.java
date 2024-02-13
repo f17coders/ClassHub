@@ -83,8 +83,8 @@ public class CommunityServiceImpl implements CommunityService {
             .map(comment -> CommentDetailRes.builder()
                 .commentId(comment.getCommentId())
                 .content(comment.getContent())
-                .memberNickname(comment.getMember().getNickname())
-                .memberProfileImg(comment.getMember().getProfileImage())
+                .memberNickname(comment.getMember() != null ? comment.getMember().getNickname() : "(탈퇴한 사용자)")
+                .memberProfileImg(comment.getMember() != null ? comment.getMember().getProfileImage() : "https://mblogthumb-phinf.pstatic.net/MjAyMDAyMTBfODAg/MDAxNTgxMzA0MTE3ODMy.ACRLtB9v5NH-I2qjWrwiXLb7TeUiG442cJmcdzVum7cg.eTLpNg_n0rAS5sWOsofRrvBy0qZk_QcWSfUiIagTfd8g.JPEG.lattepain/1581304118739.jpg?type=w800")
                 .canUpdate(isCommentWriter(member, comment))
                 .createdAt(comment.getCreateTime())
                 .build())
@@ -102,7 +102,7 @@ public class CommunityServiceImpl implements CommunityService {
             .communityId(communityId)
             .title(community.getTitle())
             .content(community.getContent())
-            .memberNickname(community.getMember().getNickname())
+            .memberNickname(community.getMember() != null ? community.getMember().getNickname() : "(탈퇴한 사용자)")
             .tagList(tagResList)
             .viewCount(community.getViewCount())
             .commentCount(community.getCommentList().size())
@@ -131,7 +131,7 @@ public class CommunityServiceImpl implements CommunityService {
                 .communityId(community.getCommunityId())
                 .title(community.getTitle())
                 .content(community.getContent())
-                .memberNickname(community.getMember().getNickname())
+                .memberNickname(community.getMember() != null ? community.getMember().getNickname() : "(탈퇴한 사용자)")
                 .commentCount(community.getCommentList().size())
                 .likeCount(community.getCommunityLikeSet().size())
                 .scrapCount(community.getCommunityScrapSet().size())
@@ -259,11 +259,15 @@ public class CommunityServiceImpl implements CommunityService {
     private boolean isCommunityWriter(Member member, Community community) {
         if(member == null)
             return false;
+        if(community.getMember() == null)
+            return false;
         return community.getMember().getMemberId() == member.getMemberId();
     }
 
     private boolean isCommentWriter(Member member, Comment comment) {
         if(member == null)
+            return false;
+        if(comment.getMember() == null)
             return false;
         return comment.getMember().getMemberId() == member.getMemberId();
     }
@@ -276,7 +280,7 @@ public class CommunityServiceImpl implements CommunityService {
 
     public boolean canLike(Community community, Member member) {
         if (member == null) {
-            return false;
+            return true;
         } else {
             return communityLikeRepository.findByCommunityAndMember(
                 community, member).isEmpty();
@@ -285,7 +289,7 @@ public class CommunityServiceImpl implements CommunityService {
 
     public boolean canScrap(Community community, Member member) {
         if (member == null) {
-            return false;
+            return true;
         } else {
             Optional<CommunityScrap> communityScrap = communityScrapRepository.findByCommunity_CommunityIdAndMember(
                 community.getCommunityId(), member);

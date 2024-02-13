@@ -6,6 +6,7 @@ import com.f17coders.classhub.module.domain.job.Job;
 import com.f17coders.classhub.module.domain.job.dto.response.JobRes;
 import com.f17coders.classhub.module.domain.lecture.dto.response.*;
 import com.f17coders.classhub.module.domain.lecture.repository.LectureRepository;
+import com.f17coders.classhub.module.domain.lectureBuy.repository.LectureBuyRepository;
 import com.f17coders.classhub.module.domain.lectureSummary.service.LectureSummaryService;
 import com.f17coders.classhub.module.domain.member.repository.MemberRepository;
 import com.f17coders.classhub.module.domain.memberTag.MemberTag;
@@ -20,25 +21,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.*;
 
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Log4j2
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class LectureServiceImpl implements LectureService {
-	private final RedisTemplate<String, Integer> redisTemplate;
 
 	private final LectureRepository lectureRepository;
 	private final TagRepository tagRepository;
-	private final MemberTagRepository memberTagRepository;
 	private final MemberRepository memberRepository;
-	private final LectureSummaryService lectureSummaryService;
+	private final LectureBuyRepository lectureBuyRepository;
 
 	@Override
 	public LectureReadRes readLecture(int lectureId) throws BaseExceptionHandler, IOException {
@@ -46,7 +47,18 @@ public class LectureServiceImpl implements LectureService {
 			lectureId);
 
 		List<TagRes> tagList = tagRepository.findTagsByLectureIdFetchJoinLectureTag(lectureId);
-		String curriculum = "{\"curriculum\": [{\"time\": 8, \"item_count\": 3, \"title\": \"Introduction\", \"items\": [{\"title\": \"Introduction\", \"time\": \"01:24\"}, {\"title\": \"How to submit an assignment\", \"time\": \"01:41\"}, {\"title\": \"Understanding Databases\", \"time\": \"05:02\"}]}, {\"time\": 0, \"item_count\": 0, \"title\": \"Create and Manage a Database\", \"items\": [{\"title\": \"2013\", \"time\": \"1 question\"}, {\"title\": \"2029\", \"time\": \"1 question\"}, {\"title\": \"2085\", \"time\": \"1 question\"}, {\"title\": \"2150\", \"time\": \"1 question\"}, {\"title\": \"2159\", \"time\": \"1 question\"}, {\"title\": \"2247\", \"time\": \"1 question\"}, {\"title\": \"2250\", \"time\": \"1 question\"}, {\"title\": \"2254\", \"time\": \"1 question\"}, {\"title\": \"2804\", \"time\": \"1 question\"}]}, {\"time\": 0, \"item_count\": 0, \"title\": \"Build Tables\", \"items\": [{\"title\": \"2004\", \"time\": \"1 question\"}, {\"title\": \"2032\", \"time\": \"1 question\"}, {\"title\": \"2091\", \"time\": \"1 question\"}, {\"title\": \"2204\", \"time\": \"1 question\"}, {\"title\": \"2208\", \"time\": \"1 question\"}, {\"title\": \"2242\", \"time\": \"1 question\"}, {\"title\": \"2763\", \"time\": \"1 question\"}, {\"title\": \"2773\", \"time\": \"1 question\"}, {\"title\": \"2793\", \"time\": \"1 question\"}]}, {\"time\": 0, \"item_count\": 0, \"title\": \"Create Queries\", \"items\": [{\"title\": \"2021\", \"time\": \"1 question\"}, {\"title\": \"2103\", \"time\": \"1 question\"}, {\"title\": \"2130\", \"time\": \"1 question\"}, {\"title\": \"2168\", \"time\": \"1 question\"}, {\"title\": \"2192\", \"time\": \"1 question\"}, {\"title\": \"2815\", \"time\": \"1 question\"}]}, {\"time\": 0, \"item_count\": 0, \"title\": \"Create Forms\", \"items\": [{\"title\": \"2087\", \"time\": \"1 question\"}, {\"title\": \"2151\", \"time\": \"1 question\"}, {\"title\": \"2182\", \"time\": \"1 question\"}, {\"title\": \"2237\", \"time\": \"1 question\"}, {\"title\": \"2241\", \"time\": \"1 question\"}, {\"title\": \"2266\", \"time\": \"1 question\"}, {\"title\": \"2783\", \"time\": \"1 question\"}, {\"title\": \"2839\", \"time\": \"1 question\"}]}, {\"time\": 0, \"item_count\": 0, \"title\": \"Create Reports\", \"items\": [{\"title\": \"2111\", \"time\": \"1 question\"}, {\"title\": \"2112\", \"time\": \"1 question\"}, {\"title\": \"2197\", \"time\": \"1 question\"}, {\"title\": \"2276\", \"time\": \"1 question\"}, {\"title\": \"2280\", \"time\": \"1 question\"}, {\"title\": \"2536\", \"time\": \"1 question\"}, {\"title\": \"2790\", \"time\": \"1 question\"}]}, {\"time\": 0, \"item_count\": 0, \"title\": \"Projects\", \"items\": [{\"title\": \"Theopetra Cave\", \"time\": \"5 questions\"}, {\"title\": \"Rock You!\", \"time\": \"5 questions\"}, {\"title\": \"Stock market\", \"time\": \"6 questions\"}, {\"title\": \"Video Club\", \"time\": \"5 questions\"}, {\"title\": \"Faster Shipping Co.\", \"time\": \"6 questions\"}, {\"title\": \"PC-X shop\", \"time\": \"5 questions\"}]}, {\"time\": 0, \"item_count\": 1, \"title\": \"Epilogue\", \"items\": [{\"title\": \"Epilogue\", \"time\": \"00:31\"}]}, {\"time\": 3, \"item_count\": 1, \"title\": \"BONUS\", \"items\": [{\"title\": \"BONUS content\", \"time\": \"03:24\"}]}]}";
+
+		String summaryText = lectureReadLectureLikeCountRes.summary();
+		List<String> summaryList;
+		if (StringUtils.hasText(summaryText)) {
+			String[] array = summaryText.split("\\|\\|");
+			summaryList = Arrays.stream(array)
+				.collect(Collectors.toList());
+		} else {
+			summaryList = new ArrayList<>();
+		}
+
+
 		return LectureReadRes.builder()
 			.lectureId(lectureId)
 			.lectureName(lectureReadLectureLikeCountRes.lectureName())
@@ -58,7 +70,7 @@ public class LectureServiceImpl implements LectureService {
 			.priceOriginal(lectureReadLectureLikeCountRes.priceOriginal())
 			.priceSale(lectureReadLectureLikeCountRes.priceSale())
 			.totalTime(lectureReadLectureLikeCountRes.totalTime())
-			.curriculum(curriculum) // 수정필요
+			.curriculum(lectureReadLectureLikeCountRes.curriculum()) // 수정필요
 			.category(lectureReadLectureLikeCountRes.category())
 			.tagList(tagList)
 			.lectureLikeCount(lectureReadLectureLikeCountRes.lectureLikeCount())
@@ -68,10 +80,9 @@ public class LectureServiceImpl implements LectureService {
 			.siteReviewRating(lectureReadLectureLikeCountRes.siteReviewRating())
 			.siteReviewCount(lectureReadLectureLikeCountRes.siteReviewCount())
 			.siteStudentCount(lectureReadLectureLikeCountRes.siteStudentCount())
-			.gptReviewGood(lectureReadLectureLikeCountRes.gptReviewGood())
-			.gptReviewBad(lectureReadLectureLikeCountRes.gptReviewBad())
+			.gptReview(lectureReadLectureLikeCountRes.gptReview())
 			.descriptionSummary(lectureReadLectureLikeCountRes.descriptionSummary())
-			.summary(lectureReadLectureLikeCountRes.summary())
+			.summary(summaryList)
 			.descriptionDetail(lectureReadLectureLikeCountRes.descriptionDetail())
 			.build();
 
