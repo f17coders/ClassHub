@@ -39,6 +39,10 @@ export default function CommunityDetail(){
 
     const [detailData, setDetailData] = useState([]); //받아온 데이터 저장할 배열
     const { communityId } = useParams();
+
+    //날짜랑 시간 split
+    const [dateTime, setDateTime] = useState('');
+    
     // 게시글 상세 조회
     useEffect(() => {
         {
@@ -54,8 +58,9 @@ export default function CommunityDetail(){
                     setCanLike(response.data.result.canLike);
                     setCanScrap(response.data.result.canScrap);
                     setCanUpdate(response.data.result.canUpdate);
-                    console.log(response.data.result)
-                    console.log(detailData)
+                    setDateTime(response.data.result.createdAt.split("T").join(" "));
+                    // console.log(response.data.result)
+                    // console.log(detailData)
                   })
                   .catch((err) => console.log(err))
             ) : (
@@ -66,8 +71,9 @@ export default function CommunityDetail(){
                     setCanLike(response.data.result.canLike);
                     setCanScrap(response.data.result.canScrap);
                     setCanUpdate(response.data.result.canUpdate);
-                    console.log(response.data.result)
-                    console.log(detailData)
+                    setDateTime(response.data.result.createdAt.split("T").join(" "));
+                    // console.log(response.data.result)
+                    // console.log(detailData)
                   })
                   .catch((err) => console.log(err))
             )
@@ -92,7 +98,7 @@ export default function CommunityDetail(){
 
     //좋아요
     const postLike = (communityId) => {
-        axios.post(`https://i10a810.p.ssafy.io/api/communities/v1/likes/${communityId}`, {
+        axios.post(`https://i10a810.p.ssafy.io/api/communities/v1/likes/${communityId}`, null, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
@@ -120,7 +126,7 @@ export default function CommunityDetail(){
 
     //스크랩
     const postScrap = (communityId) => {
-        axios.post(`https://i10a810.p.ssafy.io/api/communities/v1/scrap/${communityId}`, {
+        axios.post(`https://i10a810.p.ssafy.io/api/communities/v1/scrap/${communityId}`, null, {
             headers: {
               Authorization: `Bearer ${accessToken}`,
             },
@@ -165,7 +171,8 @@ export default function CommunityDetail(){
             title: "삭제되었습니다!",
             text: "게시물이 정상적으로 삭제되었습니다.",
             icon: "success"
-          }).then(() =>{
+          })
+          .then(() =>{
               deleteData(communityId);
           });
         } else if (
@@ -188,16 +195,16 @@ export default function CommunityDetail(){
                         {detailData.title}
                     </Typography>
                     <Stack direction="row" style={{justifyContent: 'space-between', marginTop:'40px'}}>
-                        <div>
-                            <span style={{marginRight: '20px'}}>{detailData.createdAt}</span>
+                        <div style={{display:'flex', alignItems:'center'}}>
+                            <span style={{marginRight: '20px'}}>{dateTime}</span>
                             <Tooltip title="조회수">
-                                <VisibilityIcon/>
+                                <VisibilityIcon sx={{marginRight: '4px'}}/>
                             </Tooltip>
-                            <span> {detailData.viewCount}</span>
+                            {detailData.viewCount}
                         </div>
-                        <div>
+                        <div style={{display:'flex', alignItems:'center'}}>
                             <Tooltip title="작성자">
-                                <PersonIcon/>
+                                <PersonIcon sx={{marginRight: '4px'}}/>
                             </Tooltip>
                              {detailData.memberNickname}
                         </div>
@@ -241,13 +248,35 @@ export default function CommunityDetail(){
                                     {
                                         canLike ? (
                                             <Tooltip title="좋아요">
-                                                <IconButton size='small' onClick={() => {toggleLike(); postLike(communityId); }} >
+                                                <IconButton size='small' onClick={() => {
+                                                    isLogin? (
+                                                        toggleLike(),
+                                                        postLike(communityId)
+                                                    ) : (
+                                                        MySwal.fire({
+                                                            title: "로그인 필요",
+                                                            text: "로그인 후 이용해주세요.",
+                                                            icon: "warning"
+                                                        })
+                                                    )
+                                                    }} >
                                                     <FavoriteBorderIcon />
                                                 </IconButton>
                                             </Tooltip>
                                         ) : (
                                             <Tooltip title="좋아요 취소">
-                                                <IconButton size='small' onClick={() => {toggleLike(); deleteLike(communityId); }} >
+                                                <IconButton size='small' onClick={() => {
+                                                    isLogin? (
+                                                        toggleLike(),
+                                                        deleteLike(communityId)
+                                                    ) : (
+                                                        MySwal.fire({
+                                                            title: "로그인 필요",
+                                                            text: "로그인 후 이용해주세요.",
+                                                            icon: "warning"
+                                                        })
+                                                    )
+                                                    }} >
                                                     <FavoriteIcon />
                                                 </IconButton>
                                             </Tooltip>
@@ -257,13 +286,35 @@ export default function CommunityDetail(){
                                     {
                                         canScrap ? (
                                             <Tooltip title="스크랩">
-                                                <IconButton size='small' onClick={() => {toggleBookmark(); postScrap(communityId); }} >
+                                                <IconButton size='small' onClick={() => {
+                                                    isLogin? (
+                                                        toggleBookmark(),
+                                                        postScrap(communityId)
+                                                    ) : (
+                                                        MySwal.fire({
+                                                            title: "로그인 필요",
+                                                            text: "로그인 후 이용해주세요.",
+                                                            icon: "warning"
+                                                        })
+                                                    )
+                                                    }} >
                                                     <BookmarkBorderIcon />
                                                 </IconButton>
                                             </Tooltip>
                                         ) : (
                                             <Tooltip title="스크랩 취소">
-                                                <IconButton size='small' onClick={() => {toggleBookmark(); deleteScrap(communityId);}}>
+                                                <IconButton size='small' onClick={() => {
+                                                    isLogin? (
+                                                        toggleBookmark(),
+                                                        deleteScrap(communityId)
+                                                    ) : (
+                                                        MySwal.fire({
+                                                            title: "로그인 필요",
+                                                            text: "로그인 후 이용해주세요.",
+                                                            icon: "warning"
+                                                        })
+                                                    )
+                                                    }}>
                                                     <BookmarkIcon />
                                                 </IconButton>
                                             </Tooltip>

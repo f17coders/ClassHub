@@ -9,8 +9,11 @@ import CommunitySearch from '../../components/Community/CommunitySearch';
 import CommunityListAlignment from '../../components/Community/CommunityListAlignment';
 import axios from 'axios';
 import { useSelector } from "react-redux"
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 function Community() {
+  const MySwal = withReactContent(Swal);
   // 토큰
   let accessToken = useSelector((state) => state.accessToken)
   // 로그인 여부
@@ -75,23 +78,37 @@ function Community() {
 
           <Stack sx={{ mx: 3, px: 1, justifyContent: "space-between" }}  direction="row" >
             {/* 정렬 기능 컴포넌트 */}
-            <Stack direction="row" sx={{width:"90%"}}>
-              <Button onClick={() => {console.log("최신순 clicked"); setAlignList("createTime,desc")}} startIcon={<ExpandMoreIcon/>}>최신순</Button>
-              <Button onClick={() => {console.log("인기순 clicked");setAlignList("likeCount,desc")}} startIcon={<ExpandMoreIcon/>}>인기순</Button>
+            <Stack direction="row" sx={{width:"80%"}}>
+              <Button onClick={() => {setAlignList("createTime,desc")}} startIcon={<ExpandMoreIcon/>}>최신순</Button>
+              <Button onClick={() => {setAlignList("viewCount,desc")}} startIcon={<ExpandMoreIcon/>}>조회순</Button>
             </Stack>
             {/* <CommunityListAlignment sx={{width:"90%"}}/> */}
+
             {/* 글 작성하기 버튼 */}
+            <Tooltip title="게시물 작성하기">
             {
               isLogin? (
-                <Tooltip title="게시물 작성하기">
-                  <IconButton style={{ margin: 5 }} onClick={() => { navigate(`/community/write`);}}>
-                    <CreateIcon/>
-                  </IconButton>
-                </Tooltip>
+                  <Button startIcon={<CreateIcon/> } 
+                  onClick={() => { navigate(`/community/write`);}}>
+                    작성하기
+                  </Button>
               ) : (
-                null
+                  <Button startIcon={<CreateIcon/> } 
+                  onClick={() => {
+                    MySwal.fire({
+                      title: "로그인 후 이용해주세요!",
+                      text: "게시물 작성은 로그인 후 이용 가능합니다.",
+                      icon: "warning"
+                    })
+                    .then(() => {
+                      navigate(`/login`);
+                    })
+                    }}>
+                    작성하기
+                  </Button>
               )
             }
+            </Tooltip>
             
           </Stack>
 
