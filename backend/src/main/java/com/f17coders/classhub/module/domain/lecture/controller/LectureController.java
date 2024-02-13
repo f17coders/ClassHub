@@ -14,6 +14,7 @@ import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListTagR
 import com.f17coders.classhub.module.domain.lecture.dto.response.LectureReadRes;
 import com.f17coders.classhub.module.domain.lecture.repository.LectureRepository;
 import com.f17coders.classhub.module.domain.lecture.service.LectureService;
+import com.f17coders.classhub.module.domain.lectureBuy.repository.LectureBuyRepository;
 import com.f17coders.classhub.module.domain.lectureBuy.service.LectureBuyService;
 import com.f17coders.classhub.module.domain.lectureLike.service.LectureLikeService;
 import com.f17coders.classhub.module.domain.member.Member;
@@ -53,6 +54,7 @@ public class LectureController {
 	private final MemberRepository memberRepository;
 	private final LectureLikeService lectureLikeService;
 	private final LectureBuyService lectureBuyService;
+	private final LectureBuyRepository lectureBuyRepository;
 
 	@Operation(summary = "강의 상세 정보 조회")
 	@GetMapping("/v0/details/{lectureId}")
@@ -88,7 +90,8 @@ public class LectureController {
 		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
 
 		Member member = memberRepository.findById(memberSecurityDTO.getMemberId())
-			.orElseThrow(()->new BaseExceptionHandler("해당하는 유저를 찾을수없습니다.", ErrorCode.NOT_FOUND_USER_EXCEPTION));
+			.orElseThrow(() -> new BaseExceptionHandler("해당하는 유저를 찾을수없습니다.",
+				ErrorCode.NOT_FOUND_USER_EXCEPTION));
 
 		lectureLikeService.likeLecture(lectureId, member);
 
@@ -102,7 +105,8 @@ public class LectureController {
 		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
 
 		Member member = memberRepository.findById(memberSecurityDTO.getMemberId())
-			.orElseThrow(()->new BaseExceptionHandler("해당하는 유저를 찾을수없습니다.", ErrorCode.NOT_FOUND_USER_EXCEPTION));
+			.orElseThrow(() -> new BaseExceptionHandler("해당하는 유저를 찾을수없습니다.",
+				ErrorCode.NOT_FOUND_USER_EXCEPTION));
 
 		lectureLikeService.unLikeLecture(lectureId, member);
 
@@ -137,7 +141,8 @@ public class LectureController {
 		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO
 	) throws IOException {
 
-		LectureListJobRes lectures = lectureService.getLecturesByDesiredJob(memberSecurityDTO.toMember().getMemberId());
+		LectureListJobRes lectures = lectureService.getLecturesByDesiredJob(
+			memberSecurityDTO.toMember().getMemberId());
 
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectures);
 	}
@@ -145,15 +150,31 @@ public class LectureController {
 	@Operation(summary = "강의 구매")
 	@PostMapping("/v1/buy/{lectureId}")
 	public ResponseEntity<BaseResponse<Integer>> buyLecture(
-			@PathVariable("lectureId") int lectureId,
-			@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+		@PathVariable("lectureId") int lectureId,
+		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
 
 		Member member = memberRepository.findById(memberSecurityDTO.getMemberId())
-				.orElseThrow(()->new BaseExceptionHandler("해당하는 유저를 찾을수없습니다.", ErrorCode.NOT_FOUND_USER_EXCEPTION));
+			.orElseThrow(() -> new BaseExceptionHandler("해당하는 유저를 찾을수없습니다.",
+				ErrorCode.NOT_FOUND_USER_EXCEPTION));
 
 		lectureBuyService.buyLecture(lectureId, member);
 
 		return BaseResponse.success(SuccessCode.INSERT_SUCCESS, lectureId);
+	}
+
+	@Operation(summary = "강의 구매")
+	@GetMapping("/v1/buy/hi/{jobId}")
+	public ResponseEntity<BaseResponse<List<Integer>>> tetet(
+		@PathVariable("jobId") int jobId,
+		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+
+		Member member = memberRepository.findById(memberSecurityDTO.getMemberId())
+			.orElseThrow(() -> new BaseExceptionHandler("해당하는 유저를 찾을수없습니다.",
+				ErrorCode.NOT_FOUND_USER_EXCEPTION));
+
+		List<Integer> lectureIds = lectureBuyRepository.getLectureIdsByJobId(jobId);
+
+		return BaseResponse.success(SuccessCode.INSERT_SUCCESS,lectureIds);
 	}
 
 
