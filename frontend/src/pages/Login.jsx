@@ -4,8 +4,6 @@ import MainLogo from './../assets/MainLogo.png'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import naverLogo from './../assets/Login/naverLogo.png'
-import googleLogo from './../assets/Login/googleLogo.png'
 import kakaoLogo from './../assets/Login/kakaoLogo.png'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
@@ -65,9 +63,9 @@ function Login() {
 	}
 
 	// 좋아요 리스트도 가져오기
-	const getUserLike = function() {
+	// const getUserLike = function() {
 		
-	}
+	// }
 
 
 	// 카카오 로그인
@@ -81,24 +79,6 @@ function Login() {
 		window.location.href = 'https://i10a810.p.ssafy.io/login/oauth2/authorization/kakao';
 	}
 
-
-	// 구글 로그인 버튼 호버용
-	let [googleHover, setGoogleHover] = useState(false)
-	const hoverInGoogle = function () {
-		setGoogleHover(true)
-	}
-	const hoverOutGoogle = function () {
-		setGoogleHover(false)
-	}
-
-	// 네이버 로그인 버튼 호버용
-	let [naverHover, setNaverHover] = useState(false)
-	const hoverInNaver = function () {
-		setNaverHover(true)
-	}
-	const hoverOutNaver = function () {
-		setNaverHover(false)
-	}
 	// 카카오 로그인 버튼 호버용
 	let [kakaoHover, setKakaoHover] = useState(false)
 	const hoverInKakao = function () {
@@ -120,22 +100,6 @@ function Login() {
         <img src={MainLogo} alt="MainLogo" style={{ width: '15%' }} />
         <p>서비스 이용을 위해 로그인/회원가입을 해주세요</p>
         <div style={{ display: 'flex', flexDirection: 'column', marginTop: '30px', width: '20%', justifyContent: 'space-around', alignItems: 'center' }}>
-					<Paper 
-					onMouseEnter={hoverInGoogle}
-					onMouseLeave={hoverOutGoogle}
-					style={{
-						display:'flex', 
-						justifyContent:'center',
-						alignItems:'center',
-						backgroundColor:'rgb(242, 242, 242)', 
-						cursor: googleHover ? 'pointer' : 'default',
-						boxShadow: googleHover ? '2px 2px 8px 4px lightgrey' : '2px 2px 4px 2px lightgrey',
-						width:'300px',
-						height:'60px'
-					}}>
-						<img src={googleLogo} style={{width: '50px', height:'50px'}} />
-						<p style={{fontSize:'1.1em', marginLeft:'10px'}}>Google로 로그인하기</p>
-					</Paper>
 					<Paper 
 					onMouseEnter={hoverInKakao}
 					onMouseLeave={hoverOutKakao}

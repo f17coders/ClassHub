@@ -9,6 +9,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
+import CheckIcon from '@mui/icons-material/Check';
 import SellIcon from '@mui/icons-material/Sell'
 import axios from 'axios'
 import EastIcon from '@mui/icons-material/East'
@@ -43,7 +44,7 @@ function LectureDetail() {
 	useEffect(() => {
 		axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0/details/${lectureId}`)
 			.then((response) => {
-				// console.log(response.data.result)
+				console.log(response.data.result)
 				setLecture(response.data.result)
 			})
 			.catch((err) => console.log(err));
@@ -258,7 +259,8 @@ function Content1(props) {
 	const [htmlString, setHtmlString] = useState('')
 	useEffect(() => {
 		if (htmlString == '') {
-			axios.get('https://storage.googleapis.com/classhub/data/udemy/htmlFiles/1.html')
+			axios.get('https://storage.googleapis.com/classhub/data/udemy/htmlFiles/328990.html')
+			// axios.get('https://storage.googleapis.com/classhub/data/udemy/htmlFiles/1.html')
 				.then((res) => {
 					setHtmlString(res.data)
 				})
@@ -275,6 +277,7 @@ function Content1(props) {
 	const style = {
 		position: 'absolute',
 		backgroundColor:'white',
+		padding:'10px',
 		top: '50%',
 		left: '50%',
 		transform: 'translate(-50%, -50%)',
@@ -282,13 +285,25 @@ function Content1(props) {
 		height:'80%',
 		border: '2px solid #000',
 		boxShadow: 24,
-		overflow:'scroll'
+		overflowY:'scroll',
+		overflowX: 'hidden'
 	};
 	return (
 		<div>
 			<div>
 				<h3>한 줄 소개</h3>
-				<p>{lecture.summary}</p>
+				{
+					lecture.summary.length != 0 ? (
+					<div>
+						 {
+							lecture.summary.map((item, idx) => {
+								return(
+									<div key={idx} style={{display:'flex', alignItems:'center'}}><CheckIcon/>{item}</div>
+								)
+							})
+						 }
+					</div>) : (<p>한 줄 소개가 없는 강의입니다.</p>)
+				}
 			</div>
 			<div style={{marginTop:'50px'}}>
 				<h3>배울 내용 요약</h3>
