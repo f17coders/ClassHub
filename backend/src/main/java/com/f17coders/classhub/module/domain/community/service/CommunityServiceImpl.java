@@ -259,11 +259,15 @@ public class CommunityServiceImpl implements CommunityService {
     private boolean isCommunityWriter(Member member, Community community) {
         if(member == null)
             return false;
+        if(community.getMember() == null)
+            return false;
         return community.getMember().getMemberId() == member.getMemberId();
     }
 
     private boolean isCommentWriter(Member member, Comment comment) {
         if(member == null)
+            return false;
+        if(comment.getMember() == null)
             return false;
         return comment.getMember().getMemberId() == member.getMemberId();
     }
