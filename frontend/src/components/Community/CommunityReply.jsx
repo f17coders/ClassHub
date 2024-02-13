@@ -20,6 +20,7 @@ export default function CommunityReply({detailData}){
   let accessToken = useSelector((state) => state.accessToken)
   // 로그인 여부
   let isLogin = useSelector((state) => state.isLogin)
+  let user = useSelector((state) => state.user)
   const navigate = useNavigate();
   const [content, setContent] = useState('');
   const MySwal = withReactContent(Swal);
@@ -69,6 +70,7 @@ export default function CommunityReply({detailData}){
         })
         .then((res) => {
           console.log(res)
+          console.log(profileImage)
           // 등록 확인 dialog
           MySwal.fire({
             title: "등록되었습니다!",
@@ -99,14 +101,12 @@ export default function CommunityReply({detailData}){
     // 댓글 삭제 함수
       axios.delete(`https://i10a810.p.ssafy.io/api/comments/v1/${commentId}`,
       {
-        "commentId": commentId,
-      }, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       })
       .then((res) => {
-        console.log(res)
+        // console.log(res)
         MySwal.fire({
           title: "삭제되었습니다!",
           text: "댓글이 정상적으로 삭제되었습니다.",
@@ -139,8 +139,8 @@ export default function CommunityReply({detailData}){
     return(
         <div>
             {/* 댓글 */}
-            <div>
-                <ChatIcon/> 댓글 {detailData.commentCount}
+            <div style={{display:'flex', alignItems:'center'}}>
+                <ChatIcon sx={{marginRight: '4px'}}/> 댓글 {detailData.commentCount}
             </div>
 
             {/* 댓글 입력창 */}
@@ -155,7 +155,7 @@ export default function CommunityReply({detailData}){
                     onKeyDown={enterKeyPress} //엔터키 눌렀을 때 이벤트 핸들링
                     />
                     <Tooltip title="등록">
-                        <IconButton onClick={() => {createReply(); }}>
+                        <IconButton onClick={() => {createReply()}}>
                             <SendIcon/>
                         </IconButton>
                     </Tooltip>
@@ -169,7 +169,7 @@ export default function CommunityReply({detailData}){
                 detailData.commentList && detailData.commentList.map((singleComment, index) => (
                   <ListItem key={index} alignItems="flex-start">
                     <ListItemAvatar>
-                      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                      <Avatar src={user.profileImage} />
                     </ListItemAvatar> 
                     
                     {/* 수정 모드인 경우 */}
@@ -200,12 +200,32 @@ export default function CommunityReply({detailData}){
                           }
                         />
                         <Tooltip title="수정">
-                              <IconButton onClick={() => {setEditingCommentId(singleComment.commentId); }}>
+                              <IconButton onClick={() => {
+                                isLogin? (
+                                  setEditingCommentId(singleComment.commentId)
+                                ) : (
+                                  MySwal.fire({
+                                    title: "로그인 필요",
+                                    text: "로그인 후 이용해주세요.",
+                                    icon: "warning",
+                                  })
+                                )
+                                }}>
                                   <EditIcon/>
                               </IconButton>
                           </Tooltip>
                           <Tooltip title="삭제">
-                              <IconButton onClick={() => {handleDeleteDialogOpen(singleComment.commentId); }}>
+                              <IconButton onClick={() => {
+                                isLogin? (
+                                  handleDeleteDialogOpen(singleComment.commentId)
+                                ) : (
+                                  MySwal.fire({
+                                    title: "로그인 필요",
+                                    text: "로그인 후 이용해주세요.",
+                                    icon: "warning",
+                                  })
+                                )
+                                }}>
                                   <DeleteIcon/>
                               </IconButton>
                           </Tooltip> 

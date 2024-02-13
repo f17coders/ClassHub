@@ -148,7 +148,8 @@ export default function StudyRoom() {
               ) : (
                 null
               )
-            } 
+            }
+                
             </Grid>
 
           </Grid>
