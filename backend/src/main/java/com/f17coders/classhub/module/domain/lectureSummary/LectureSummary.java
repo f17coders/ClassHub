@@ -16,4 +16,6 @@ public class LectureSummary extends BaseEntity {
     private Float combinedRating;
     private int combinedRatingCount;
     private int lectureLikeCount;
+    private int siteStudentCount;
+    private float weight;
 }

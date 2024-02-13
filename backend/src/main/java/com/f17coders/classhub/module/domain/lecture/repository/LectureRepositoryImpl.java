@@ -339,10 +339,7 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 		} else if (order.equals("lowest-price")) {
 			return new OrderSpecifier[] {lecture.priceSale.asc(), lectureSummary.combinedRating.desc()};
 		} else {
-			return new OrderSpecifier[] {Expressions.numberTemplate(Float.class,
-				"{0}*0.35 + {1}*0.35 + {2}*0.2 + {3}*0.1",
-				lecture.siteStudentCount, lectureSummary.combinedRating, lectureSummary.lectureLikeCount,
-				lectureSummary.combinedRatingCount).desc()
+			return new OrderSpecifier[] {lectureSummary.weight.desc()
 			};
 		}
 
