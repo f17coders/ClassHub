@@ -70,7 +70,7 @@ export default function CommunityReply({detailData}){
         })
         .then((res) => {
           console.log(res)
-          console.log(profileImage)
+          // console.log(profileImage)
           // 등록 확인 dialog
           MySwal.fire({
             title: "등록되었습니다!",
@@ -169,7 +169,7 @@ export default function CommunityReply({detailData}){
                 detailData.commentList && detailData.commentList.map((singleComment, index) => (
                   <ListItem key={index} alignItems="flex-start">
                     <ListItemAvatar>
-                      <Avatar src={user.profileImage} />
+                      <Avatar alt={singleComment.memberNickname} src={singleComment.memberProfileImg} />
                     </ListItemAvatar> 
                     
                     {/* 수정 모드인 경우 */}
@@ -199,22 +199,25 @@ export default function CommunityReply({detailData}){
                           </React.Fragment>
                           }
                         />
-                        <Tooltip title="수정">
-                              <IconButton onClick={() => {
-                                isLogin? (
-                                  setEditingCommentId(singleComment.commentId)
-                                ) : (
-                                  MySwal.fire({
-                                    title: "로그인 필요",
-                                    text: "로그인 후 이용해주세요.",
-                                    icon: "warning",
-                                  })
-                                )
-                                }}>
-                                  <EditIcon/>
-                              </IconButton>
-                          </Tooltip>
-                          <Tooltip title="삭제">
+                        {
+                          singleComment.canUpdate? (
+                            <>
+                            <Tooltip title="수정">
+                                <IconButton onClick={() => {
+                                  isLogin? (
+                                    setEditingCommentId(singleComment.commentId)
+                                  ) : (
+                                    MySwal.fire({
+                                      title: "로그인 필요",
+                                      text: "로그인 후 이용해주세요.",
+                                      icon: "warning",
+                                    })
+                                  )
+                                  }}>
+                                    <EditIcon/>
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="삭제">
                               <IconButton onClick={() => {
                                 isLogin? (
                                   handleDeleteDialogOpen(singleComment.commentId)
@@ -228,7 +231,15 @@ export default function CommunityReply({detailData}){
                                 }}>
                                   <DeleteIcon/>
                               </IconButton>
-                          </Tooltip> 
+                            </Tooltip> 
+                        </>
+                          ) : (
+                            null
+                          )
+                        }
+                        
+
+                          
                       </>
                     )}
                   </ListItem>

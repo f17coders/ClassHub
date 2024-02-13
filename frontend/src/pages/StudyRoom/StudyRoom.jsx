@@ -9,20 +9,6 @@ import ParticipatingRoomList from "../../components/StudyRoom/ParticipatingRoomL
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
-const FireNav = styled(List)({
-  '& .MuiListItemButton-root': {
-    paddingLeft: 24,
-    paddingRight: 24,
-  },
-  '& .MuiListItemIcon-root': {
-    minWidth: 0,
-    marginRight: 16,
-  },
-  '& .MuiSvgIcon-root': {
-    fontSize: 20,
-  },
-});
-
 // 스터디룸 홈페이지
 export default function StudyRoom() {
     const MySwal = withReactContent(Swal);
@@ -72,42 +58,26 @@ export default function StudyRoom() {
     const [open, setOpen] = React.useState(true);
 
     return(
-        <Container>
+        <Container sx={{bgcolor:"theme.palette.background.paper"}}>
           <Grid container sx={{width:"100%"}}>
-            {/* <Hidden smUp>
-            </Hidden> */}
-
-            <Hidden smDown>
-              <Box sx={{ display: 'flex' }}>
-                <ThemeProvider
-                  theme={createTheme({
-                    components: {
-                      MuiListItemButton: {
-                        defaultProps: {
-                          disableTouchRipple: true,
-                        },
-                      },
-                    },
-                    palette: {
-                      mode: 'dark',
-                      primary: { main: 'rgb(102, 157, 246)' },
-                      background: { paper: 'rgb(5, 30, 52)' },
-                    },
-                  })}
-                >
-                <Paper elevation={0} sx={{ maxWidth: 256 }}>
-                  <FireNav component="nav" disablePadding>
-                    <ListItem component="div" disablePadding>
-
+              <Box sx={{ display: 'flex'}}>
+                <Paper elevation={0} sx={{ maxWidth: 256, marginTop: '20px' }}>
                       {/* 모집하기 버튼 */}
-                      <ListItemButton selected={selectedIndex === 0}
+                      <ListItemButton 
+                      // selected={selectedIndex === 0}
                         onClick={(event) =>{
                           handleListItemClick(event, 0)
                           navigate('recruit');
                         }}
-                        sx={{ height: 56,
-                          backgroundColor: selectedIndex === 0 ? 'pink' : null,
-                        }}>
+                        sx={{ 
+                          padding: '1em',
+                          paddingBottom: '1.1em',
+                          border: '3px solid rgba(25, 118, 210, 0.12)',
+                          borderRadius: '15px',
+                          marginX: '1em',
+                          height: 56,
+                        }}
+                        >
 
                         <ListItemIcon>
                           <Home color="white"/>
@@ -115,30 +85,22 @@ export default function StudyRoom() {
                         <ListItemText
                           primary="모집하기"
                           primaryTypographyProps={{
-                            color: 'white',
-                            fontWeight: 'medium',
-                            fontSize: '16px',
+                            color: 'black',
+                            fontWeight: 'bold',
+                            fontSize: 17,
                             variant: 'body2',
                           }}
                         />
                       </ListItemButton>
-                    </ListItem>
                         
-                    <Divider />
                     {/* 참여중인 스터디 목록 */}
                     <ParticipatingRoomList selected={selectedIndex} onClick={handleListItemClick}/>
                         
-                    <Divider />
                     {/* 1:1 개인 메시지 */}
                     <PrivateMessageList selected={selectedIndex} onClick={handleListItemClick}/>
                         
-                  </FireNav>
                 </Paper>
-              </ThemeProvider>
             </Box>
-            </Hidden>
-            
-
             
             {/* contentArea */}
             <Grid item backgroundColor="theme.palette.background.paper"  xs={12} sm>

@@ -5,7 +5,7 @@ import { useSelector } from "react-redux"
 import SockJS from "sockjs-client/dist/sockjs";
 import { Client } from "@stomp/stompjs";
 import SendIcon from '@mui/icons-material/Send';
-import { ListItem, Avatar, ListItemAvatar, ListItemText, CircularProgress, Alert, TextField, Button, Stack, Box, List, ListItemButton, Grid, Typography, Divider, IconButton, Tooltip } from '@mui/material'
+import { FormControl,OutlinedInput, ListItem, Avatar, ListItemAvatar, ListItemText, CircularProgress, Alert, TextField, Button, Stack, Box, List, ListItemButton, Grid, Typography, Divider, IconButton, Tooltip } from '@mui/material'
 
 // 스터디룸 개인 메시지
 export default function StudyRoomPrivateMessage() {
@@ -129,8 +129,8 @@ export default function StudyRoomPrivateMessage() {
     };
     
     return(
-        <List sx={{ display: 'flex',  maxHeight: "80vh" }}>
-            <Stack sx={{ width:"100%", maxHeight: "80vh" , display:"flex", marginTop: 5}}>
+        <List sx={{ display: 'flex-row',  maxHeight: "80vh" }}>
+            <Stack sx={{ width:"100%", height: "80vh" , display:"flex"}}>
                 <Box 
                     ref={scrollContainerRef}
                     sx={{ height: "90%",
@@ -138,8 +138,8 @@ export default function StudyRoomPrivateMessage() {
                     position: 'relative',
                     overflow: 'auto',
                     // 스크롤바 숨기기
-                    "-ms-overflow-style": "none", /* IE and Edge */
-                    "scrollbar-width": "none", /* Firefox */
+                    "msOverflowStyle": "none", /* IE and Edge */
+                    "scrollbarWidth": "none", /* Firefox */
                     "&::-webkit-scrollbar": {
                     display: "none" /* Chrome, Safari, and Opera */,
                     },
@@ -228,19 +228,41 @@ export default function StudyRoomPrivateMessage() {
                         <CircularProgress sx={{ width:"100%", height:"10%", margin: "auto"}} />
                         {/* <Divider sx={{my: 2}}>채팅을 연결하는 중입니다. 잠시만 기다려주세요</Divider> */}
                     </React.Fragment>
-                    : <Box sx={{ width:"100%", height:"10%", display: 'flex', justifyContent:'flex-start', alignItems: 'flex-start' }}>
-                    <TextField
-                        id="standard-multiline-static"
-                        label="채팅을 작성해주세요"
-                        multiline
-                        rows={2}
-                        sx={{flex: 9, marginLeft: 3}}
-                        value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
-                        onKeyPress={(e) => handleKeyPress(e)}
-                    />
-                    <Button sx={{mx: 2}} variant="contained" endIcon={<SendIcon />} onClick={sendMessage}></Button>
-                </Box>
+                    : 
+                    <div style={{ width: '100%', marginTop: '10px' }}>
+                        <form noValidate autoComplete="off">
+                          <FormControl size="small" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                            <OutlinedInput 
+                            multiline
+                            rows={2}
+                            sx={{width: "100%", marginRight: '10px'}} 
+                            placeholder="채팅을 작성해주세요"
+                            value={newMessage}
+                            onChange={(e) => setNewMessage(e.target.value)}
+                            onKeyPress={(e) => handleKeyPress(e)}
+                            />
+                            <Tooltip title="전송">
+                                <IconButton onClick={sendMessage}>
+                                    <SendIcon/>
+                                </IconButton>
+                            </Tooltip>
+                          </FormControl>
+                        </form>
+                    </div>
+                    
+                    // <Box sx={{ width:"100%", height:"10%", display: 'flex', justifyContent:'flex-start', alignItems: 'flex-start' }}>
+                    //     <TextField
+                    //         id="standard-multiline-static"
+                    //         label="채팅을 작성해주세요"
+                    //         multiline
+                    //         rows={2}
+                    //         sx={{flex: 9, marginLeft: 3}}
+                    //         value={newMessage}
+                    //         onChange={(e) => setNewMessage(e.target.value)}
+                    //         onKeyPress={(e) => handleKeyPress(e)}
+                    //     />
+                    //     <Button sx={{mx: 2}} variant="contained" endIcon={<SendIcon />} onClick={sendMessage}></Button>
+                    // </Box>
                 }
                 
                 
