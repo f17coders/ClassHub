@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid'
 import { useSelector } from "react-redux"
 import { useState, useEffect } from "react"
 import axios from 'axios'
+import { motion } from 'framer-motion'
 
 // 홈페이지에서 강의 추천 (직업)
 
@@ -32,12 +33,35 @@ function RecommendTag({tag}) {
             {
                 lectures.length != 0 ? (
                     <div>
-                        <div style={{ textAlign: "center", margin: "10px" }}>
+                        <motion.div 
+                            initial={{ opacity: 0, y: 40 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: false }}
+                            transition={{
+                                type: "spring",
+                                duration: 1.5,
+                                bounce: 0.2
+                                // ease: "linear",
+                                // duration: 2,
+                                // y: { duration: 2 },
+                            }}
+                            style={{ textAlign: "center", margin: "10px" }}
+                        >
                             {
                                 isLogin ? (<p style={{ marginBottom: 0 }}>{user.nickname}님의 관심 기술</p>) : null
                             }
                             <p style={{ fontWeight: "800", fontSize: "2em", marginTop: '0' }}>{tag.name} 분야 인기강의</p>
-                        </div>
+                            </motion.div>
+                        <motion.div
+                            initial={{ opacity: 0, y: 50 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: false }}
+                            transition={{
+                                type: "spring",
+                                duration: 1.5,
+                                bounce: 0.2
+                            }}
+                        >
                         <Grid container spacing={{ sm: 1, md: 2 }} justifyContent="center" alignItems="center">
                             {
                                 lectures.map((lecture, idx) => (
@@ -47,7 +71,8 @@ function RecommendTag({tag}) {
                                 ))
                             }
                         </Grid>
-                    </div>
+                        </motion.div>
+                   </div>
                 ) : null
             }
 

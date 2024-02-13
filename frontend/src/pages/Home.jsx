@@ -3,6 +3,7 @@ import Search from './../components/Home/Search'
 import RecommendJob from '../components/Home/RecommendJob'
 import RecommendTag from '../components/Home/RecommendTag'
 import CompareButton from './../components/CompareButton'
+import GoPage from '../components/Home/GoPage'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
@@ -18,6 +19,7 @@ function Home() {
 		<div>
 			<Banner />
 			<Search />
+			<GoPage />
 			<RecommendJob />
 			{
 				isLogin ? (<div>
