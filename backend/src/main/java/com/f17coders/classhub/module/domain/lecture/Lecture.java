@@ -76,10 +76,7 @@ public class Lecture extends BaseEntity {
 	private String siteLink;
 
 	@Column(length = 300)
-	private String gptReviewGood;
-
-	@Column(length = 300)
-	private String gptReviewBad;
+	private String gptReview;
 
 	// Lecture - Category 연관 관계
 	@ManyToOne(fetch = FetchType.LAZY)

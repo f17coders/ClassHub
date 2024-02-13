@@ -31,11 +31,11 @@ public record LectureReadRes(
 	float siteReviewRating,
 	int siteReviewCount,
 	int siteStudentCount,
-	String gptReviewGood,
-	String gptReviewBad,
+	String gptReview,
 	String descriptionSummary,  // 한줄요약
 	String summary, // 배울내용
-	String descriptionDetail
+	String descriptionDetail,
+	boolean canBuy
 
 ) {
 
