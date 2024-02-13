@@ -1,5 +1,6 @@
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
+import {Pagination, Stack, Box} from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -12,10 +13,9 @@ import axios from 'axios'
 function MyPageLecture() {
   const accessToken = useSelector((state) => state.accessToken)
   const navigate = useNavigate()
-  const [page, setPage] = useState(0)
   const [lectures, setLectures] = useState([])
   useEffect(() => {
-    axios.get(`https://i10a810.p.ssafy.io/api/members/v1/lectures/buy?size=8&page=${page}`, {
+    axios.get(`https://i10a810.p.ssafy.io/api/members/v1/lectures/buy?size=6&page=${page}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -26,6 +26,16 @@ function MyPageLecture() {
     })
     .catch((err) => console.log(err))
   }, [])
+
+
+  // 페이지네이션 관련
+  const [page, setPage] = useState(0)
+  const [totalPages, setTotalPages] = useState(1)
+  const handleChange = (event, value) => {
+		setPage(value - 1);
+	}
+
+
   return(
     <div style={{position:'relative', height:'70%'}}>
       <h2>내가 수강중인 강의</h2>
@@ -47,6 +57,11 @@ function MyPageLecture() {
           </div>)
         }
       </div>
+      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+						<Stack spacing={2}>
+							<Pagination count={totalPages} page={page} onChange={handleChange} />
+						</Stack>
+					</Box>
     </div>
   )
 }
