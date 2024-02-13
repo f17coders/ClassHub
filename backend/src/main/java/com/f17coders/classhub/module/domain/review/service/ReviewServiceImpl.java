@@ -4,6 +4,7 @@ import com.f17coders.classhub.global.exception.BaseExceptionHandler;
 import com.f17coders.classhub.global.exception.code.ErrorCode;
 import com.f17coders.classhub.module.domain.lecture.Lecture;
 import com.f17coders.classhub.module.domain.lecture.repository.LectureRepository;
+import com.f17coders.classhub.module.domain.lectureBuy.LectureBuy;
 import com.f17coders.classhub.module.domain.lectureBuy.repository.LectureBuyRepository;
 import com.f17coders.classhub.module.domain.lectureLike.repository.LectureLikeRepository;
 import com.f17coders.classhub.module.domain.member.Member;
@@ -72,6 +73,13 @@ public class ReviewServiceImpl implements ReviewService {
 			.orElseThrow(
 				() -> new BaseExceptionHandler("lectureId=" + lectureId + " 강의를 DB에서 찾을수없습니다.",
 					ErrorCode.NOT_FOUND_ITEM_EXCEPTION));
+		int isBuyed = lectureBuyRepository.countByMember_MemberIdAndLecture_LectureId(
+			member.getMemberId(), lectureId);
+		if (isBuyed==0) {
+			// 안 샀네 못 써~
+			throw new BaseExceptionHandler("해당 사용자는 해당 강의를 구매하지 않았습니다.",
+				ErrorCode.INTERNAL_SERVER_ERROR);
+		}
 
 		Optional<Review> isReviewExist = reviewRepository.findByMember_MemberIdAndLecture_LectureId(
 			member.getMemberId(), lectureId);
