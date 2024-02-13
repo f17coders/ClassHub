@@ -155,7 +155,7 @@ function MyPage() {
 				isLogin == true ? (<div>{
 					user != null ? (
 						<Grid container>
-							<Grid item xs={5} md={3} sx={{ display: 'flex', justifyContent: 'center', padding: '30px', flexDirection: 'column' }}>
+							<Grid item xs={5} md={3} sx={{ display: 'flex', justifyContent: 'flex-start', padding: '30px', flexDirection: 'column' }}>
 								<img style={{ width: '180px', height: '180px', borderRadius: '75%', margin: '30px auto', cursor: 'pointer' }} onClick={() => handleClick(null)} src={user.profileImage == null ? profileImg : user.profileImage} alt="Profile Image" />
 								{/* <p style={{ marginTop: '20px', marginBottom: '5px', textAlign: 'center', fontWeight: '600', color: 'grey' }}><span style={{color:'black'}}>{user.job.name}</span>가 될</p> */}
 								<p style={{ marginTop: '10px', textAlign: 'center', fontWeight: '800', fontSize: '1.6em', cursor: 'pointer' }} onClick={() => handleClick(null)}>{user.nickname}의<br />마이페이지</p>
