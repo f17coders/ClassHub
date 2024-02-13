@@ -13,6 +13,8 @@ import { useSelector } from "react-redux"
 function Community() {
   // 토큰
   let accessToken = useSelector((state) => state.accessToken)
+  // 로그인 여부
+  let isLogin = useSelector((state) => state.isLogin)
   // 전체 글
   const [articles, setArticles] = useState([])
   // 현재 페이지를 나타내는 state
@@ -79,11 +81,18 @@ function Community() {
             </Stack>
             {/* <CommunityListAlignment sx={{width:"90%"}}/> */}
             {/* 글 작성하기 버튼 */}
-            <Tooltip title="게시물 작성하기">
-              <IconButton style={{ margin: 5 }} onClick={() => { navigate(`/community/write`);}}>
-                <CreateIcon/>
-              </IconButton>
-            </Tooltip>
+            {
+              isLogin? (
+                <Tooltip title="게시물 작성하기">
+                  <IconButton style={{ margin: 5 }} onClick={() => { navigate(`/community/write`);}}>
+                    <CreateIcon/>
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                null
+              )
+            }
+            
           </Stack>
 
           {/* <hr/> */}
