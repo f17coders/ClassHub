@@ -83,11 +83,11 @@ public class Member extends BaseEntity {
     private List<Comment> commentList = new ArrayList<>();
 
     // Member - CommunityLike 연관 관계
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommunityLike> communityLikeList = new ArrayList<>();
 
     // Member - CommunityScrap 연관 관계
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommunityScrap> communityScrapList = new ArrayList<>();
 
     // Member - MemberTag 연관 관계
