@@ -76,7 +76,7 @@ public class StudyController {
     public ResponseEntity<BaseResponse<Integer>> updateStudy(
             @RequestBody StudyUpdateReq studyUpdateReq, @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) {
 
-        studyService.updateStudy(studyUpdateReq, memberSecurityDTO.getMemberId());
+        studyService.updateStudy(studyUpdateReq, memberSecurityDTO.toMember());
 
         return BaseResponse.success(SuccessCode.UPDATE_SUCCESS, studyUpdateReq.studyId());
     }
