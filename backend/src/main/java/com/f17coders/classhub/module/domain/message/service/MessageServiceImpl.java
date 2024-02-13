@@ -54,12 +54,13 @@ public class MessageServiceImpl implements MessageService {
 
         int targetId;
         String text = "";
+
         if(messageReq.getSender().get("memberId").equals(personalChat.getSender().get("memberId"))) {
             targetId = Integer.parseInt(personalChat.getReceiver().get("memberId"));
-            text = personalChat.getReceiver().get("nickname") + "님으로부터 새로운 채팅이 도착했습니다.";
+            text = personalChat.getSender().get("nickname") + "님으로부터 새로운 채팅이 도착했습니다.";
         } else {
             targetId = Integer.parseInt(personalChat.getSender().get("memberId"));
-            text = personalChat.getSender().get("nickname") + "님으로부터 새로운 채팅이 도착했습니다.";
+            text = personalChat.getReceiver().get("nickname") + "님으로부터 새로운 채팅이 도착했습니다.";
         }
 
         alarmService.registPersonalChatAlarm(personalChatId, targetId, text);
