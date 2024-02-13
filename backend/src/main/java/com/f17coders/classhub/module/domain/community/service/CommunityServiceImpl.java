@@ -102,7 +102,7 @@ public class CommunityServiceImpl implements CommunityService {
             .communityId(communityId)
             .title(community.getTitle())
             .content(community.getContent())
-            .memberNickname(community.getMember().getNickname())
+            .memberNickname(community.getMember() != null ? community.getMember().getNickname() : "(탈퇴한 사용자)")
             .tagList(tagResList)
             .viewCount(community.getViewCount())
             .commentCount(community.getCommentList().size())
