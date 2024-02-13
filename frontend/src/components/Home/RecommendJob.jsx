@@ -32,6 +32,7 @@ function RecommendJob() {
         } else {
             axios.get('https://i10a810.p.ssafy.io/api/lectures/v0/desired-job')
                 .then((res) => {
+                    console.log(res)
                     setLectures(res.data.result.lectureList)
                     setJob(res.data.result.job.name)
                 })

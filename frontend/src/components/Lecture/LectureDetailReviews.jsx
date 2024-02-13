@@ -101,7 +101,6 @@ function LectureDetailReviews({ lecture }) {
   // 위로가기 버튼
   const goTop = () => {
     window.scrollTo(0, 0)
-    handleClose()
   }
   const fab = {
     color: 'inherit',
