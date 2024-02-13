@@ -10,21 +10,34 @@ import StudyRoomRecruitList from '../../components/StudyRoom/StudyRoomRecruitLis
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
+import { changeFilter  } from '../../store/store';
 
 // 스터디 모집하는 페이지
 export default function StudyRoomRecruit() {
   const MySwal = withReactContent(Swal);
   const [data, setData] = useState([])
+  const dispatch = useDispatch();
+  const [searchWord, setSearchWord] = useState('');
   // 토큰
   let accessToken = useSelector((state) => state.accessToken)
+  // 스터디 모집 상태에 대한 선택된 인덱스 상태 관리
+  const selectedIndex = useSelector((state) => state.studyroomFilter.category);
+
+  // 페이지네이션용
+  const [page, setPage] = useState(1)
+  const handleChange = (event, value) => {
+    dispatch(changePage(value - 1))
+    setPage(value);
+  }
+  const [totalPages, setTotalPages] = useState(10)
 
   // 현재 페이지를 나타내는 state
   const [currentPage, setCurrentPage] = useState(1);
   // 페이지 당 항목 수
   const itemsPerPage = 4;
   //전체 페이지 수
-  const [totalPages, setTotalPages] = useState(1);
+  // const [totalPages, setTotalPages] = useState(1);
 
   // 처음에 axios 요청으로 전체 목록 가져오기
 	useEffect(() => {
@@ -48,9 +61,30 @@ export default function StudyRoomRecruit() {
     .catch((err) => console.log(err))
   }, [currentPage])
 
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const searchStudyroom = () =>{
+    axios.get(`https://i10a810.p.ssafy.io/api/studies/v1?page=${currentPage-1}&size=${itemsPerPage}&keyword=${searchWord}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    .then((response)=> {
+        // console.log(response.data.result.studyList)
+        setData(response.data.result.studyList)
+        // console.log("현재페이지: "+currentPage)
+        setCurrentPage(currentPage)
+
+        let totalPages = response.data.result.totalPages;
+        // console.log("전체페이지 수: "+totalPages)
+        setTotalPages(totalPages)
+
+        // console.log("페이지 당 항목 수: " + itemsPerPage)
+    })
+    .catch((err) => console.log(err))
+  }
+
+  // const [selectedIndex, setSelectedIndex] = React.useState(0);
   const handleListItemClick = (event, index) => {
-    setSelectedIndex(index);
+    dispatch(changeFilter(index));
   };
 
   // StudyRoomCreateModal이 열렸는지 여부를 관리하는 state
@@ -149,10 +183,10 @@ export default function StudyRoomRecruit() {
         <Grid item sx={{ width: '90%' }} >
           {/* 검색기능 */}
           <Stack direction="row" spacing={1} margin={1} padding={1}>
-            <TextField size="small" sx={{ width: "100%" }} id="outlined-basic" label="원하는 스터디를 검색해보세요!" variant="outlined" />
+            <TextField value={searchWord} onChange={(e) => setSearchWord(e.target.value)} size="small" sx={{ width: "100%" }} id="outlined-basic" label="원하는 스터디를 검색해보세요!" variant="outlined" />
             {/* 검색 버튼 */}
             <Tooltip title="검색">
-              <IconButton style={{ margin: 2 }}>
+              <IconButton onClick={() => {searchStudyroom()}} style={{ margin: 2 }}>
                 <SearchIcon fontSize='medium' />
               </IconButton>
             </Tooltip>

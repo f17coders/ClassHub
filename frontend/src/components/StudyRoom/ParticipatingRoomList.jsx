@@ -70,7 +70,7 @@ export default function ParticipatingRoomList({studyId}){
           border: '3px solid rgba(25, 118, 210, 0.12)',
           borderRadius: '15px',
           margin: '1em',
-          maxHeight: 250,
+          maxHeight: 260,
           // width:"100%",
           position: 'relative',
           overflow: 'auto',
@@ -146,7 +146,11 @@ export default function ParticipatingRoomList({studyId}){
                   <ListItemText primary={item.title}
                   primaryTypographyProps={{ 
                     fontSize: 15, 
-                    fontWeight: 'medium'
+                    fontWeight: 'medium',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    width:'100%'
                     }} 
                   />
                 </ListItem>
