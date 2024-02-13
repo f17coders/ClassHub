@@ -9,6 +9,10 @@ body {
   margin:0
 }  
 
+.my-swal {
+  z-index: 1000000;
+}
+
 /* @font-face {
   font-family: "nexon-Regular";
   font-weight: normal;

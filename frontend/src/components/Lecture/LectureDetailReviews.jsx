@@ -278,7 +278,7 @@ function CreateReview({ lecture }) {
   const submitReview = function () {
     if (editing) {
       // 여기는 수정
-      axios.patch(`https://i10a810.p.ssafy.io/api/reviews/v1/${lecture.lectureId}`, {
+      axios.put(`https://i10a810.p.ssafy.io/api/reviews/v1/${lecture.lectureId}`, {
         "score": newRate,
         "content": review
       }, {
@@ -384,7 +384,7 @@ function CreateReview({ lecture }) {
               <div style={{ display: 'flex', flexDirection: 'column', width: '75%' }}>
                 {user.nickname}
                 <div>
-                  <Rating name="read-only" value={rate} readOnly size='small' />
+                  <Rating name="read-only" value={editing ? newRate : rate} precision={0.5} readOnly size='small' />
                 </div>
               </div>
             </div>

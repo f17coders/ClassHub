@@ -1,5 +1,6 @@
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
+import {Pagination, Stack, Box} from '@mui/material'
 import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import LectureCard from './../../components/LectureCard'
@@ -11,20 +12,29 @@ import { useNavigate } from 'react-router-dom'
 function MyPageLike() {
   const accessToken = useSelector((state) => state.accessToken)
   const navigate = useNavigate()
+  
+  // 페이지네이션 관련
   const [page, setPage] = useState(0)
+  const [totalPages, setTotalPages] = useState(1)
+  const handleChange = (event, value) => {
+		setPage(value - 1);
+	}
+  
   const [lectures, setLectures] = useState([])
   useEffect(() => {
-      axios.get(`https://i10a810.p.ssafy.io/api/members/v1/lectures/like?size=8&page=${page}`, {
+      axios.get(`https://i10a810.p.ssafy.io/api/members/v1/lectures/like?size=6&page=${page}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       })
       .then((res) => {
-        console.log(res.data)
+        console.log(res.config.url)
+        setTotalPages(res.data.result.totalPages)
         setLectures(res.data.result.lectureList)
       })
       .catch((err) => console.log(err))
-  }, [])
+  }, [page])
+  
   return(
     <div style={{position:'relative', height:'70%'}}>
       <h2>내가 찜한 강의</h2>
@@ -45,7 +55,14 @@ function MyPageLike() {
             <Button variant="outlined" onClick={() => navigate('/lecture')}>강의 둘러보러 가기</Button>
           </div>)
         }
+
       </div>
+      {/* 페이지네이션 */}
+					<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+						<Stack spacing={2}>
+							<Pagination count={totalPages} page={page} onChange={handleChange} />
+						</Stack>
+					</Box>
     </div>
   )
 }
