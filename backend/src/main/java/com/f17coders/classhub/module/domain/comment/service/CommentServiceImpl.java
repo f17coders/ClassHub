@@ -46,6 +46,8 @@ public class CommentServiceImpl implements CommentService {
             .orElseThrow(() -> new BaseExceptionHandler
                 ("존재하지 않는 댓글입니다.", ErrorCode.NOT_FOUND_ERROR));
 
+        checkAuthority(member, comment);
+
         comment.setContent(commentUpdateReq.content());
 
         commentRepository.save(comment);
@@ -57,6 +59,14 @@ public class CommentServiceImpl implements CommentService {
             .orElseThrow(() -> new BaseExceptionHandler
                 ("존재하지 않는 댓글입니다.", ErrorCode.NOT_FOUND_ERROR));
 
+        checkAuthority(member, comment);
+
         commentRepository.delete(comment);
+    }
+
+    private void checkAuthority(Member member, Comment comment) {
+        if (comment.getMember() == null || !comment.getMember().equals(member)) {
+            throw new BaseExceptionHandler("해당 댓글에 대한 권한이 없습니다.", ErrorCode.FORBIDDEN_ERROR);
+        }
     }
 }
