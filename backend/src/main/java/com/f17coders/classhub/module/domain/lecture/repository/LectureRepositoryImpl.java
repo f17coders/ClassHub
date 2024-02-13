@@ -83,8 +83,7 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 						lecture.siteReviewRating).as("siteReviewRating"),
 					lecture.siteReviewCount,
 					lecture.siteStudentCount,
-					lecture.gptReviewGood,
-					lecture.gptReviewBad,
+					lecture.gptReview,
 					lecture.descriptionSummary,
 					lecture.summary,
 					lecture.descriptionDetail

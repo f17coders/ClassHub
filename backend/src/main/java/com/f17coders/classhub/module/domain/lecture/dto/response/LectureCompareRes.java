@@ -18,8 +18,7 @@ public record LectureCompareRes(
 	int discountRate,
 	int siteStudentCount,
 	int lectureLikeCount,
-	String gptReviewGood,
-	String gptReviewBad,
+	String gptReview,
 	String curriculum,
 	List<TagRes> tagList
 
