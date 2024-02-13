@@ -33,6 +33,13 @@ export default function ParticipatingRoomList({studyId}){
   // 토큰
   let accessToken = useSelector((state) => state.accessToken)
 
+  // 로그인 여부
+  let isLogin = useSelector((state) => state.isLogin)
+
+  useEffect(() => {
+    isLogin? (null) : (navigate('/login'))
+  }, [])
+
   // 참여중인 스터디 목록 데이터 -> API에서 받아올것!
   useEffect(() => {
     axios.get(`https://i10a810.p.ssafy.io/api/members/v1/studies/participation`, {
