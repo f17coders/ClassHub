@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { Modal, Box, Divider, ListItem, ListItemText, List, Typography } from "@mui/material";
-
+import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { Modal, Box, Divider, ListItem, ListItemText, List, Typography, Button } from "@mui/material";
+import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 
 function AlarmModal({onOpen, onClose}) {
     // Modal창 스타일
@@ -24,7 +24,7 @@ function AlarmModal({onOpen, onClose}) {
 
     const [privateAlarm, setPrivateAlarm] = useState([]);
     const [channelAlarm, setChannelAlarm] = useState([]);
-
+    const navigate = useNavigate();
     const getPrivateAlarm = () => {
         axios.get("https://i10a810.p.ssafy.io/api/studies/v1/alarm/personalChat", {
             headers: {
@@ -51,6 +51,15 @@ function AlarmModal({onOpen, onClose}) {
         getChannelAlarm();
     }, [onOpen])
 
+    const clickPrivateAlarm = (personalChatId) => {
+        navigate(`/studyroom/message/${personalChatId}`);
+        onClose();
+    }
+
+    const clickChannelAlarm = (studyId) => {
+        navigate(`/studyroom/participating/${studyId}`);
+        onClose();
+    }
 
 	return (
 		<Modal
@@ -72,6 +81,12 @@ function AlarmModal({onOpen, onClose}) {
                         <ListItem sx={{ mx: 2, minHeight: 32, color: 'black' }}>
                             <ListItemText primary={item.text}
                                 primaryTypographyProps={{ fontSize: 16, fontWeight: 'medium' }} />
+                            <Button onClick={() => clickPrivateAlarm(item.personalChatId)}>
+                                <Typography fontSize={16} component="div">
+                                    채팅방 이동
+                                </Typography> 
+                                <KeyboardDoubleArrowRightIcon></KeyboardDoubleArrowRightIcon>
+                            </Button>
                         </ListItem>
                     </div>
                     )))}
@@ -89,6 +104,12 @@ function AlarmModal({onOpen, onClose}) {
                         <ListItem sx={{ mx: 2, minHeight: 32, color: 'black' }}>
                             <ListItemText primary={item.text}
                                 primaryTypographyProps={{ fontSize: 16, fontWeight: 'medium' }} />
+                            <Button onClick={() => clickChannelAlarm(item.studyId)}>
+                                <Typography fontSize={16} component="div">
+                                    채팅방 이동
+                                </Typography> 
+                                <KeyboardDoubleArrowRightIcon></KeyboardDoubleArrowRightIcon>
+                            </Button>
                         </ListItem>
                     </div>
                     )))}
