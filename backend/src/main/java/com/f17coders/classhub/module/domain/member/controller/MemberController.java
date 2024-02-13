@@ -2,6 +2,7 @@ package com.f17coders.classhub.module.domain.member.controller;
 
 import com.f17coders.classhub.global.api.response.BaseResponse;
 import com.f17coders.classhub.global.exception.code.SuccessCode;
+import com.f17coders.classhub.module.domain.lecture.dto.response.LectureIdListRes;
 import com.f17coders.classhub.module.domain.lecture.dto.response.LectureListRes;
 import com.f17coders.classhub.module.domain.member.Member;
 import com.f17coders.classhub.module.domain.member.dto.request.MemberAddInfoReq;
@@ -51,25 +52,25 @@ public class MemberController {
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, memberGetInfoRes);
 	}
 
-    @Operation(summary = "회원 추가 정보 입력")
-    @PostMapping("/v1")
-    public ResponseEntity<BaseResponse<Integer>> addInformation(
-        @RequestBody MemberAddInfoReq memberAddInfoReq,
-        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
-        memberService.addInformation(memberAddInfoReq, memberSecurityDTO.toMember());
+	@Operation(summary = "회원 추가 정보 입력")
+	@PostMapping("/v1")
+	public ResponseEntity<BaseResponse<Integer>> addInformation(
+		@RequestBody MemberAddInfoReq memberAddInfoReq,
+		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+		memberService.addInformation(memberAddInfoReq, memberSecurityDTO.toMember());
 
-        return BaseResponse.success(SuccessCode.INSERT_SUCCESS, memberSecurityDTO.getMemberId());
-    }
+		return BaseResponse.success(SuccessCode.INSERT_SUCCESS, memberSecurityDTO.getMemberId());
+	}
 
-    @Operation(summary = "회원 추가 정보 수정")
-    @PutMapping("/v1")
-    public ResponseEntity<BaseResponse<Integer>> updateInformation(
-        @RequestBody MemberUpdateInfoReq memberUpdateInfoReq,
-        @AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
-        memberService.updateInformation(memberUpdateInfoReq, memberSecurityDTO.toMember());
+	@Operation(summary = "회원 추가 정보 수정")
+	@PutMapping("/v1")
+	public ResponseEntity<BaseResponse<Integer>> updateInformation(
+		@RequestBody MemberUpdateInfoReq memberUpdateInfoReq,
+		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+		memberService.updateInformation(memberUpdateInfoReq, memberSecurityDTO.toMember());
 
-        return BaseResponse.success(SuccessCode.UPDATE_SUCCESS, memberSecurityDTO.getMemberId());
-    }
+		return BaseResponse.success(SuccessCode.UPDATE_SUCCESS, memberSecurityDTO.getMemberId());
+	}
 
 	@Operation(summary = "회원 탈퇴")
 	@DeleteMapping("/v1")
@@ -141,6 +142,16 @@ public class MemberController {
 		Pageable pageable) throws IOException {
 		LectureListRes lectureListRes = memberService.getLikedLectureList(
 			memberSecurityDTO.getMemberId(), pageable);
+
+		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectureListRes);
+	}
+
+	@Operation(summary = "내가 찜한 강의 아이디 전체 조회")
+	@GetMapping("/v1/lectures/all-like")
+	public ResponseEntity<BaseResponse<LectureIdListRes>> getLikedLectureIdList(
+		@AuthenticationPrincipal MemberSecurityDTO memberSecurityDTO) throws IOException {
+		LectureIdListRes lectureListRes = memberService.getLikedLectureIdList(
+			memberSecurityDTO.getMemberId());
 
 		return BaseResponse.success(SuccessCode.SELECT_SUCCESS, lectureListRes);
 	}
