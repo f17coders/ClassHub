@@ -6,13 +6,15 @@ import { useState, forwardRef } from 'react'
 import DialogContent from '@mui/material/DialogContent'
 import CompareElement from './Lecture/CompareElement.jsx'
 
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import IconButton from '@mui/material/IconButton'
 import { deleteElement } from './../store/store.js'
 import { Grid } from '@mui/material'
 import { Link } from 'react-router-dom'
-
+import Swal from 'sweetalert2'
+import help1 from './../assets/Help/help1.png'
 
 
 // 모달(dialog) 트랜지션용
@@ -44,6 +46,19 @@ function CompareButton() {
     setOpen(false)
   }
 
+  // 안내문
+  const openHelp = function() {
+    Swal.fire({
+      html: "강의카드에서 '강의 비교하기'를 클릭해서<br/>한 눈에 비교할 수 있어요",
+      imageUrl: help1,
+      imageWidth: 300,
+      imageHeight: 250,
+      imageAlt: "안내 이미지",
+      customClass: {
+        container: 'my-swal'
+      }
+    });
+  }
   return (
     <div style={{ position: 'fixed', bottom: '30px', right: '30px' }}>
       <Tooltip title='강의 비교하기'>
@@ -64,7 +79,10 @@ function CompareButton() {
       >
         <DialogContent>
           <Container sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-            <p style={{ fontSize: '1.7em', fontWeight: '600', marginTop: '20px', marginBottom:'0px' }}>강의 비교</p>
+            <div style={{display:'flex', alignItems: 'center', marginTop: '20px'}}>
+              <p style={{ fontSize: '1.7em', fontWeight: '600', margin:0 }}>강의 비교</p>
+              <Tooltip title='강의 비교란?' placement='top'><IconButton onClick={openHelp}><HelpOutlineIcon /></IconButton></Tooltip>
+            </div>
             <p sytle={{ marginTop:'5px', marginBottom: '40px'}}>비교하고 싶은 강의를 추가해서 한 눈에 비교해보세요!</p>
             <Grid container spacing={3} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px' }}>
               {compareLectures.map((lecture, idx) => (

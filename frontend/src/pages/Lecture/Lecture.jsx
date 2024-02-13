@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react'
 import { changeCategory, changeKeyword, searchResult, setFromMainFalse, changePage, changeOrder } from '../../store/store'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import axios from 'axios'
+import Loading from './../../components/Loading'
 
 // 강의 전체 조회 창
 function Lecture() {
@@ -25,13 +26,14 @@ function Lecture() {
 	let fromMain = useSelector((state) => state.fromMain)
 	let dispatch = useDispatch()
 
+	// 로딩중인지?
+	const [loading, setLoading] = useState(false)
+
 	// 검색어
 	const [keyword, setKeyword] = useState('')
 	const handlekeyword = function (event) {
 		const input = event.target.value
-		if (input) {
-			setKeyword(input)
-		}
+		setKeyword(input)
 	}
 
 	// 페이지네이션용
@@ -44,15 +46,19 @@ function Lecture() {
 
 	// 검색하기
 	useEffect(() => {
-		axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?${searchParams.category ? 'category=' + searchParams.category.categoryId : ''}${searchParams.tags.length ? '&tags=' + searchParams.tags.map(tag => tag.tagId).join('%7C%7C') : ''}${searchParams.keyword ? '&keyword=' + searchParams.keyword : ''}${searchParams.level != 'ALL' ? '&level=' + searchParams.level : ''}${searchParams.site ? '&site=' + searchParams.site : ''}&order=${searchParams.order}&page=${searchParams.page}&size=16`)
-			.then((res) => {
-				console.log(`${res.config.url}으로 요청 보냄`)
-				console.log(res.data)
-				setTotalPages(res.data.result.totalPages)
-				dispatch(searchResult(res.data.result.lectureList))
-			}).catch((err) =>
-				console.log(err)
-			)
+		if (fromMain == false) {
+			setLoading(true)
+			axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?${searchParams.category ? 'category=' + searchParams.category.categoryId : ''}${searchParams.tags.length ? '&tags=' + searchParams.tags.map(tag => tag.tagId).join('%7C%7C') : ''}${searchParams.keyword ? '&keyword=' + searchParams.keyword : ''}${searchParams.level != 'ALL' ? '&level=' + searchParams.level : ''}${searchParams.site ? '&site=' + searchParams.site : ''}&order=${searchParams.order}&page=${searchParams.page}&size=16`)
+				.then((res) => {
+					console.log(`${res.config.url}으로 요청 보냄`)
+					console.log(res.data)
+					setTotalPages(res.data.result.totalPages)
+					dispatch(searchResult(res.data.result.lectureList))
+					setLoading(false)
+				}).catch((err) =>
+					console.log(err)
+				)
+		} 
 	}, [searchParams])
 
 
@@ -73,7 +79,7 @@ function Lecture() {
 		<Container>
 			<Grid container sx={{ margin: 'auto', minHeight: '500px', marginTop: '20px' }}>
 				{/* 왼쪽 사이드 바 */}
-				<Grid item md={2} sx={{ display:{md: 'block', xs: 'none'}, borderRight: "1px solid lightgrey", paddingRight: '0px' }}>
+				<Grid item md={2} sx={{ display: { md: 'block', xs: 'none' }, borderRight: "1px solid lightgrey", paddingRight: '0px' }}>
 					<Box>
 						{/* 강의 카테고리 체크 */}
 						<LectureCheck />
@@ -115,24 +121,31 @@ function Lecture() {
 						{
 							searchParams.keyword ? (<p style={{ fontSize: '1.3em', textAlign: 'center', fontWeight: 'bold' }}>{searchParams.keyword}에 대한 검색 결과</p>) : null
 						}
-						<Grid container spacing={1}>
-							{
-								lectureResult.length > 0 ? (
-									lectureResult.map((item, idx) => {
-										return (
-											<Grid item xs={6} sm={4} md={3} key={idx}>
-												<LectureCard img={img1} lecture={item} />
-											</Grid>
-										)
+						{
+							loading ? (<div style={{display:'flex', justifyContent:'center', height:'500px', alignItems:'center'}}><Loading /></div>) : (
+								<Grid container spacing={1}>
+									{
+										lectureResult.length > 0 ? (
+											lectureResult.map((item, idx) => {
+												return (
+													<Grid item xs={6} sm={4} md={3} key={idx}>
+														<LectureCard img={img1} lecture={item} />
+													</Grid>
+												)
 
-									})
-								) : (
-									<div style={{ margin: 'auto' }}>
-										<p style={{ textAlign: 'center' }}>결과가 없습니다!</p>
-									</div>
-								)
-							}
-						</Grid>
+											})
+										) : (
+											<div style={{ margin: 'auto' }}>
+												<p style={{ textAlign: 'center' }}>결과가 없습니다!</p>
+											</div>
+										)
+									}
+								</Grid>
+							)
+						}
+
+
+
 					</Box>
 					{/* 페이지네이션 */}
 					<Box sx={{ display: 'flex', justifyContent: 'center' }}>

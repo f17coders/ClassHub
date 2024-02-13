@@ -46,11 +46,13 @@ function Login() {
 				.then((res) => {
 					// 불러온 유저정보에서 job이 null이라면 -> 추가 정보 입력이 필요함
 					let tmpUser = res.data.result
+					// 회원가입
 					if (tmpUser.job == null) {
 						dispatch(login())
 						dispatch(saveUser(tmpUser))
 						navigate('/additionalinfo')
 					} else {
+						// 로그인
 						dispatch(saveUser(tmpUser))
 						dispatch(login())
 						navigate('/')
@@ -60,8 +62,13 @@ function Login() {
 					console.log(err)
 				})
 		}
-
 	}
+
+	// 좋아요 리스트도 가져오기
+	const getUserLike = function() {
+		
+	}
+
 
 	// 카카오 로그인
 	const kakaoLogin = function () {
@@ -145,7 +152,7 @@ function Login() {
 						marginTop:'20px'
 					}}>
 						<img src={kakaoLogo} style={{width: '50px', height:'50px'}} />
-						<p style={{fontSize:'1.1em', marginLeft:'10px'}}>Google로 로그인하기</p>
+						<p style={{fontSize:'1.1em', marginLeft:'10px'}}>카카오로 로그인하기</p>
 					</Paper>
         </div>
       </div>

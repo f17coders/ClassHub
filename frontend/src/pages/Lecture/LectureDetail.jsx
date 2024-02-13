@@ -1,9 +1,10 @@
 import FavoriteIcon from '@mui/icons-material/Favorite'
-import Rating from '@mui/material/Rating';
+import Rating from '@mui/material/Rating'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import Container from '@mui/material/Container'
 import { useState, useEffect } from 'react'
 import IconButton from '@mui/material/IconButton'
+import Modal from '@mui/material/Modal'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 import Box from '@mui/material/Box'
@@ -13,16 +14,16 @@ import axios from 'axios'
 import EastIcon from '@mui/icons-material/East'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import PersonIcon from '@mui/icons-material/Person'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import LectureDetailReviews from '../../components/Lecture/LectureDetailReviews'
 import { useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
-import DOMPurify from "dompurify"
+import LectureHTML from '../../components/Lecture/LectureHTML'
 
-import { Accordion, Icon, Tooltip } from '@mui/material'
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Accordion, Icon, Tooltip, Button } from '@mui/material'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import AccordionDetails from '@mui/material/AccordionDetails'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 // 강의의 상세 내용이 들어가는 페이지 입니다.
 
@@ -31,6 +32,7 @@ function LectureDetail() {
 	let accessToken = useSelector((state) => state.accessToken)
 	// id가져오기
 	const { lectureId } = useParams()
+	const navigate = useNavigate()
 
 	// 로그인 확인용
 	let isLogin = useSelector((state) => state.isLogin)
@@ -79,7 +81,7 @@ function LectureDetail() {
 				confirmButtonText: '로그인하러가기'
 			}).then((result) => {
 				if (result.isConfirmed) {
-					navigator('/login')
+					navigate('/login')
 				}
 			})
 		}
@@ -87,13 +89,38 @@ function LectureDetail() {
 
 	// 내가 산 강의에 추가
 	const addMyLecture = function() {
-		axios.post(`https://i10a810.p.ssafy.io/api/lectures/v1/buy/${lecture.lectureId}`, null, {
-			headers: {
-				Authorization: `Bearer ${accessToken}`
-			}
-		})
-			.then((res) => console.log('내가 산 강의에 추가완료'))
-			.catch((err) => console.log(err));
+		if (isLogin == true) {
+			axios.post(`https://i10a810.p.ssafy.io/api/lectures/v1/buy/${lecture.lectureId}`, null, {
+				headers: {
+					Authorization: `Bearer ${accessToken}`
+				}
+			})
+			.then((res) => {
+				Swal.fire({
+					title: "강의 추가 완료",
+					icon: "success"
+				}) .then((res) => location.reload())
+			})
+			.catch((err) => {
+				if (err.response.data.reason == '이미 구매한 강의.') {
+					Swal.fire({
+						title: "이미 구매한 강의입니다!",
+						icon: "warning"
+					})
+				}
+			});
+		} else {
+			Swal.fire({
+				title: "로그인이 필요합니다!",
+				icon: "warning",
+				confirmButtonText: '로그인하러가기'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					navigate('/login')
+				}
+			})
+		}
+		
 	}
 
 	// 리뷰 요약 탭 제어
@@ -124,15 +151,21 @@ function LectureDetail() {
 		}
 	}
 
+	// GPT 리뷰 더보기
+	const [load, setLoad] = useState(false)
+	const addMore = function() {
+		setLoad(true)
+	}
+
 	return (
 		<div>
 			{
 				lecture == null ? null : (
 					<div>
 						<Container style={{ display: 'flex', padding: '20px' }}>
-							<img src={lecture.image} alt="강의 이미지" style={{ width: '300px', height: '250px' }} />
+							<img src={lecture.image} alt="강의 이미지" style={{ width: '300px', height: '250px', marginTop:'20px', borderRadius:'5px' }} />
 							<div style={{ padding: '10px', marginLeft: '30px', width: '60%' }}>
-								<div style={{ height: '80%', paddingTop: '30px' }}>
+								<div style={{ height: '75%' }}>
 									<p style={{ fontSize: '0.9em', margin: '0px' }}>{lecture.categoryName}</p>
 									<p style={{ fontSize: '1.8em', fontWeight: 800 }}>{lecture.lectureName}</p>
 									<div style={{ display: 'flex', flexDirection: 'row' , alignItems:'center'}}>
@@ -170,20 +203,16 @@ function LectureDetail() {
 
 						{/* GPT강의요약 */}
 						<Container sx={{ marginTop: '20px' }}>
-							<p style={{ fontSize: '1.2em', marginBottom: '10px' }}>🤖GPT로 리뷰를 한 줄 요약했어요</p>
-							<Box sx={{ width: '100%' }}>
-								<Tabs
-									value={value}
-									onChange={handleChange}
-								>
-									<Tab value={0} label="높은 평점 요약" sx={{ fontSize: '1.2em' }} />
-									<Tab value={1} label="낮은 평점 요약" sx={{ fontSize: '1.2em' }} />
-								</Tabs>
-								<div style={{ marginTop: "20px" }}>
-									{
-										value == 0 ? lecture.gptReviewGood : lecture.gptReviewBad
-									}
-								</div>
+							<h3 style={{ textAlign:'center' }}>🤖GPT로 리뷰를 요약했어요</h3>
+							<Box>
+								<p style={{ height: '100px', marginTop:'20px', overflow: load ? 'auto' : 'hidden', whiteSpace: load ? 'normal' : 'nowrap' }}>{lecture.gptReviewGood}</p>
+								{
+									load ? null : (
+										<Divider>
+											<Button onClick={addMore}>더 보기</Button>
+										</Divider>
+									)
+								}
 							</Box>
 						</Container>
 						<Divider variant="middle" sx={{ bgcolor: 'lightgrey', marginTop: '40px' }} />
@@ -229,7 +258,6 @@ function Content1(props) {
 	const [htmlString, setHtmlString] = useState('')
 	useEffect(() => {
 		if (htmlString == '') {
-			// axios.get(lecture.descriptionDetail)
 			axios.get('https://storage.googleapis.com/classhub/data/udemy/htmlFiles/1.html')
 				.then((res) => {
 					setHtmlString(res.data)
@@ -239,27 +267,44 @@ function Content1(props) {
 				})
 		}
 	})
+
+	// 모달
+	const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+	const style = {
+		position: 'absolute',
+		backgroundColor:'white',
+		top: '50%',
+		left: '50%',
+		transform: 'translate(-50%, -50%)',
+		width: '85%',
+		height:'80%',
+		border: '2px solid #000',
+		boxShadow: 24,
+		overflow:'scroll'
+	};
 	return (
 		<div>
 			<div>
 				<h3>한 줄 소개</h3>
 				<p>{lecture.summary}</p>
 			</div>
-			<div>
+			<div style={{marginTop:'50px'}}>
 				<h3>배울 내용 요약</h3>
 				<p>{lecture.descriptionSummary}</p>
 			</div>
-			<div>
+			<div style={{marginTop:'50px'}}>
 				<h3>강의 상세 정보</h3>
 				{
-					htmlString != '' ? (<div
-						style={{ overflow: 'scroll', width: '100%' }}
-						dangerouslySetInnerHTML={{
-							__html: DOMPurify.sanitize(htmlString),
-						}}
-					/>) : null
+					htmlString != '' ? (<Button onClick={handleOpen}>상세 보기</Button>) : (<p>상세 정보를 제공하지 않는 강의입니다.</p>)
 				}
 			</div>
+			<Modal open={open} onClose={handleClose}>
+				<div style={style}>
+					<LectureHTML htmlString={htmlString}/>
+				</div>
+			</Modal>
 		</div>
 	)
 }
@@ -280,7 +325,7 @@ function Content2(props) {
 								expandIcon={<ExpandMoreIcon />}
 								sx={{ backgroundColor: 'rgba(128, 128, 128, 0.1)' }}
 							>
-								<p style={{ margin: '7px' }}><span style={{ fontSize: '1.2em' }}>{theme.title}</span> ({theme.item_count}개의 강의, 총 {theme.time}시간)</p>
+								<p style={{ margin: '7px' }}><span style={{ fontSize: '1.1em' }}>{theme.title}</span> ({theme.item_count}개의 강의, 총 {theme.time}시간)</p>
 							</AccordionSummary>
 							<AccordionDetails>
 								{
