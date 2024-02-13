@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"
 import SockJS from "sockjs-client/dist/sockjs";
 import { Client } from "@stomp/stompjs";
 import SendIcon from '@mui/icons-material/Send';
-import { ListItem, Avatar, ListItemAvatar, ListItemText, CircularProgress, Alert, TextField, Button, Stack, Box, List, ListItemButton, Grid, Typography, Divider, IconButton, Tooltip } from '@mui/material'
+import {FormControl, OutlinedInput, ListItem, Avatar, ListItemAvatar, ListItemText, CircularProgress, Alert, TextField, Button, Stack, Box, List, ListItemButton, Grid, Typography, Divider, IconButton, Tooltip } from '@mui/material'
 
 // 스터디룸 단체 메시지
 export default function StudyRoomPrivateMessage({channel}) {
@@ -115,13 +115,13 @@ export default function StudyRoomPrivateMessage({channel}) {
                     sx={{ width: "100%" }}
                     id="outlined-basic"
                     label="내용을 검색해보세요!"
-                    variant="outlined"
+                    // variant="outlined"
                     onChange={(e) => setSearchText(e.target.value)} 
                 />
             </Stack>
             
             {/* 채널에 대한 페이지 */}
-            <Stack sx={{ width:"100%", maxHeight: "70%" , display:"flex", marginTop: 5}}>
+            <Stack sx={{ width:"100%", height: "70%" , display:"flex", marginTop: 5}}>
                 <Box 
                     ref={scrollContainerRef}
                     sx={{ height: "90%",
@@ -184,19 +184,40 @@ export default function StudyRoomPrivateMessage({channel}) {
                         <CircularProgress sx={{ width:"100%", height:"10%", margin: "auto"}} />
                         {/* <Divider sx={{my: 2}}>채팅을 연결하는 중입니다. 잠시만 기다려주세요</Divider> */}
                     </React.Fragment>
-                    : <Box sx={{ width:"100%", height:"10%", display: 'flex', justifyContent:'flex-start', alignItems: 'flex-start' }}>
-                    <TextField
-                        id="standard-multiline-static"
-                        label="채팅을 작성해주세요"
-                        multiline
-                        rows={2}
-                        sx={{flex: 9, marginLeft: 3}}
-                        value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
-                        onKeyPress={(e) => handleKeyPress(e)}
-                    />
-                    <Button sx={{mx: 2}} variant="contained" endIcon={<SendIcon />} onClick={sendMessage}></Button>
-                </Box>
+                    : 
+                    <div style={{ width: '100%', marginTop: '10px' }}>
+                        <form noValidate autoComplete="off">
+                          <FormControl size="small" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                            <OutlinedInput 
+                            multiline
+                            rows={2}
+                            sx={{width: "100%", marginRight: '10px'}} 
+                            placeholder="채팅을 작성해주세요"
+                            value={newMessage}
+                            onChange={(e) => setNewMessage(e.target.value)}
+                            onKeyPress={(e) => handleKeyPress(e)}
+                            />
+                            <Tooltip title="전송">
+                                <IconButton onClick={sendMessage}>
+                                    <SendIcon/>
+                                </IconButton>
+                            </Tooltip>
+                          </FormControl>
+                        </form>
+                    </div>
+                    // <Box sx={{ width:"100%", height:"10%", display: 'flex', justifyContent:'flex-start', alignItems: 'flex-start' }}>
+                    //     <TextField
+                    //         id="standard-multiline-static"
+                    //         label="채팅을 작성해주세요"
+                    //         multiline
+                    //         rows={2}
+                    //         sx={{flex: 9, marginLeft: 3}}
+                    //         value={newMessage}
+                    //         onChange={(e) => setNewMessage(e.target.value)}
+                    //         onKeyPress={(e) => handleKeyPress(e)}
+                    //     />
+                    //     <Button sx={{mx: 2}} variant="contained" endIcon={<SendIcon />} onClick={sendMessage}></Button>
+                    // </Box>
                 }
             </Stack>       
         </List>

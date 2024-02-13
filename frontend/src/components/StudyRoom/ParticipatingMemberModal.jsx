@@ -33,9 +33,11 @@ export default function ParticipatingMemberModal ({ studyId, participatingMember
     const navigate = useNavigate();
     
     const registChat = (receiver) => {
-      registPersonalChat(accessToken, receiver).then(personalChatId => {
+      registPersonalChat(accessToken, receiver)
+      .then(personalChatId => {
         setPersonalChatId(personalChatId);
         navigate(`/studyroom/message/${personalChatId}`)
+        window.location.reload();
       });
     }
 

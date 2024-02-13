@@ -15,12 +15,12 @@ export default function PrivateMessageList(){
     // 사이드바 메뉴 열기
     const [open, setOpen] = React.useState(true);
     const navigate = useNavigate();
-    const [selectedIndex, setSelectedIndex] = useState(null);
+    // const [selectedIndex, setSelectedIndex] = useState(null);
     const [data, setData] = useState([]);
     const [personalChatId, setPersonalChatId] = useState();
-    const handleListItemClick = (event, index) => {
-      setSelectedIndex(index);
-    };
+    // const handleListItemClick = (event, index) => {
+    //   setSelectedIndex(index);
+    // };
 
 
 
@@ -42,40 +42,42 @@ export default function PrivateMessageList(){
     },[])
 
     return(
-        <Box sx={{
-          maxHeight: 360,
-          width:"100%",
-          position: 'relative',
-          overflow: 'auto',
-          // 스크롤바 숨기기
-          "msOverflowStyle": "none", /* IE and Edge */
-          "scrollbarWidth": "none", /* Firefox */
-          "&::-webkit-scrollbar": {
-            display: "none" /* Chrome, Safari, and Opera */,
-          },
-          bgcolor: open ? 'rgba(71, 98, 130, 0.2)' : null,
-          pb: open ? 2 : 0,
-          }}>
-          <ListSubheader>
+      <Box sx={{
+        backgroundColor: 'white',
+        border: '3px solid rgba(25, 118, 210, 0.12)',
+        borderRadius: '15px',
+        margin: '1em',
+        maxHeight: 250,
+        // width:"100%",
+        position: 'relative',
+        overflow: 'auto',
+        // 스크롤바 숨기기
+        "msOverflowStyle": "none", /* IE and Edge */
+        "scrollbarWidth": "none", /* Firefox */
+        "&::-webkit-scrollbar": {
+          display: "none" /* Chrome, Safari, and Opera */,
+        },
+      }}>
+          <ListSubheader  sx={{ margin: 0, padding: 0 }}>
             <ListItemButton
               alignItems="flex-start"
               onClick={() => setOpen(!open)}
               sx={{
                 px: 3,
                 pt: 2.5,
-                pb: open ? 0 : 2.5,
+                pb: 0,
                 width: "100%",
-                minWidth: 360,
-                '&:hover, &:focus': { '& svg': { opacity: open ? 1 : 0 } },
+                color: 'black',
               }}>
+                <Divider/>
               <ListItemText
                 primary="개인 메시지"
                 primaryTypographyProps={{
-                  fontSize: 15,
-                  fontWeight: 'medium',
+                  fontSize: 17,
+                  fontWeight: 'bold',
                   lineHeight: '20px',
                   mb: '24px',
-                  width: "100%"
+                  // width: "100%"
                 }}
                 sx={{ my: 0 }}
               />
@@ -95,19 +97,22 @@ export default function PrivateMessageList(){
                   <ListItemButton 
                     key={itemIndex}
                     sx={{ width: '100%', minHeight:'60px' }}
-                    selected={selectedIndex === itemIndex}
+                    // selected={selectedIndex === itemIndex}
                     onClick={(event) => {
-                      handleListItemClick(event, itemIndex);
+                      // handleListItemClick(event, itemIndex);
                       navigate(`message/${item.personalChatId}`);
                     }}
                     >
-                      <ListItem sx={{ py: 0, minHeight: 32, color: 'rgba(255,255,255,.8)' }}>
-                        <ListItemAvatar>
-                          <Avatar  alt={item.receiver.nickname} src={item.receiver.profileImage} >
-                          </Avatar>
-                        </ListItemAvatar>
+                      <ListItem sx={{ 
+                        py: 0, 
+                        minHeight: 32, 
+                        }}>
+                        <Avatar sx={{width: 30, height: 30, marginRight: 2}} alt={item.receiver.nickname} src={item.receiver.profileImage}/>
                         <ListItemText primary={item.receiver.nickname}
-                        primaryTypographyProps={{ fontSize: 12, fontWeight: 'medium' }} />
+                        primaryTypographyProps={{ 
+                          fontSize: 15, 
+                          fontWeight: 'medium' 
+                        }} />
                       </ListItem>
                       <Divider/>
 
