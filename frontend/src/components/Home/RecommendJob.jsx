@@ -43,25 +43,45 @@ function RecommendJob() {
 
     return (
         <div style={{ margin: "auto", width: "90%", marginTop: "50px" }}>
-            <Test />
             {
                 lectures.length != 0 ? (
                     <div>
-                        <div style={{ textAlign: "center", margin: "10px" }}>
+                        <motion.div 
+                            initial={{ opacity: 0, y: 40 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: false }}
+                            transition={{
+                                type: "spring",
+                                duration: 1.5,
+                                bounce: 0.2
+                            }}
+                            style={{ textAlign: "center", margin: "10px" }}
+                        >
                             {
                                 isLogin ? (<p style={{ marginBottom: 0 }}>{user.nickname}님의 관심 직무</p>) : null
                             }
                             <p style={{ fontWeight: "800", fontSize: "2em", marginTop: '0' }}>{job} 직무 인기강의</p>
-                        </div>
-                        <Grid container spacing={{ sm: 1, md: 2 }} justifyContent="center" alignItems="center">
-                            {
-                                lectures.map((lecture, idx) => (
-                                    <Grid item xs={6} sm={4} md={2} key={idx}>
-                                        <LectureCard lecture={lecture} />
-                                    </Grid>
-                                ))
-                            }
-                        </Grid>
+                        </motion.div>
+                        <motion.div
+                            initial={{ opacity: 0, y: 50 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: false }}
+                            transition={{
+                                type: "spring",
+                                duration: 1.5,
+                                bounce: 0.2
+                            }}
+                        >
+                            <Grid container spacing={{ sm: 1, md: 2 }} justifyContent="center" alignItems="center">
+                                {
+                                    lectures.map((lecture, idx) => (
+                                        <Grid item xs={6} sm={4} md={2} key={idx}>
+                                            <LectureCard lecture={lecture} />
+                                        </Grid>
+                                    ))
+                                }
+                            </Grid>
+                        </motion.div>
                     </div>
                 ) : null
             }
@@ -71,51 +91,3 @@ function RecommendJob() {
 }
 
 export default RecommendJob
-
-function Test() {
-    const containerVariant = {
-        visible: {
-            opacity: 1,
-            transition: { staggerChildren: 0.05, delayChildren: 0.05 }
-        },
-        hidden: {
-            opacity: 0
-        }
-    };
-
-    const letterVariant = {
-        visible: {
-            opacity: 1, y: 0,
-            transition: {
-                type: "spring",
-                damping: 15,
-                stiffness: 400
-            }
-        },
-        hidden: {
-            opacity: 0,
-            y: 20,
-            transition: {
-                type: "spring",
-                damping: 15,
-                stiffness: 400
-            }
-        }
-    }
-
-    const text = "owen-triple's 2nd weekly! 🎉";
-
-    return (
-        <motion.h1
-            whileInView="visible"
-            initial="hidden"
-            variants={containerVariant}
-        >
-            {Array.from(text).map((letter, index) => (
-                <motion.span key={index} variants={letterVariant}>
-                    {letter === " " ? "\u00A0" : letter}
-                </motion.span>
-            ))}
-        </motion.h1>
-    )
-}
