@@ -21,12 +21,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.*;
 
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Log4j2
 @Service
@@ -45,6 +47,17 @@ public class LectureServiceImpl implements LectureService {
 			lectureId);
 
 		List<TagRes> tagList = tagRepository.findTagsByLectureIdFetchJoinLectureTag(lectureId);
+
+		String summaryText = lectureReadLectureLikeCountRes.summary();
+		List<String> summaryList;
+		if (StringUtils.hasText(summaryText)) {
+			String[] array = summaryText.split("\\|\\|");
+			summaryList = Arrays.stream(array)
+				.collect(Collectors.toList());
+		} else {
+			summaryList = new ArrayList<>();
+		}
+
 
 		return LectureReadRes.builder()
 			.lectureId(lectureId)
@@ -69,7 +82,7 @@ public class LectureServiceImpl implements LectureService {
 			.siteStudentCount(lectureReadLectureLikeCountRes.siteStudentCount())
 			.gptReview(lectureReadLectureLikeCountRes.gptReview())
 			.descriptionSummary(lectureReadLectureLikeCountRes.descriptionSummary())
-			.summary(lectureReadLectureLikeCountRes.summary())
+			.summary(summaryList)
 			.descriptionDetail(lectureReadLectureLikeCountRes.descriptionDetail())
 			.build();
 

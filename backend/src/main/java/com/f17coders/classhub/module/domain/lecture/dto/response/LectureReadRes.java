@@ -33,7 +33,7 @@ public record LectureReadRes(
 	int siteStudentCount,
 	String gptReview,
 	String descriptionSummary,  // 한줄요약
-	String summary, // 배울내용
+	List<String> summary, // 배울내용
 	String descriptionDetail,
 	boolean canBuy
 
