@@ -48,8 +48,8 @@ export default function PrivateMessageList(){
           position: 'relative',
           overflow: 'auto',
           // 스크롤바 숨기기
-          "-ms-overflow-style": "none", /* IE and Edge */
-          "scrollbar-width": "none", /* Firefox */
+          "msOverflowStyle": "none", /* IE and Edge */
+          "scrollbarWidth": "none", /* Firefox */
           "&::-webkit-scrollbar": {
             display: "none" /* Chrome, Safari, and Opera */,
           },

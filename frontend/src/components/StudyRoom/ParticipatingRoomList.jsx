@@ -33,6 +33,13 @@ export default function ParticipatingRoomList({studyId}){
   // 토큰
   let accessToken = useSelector((state) => state.accessToken)
 
+  // 로그인 여부
+  let isLogin = useSelector((state) => state.isLogin)
+
+  useEffect(() => {
+    isLogin? (null) : (navigate('/login'))
+  }, [])
+
   // 참여중인 스터디 목록 데이터 -> API에서 받아올것!
   useEffect(() => {
     axios.get(`https://i10a810.p.ssafy.io/api/members/v1/studies/participation`, {
@@ -41,7 +48,7 @@ export default function ParticipatingRoomList({studyId}){
       },
     })
     .then((res) => {
-      console.log(res.data.result)
+      // console.log(res.data.result)
       setData(res.data.result)
       // window.location.reload(); //페이지 새로고침
     })
@@ -63,8 +70,8 @@ export default function ParticipatingRoomList({studyId}){
                 position: 'relative',
                 overflow: 'auto',
                 // 스크롤바 숨기기
-                "-ms-overflow-style": "none", /* IE and Edge */
-                "scrollbar-width": "none", /* Firefox */
+                "msOverflowStyle": "none", /* IE and Edge */
+                "scrollbarWidth": "none", /* Firefox */
                 "&::-webkit-scrollbar": {
                   display: "none" /* Chrome, Safari, and Opera */,
                 },

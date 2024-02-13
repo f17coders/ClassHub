@@ -18,6 +18,9 @@ export default function CommunityPostList({post}){
       return purifiedText;
     };
 
+    //날짜랑 시간 split
+    const dateTime = post.createdAt.split("T").join(" ");
+
     return(
         <>
             {/* 글 목록 한개 */}
@@ -38,7 +41,7 @@ export default function CommunityPostList({post}){
                 <div style={{ display: 'flex' }}>
                   <div style={{marginRight: '1em'}}>
                     <Tooltip title="작성자">
-                      <div>
+                      <div style={{display:'flex', alignItems:'center'}}>
                         <PersonIcon/>
                         {post.memberNickname}
                       </div>
@@ -46,8 +49,8 @@ export default function CommunityPostList({post}){
                   </div>
                   <div style={{marginRight: '1em'}}>
                     <Tooltip title="작성일자">
-                      <div>
-                        <TodayIcon/> {post.createdAt}
+                      <div style={{display:'flex', alignItems:'center'}}>
+                        <TodayIcon/> {dateTime}
                       </div>
                     </Tooltip>
                   </div>

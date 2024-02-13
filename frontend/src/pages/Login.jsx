@@ -47,7 +47,6 @@ function Login() {
 					// 불러온 유저정보에서 job이 null이라면 -> 추가 정보 입력이 필요함
 					let tmpUser = res.data.result
 					if (tmpUser.job == null) {
-						// console.log('회원가입하러가자')
 						dispatch(login())
 						dispatch(saveUser(tmpUser))
 						navigate('/additionalinfo')
@@ -67,8 +66,7 @@ function Login() {
 	// 카카오 로그인
 	const kakaoLogin = function () {
 		let temp = localStorage.getItem('token')
-		// console.log(temp)
-		// 테스트용
+		
 		if (temp != null) {
 			loadUserInfo()
 		}

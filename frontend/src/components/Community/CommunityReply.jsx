@@ -20,21 +20,11 @@ export default function CommunityReply({detailData}){
   let accessToken = useSelector((state) => state.accessToken)
   // 로그인 여부
   let isLogin = useSelector((state) => state.isLogin)
+  let user = useSelector((state) => state.user)
   const navigate = useNavigate();
   const [content, setContent] = useState('');
   const MySwal = withReactContent(Swal);
   const [editingCommentId, setEditingCommentId] = useState(null); // 수정 중인 댓글의 ID를 저장
-  
-  //등록 확인 Dialog용
-  const handleCreateDialogOpen = () =>{
-    MySwal.fire({
-      title: "등록되었습니다!",
-      text: "댓글이 정상적으로 등록되었습니다.",
-      icon: "success"
-    }).then(() => {
-      window.location.reload(); //페이지 새로고침
-    })
-  }
 
   // 삭제 확인 Dialog용
   const handleDeleteDialogOpen = (commentId) => {
@@ -50,13 +40,7 @@ export default function CommunityReply({detailData}){
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        MySwal.fire({
-          title: "삭제되었습니다!",
-          text: "댓글이 정상적으로 삭제되었습니다.",
-          icon: "success"
-        }).then(() =>{
-          deleteReply(commentId);
-        });
+        deleteReply(commentId);        
       } else if (
         result.dismiss === Swal.DismissReason.cancel
       ) {
@@ -72,7 +56,9 @@ export default function CommunityReply({detailData}){
 // 댓글 생성 함수
   const createReply = () => {
     {
-      isLogin?(
+      isLogin?
+      //로그인 되어있다면
+      (
         axios.post(`https://i10a810.p.ssafy.io/api/comments/v1/${detailData.communityId}`,
         {
           "communityId": detailData.communityId,
@@ -84,13 +70,29 @@ export default function CommunityReply({detailData}){
         })
         .then((res) => {
           console.log(res)
-          navigate(`/community/detail/${detailData.communityId}`)
-          handleCreateDialogOpen();
+          console.log(profileImage)
+          // 등록 확인 dialog
+          MySwal.fire({
+            title: "등록되었습니다!",
+            text: "댓글이 정상적으로 등록되었습니다.",
+            icon: "success"
+          })
+          .then(() => {
+            navigate(`/community/detail/${detailData.communityId}`)
+            window.location.reload(); //페이지 새로고침
+          })
         })
         .catch((err) => console.log(err))
       ) : (
-        alert('로그인 후 이용해주세요')
-        //로그인 페이지로 이동시키기
+        MySwal.fire({
+          title: "로그인 필요",
+          text: "로그인 후 댓글을 작성하실 수 있습니다.",
+          icon: "warning"
+        })
+        .then(()=>{
+          //로그인 페이지로 이동시키기
+          navigate('/login')
+        })
       )
     }
   }
@@ -99,18 +101,30 @@ export default function CommunityReply({detailData}){
     // 댓글 삭제 함수
       axios.delete(`https://i10a810.p.ssafy.io/api/comments/v1/${commentId}`,
       {
-        "commentId": commentId,
-      }, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       })
       .then((res) => {
-        console.log(res)
-        navigate(`/community/detail/${detailData.communityId}`)
-        window.location.reload(); //페이지 새로고침
+        // console.log(res)
+        MySwal.fire({
+          title: "삭제되었습니다!",
+          text: "댓글이 정상적으로 삭제되었습니다.",
+          icon: "success"
+        })
+        .then(() =>{
+          navigate(`/community/detail/${detailData.communityId}`)
+          window.location.reload(); //페이지 새로고침
+        })
       })
-      .catch((err) => console.log(err))
+      .catch((err) => {
+        console.log(err)
+        MySwal.fire({
+          title: "댓글 삭제 실패",
+          text: "댓글 삭제 중 오류가 발생했습니다.",
+          icon: "error"
+        })
+      })
     
   }
 
@@ -118,15 +132,15 @@ export default function CommunityReply({detailData}){
     //엔터키 눌렀을 때 등록 함수 호출
     if(event.key === 'Enter'){
       event.preventDefault(); //기본 동작 방지
-      handleCreateDialogOpen();
+      createReply();
     }
   }
   
     return(
         <div>
             {/* 댓글 */}
-            <div>
-                <ChatIcon/> 댓글 {detailData.commentCount}
+            <div style={{display:'flex', alignItems:'center'}}>
+                <ChatIcon sx={{marginRight: '4px'}}/> 댓글 {detailData.commentCount}
             </div>
 
             {/* 댓글 입력창 */}
@@ -141,7 +155,7 @@ export default function CommunityReply({detailData}){
                     onKeyDown={enterKeyPress} //엔터키 눌렀을 때 이벤트 핸들링
                     />
                     <Tooltip title="등록">
-                        <IconButton onClick={() => {createReply(); }}>
+                        <IconButton onClick={() => {createReply()}}>
                             <SendIcon/>
                         </IconButton>
                     </Tooltip>
@@ -155,7 +169,7 @@ export default function CommunityReply({detailData}){
                 detailData.commentList && detailData.commentList.map((singleComment, index) => (
                   <ListItem key={index} alignItems="flex-start">
                     <ListItemAvatar>
-                      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                      <Avatar src={user.profileImage} />
                     </ListItemAvatar> 
                     
                     {/* 수정 모드인 경우 */}
@@ -186,12 +200,32 @@ export default function CommunityReply({detailData}){
                           }
                         />
                         <Tooltip title="수정">
-                              <IconButton onClick={() => {setEditingCommentId(singleComment.commentId); }}>
+                              <IconButton onClick={() => {
+                                isLogin? (
+                                  setEditingCommentId(singleComment.commentId)
+                                ) : (
+                                  MySwal.fire({
+                                    title: "로그인 필요",
+                                    text: "로그인 후 이용해주세요.",
+                                    icon: "warning",
+                                  })
+                                )
+                                }}>
                                   <EditIcon/>
                               </IconButton>
                           </Tooltip>
                           <Tooltip title="삭제">
-                              <IconButton onClick={() => {handleDeleteDialogOpen(singleComment.commentId); }}>
+                              <IconButton onClick={() => {
+                                isLogin? (
+                                  handleDeleteDialogOpen(singleComment.commentId)
+                                ) : (
+                                  MySwal.fire({
+                                    title: "로그인 필요",
+                                    text: "로그인 후 이용해주세요.",
+                                    icon: "warning",
+                                  })
+                                )
+                                }}>
                                   <DeleteIcon/>
                               </IconButton>
                           </Tooltip> 

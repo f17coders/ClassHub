@@ -36,7 +36,8 @@
     "redux-persist": "^6.0.0",
     "sockjs-client": "^1.6.1",
     "sweetalert2": "^11.10.4",
-    "sweetalert2-react-content": "^5.0.7"
+    "sweetalert2-react-content": "^5.0.7",
+    "swiper": "^11.0.6"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

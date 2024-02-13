@@ -6,6 +6,8 @@ import Home from '@mui/icons-material/Home';
 import { useSelector } from "react-redux"
 import PrivateMessageList from "../../components/StudyRoom/PrivateMessageList";
 import ParticipatingRoomList from "../../components/StudyRoom/ParticipatingRoomList";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 const FireNav = styled(List)({
   '& .MuiListItemButton-root': {
@@ -23,10 +25,28 @@ const FireNav = styled(List)({
 
 // 스터디룸 홈페이지
 export default function StudyRoom() {
+    const MySwal = withReactContent(Swal);
+
     // 토큰
 	  let accessToken = useSelector((state) => state.accessToken)
     // 로그인 여부
     let isLogin = useSelector((state) => state.isLogin)
+
+    // 로그인 안했으면 로그인 페이지로 보내버리기
+    useEffect(() =>{
+      isLogin === false ? (
+        MySwal.fire({
+          title: "로그인 후 이용해주세요!",
+          text: "스터디룸은 로그인 후 이용 가능합니다.",
+          icon: "warning"
+        })
+        .then(() =>{
+          navigate('/login')
+        })
+      )
+      : null
+    }, []);
+
     // const [open, setOpen] = useState(false);
     const [windowSize, setWindowSize] = useState(window.innerWidth);
     const navigate = useNavigate();
@@ -126,14 +146,9 @@ export default function StudyRoom() {
               isLogin? (
                 <Outlet/>
               ) : (
-                <Container sx={{backgroundColor: "gainsboro", width: "100%", height:"80vh", textAlign: "center", justifyContent:"center" ,alignContent:"center"}}>
-                  <Typography variant="h5">
-                    로그인 후 이용 가능합니다!
-                  </Typography>
-                </Container>
+                null
               )
-            }
-                
+            } 
             </Grid>
 
           </Grid>

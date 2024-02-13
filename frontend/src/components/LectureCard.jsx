@@ -11,7 +11,6 @@ import { addElement, searchResult } from './../store/store.js'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import axios from 'axios'
-import LoginModal from './LoginModal.jsx'
 import EastIcon from '@mui/icons-material/East'
 
 // tooltip에 스타일 주기
@@ -44,6 +43,28 @@ function LectureCard({ lecture }) {
 	}
 
 	// 좋아요 + 로그인 안했으면 로그인 하라 하기
+	// 좋아요 눌렀을 때
+	const sayLiked = Swal.mixin({
+		toast: true,
+		position: "top-end",
+		showConfirmButton: false,
+		timer: 2000,
+		didOpen: (toast) => {
+		  toast.onmouseenter = Swal.stopTimer;
+		  toast.onmouseleave = Swal.resumeTimer;
+		}
+	  })
+	// 이미 좋아요를 눌렀을 때
+	const sayAlert = Swal.mixin({
+		toast: true,
+		position: "top-end",
+		showConfirmButton: false,
+		timer: 3000,
+		didOpen: (toast) => {
+		  toast.onmouseenter = Swal.stopTimer;
+		  toast.onmouseleave = Swal.resumeTimer;
+		}
+	  })
 	// 좋아요용 변수
 	const [like, setLike] = useState(false)
 	
@@ -56,8 +77,22 @@ function LectureCard({ lecture }) {
 						Authorization: `Bearer ${accessToken}`
 					}
 				})
-					.then((res) => console.log('좋아요를 눌렀어요'))
-					.catch((err) => console.log(err));
+					.then((res) => {
+						sayLiked.fire({
+							icon:'success',
+							title: '좋아요를 눌렀어요'
+						})
+					})
+					.catch((err) => {
+						if (err.response.data.reason == "이미 좋아요를 하셨습니다.") {
+							sayAlert.fire({
+								icon:'warning',
+								title: '이미 좋아요한 강의입니다!'
+							})
+						} else {
+							console.log(err)
+						}
+					});
 				setLike(true)
 			} else {
 				axios.delete(`https://i10a810.p.ssafy.io/api/lectures/v1/unlikes/${lecture.lectureId}`, {
