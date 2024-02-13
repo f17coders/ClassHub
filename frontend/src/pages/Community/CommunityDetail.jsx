@@ -59,7 +59,7 @@ export default function CommunityDetail(){
                     setCanScrap(response.data.result.canScrap);
                     setCanUpdate(response.data.result.canUpdate);
                     setDateTime(response.data.result.createdAt.split("T").join(" "));
-                    // console.log(response.data.result)
+                    console.log(response.data.result)
                     // console.log(detailData)
                   })
                   .catch((err) => console.log(err))
