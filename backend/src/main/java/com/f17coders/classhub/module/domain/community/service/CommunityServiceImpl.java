@@ -276,7 +276,7 @@ public class CommunityServiceImpl implements CommunityService {
 
     public boolean canLike(Community community, Member member) {
         if (member == null) {
-            return false;
+            return true;
         } else {
             return communityLikeRepository.findByCommunityAndMember(
                 community, member).isEmpty();
@@ -285,7 +285,7 @@ public class CommunityServiceImpl implements CommunityService {
 
     public boolean canScrap(Community community, Member member) {
         if (member == null) {
-            return false;
+            return true;
         } else {
             Optional<CommunityScrap> communityScrap = communityScrapRepository.findByCommunity_CommunityIdAndMember(
                 community.getCommunityId(), member);
