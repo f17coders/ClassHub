@@ -25,4 +25,18 @@ public class ChannelAlarm {
 
     @Field(name="member_id")
     int memberId;
+
+    @Field(name="text")
+    String text;
+
+    public static ChannelAlarm createChannelAlarm(int studyId, String channelId, int memberId, String text) {
+        ChannelAlarm channelAlarm = new ChannelAlarm();
+
+        channelAlarm.setStudyId(studyId);
+        channelAlarm.setChannelId(channelId);
+        channelAlarm.setMemberId(memberId);
+        channelAlarm.setText(text);
+
+        return channelAlarm;
+    }
 }

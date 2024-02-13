@@ -99,9 +99,9 @@ public class StudyServiceImpl implements StudyService {
 
         Map<String, String> sender = new HashMap<>();
 
-        sender.put("memberId", String.valueOf(member.getMemberId()));
-        sender.put("nickname", member.getNickname());
-        sender.put("profileImage", member.getProfileImage());
+        sender.put("memberId", null);
+        sender.put("nickname", "공지봇");
+        sender.put("profileImage", null);
 
         Message message = Message.createMessage(sender, text);
 
@@ -244,9 +244,9 @@ public class StudyServiceImpl implements StudyService {
 
         Map<String, String> sender = new HashMap<>();
 
-        sender.put("memberId", String.valueOf(member.getMemberId()));
-        sender.put("nickname", member.getNickname());
-        sender.put("profileImage", member.getProfileImage());
+        sender.put("memberId", null);
+        sender.put("nickname", "공지봇");
+        sender.put("profileImage", null);
 
         Message message = Message.createMessage(sender, text);
         messageRepository.save(message);

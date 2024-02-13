@@ -23,10 +23,15 @@ public class PersonalChatAlarm {
     @Field(name = "member_id")
     int memberId;
 
-    public static PersonalChatAlarm createPersonalChatAlarm(String personalChatId) {
+    @Field(name="text")
+    String text;
+
+    public static PersonalChatAlarm createPersonalChatAlarm(String personalChatId, int memberId, String text) {
         PersonalChatAlarm personalChatAlarm = new PersonalChatAlarm();
 
         personalChatAlarm.setPersonalChatId(personalChatId);
+        personalChatAlarm.setMemberId(memberId);
+        personalChatAlarm.setText(text);
 
         return personalChatAlarm;
     }

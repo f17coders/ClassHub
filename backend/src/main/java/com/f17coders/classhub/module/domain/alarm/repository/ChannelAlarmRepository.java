@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ChannelAlarmRepository extends MongoRepository<ChannelAlarm, String> {
 
-    ChannelAlarmRepository findChannelAlarmByChannelIdAndMemberId(String channelId, int memberId);
+    ChannelAlarm findChannelAlarmByChannelIdAndMemberId(String channelId, int memberId);
 
     List<ChannelAlarm> findChannelAlarmsByMemberId(int memberId);
 }

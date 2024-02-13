@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef  } from 'react';
-import { getPersonalChat, send } from "../../common/chat.js";
+import { getPersonalChat, send, readPersonalChat } from "../../common/chat.js";
 import {useParams} from 'react-router-dom'
 import { useSelector } from "react-redux"
 import SockJS from "sockjs-client/dist/sockjs";
@@ -38,6 +38,7 @@ export default function StudyRoomPrivateMessage() {
 
     const chatPrivateConnect = () => {
         const serverURL = `https://i10a810.p.ssafy.io/api/chat`;
+        // const serverURL = `http://localhost:8080/api/chat`;
     
         setIsLoading(true);
         let socket = new SockJS(serverURL);
@@ -93,6 +94,7 @@ export default function StudyRoomPrivateMessage() {
     // 메시지 전송
     const sendMessage = () => {
         send(stompClient, personalChat.sender, newMessage, personalChat.personalChatId);
+        readPersonalChat(accessToken, personalChat.personalChatId);
         setNewMessage("");
     };
 
@@ -125,8 +127,6 @@ export default function StudyRoomPrivateMessage() {
             sendMessage();
         }
     };
-    
-    
     
     return(
         <List sx={{ display: 'flex',  maxHeight: "80vh" }}>

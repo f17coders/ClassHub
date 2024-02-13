@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef  } from 'react';
-import { sendChannel } from "../../common/chat.js";
+import { sendChannel, readChannelChat } from "../../common/chat.js";
 import { useSelector } from "react-redux"
 import SockJS from "sockjs-client/dist/sockjs";
 import { Client } from "@stomp/stompjs";
@@ -64,6 +64,7 @@ export default function StudyRoomPrivateMessage({channel}) {
     useEffect(() =>  {
         if(channel != null) {
             chatConnect();
+            readChannelChat(accessToken, channel.channelId);
             setRecvList(channel.messageList);
         }
     }, [channel]);
@@ -71,6 +72,7 @@ export default function StudyRoomPrivateMessage({channel}) {
     // 메시지 전송
     const sendMessage = () => {
         sendChannel(accessToken, stompClient, newMessage, channel.channelId);
+        readChannelChat(accessToken, channel.channelId);
         setNewMessage("");
     };
 

@@ -1,6 +1,32 @@
 import axios from 'axios';
 
 
+const readPersonalChat = (accessToken, personalChatId) => {
+    axios.delete(`https://i10a810.p.ssafy.io/api/studies/v1/alarm/personalChat/${personalChatId}`, {
+    // axios.delete(`http://localhost:8080/api/studies/v1/alarm/personalChat/${personalChatId}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    })
+    .then(()=> {
+
+    })
+    .catch((err) => console.log(err))
+}
+
+const readChannelChat = (accessToken, channelId) => {
+    axios.delete(`https://i10a810.p.ssafy.io/api/studies/v1/alarm/channels/${personalChatId}`, {
+    // axios.delete(`http://localhost:8080/api/studies/v1/alarm/channels/${channelId}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+        },
+    })
+    .then(()=> {
+
+    })
+    .catch((err) => console.log(err))
+}
+
 // 채팅방 얻기
 const getPersonalChat = (accessToken, personalChatId) => {
     return axios.get(`https://i10a810.p.ssafy.io/api/personal-chat/v1/${personalChatId}`,{
@@ -9,6 +35,7 @@ const getPersonalChat = (accessToken, personalChatId) => {
         }
     })
     .then((res) => {
+        readPersonalChat(accessToken, personalChatId);
         return res.data.result;
     })
     .catch((err) => {
@@ -87,5 +114,7 @@ export {
     getPersonalChat,
     send,
     sendChannel,
-    entranceChannel
+    entranceChannel,
+    readPersonalChat,
+    readChannelChat
 }
