@@ -58,7 +58,6 @@ public class LectureServiceImpl implements LectureService {
 			summaryList = new ArrayList<>();
 		}
 
-
 		return LectureReadRes.builder()
 			.lectureId(lectureId)
 			.lectureName(lectureReadLectureLikeCountRes.lectureName())
@@ -168,8 +167,14 @@ public class LectureServiceImpl implements LectureService {
 		int randomIndex = new Random().nextInt(jobs.size());
 		Job job = jobs.get(randomIndex);
 
-		List<LectureListDetailLectureLikeCountRes> lectures = lectureRepository.findTop5LecturesWithJobId(
-			job.getJobId());
+		List<Integer> lectureIds = lectureBuyRepository.getLectureIdsByJobId(job.getJobId());
+		if (lectureIds.size() != 5) {
+			List<Integer> spareLectures = lectureRepository.getFamousLectureIds();
+			lectureIds.addAll(spareLectures.subList(0, 5 - lectureIds.size()));
+		}
+
+		List<LectureListDetailLectureLikeCountRes> lectures = lectureRepository.findLecturesByLectureIds(
+			lectureIds);
 
 		return LectureListJobRes.builder()
 			.lectureList(lectures)
@@ -185,12 +190,18 @@ public class LectureServiceImpl implements LectureService {
 	public LectureListJobRes getLecturesByDesiredJob(int memberId) {
 
 		Job job = memberRepository.findJobIdByMemberId(memberId);
-			if (job == null) {
+		if (job == null) {
 			return getLecturesByFamousJob();
 		}
 
-		List<LectureListDetailLectureLikeCountRes> lectures = lectureRepository.findTop5LecturesWithJobId(
-			job.getJobId());
+		List<Integer> lectureIds = lectureBuyRepository.getLectureIdsByJobId(job.getJobId());
+		if (lectureIds.size() != 5) {
+			List<Integer> spareLectures = lectureRepository.getFamousLectureIds();
+			lectureIds.addAll(spareLectures.subList(0, 5 - lectureIds.size()));
+		}
+
+		List<LectureListDetailLectureLikeCountRes> lectures = lectureRepository.findLecturesByLectureIds(
+			lectureIds);
 
 		return LectureListJobRes.builder()
 			.lectureList(lectures)
@@ -201,7 +212,6 @@ public class LectureServiceImpl implements LectureService {
 			)
 			.build();
 	}
-
 
 
 }

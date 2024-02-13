@@ -161,7 +161,6 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 			.from(lecture)
 			.innerJoin(lectureSummary)
 			.on(lecture.lectureId.eq(lectureSummary.lectureId))
-			.innerJoin(lecture.category, category)
 			.where(lecture.lectureId.in(
 				JPAExpressions
 					.select(lectureTag.lecture.lectureId)
@@ -176,46 +175,7 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 		return lectureListDetailLectureLikeCountRes;
 	}
 
-	@Override
-	public List<LectureListDetailLectureLikeCountRes> findTop5LecturesWithJobId(int jobId) {
 
-		List<LectureListDetailLectureLikeCountRes> lectureListJobResList = queryFactory.select(
-				Projections.constructor(LectureListDetailLectureLikeCountRes.class,
-					lecture.lectureId,
-					lecture.name,
-					lecture.siteType,
-					lecture.instructor,
-					Expressions.stringTemplate(
-						"COALESCE({0}, 'https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791187395027.jpg')",
-						lecture.image).as("image"),
-					lecture.level,
-					lectureSummary.combinedRating,
-					lectureSummary.combinedRatingCount,
-					lecture.priceOriginal,
-					lecture.priceSale,
-					lecture.descriptionSummary,
-					lecture.totalTime,
-					Projections.constructor(CategoryRes.class,
-						category.categoryId,
-						category.categoryName
-					),
-					lectureSummary.lectureLikeCount
-				))
-			.from(lecture)
-			.innerJoin(lectureSummary)
-			.on(lecture.lectureId.eq(lectureSummary.lectureId))
-			.innerJoin(lectureLike)
-			.on(lecture.lectureId.eq(lectureLike.lecture.lectureId))
-			.innerJoin(lectureLike.member, member)
-			.innerJoin(lecture.category, category)
-			.where(member.job.jobId.eq(jobId))
-			.groupBy(lectureLike.lecture)
-			.orderBy(lectureLike.lecture.lectureId.count().desc())
-			.limit(5)
-			.fetch();
-
-		return lectureListJobResList;
-	}
 
 	@Override
 	public List<LectureListDetailLectureLikeCountRes> findLecturesByMemberJoinLectureBuy(
@@ -331,6 +291,43 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 			.fetchFirst());
 	}
 
+	@Override
+	public List<LectureListDetailLectureLikeCountRes> findLecturesByLectureIds(
+		List<Integer> lectureIds) {
+
+		List<LectureListDetailLectureLikeCountRes> lectureListJobResList = queryFactory.select(
+				Projections.constructor(LectureListDetailLectureLikeCountRes.class,
+					lecture.lectureId,
+					lecture.name,
+					lecture.siteType,
+					lecture.instructor,
+					Expressions.stringTemplate(
+						"COALESCE({0}, 'https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791187395027.jpg')",
+						lecture.image).as("image"),
+					lecture.level,
+					lectureSummary.combinedRating,
+					lectureSummary.combinedRatingCount,
+					lecture.priceOriginal,
+					lecture.priceSale,
+					lecture.descriptionSummary,
+					lecture.totalTime,
+					Projections.constructor(CategoryRes.class,
+						category.categoryId,
+						category.categoryName
+					),
+					lectureSummary.lectureLikeCount
+				))
+			.from(lecture)
+			.innerJoin(lectureSummary)
+			.on(lecture.lectureId.eq(lectureSummary.lectureId))
+			.where(lecture.lectureId.in(lectureIds))
+			.fetch();
+
+
+
+		return lectureListJobResList;
+	}
+
 	private OrderSpecifier<?>[] orderExpression(String order) {
 		if (order.equals("ranking")) {
 			return new OrderSpecifier[] {lectureSummary.combinedRating.desc(), lectureSummary.combinedRatingCount.desc()};
@@ -351,8 +348,8 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 	}
 
 	private BooleanExpression keywordLike(String keyword) {
-		return StringUtils.hasText(keyword) ? lecture.name.contains(keyword)
-			.or(lecture.instructor.contains(keyword)) : null;
+		return StringUtils.hasText(keyword) ? lecture.name.startsWith(keyword)
+			.or(lecture.instructor.startsWith(keyword)) : null;
 	}
 
 	private BooleanExpression levelEq(String level) {
