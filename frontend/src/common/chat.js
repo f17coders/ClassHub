@@ -29,9 +29,8 @@ const readChannelChat = (accessToken, channelId) => {
 
 // 채팅방 얻기
 const getPersonalChat = (accessToken, personalChatId) => {
-    return axios.get(`http://localhost:8080/api/personal-chat/v1/${personalChatId}`,{
-
-    // return axios.get(`https://i10a810.p.ssafy.io/api/personal-chat/v1/${personalChatId}`,{
+    // return axios.get(`http://localhost:8080/api/personal-chat/v1/${personalChatId}`,{
+    return axios.get(`https://i10a810.p.ssafy.io/api/personal-chat/v1/${personalChatId}`,{
         headers: {
             Authorization: `Bearer ${accessToken}`,
         }
