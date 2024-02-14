@@ -660,5 +660,7 @@ data/**/page/*
 data/**/html_files/*
 data/**/nohup*
 data/**/*.csv
+data/**/data-dump.ipynb
+data/**/playground.ipynb
 
 # End of https://www.toptal.com/developers/gitignore/api/gradle

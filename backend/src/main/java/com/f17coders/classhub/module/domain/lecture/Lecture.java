@@ -75,7 +75,7 @@ public class Lecture extends BaseEntity {
 	@Column(columnDefinition = "TEXT")
 	private String siteLink;
 
-	@Column(length = 300)
+	@Column(columnDefinition = "TEXT")
 	private String gptReview;
 
 	// Lecture - Category 연관 관계

@@ -48,8 +48,20 @@ function Home() {
 							duration: 1.5,
 							bounce: 0.2
 						}}
+						src={img1}
+						style={{ position: 'absolute', top: "0%", right: "15%", width: '50vh', zIndex:1 }}
+					/>
+						<motion.img
+						initial={{ opacity: 0, y: 40 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: false }}
+						transition={{
+							type: "spring",
+							duration: 1.5,
+							bounce: 0.2
+						}}
 						src={recommend}
-						style={{ position: 'absolute', bottom: 40, left: 230, width: '50vh' }}
+						style={{ position: 'absolute', bottom: "15%", left: "15%", width: '50vh' }}
 					/>
 						<motion.div
 							initial={{ opacity: 0, y: 40 }}
@@ -60,8 +72,9 @@ function Home() {
 								duration: 1.5,
 								bounce: 0.2
 							}}
-							style={{ margin: '15vh 0vh 20vh 0vh' }}>
-							<p style={{ fontSize: '3em', fontWeight: '800', paddingRight: '200px' }}>{user.nickname}님의 <span style={{ color: 'rgb(56, 65, 172)' }}>관심 기술</span>과 <span style={{ color: 'rgb(56, 65, 172)' }}>목표 직무</span>에 따라서</p>
+							style={{ margin: '15vh 0vh  20vh 0vh', zIndex:3 }}>
+							<p style={{ fontSize: '3em', fontWeight: '800', paddingRight: '40%' , marginBottom:'10px' }}>{user.nickname}님의 <span style={{ color: 'rgb(56, 65, 172)' }}>관심 기술</span>과</p>
+							<p style={{ fontSize: '3em', fontWeight: '800', paddingRight: '23%', marginTop:'0px' }}><span style={{ color: 'rgb(56, 65, 172)' }}>목표 직무</span>에 따라서</p>
 						</motion.div>
 						<motion.div
 							initial={{ opacity: 0, y: 40 }}
@@ -72,35 +85,37 @@ function Home() {
 								duration: 1.5,
 								bounce: 0.2
 							}}
-							style={{ margin: '30vh 0vh 10vh 0vh' }}>
-							<p style={{ fontSize: '3em', fontWeight: '800', paddingLeft: '300px' }}><span style={{ color: 'rgb(56, 65, 172)' }}>Classhub</span>가 강의를 추천해드려요</p>
+							style={{ margin: '22vh 0vh 18vh 0vh' }}>
+							<p style={{ fontSize: '3em', fontWeight: '800', paddingLeft: '27%' }}><span style={{ color: 'rgb(56, 65, 172)' }}>Classhub</span>가 강의를 추천해드려요</p>
 						</motion.div>
 					</div>
-				) : (<div style={{ margin: 'auto', textAlign: 'center', height: '65vh', position: 'relative' }}>
+				) : (
+				
+					<div style={{ margin: 'auto', textAlign: 'center', height: '65vh', position:'relative' }}>
 					<motion.img
-						initial={{ opacity: 0, y: 40 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						viewport={{ once: false }}
-						transition={{
-							type: "spring",
-							duration: 1.5,
-							bounce: 0.2
-						}}
-						src={img1}
-						style={{ position: 'absolute', top: -40, right: 200, width: '50vh' }}
-					/>
+					initial={{ opacity: 0, y: 40 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: false }}
+					transition={{
+						type: "spring",
+						duration: 1.5,
+						bounce: 0.2
+					}}
+					src={img1}
+					style={{ position: 'absolute', top: "0%", right: "15%", width: '50vh', zIndex:1 }}
+				/>
 					<motion.img
-						initial={{ opacity: 0, y: 40 }}
-						whileInView={{ opacity: 1, y: 0 }}
-						viewport={{ once: false }}
-						transition={{
-							type: "spring",
-							duration: 1.5,
-							bounce: 0.2
-						}}
-						src={recommend}
-						style={{ position: 'absolute', bottom: 40, left: 230, width: '50vh' }}
-					/>
+					initial={{ opacity: 0, y: 40 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: false }}
+					transition={{
+						type: "spring",
+						duration: 1.5,
+						bounce: 0.2
+					}}
+					src={recommend}
+					style={{ position: 'absolute', bottom: "15%", left: "15%", width: '50vh' }}
+				/>
 					<motion.div
 						initial={{ opacity: 0, y: 40 }}
 						whileInView={{ opacity: 1, y: 0 }}
@@ -110,8 +125,10 @@ function Home() {
 							duration: 1.5,
 							bounce: 0.2
 						}}
-						style={{ margin: '15vh 0vh 20vh 0vh' }}>
-						<p style={{ fontSize: '3em', fontWeight: '800', paddingRight: '300px' }}><span style={{ color: 'rgb(56, 65, 172)' }}>회원 가입</span>을 통해 나에게 맞는</p>
+						style={{ margin: '15vh 0vh  20vh 0vh', zIndex:3 }}>
+						<p style={{ fontSize: '3em', fontWeight: '800', paddingRight: '40%' , marginBottom:'10px' }}><span style={{ color: 'rgb(56, 65, 172)' }}>회원 가입</span>을 통해</p>
+						<p style={{ fontSize: '3em', fontWeight: '800', paddingRight: '23%', marginTop:'0px' }}>나에게 맞는 강의를</p>
+
 					</motion.div>
 					<motion.div
 						initial={{ opacity: 0, y: 40 }}
@@ -122,10 +139,62 @@ function Home() {
 							duration: 1.5,
 							bounce: 0.2
 						}}
-						style={{ margin: '30vh 0vh 10vh 0vh' }}>
-						<p style={{ fontSize: '3em', fontWeight: '800', paddingLeft: '300px' }}><span style={{ color: 'rgb(56, 65, 172)' }}>Classhub</span>의 추천을 받으세요</p>
+						style={{ margin: '22vh 0vh 18vh 0vh' }}>
+						<p style={{ fontSize: '3em', fontWeight: '800', paddingLeft: '25%' }}><span style={{ color: 'rgb(56, 65, 172)' }}>Classhub</span>에서 추천 받아보세요</p>
 					</motion.div>
-				</div>)
+				</div>
+				
+				// <div style={{ margin: 'auto', textAlign: 'center', height: '65vh', position: 'relative' }}>
+				// 	<motion.img
+				// 		initial={{ opacity: 0, y: 40 }}
+				// 		whileInView={{ opacity: 1, y: 0 }}
+				// 		viewport={{ once: false }}
+				// 		transition={{
+				// 			type: "spring",
+				// 			duration: 1.5,
+				// 			bounce: 0.2
+				// 		}}
+				// 		src={img1}
+				// 		style={{ position: 'absolute', top: -40, right: 200, width: '50vh' }}
+				// 	/>
+				// 	<motion.img
+				// 		initial={{ opacity: 0, y: 40 }}
+				// 		whileInView={{ opacity: 1, y: 0 }}
+				// 		viewport={{ once: false }}
+				// 		transition={{
+				// 			type: "spring",
+				// 			duration: 1.5,
+				// 			bounce: 0.2
+				// 		}}
+				// 		src={recommend}
+				// 		style={{ position: 'absolute', bottom: 40, left: 230, width: '50vh' }}
+				// 	/>
+				// 	<motion.div
+				// 		initial={{ opacity: 0, y: 40 }}
+				// 		whileInView={{ opacity: 1, y: 0 }}
+				// 		viewport={{ once: false }}
+				// 		transition={{
+				// 			type: "spring",
+				// 			duration: 1.5,
+				// 			bounce: 0.2
+				// 		}}
+				// 		style={{ margin: '15vh 0vh 20vh 0vh' }}>
+				// 		<p style={{ fontSize: '3em', fontWeight: '800', paddingRight: '300px' }}><span style={{ color: 'rgb(56, 65, 172)' }}>회원 가입</span>을 통해 나에게 맞는</p>
+				// 	</motion.div>
+				// 	<motion.div
+				// 		initial={{ opacity: 0, y: 40 }}
+				// 		whileInView={{ opacity: 1, y: 0 }}
+				// 		viewport={{ once: false }}
+				// 		transition={{
+				// 			type: "spring",
+				// 			duration: 1.5,
+				// 			bounce: 0.2
+				// 		}}
+				// 		style={{ margin: '30vh 0vh 10vh 0vh' }}>
+				// 		<p style={{ fontSize: '3em', fontWeight: '800', paddingLeft: '300px' }}><span style={{ color: 'rgb(56, 65, 172)' }}>Classhub</span>의 추천을 받으세요</p>
+				// 	</motion.div>
+				// </div>
+				)
 			}
 			<Divider />
 			{

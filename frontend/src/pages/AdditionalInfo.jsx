@@ -8,7 +8,7 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { saveUser, changeUserTagList, changeUserJob } from '../store/userSlice'
+import { saveUser, changeUserTagList, changeUserJob, updateLikeList, insertUser } from '../store/userSlice'
 import { login } from '../store/store'
 
 function AdditionalInfo() {
@@ -85,9 +85,9 @@ function AdditionalInfo() {
 	}
 
 	// 전체 유효성 검사
-	const [valid, setValid] = useState(false)
 	const checkValid = function () {
 		testTargetInput()
+		// let tagPost = interstedSkills.map((skill) => skill.tagId)
 		if (interstedSkills.length < 2 || interstedSkills.length > 10) {
 			setSkillError(true);
 		}
@@ -97,31 +97,25 @@ function AdditionalInfo() {
 				icon: "warning"
 			})
 		} else {
-			try {
-				axios.post(
-					'https://i10a810.p.ssafy.io/api/members/v1',
-					{
+				axios.post('https://i10a810.p.ssafy.io/api/members/v1',{
 						tagList: interstedSkills.map((skill) => skill.tagId),
 						jobId: target[0].jobId,
-					},
-					{
+					},{
 						headers: {
-							AUTHORIZATION: `Bearer ${accessToken}`,
-						},
-					}
-				);
-				dispatch(changeUserTagList(interstedSkills));
-				dispatch(changeUserJob(target[0]));
-				Swal.fire({
-					title: '회원가입 완료',
-					icon: 'success',
-				}).then((a) => navigate('/'));
-			} catch (err) {
-				console.log(err);
-			}
+							AUTHORIZATION: `Bearer ${accessToken}`}})
+				.then((res) => {
+					// console.log(res)
+					// console.log(interstedSkills.map((skill) => skill.tagId))
+					dispatch(insertUser({tagList: interstedSkills, job: target[0]}))
+					Swal.fire({
+						title: '회원가입 완료',
+						icon: 'success',
+					}).then((a) => navigate('/'))
+				})
+				.catch((err) => console.log(err))
+			} 
 		}
-	}
-
+	
 	// Modal창 스타일
 	return (
 		<Box>
