@@ -350,27 +350,27 @@ function Content1(props) {
 // 커리큘럼
 function Content2(props) {
 	const lecture = props.lecture
-	const curriculum = JSON.parse(lecture.curriculum).curriculum
+	const curriculum = JSON.parse(lecture.curriculum)
 	return (
 		<Container>
 			<h3>커리큘럼 (총 {lecture.totalTime}시간)</h3>
 			{
-				curriculum.map((theme, idx) => {
+				Object.entries(curriculum).map(([section, {item_count, time, items}]) => {
 					return (
-						<Accordion key={idx}>
+						<Accordion key={section}>
 							<AccordionSummary
 								expandIcon={<ExpandMoreIcon />}
 								sx={{ backgroundColor: 'rgba(128, 128, 128, 0.1)' }}
 							>
-								<p style={{ margin: '7px' }}><span style={{ fontSize: '1.1em' }}>{theme.title}</span> ({theme.item_count}개의 강의, 총 {theme.time}시간)</p>
+								<p style={{ margin: '7px' }}><span style={{ fontSize: '1.1em' }}>{section}</span> ({item_count}개의 강의, 총 {time}시간)</p>
 							</AccordionSummary>
 							<AccordionDetails>
 								{
-									theme.items.map((item, idx) => {
+									Object.entries(items).map(([section, {time}]) => {
 										return (
-											<div key={idx} style={{ display: 'flex', justifyContent: 'space-between' }}>
-												<p>{item.title}</p>
-												<p>{item.time ? (<>{item.time}</>) : null}</p>
+											<div key={section} style={{ display: 'flex', justifyContent: 'space-between' }}>
+												<p>{section}</p>
+												<p>{time ? (<>{time}</>) : null}</p>
 											</div>
 										)
 									})
