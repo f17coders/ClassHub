@@ -86,7 +86,7 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 					lecture.gptReview,
 					lecture.descriptionSummary,
 					lecture.summary,
-					lecture.descriptionDetail
+					lecture.descriptionDetail.prepend("https://storage.googleapis.com/classhub/data/description_detail/")
 				))
 			.from(lecture)
 			.innerJoin(lectureSummary)
