@@ -32,7 +32,7 @@ function AlarmModal({onOpen, onClose}) {
             },
         }).then((res) => {
             setPrivateAlarm(res.data.result);
-            console.log(res.data.result)
+            // console.log(res.data.result)
         }).catch((err) => console.log(err))
         
     }
@@ -47,8 +47,10 @@ function AlarmModal({onOpen, onClose}) {
     }
 
     useEffect(() => {
-        getPrivateAlarm();
-        getChannelAlarm();
+        if (onOpen == true) {
+            getPrivateAlarm();
+            getChannelAlarm();
+        }
     }, [onOpen])
 
     const clickPrivateAlarm = (personalChatId) => {

@@ -49,8 +49,8 @@ function LectureDetail() {
 	useEffect(() => {
 		axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0/details/${lectureId}`)
 			.then((response) => {
+				console.log(response)
 				setLecture(response.data.result)
-
 			})
 			.catch((err) => console.log(err))
 	}, [lectureId]);
@@ -58,12 +58,16 @@ function LectureDetail() {
 	// 강의가 로드 되고나서, 찾기
 	useEffect(() => {
 		if (isLogin && lecture) {
-			if (user.likeList.length > 0) {
-				if (user.likeList.includes(lecture.lectureId)) {
-					setLike(true)
-				} else if (user.likeList.includes(parseInt(lectureId))) {
-					setLike(true)
+			try {
+				if (user.likeList.length > 0) {
+					if (user.likeList.includes(lecture.lectureId)) {
+						setLike(true)
+					} else if (user.likeList.includes(parseInt(lectureId))) {
+						setLike(true)
+					}
 				}
+			} catch(err) {
+				console.log(err)
 			}
 		}
 	}, [lecture])
@@ -149,12 +153,6 @@ function LectureDetail() {
 
 	}
 
-	// 리뷰 요약 탭 제어
-	const [value, setValue] = useState(0)
-	const handleChange = (event, newValue) => {
-		setValue(newValue)
-	}
-
 	// 상세 내용 탭 제어 
 	const [value2, setValue2] = useState(0)
 	const handleChange2 = (event, newValue) => {
@@ -170,9 +168,9 @@ function LectureDetail() {
 			return (<p>가격: <span style={{ color: 'grey' }}>{price1.toLocaleString()}</span>원</p>)
 		} else {
 			return (<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: '10px' }}>
-				<p style={{ textDecoration: 'line-through', margin: 0 }}>가격: <span style={{ color: 'grey' }}>{price2.toLocaleString()}</span></p>
+				<p style={{ textDecoration: 'line-through', margin: 0 }}>가격: <span style={{ color: 'grey' }}>{price1.toLocaleString()}</span></p>
 				<EastIcon fontSize='small' />
-				<p style={{ margin: 0, color: 'rgb(29, 35, 100)' }}>{price1.toLocaleString()}원</p>
+				<p style={{ margin: 0, color: 'rgb(29, 35, 100)' }}>{price2.toLocaleString()}원</p>
 			</div>)
 		}
 	}
@@ -231,7 +229,7 @@ function LectureDetail() {
 						<Container sx={{ marginTop: '20px' }}>
 							<h3 style={{ textAlign: 'center' }}>🤖GPT로 리뷰를 요약했어요</h3>
 							<Box>
-								<p style={{ height: '100px', marginTop: '20px', overflow: load ? 'auto' : 'hidden', whiteSpace: load ? 'normal' : 'nowrap' }}>{lecture.gptReviewGood}</p>
+								<p style={{ height: '100px', marginTop: '20px', overflow: load ? 'auto' : 'hidden', whiteSpace: load ? 'normal' : 'nowrap' }}>{lecture.gptReview}</p>
 								{
 									load ? null : (
 										<Divider>
