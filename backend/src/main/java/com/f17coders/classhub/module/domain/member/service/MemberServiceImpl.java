@@ -40,6 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MemberServiceImpl implements MemberService {
 
 	private final MemberRepository memberRepository;
@@ -90,6 +91,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	@Transactional
 	public void addInformation(MemberAddInfoReq memberAddInfoReq, Member member)
 		throws BaseExceptionHandler, IOException {
 		// 멤버와 직업 정보 가져오기
