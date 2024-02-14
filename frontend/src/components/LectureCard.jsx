@@ -77,8 +77,10 @@ function LectureCard({ lecture }) {
 	// 이미 좋아요 한 강의인지?
 	useEffect(() => {
 		if (isLogin) {
-			if (user.likeList.includes(lecture.lectureId)) {
+			if (user.likeList.length > 0) {
+				if (user.likeList.includes(lecture.lectureId)) {
 					setLike(true)
+				}
 			}
 		}
 	}, [])

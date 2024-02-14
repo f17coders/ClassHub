@@ -3,7 +3,7 @@ import Button from '@mui/material/Button'
 import { useState, useEffect } from 'react'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
-import { IconButton } from '@mui/material'
+import { IconButton, nativeSelectClasses } from '@mui/material'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { Link, useNavigate } from 'react-router-dom'
@@ -88,35 +88,37 @@ function AdditionalInfo() {
 	const [valid, setValid] = useState(false)
 	const checkValid = function () {
 		testTargetInput()
-		if (interstedSkills.length < 2 | interstedSkills.length > 10) {
+		if (interstedSkills.length < 2 || interstedSkills.length > 10) {
 			setSkillError(true);
 		}
-		if (skillError | targetError) {
-			setValid(false)
-		} else {
-			setValid(true)
-		}
-
-		if (valid) {
-			// 유효할 때 가입 요청 보내기
-			axios.post('https://i10a810.p.ssafy.io/api/members/v1', {
-				'tagList': interstedSkills.map((skill) => skill.tagId),
-				'jobId': target[0].jobId
-			}, {
-				headers: {
-					Authorization: `Bearer ${accessToken}`
-				}
+		if (skillError || targetError) {
+			Swal.fire({
+				html: "관심기술은 최소 2개, 최대 10개,<br>목표 직무는 1개 지정 필수입니다",
+				icon: "warning"
 			})
-				.then((res) => {
-					dispatch(changeUserTagList(interstedSkills))
-					dispatch(changeUserJob(target[0]))
-					dispatch(login())
-					Swal.fire({
-						title: "회원가입 완료",
-						icon: "success"
-					}).then((a) => navigate('/'))
-				})
-				.catch((err) => console.log(err))
+		} else {
+			try {
+				axios.post(
+					'https://i10a810.p.ssafy.io/api/members/v1',
+					{
+						tagList: interstedSkills.map((skill) => skill.tagId),
+						jobId: target[0].jobId,
+					},
+					{
+						headers: {
+							AUTHORIZATION: `Bearer ${accessToken}`,
+						},
+					}
+				);
+				dispatch(changeUserTagList(interstedSkills));
+				dispatch(changeUserJob(target[0]));
+				Swal.fire({
+					title: '회원가입 완료',
+					icon: 'success',
+				}).then((a) => navigate('/'));
+			} catch (err) {
+				console.log(err);
+			}
 		}
 	}
 
