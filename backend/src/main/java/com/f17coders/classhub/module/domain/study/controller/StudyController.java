@@ -53,9 +53,10 @@ public class StudyController {
     @Operation(summary = "스터디룸 목록 조회")
     @GetMapping
     public ResponseEntity<BaseResponse<StudyListRes>> getStudyList(
-            @RequestParam(required = false) String keyword, Pageable pageable) {
+            @RequestParam(required = false) String keyword, @RequestParam int recruitment, Pageable pageable) {
 
-        StudyListRes studyListRes = studyService.getStudyList(keyword, pageable);
+        // recuritment => 0 전체 1 모집중 2 모집완료
+        StudyListRes studyListRes = studyService.getStudyList(keyword, recruitment, pageable);
 
         return BaseResponse.success(SuccessCode.SELECT_SUCCESS, studyListRes);
     }
