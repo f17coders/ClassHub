@@ -105,7 +105,7 @@ function MyPageEdit() {
 				Swal.fire({
 					title: '정보 수정 완료',
 					icon: 'success',
-				}).then((a) => navigate('/mypage'));
+				}).then((a) => location.reload());
 			} catch (err) {
 				console.log(err);
 			}

@@ -7,7 +7,7 @@ import Swal from 'sweetalert2'
 import kakaoLogo from './../assets/Login/kakaoLogo.png'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { saveUser, changeUserTagList, changeUserJob } from '../store/userSlice'
+import { saveUser, changeUserTagList, changeUserJob, updateLikeList } from '../store/userSlice'
 import { saveAccessToken } from './../store/store'
 import { login } from './../store/store'
 
@@ -36,8 +36,8 @@ function Login() {
 
 	// 토큰을 통해 회원가입이 되어있는지 / 아닌지 판단하고 load해오는 함수
 	const loadUserInfo = () => {
+		// 토큰이 있는지 확인하고, 서버에 user info를 확인하자
 		if (accessToken) {
-			// console.log(accessToken)
 			axios.get('https://i10a810.p.ssafy.io/api/members/v1', {
 				headers: { Authorization: `Bearer ${accessToken}` }
 			})
@@ -50,10 +50,10 @@ function Login() {
 						dispatch(saveUser(tmpUser))
 						navigate('/additionalinfo')
 					} else {
-						// 로그인
 						dispatch(saveUser(tmpUser))
 						dispatch(login())
-						navigate('/')
+						// 로그인에만 좋아요 리스트 받아오기
+						getUserLike()
 					}
 				})
 				.catch((err) => {
@@ -62,10 +62,19 @@ function Login() {
 		}
 	}
 
+	
 	// 좋아요 리스트도 가져오기
-	// const getUserLike = function() {
-		
-	// }
+	const getUserLike = function() {
+		axios.get('https://i10a810.p.ssafy.io/api/members/v1/lectures/all-like', {
+			headers: { Authorization: `Bearer ${accessToken}` }
+		})
+		.then((res) => {
+			let likeList = res.data.result.lectureIdList
+			dispatch(updateLikeList(likeList))
+			navigate('/')
+		})
+		.catch((err) => console.log(err))
+	}
 
 
 	// 카카오 로그인

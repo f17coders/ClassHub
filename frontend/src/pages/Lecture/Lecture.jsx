@@ -64,6 +64,8 @@ function Lecture() {
 
 	// 검색어로 검색하기
 	const searchByKeyword = function () {
+		dispatch(changePage(0))
+		setPage(0)
 		dispatch(changeKeyword(keyword))
 	}
 
@@ -86,7 +88,7 @@ function Lecture() {
 					</Box>
 				</Grid>
 				{/* 여기는 검색창과 강의들 */}
-				<Grid item xs={12} md={9} sx={{ margin: '0px 30px' }}>
+				<Grid item xs={12} md={9} sx={{ margin: '0px 15px' }}>
 					<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 						{/* 전체 내용 */}
 						<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>

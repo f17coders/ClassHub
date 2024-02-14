@@ -15,6 +15,7 @@ import EastIcon from '@mui/icons-material/East'
 import GOORM from './../assets/sites/goorm.png'
 import INFLEARN from './../assets/sites/inflearn.png'
 import UDEMY from './../assets/sites/udemy.png'
+import { updateLikeList } from './../store/userSlice'
 
 // tooltip에 스타일 주기
 const LightTooltip = styled(({ className, ...props }) => (
@@ -35,6 +36,7 @@ function LectureCard({ lecture }) {
 	let dispatch = useDispatch()
 	// 로그인 확인용
 	let isLogin = useSelector((state) => state.isLogin)
+	let user = useSelector((state) => state.user)
 
 	// 호버용 변수
 	const [hover, setHover] = useState(false)
@@ -71,6 +73,16 @@ function LectureCard({ lecture }) {
 	}, [])
 
 	// 좋아요 + 로그인 안했으면 로그인 하라 하기
+
+	// 이미 좋아요 한 강의인지?
+	useEffect(() => {
+		if (isLogin) {
+			if (user.likeList.includes(lecture.lectureId)) {
+					setLike(true)
+			}
+		}
+	}, [])
+
 	// 좋아요 눌렀을 때
 	const sayLiked = Swal.mixin({
 		toast: true,
@@ -106,12 +118,17 @@ function LectureCard({ lecture }) {
 					}
 				})
 					.then((res) => {
+						setLike(true)
+						// 현재 있는 좋아요 리스트에 지금 아이디 추가해주자
+						const temp = [...user.likeList, lecture.lectureId]
+						dispatch(updateLikeList(temp))
 						sayLiked.fire({
 							icon: 'success',
 							title: '좋아요를 눌렀어요'
 						})
 					})
 					.catch((err) => {
+						console.log(err)
 						if (err.response.data.reason == "이미 좋아요를 하셨습니다.") {
 							sayAlert.fire({
 								icon: 'warning',
@@ -120,17 +137,19 @@ function LectureCard({ lecture }) {
 						} else {
 							console.log(err)
 						}
-					});
-				setLike(true)
+					})
 			} else {
 				axios.delete(`https://i10a810.p.ssafy.io/api/lectures/v1/unlikes/${lecture.lectureId}`, {
 					headers: {
 						Authorization: `Bearer ${accessToken}`
 					}
 				})
-					.then((res) => console.log('좋아요 취소'))
+					.then((res) => {
+						setLike(false)
+						const temp = user.likeList.filter((id) => id !== lecture.lectureId)
+						dispatch(updateLikeList(temp))
+					})
 					.catch((err) => console.log(err))
-				setLike(false)
 			}
 		} else {
 			Swal.fire({

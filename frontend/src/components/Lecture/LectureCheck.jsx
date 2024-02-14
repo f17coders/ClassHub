@@ -42,14 +42,6 @@ function LectureCheck() {
 			})
 		} else {
 			dispatch(changeCategory(category))
-			axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?category=${category.categoryId}&page=0&size=16`)
-			.then((res) =>{
-				console.log(res.data.result)
-				dispatch(searchResult(res.data.result.lectureList))
-			})
-			.catch((err) => {
-				console.log(err)
-			})
 		}
 		
 	}
