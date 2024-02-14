@@ -213,12 +213,12 @@ export default function StudyRoomChannelModal({studyId, studyRoomChannel, channe
                                       <Button onClick={() => {
                                         setEditingChannelId(channel.channelId);
                                       }} 
-                                        variant='contained' 
+                                        variant='outlined' 
                                         >
                                         수정
                                       </Button>
                                       <Button onClick={() => handleDeleteDialogOpen(channel.channelId)}
-                                              variant='contained' 
+                                              variant='outlined' 
                                               color='error'
                                               >
                                         삭제

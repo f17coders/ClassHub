@@ -17,7 +17,13 @@ const style = {
     border: '1px solid #000',
     boxShadow: 24,
     p: 4,
-    zIndex: -1
+    zIndex: -1,
+    // 스크롤바 숨기기
+    "msOverflowStyle": "none", /* IE and Edge */
+    "scrollbarWidth": "none", /* Firefox */
+    "&::-webkit-scrollbar": {
+      display: "none" /* Chrome, Safari, and Opera */,
+    },
   };
 
 export default function StudyRoomModifyModal({ data, studyModify, studyModifyClose, onModifySuccess }){
