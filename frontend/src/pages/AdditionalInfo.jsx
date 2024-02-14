@@ -8,7 +8,7 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { saveUser, changeUserTagList, changeUserJob, updateLikeList } from '../store/userSlice'
+import { saveUser, changeUserTagList, changeUserJob, updateLikeList, insertUser } from '../store/userSlice'
 import { login } from '../store/store'
 
 function AdditionalInfo() {
@@ -106,9 +106,7 @@ function AdditionalInfo() {
 				.then((res) => {
 					// console.log(res)
 					// console.log(interstedSkills.map((skill) => skill.tagId))
-					dispatch(updateLikeList([]))
-					dispatch(changeUserTagList(interstedSkills))
-					dispatch(changeUserJob(target[0]))
+					dispatch(insertUser({tagList: interstedSkills, job: target[0]}))
 					Swal.fire({
 						title: '회원가입 완료',
 						icon: 'success',

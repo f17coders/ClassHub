@@ -8,6 +8,16 @@ let user = createSlice({
     saveUser(state, action) {
       return action.payload
     },
+    insertUser(state, action){
+      console.log('실행은 됨')
+      console.log(action.payload)
+      return {
+        ...state,
+        tagList: action.payload.tagList,
+        job: action.payload.job,
+        likeList: []
+      }
+    },
     // 관심 기술 바꾸는 함수
     changeUserTagList(state, action) {
       return {
@@ -43,6 +53,6 @@ let user = createSlice({
   }
 })
 
-export let { saveUser, changeUserTagList, changeUserJob, logoutUser, updateLikeList } = user.actions
+export let { saveUser, changeUserTagList, changeUserJob, logoutUser, updateLikeList, insertUser } = user.actions
 
 export default user
