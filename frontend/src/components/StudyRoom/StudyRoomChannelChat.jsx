@@ -121,7 +121,7 @@ export default function StudyRoomPrivateMessage({channel}) {
                 {/* <TextField size="small" sx={{ width: "100%" }} id="outlined-basic" label="내용을 검색해보세요!" variant="outlined" /> */}
                 <TextField
                     size="small"
-                    sx={{ width: "100%" }}
+                    // sx={{ width: "100%" }}
                     id="outlined-basic"
                     label="내용을 검색해보세요!"
                     // variant="outlined"
@@ -130,7 +130,11 @@ export default function StudyRoomPrivateMessage({channel}) {
             </Stack>
             
             {/* 채널에 대한 페이지 */}
+<<<<<<< HEAD
+            <Stack sx={{ width:"100%", height: "70%" , display:"flex"}}>
+=======
             <Stack sx={{ width:"100%", height: "70%" , display:"flex", marginTop: 5}}>
+>>>>>>> 887df252d3239dff4b6c82b9f9e5e1e082b57f4c
                 <Box 
                     ref={scrollContainerRef}
                     sx={{ height: "90%",
