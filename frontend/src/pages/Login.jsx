@@ -73,7 +73,10 @@ function Login() {
 			dispatch(updateLikeList(likeList))
 			navigate('/')
 		})
-		.catch((err) => console.log(err))
+		.catch((err) => {
+			console.log(err)
+			dispatch(updateLikeList([null]))
+		})
 	}
 
 

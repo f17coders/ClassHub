@@ -9,6 +9,8 @@ import axios from 'axios'
 import { useSelector } from 'react-redux'
 import { motion } from 'framer-motion'
 import { Divider } from '@mui/material'
+import img1 from './../assets/banner/5.jpg'
+import recommend from './../assets/banner/recommend.jpg'
 
 function Home() {
 	// 로그인 확인용
@@ -36,7 +38,19 @@ function Home() {
 
 			{
 				isLogin ? (
-					<div style={{ margin: 'auto', textAlign: 'center', height: '65vh' }}>
+					<div style={{ margin: 'auto', textAlign: 'center', height: '65vh', position:'relative' }}>
+						<motion.img
+						initial={{ opacity: 0, y: 40 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: false }}
+						transition={{
+							type: "spring",
+							duration: 1.5,
+							bounce: 0.2
+						}}
+						src={recommend}
+						style={{ position: 'absolute', bottom: 40, left: 230, width: '50vh' }}
+					/>
 						<motion.div
 							initial={{ opacity: 0, y: 40 }}
 							whileInView={{ opacity: 1, y: 0 }}
@@ -62,7 +76,31 @@ function Home() {
 							<p style={{ fontSize: '3em', fontWeight: '800', paddingLeft: '300px' }}><span style={{ color: 'rgb(56, 65, 172)' }}>Classhub</span>가 강의를 추천해드려요</p>
 						</motion.div>
 					</div>
-				) : (<div style={{ margin: 'auto', textAlign: 'center', height: '65vh' }}>
+				) : (<div style={{ margin: 'auto', textAlign: 'center', height: '65vh', position: 'relative' }}>
+					<motion.img
+						initial={{ opacity: 0, y: 40 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: false }}
+						transition={{
+							type: "spring",
+							duration: 1.5,
+							bounce: 0.2
+						}}
+						src={img1}
+						style={{ position: 'absolute', top: -40, right: 200, width: '50vh' }}
+					/>
+					<motion.img
+						initial={{ opacity: 0, y: 40 }}
+						whileInView={{ opacity: 1, y: 0 }}
+						viewport={{ once: false }}
+						transition={{
+							type: "spring",
+							duration: 1.5,
+							bounce: 0.2
+						}}
+						src={recommend}
+						style={{ position: 'absolute', bottom: 40, left: 230, width: '50vh' }}
+					/>
 					<motion.div
 						initial={{ opacity: 0, y: 40 }}
 						whileInView={{ opacity: 1, y: 0 }}
@@ -73,7 +111,7 @@ function Home() {
 							bounce: 0.2
 						}}
 						style={{ margin: '15vh 0vh 20vh 0vh' }}>
-						<p style={{ fontSize: '3em', fontWeight: '800', paddingRight: '200px' }}><span style={{ color: 'rgb(56, 65, 172)' }}>회원 가입</span>을 통해 나에게 맞는</p>
+						<p style={{ fontSize: '3em', fontWeight: '800', paddingRight: '300px' }}><span style={{ color: 'rgb(56, 65, 172)' }}>회원 가입</span>을 통해 나에게 맞는</p>
 					</motion.div>
 					<motion.div
 						initial={{ opacity: 0, y: 40 }}
@@ -101,8 +139,8 @@ function Home() {
 							duration: 1.5,
 							bounce: 0.2
 						}}
-						style={{ margin: '0px', textAlign:'center' }}>
-						<p style={{ fontSize: '1.3em', color:'gray' }}>ClassHub의 인기 강의</p>
+						style={{ margin: '0px', textAlign: 'center' }}>
+						<p style={{ fontSize: '1.3em', color: 'gray' }}>ClassHub의 인기 강의</p>
 					</motion.div>
 				)
 			}
