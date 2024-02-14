@@ -16,4 +16,7 @@ public interface LectureRepository extends JpaRepository<Lecture, Integer>,
 
 	Lecture findByLectureId(int lectureId);
 
+	@Query("select l.lectureId from Lecture l inner join LectureSummary ls on l.lectureId=ls.lectureId order by ls.combinedRating desc limit 5")
+	List<Integer> getFamousLectureIds();
+
 }

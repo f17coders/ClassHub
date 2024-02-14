@@ -1,13 +1,22 @@
 import DOMPurify from "dompurify"
+import styled from 'styled-components'
 
-function LectureHTML({htmlString}) {
+const StyledDiv = styled.div`
+  text-overflow: ellipsis;
+`;
 
+function LectureHTML({ htmlString }) {
   return (
-    <div
-    dangerouslySetInnerHTML={{
-        __html: DOMPurify.sanitize(htmlString, { WHOLE_DOCUMENT: true })
-      }}/>
-  )
+    <StyledDiv
+      dangerouslySetInnerHTML={{
+        __html: DOMPurify.sanitize(htmlString, {
+          ADD_TAGS: ['p'],
+          FORBID_ATTR: ['style'],
+          WHOLE_DOCUMENT: true
+        })
+      }}
+    />
+  );
 }
 
 export default LectureHTML
