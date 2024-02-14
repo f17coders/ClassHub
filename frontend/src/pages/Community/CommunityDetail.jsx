@@ -220,7 +220,7 @@ export default function CommunityDetail(){
                               whiteSpace: "normal",
                             }}
                             dangerouslySetInnerHTML={{
-                              __html: DOMPurify.sanitize(String(detailData?.content)),
+                                __html: DOMPurify.sanitize(String(detailData?.content).replace(/<img/g, '<img style="max-width:100%;height:auto;"')),
                             }}
                         />
 

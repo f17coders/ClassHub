@@ -24,7 +24,7 @@ export default function StudyRoomRecruit() {
   // 현재 페이지를 나타내는 state
   const [currentPage, setCurrentPage] = useState(1);
   // 페이지 당 항목 수
-  const itemsPerPage = 4;
+  const itemsPerPage = 3;
   //전체 페이지 수
   const [totalPages, setTotalPages] = useState(1);
 
