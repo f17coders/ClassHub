@@ -69,7 +69,7 @@ function AlarmModal({onOpen, onClose}) {
 			onClose={onClose}
 		>
             <Box sx={style}>
-                <h2>알림</h2>
+                <h2 style={{ display: 'flex', justifyContent: 'center' }}>🔔 알림 🔔</h2>
                 <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
                         개인 채팅 알람
                 </Typography>

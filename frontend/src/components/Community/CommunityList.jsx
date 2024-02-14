@@ -28,7 +28,15 @@ export default function CommunityPostList({post}){
     }
     const handleMoustOut = function() {
       setHover(false)
-    }    
+    }
+
+    // 글 내용 길이 제한하여 보여주기
+    const truncateContent = (content) => {
+      if(content.length > 75) {
+        return content.substring(0,75) + "...";
+      }
+      return content;
+    }
 
     return(
         <>
@@ -42,11 +50,11 @@ export default function CommunityPostList({post}){
               }}
             >
               <h3 style={{fontWeight: 'bold'}}>{post.title}</h3>
-              <p>{removeHTMLTags(post.content)}</p>
+              <p>{truncateContent(removeHTMLTags(post.content))}</p>
               {/* 해시태그 */}
               <Stack direction="row" spacing={1}>
                   {post.tagList.map((tag, tagIndex) => (
-                  <Chip key={tagIndex} label={`# ${tag.name}`} size="small" sx={{ borderRadius: '20px', marginRight: '0.5em'}} />
+                  <Chip key={tagIndex} label={`# ${tag.name}`} color="primary" size="small" sx={{ borderRadius: '20px', marginRight: '0.5em'}} />
                   ))}
               </Stack>
 

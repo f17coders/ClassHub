@@ -63,6 +63,14 @@ function Article({ post }) {
   const handleMouseIn = () => { setHover(true) }
   const handleMouseOut = () => { setHover(false) }
 
+  // 글 내용 길이 제한하여 보여주기
+  const truncateContent = (content) => {
+    if(content.length > 65) {
+      return content.substring(0,65) + "...";
+    }
+    return content;
+  }
+
   return (
     <Paper
       onClick={() => { navigate(`/community/detail/${post.communityId}`) }}
@@ -76,7 +84,7 @@ function Article({ post }) {
       }}
     >
       <h3 style={{ fontWeight: 'bold', margin: '0' }}>{post.title}</h3>
-      <p>{removeHTMLTags(post.content)}</p>
+      <p>{truncateContent(removeHTMLTags(post.content))}</p>
       <div style={{ marginRight: '1em' }}>
         <Tooltip title="작성일자">
           <div style={{ display: 'flex', alignContent: 'center' }}>
