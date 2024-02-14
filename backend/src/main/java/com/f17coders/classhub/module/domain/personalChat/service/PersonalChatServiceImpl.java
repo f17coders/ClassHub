@@ -69,6 +69,10 @@ public class PersonalChatServiceImpl implements PersonalChatService {
             MemberStudyInfoRes memberStudyInfoRes = memberRepository.findMemberStudyInfoResByMemberId(
                     other);
 
+            if(memberStudyInfoRes == null) {
+                memberStudyInfoRes = MemberStudyInfoRes.builder().nickname("탈퇴한 사용자").build();
+            }
+
             PersonalChatRes personalChatRes = PersonalChatRes.builder()
                 .personalChatId(personalChat.getPersonalChatId())
                 .receiver(memberStudyInfoRes).build();
@@ -89,6 +93,17 @@ public class PersonalChatServiceImpl implements PersonalChatService {
         if(member.getMemberId() != Integer.parseInt(sender.get("memberId"))){
             personalChat.setSender(personalChat.getReceiver());
             personalChat.setReceiver(sender);
+        }
+
+        int receiverId = Integer.parseInt(personalChat.getReceiver().get("memberId"));
+
+        if(memberRepository.findMemberStudyInfoResByMemberId(receiverId) == null) {
+            Map<String, String> receiver = new HashMap<>();
+
+            receiver.put("receiverId", null);
+            receiver.put("nickname", "탈퇴한 사용자");
+            receiver.put("profileImage", null);
+            personalChat.setReceiver(receiver);
         }
 
         return personalChat;
