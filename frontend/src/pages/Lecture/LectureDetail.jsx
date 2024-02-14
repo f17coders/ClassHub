@@ -229,7 +229,7 @@ function LectureDetail() {
 						<Container sx={{ marginTop: '20px' }}>
 							<h3 style={{ textAlign: 'center' }}>🤖GPT로 리뷰를 요약했어요</h3>
 							<Box>
-								<p style={{ height: '100px', marginTop: '20px', overflow: load ? 'auto' : 'hidden', whiteSpace: load ? 'normal' : 'nowrap' }}>{lecture.gptReview}</p>
+								<p style={{ height: '40px', marginTop: '20px', overflow: load ? 'auto' : 'hidden', whiteSpace: load ? 'normal' : 'nowrap' }}>{lecture.gptReview}</p>
 								{
 									load ? null : (
 										<Divider>
@@ -282,8 +282,7 @@ function Content1(props) {
 	const [htmlString, setHtmlString] = useState('')
 	useEffect(() => {
 		if (htmlString == '') {
-			axios.get('https://storage.googleapis.com/classhub/data/udemy/htmlFiles/328990.html')
-				// axios.get('https://storage.googleapis.com/classhub/data/udemy/htmlFiles/1.html')
+			axios.get(`${lecture.descriptionDetail}`)
 				.then((res) => {
 					setHtmlString(res.data)
 				})
