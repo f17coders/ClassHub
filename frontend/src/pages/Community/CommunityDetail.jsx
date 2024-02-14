@@ -1,4 +1,4 @@
-import {Tooltip, Autocomplete, Typography, Stack, Container, Button, Backdrop, Alert, Dialog, DialogActions, DialogTitle} from '@mui/material';
+import {Chip, Tooltip, Autocomplete, Typography, Stack, Container, Button, Backdrop, Alert, Dialog, DialogActions, DialogTitle} from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import PersonIcon from '@mui/icons-material/Person';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -59,7 +59,7 @@ export default function CommunityDetail(){
                     setCanScrap(response.data.result.canScrap);
                     setCanUpdate(response.data.result.canUpdate);
                     setDateTime(response.data.result.createdAt.split("T").join(" "));
-                    console.log(response.data.result)
+                    // console.log(response.data.result)
                     // console.log(detailData)
                   })
                   .catch((err) => console.log(err))
@@ -229,14 +229,16 @@ export default function CommunityDetail(){
                             <Stack direction="row">
                                 {
                                     detailData.tagList && detailData.tagList.map((tag,index) => (
-                                        <Button
+                                        <Chip
                                             key={index}
                                             size="small" 
                                             variant="contained" 
+                                            label={`# ${tag.name}`}
+                                            color="primary"
                                             sx={{ height: '2rem', borderRadius: '20px', marginRight: '0.5em'}}
                                         >
-                                            #{tag.name}
-                                        </Button>
+                                            {/* #{tag.name} */}
+                                        </Chip>
                                     ))
                                 }
                                 

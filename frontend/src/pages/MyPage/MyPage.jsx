@@ -2,7 +2,7 @@ import Grid from '@mui/material/Grid'
 import Container from '@mui/material/Container'
 import EditIcon from '@mui/icons-material/Edit';
 import NearMeIcon from '@mui/icons-material/NearMe';
-import { IconButton, Paper, Chip, Tooltip, Button } from '@mui/material'
+import { IconButton, Paper, Chip, Tooltip, Button, Divider } from '@mui/material'
 import profileImg from './../../assets/Profile.png'
 import { useState, useEffect } from 'react'
 import { Outlet, Link, useNavigate } from 'react-router-dom'
@@ -16,6 +16,7 @@ import { EffectCoverflow, Pagination } from 'swiper/modules'
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 // 마이페이지 전체 틀
 
@@ -158,14 +159,21 @@ function MyPage() {
 							<Grid item xs={5} md={3} sx={{ display: 'flex', justifyContent: 'flex-start', padding: '30px', flexDirection: 'column' }}>
 								<img style={{ width: '180px', height: '180px', borderRadius: '75%', margin: '30px auto', cursor: 'pointer' }} onClick={() => handleClick(null)} src={user.profileImage == null ? profileImg : user.profileImage} alt="Profile Image" />
 								{/* <p style={{ marginTop: '20px', marginBottom: '5px', textAlign: 'center', fontWeight: '600', color: 'grey' }}><span style={{color:'black'}}>{user.job.name}</span>가 될</p> */}
-								<p style={{ marginTop: '10px', textAlign: 'center', fontWeight: '800', fontSize: '1.6em', cursor: 'pointer' }} onClick={() => handleClick(null)}>{user.nickname}의<br />마이페이지</p>
+								<p style={{ marginTop: '10px', textAlign: 'center', fontWeight: '800', fontSize: '1.6em', cursor: 'pointer' }} onClick={() => handleClick(null)}>{user.nickname} 의<br />마이페이지</p>
 								{/* 마이페이지 메뉴 */}
-								<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '10px', paddingTop: '20px', borderTop: '1px solid lightgray' }}>
+								<div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', margin: '10px', paddingTop: '20px', borderTop: '1px solid lightgray', fontWeight:'bold' ,fontSize: '0.9em'}}>
 									{
 										tabItem.map((item, idx) => (
-											<div key={idx} style={{ margin: '10px 0px' }}>
+											<div key={idx}
+											 style={{ 
+												margin: '10px 0px', 
+												display: 'flex', 
+												alignContent:'center', 
+												justifyContent:'center',
+												}}>
+												<KeyboardArrowRightIcon />
 												<Link to={item.link}
-													style={idx == activeIndex ? { ...linkStyle, fontSize: '1.4em' } : (idx == selectedIndex ? { ...linkStyle, color: 'rgb(83, 96, 245)' } : linkStyle)}
+													style={idx == activeIndex ? { ...linkStyle, fontSize: '1em' } : (idx == selectedIndex ? { ...linkStyle, color: 'rgb(83, 96, 245)' } : linkStyle)}
 													onMouseEnter={() => handleMouseEnter(idx)}
 													onMouseLeave={handleMouseLeave}
 													onClick={() => handleClick(idx)}
@@ -176,6 +184,7 @@ function MyPage() {
 										))
 									}
 								</div>
+								<Divider/>
 							</Grid>
 
 							{/* 메뉴 요소들이 들어갈 곳 */}
@@ -185,12 +194,12 @@ function MyPage() {
 										<Grid container sx={{ padding: '20px' }}>
 											<Grid item xs={6} style={{ height: '250px', padding: '10px' }}>
 												<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3px' }}>
-													<p style={{ fontSize: '1.4em', fontWeight: '700', margin: '0px' }}>목표 직무와 관심 기술</p>
+													<p style={{ fontSize: '1.4em', fontWeight: '700', margin: '0px', marginLeft: 5 }}>🎯 목표 직무와 관심 기술</p>
 													<Tooltip title="수정하러가기"><IconButton onClick={() => handleClick(3)}><EditIcon /></IconButton></Tooltip>
 												</div>
 												<Paper sx={{ padding: '10px', height: '180px', overflow: 'auto' }}>
-													<p style={{ fontSize: '1.2em', marginTop: '0px' }}><span style={{ color: 'grey' }}>목표 직무: </span>{user.job.name}</p>
-													<p style={{ color: 'grey', fontSize: '1.2em', marginBottom: '2px' }}>관심 기술</p>
+													<p style={{ fontSize: '1.2em', marginTop: '0px', fontWeight:'bold' }}><span style={{ color: 'grey', marginRight: 10 }}>목표 직무 </span>{user.job.name}</p>
+													<p style={{ color: 'grey', fontSize: '1.2em', marginBottom: '2px', fontWeight:'bold' }}>관심 기술</p>
 													{
 														user.tagList.length == 0 ? (<p style={{ fontSize: '0.9em', color: 'lightgrey' }}>관심 기술이 입력되지 않았습니다.<br />위의 수정버튼을 통해 입력해주세요!</p>) : (
 															<div>
@@ -209,7 +218,7 @@ function MyPage() {
 											</Grid>
 											<Grid item xs={6} style={{ height: '250px', padding: '10px' }}>
 												<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3px' }}>
-													<p style={{ fontSize: '1.4em', fontWeight: '700', margin: '0px' }}>참여중인 스터디 목록</p>
+													<p style={{ fontSize: '1.4em', fontWeight: '700', margin: '0px', marginLeft: 5 }}>👨‍👩‍👧‍👦 참여중인 스터디 목록</p>
 													<Tooltip title="더보러가기"><Link to='/studyroom'><IconButton><NearMeIcon /></IconButton></Link></Tooltip>
 												</div>
 												<Paper sx={{ padding: '10px', height: '180px', overflow: 'auto' }}>
@@ -231,7 +240,7 @@ function MyPage() {
 											</Grid>
 											<Grid item xs={12} style={{ height: '250px', marginTop: '40px' }}>
 												<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3px' }}>
-													<p style={{ fontSize: '1.4em', fontWeight: '700', margin: '0px' }}>나에게 맞는 강의 추천</p>
+													<p style={{ fontSize: '1.4em', fontWeight: '700', margin: '0px', marginLeft: 5 }}> 🍀 나에게 맞는 강의 추천</p>
 													<Tooltip title="새로고침하기"><IconButton onClick={updateTag}><RefreshIcon /></IconButton></Tooltip>
 												</div>
 												<Paper sx={{ padding: '10px', height: '180px' }}>
