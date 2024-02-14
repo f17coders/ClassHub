@@ -174,9 +174,9 @@ function LectureCard({ lecture }) {
 			return (<p style={{ color: 'grey' }}>{price1.toLocaleString()}원</p>)
 		} else {
 			return (<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginTop: '10px' }}>
-				<p style={{ textDecoration: 'line-through', margin: 0, color: 'grey' }}>{price2.toLocaleString()}</p>
+				<p style={{ textDecoration: 'line-through', margin: 0, color: 'grey' }}>{price1.toLocaleString()}</p>
 				<EastIcon fontSize='small' />
-				<p style={{ margin: 0 }}>{price1.toLocaleString()}</p>
+				<p style={{ margin: 0 }}>{price2.toLocaleString()}</p>
 			</div>)
 		}
 	}
