@@ -50,6 +50,7 @@ dependencies {
 	implementation group: 'org.javassist', name: 'javassist', version: '3.15.0-GA'
 	// db
 	implementation 'org.mariadb.jdbc:mariadb-java-client'
+//	implementation 'org.springframework.data:spring-data-elasticsearch:4.3.0'
 	// https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
 
@@ -57,6 +58,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 	// websocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
 }
 
 
