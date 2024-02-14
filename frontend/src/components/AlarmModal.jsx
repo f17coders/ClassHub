@@ -81,7 +81,9 @@ function AlarmModal({onOpen, onClose}) {
                         <ListItem sx={{ mx: 2, minHeight: 32, color: 'black' }}>
                             <ListItemText primary={item.text}
                                 primaryTypographyProps={{ fontSize: 16, fontWeight: 'medium' }} />
-                            <Button onClick={() => clickPrivateAlarm(item.personalChatId)}>
+                            <Button 
+                                sx={{width:"30%"}}
+                                onClick={() => clickPrivateAlarm(item.personalChatId)}>
                                 <Typography fontSize={16} component="div">
                                     채팅방 이동
                                 </Typography> 
@@ -104,7 +106,9 @@ function AlarmModal({onOpen, onClose}) {
                         <ListItem sx={{ mx: 2, minHeight: 32, color: 'black' }}>
                             <ListItemText primary={item.text}
                                 primaryTypographyProps={{ fontSize: 16, fontWeight: 'medium' }} />
-                            <Button onClick={() => clickChannelAlarm(item.studyId)}>
+                            <Button 
+                                sx={{width:"30%"}}
+                                onClick={() => clickChannelAlarm(item.studyId)}>
                                 <Typography fontSize={16} component="div">
                                     채팅방 이동
                                 </Typography> 

@@ -18,6 +18,12 @@ const style = {
     border: '1px solid #000',
     boxShadow: 24,
     p: 4,
+    // 스크롤바 숨기기
+    "msOverflowStyle": "none", /* IE and Edge */
+    "scrollbarWidth": "none", /* Firefox */
+    "&::-webkit-scrollbar": {
+      display: "none" /* Chrome, Safari, and Opera */,
+    },
   };
 
 export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, onRegisterSuccess }){

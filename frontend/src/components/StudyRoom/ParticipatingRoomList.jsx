@@ -65,19 +65,23 @@ export default function ParticipatingRoomList({studyId}){
   }, [data]);
 
     return(
-        <Box sx={{maxHeight: 360,
-                width:"100%",
-                position: 'relative',
-                overflow: 'auto',
-                // 스크롤바 숨기기
-                "msOverflowStyle": "none", /* IE and Edge */
-                "scrollbarWidth": "none", /* Firefox */
-                "&::-webkit-scrollbar": {
-                  display: "none" /* Chrome, Safari, and Opera */,
-                },
-                bgcolor: open ? 'rgba(71, 98, 130, 0.2)' : null, pb: open ? 2 : 0,
-              }}>
-        <ListSubheader>
+        <Box sx={{
+          backgroundColor: 'white',
+          border: '3px solid rgba(25, 118, 210, 0.12)',
+          borderRadius: '15px',
+          margin: '1em',
+          maxHeight: 250,
+          // width:"100%",
+          position: 'relative',
+          overflow: 'auto',
+          // 스크롤바 숨기기
+          "msOverflowStyle": "none", /* IE and Edge */
+          "scrollbarWidth": "none", /* Firefox */
+          "&::-webkit-scrollbar": {
+            display: "none" /* Chrome, Safari, and Opera */,
+          },
+        }}>
+        <ListSubheader  sx={{ margin: 0, padding: 0,  }}>
           <ListItemButton
             alignItems="flex-start"
             onClick={() => setOpen(!open)}
@@ -88,6 +92,9 @@ export default function ParticipatingRoomList({studyId}){
               width: "100%",
               minWidth: 360,
               color: 'black',
+              '&:hover': {
+                backgroundColor: 'rgba(25, 118, 210, 0.08)',
+              }
             }}
           >
           <ListItemText
@@ -118,7 +125,10 @@ export default function ParticipatingRoomList({studyId}){
               key={itemIndex}
               sx={{
                  width: '100%', 
-                 minHeight:'60px'
+                 minHeight:'60px',
+                '&:hover': {
+                  backgroundColor: 'rgba(25, 118, 210, 0.08)',
+                }
               }}
               // selected={selectedIndex === itemIndex && open}
               onClick={(event) => {
@@ -140,7 +150,9 @@ export default function ParticipatingRoomList({studyId}){
                     src={imagePaths[itemIndex]}
                   />
                   <ListItemText primary={item.title}
-                  primaryTypographyProps={{ fontSize: 12, fontWeight: 'medium' }} />
+                  primaryTypographyProps={{ 
+                    fontSize: 14, 
+                    fontWeight: 'medium' }} />
                 </ListItem>
                 <Divider/>
                   

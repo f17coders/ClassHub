@@ -204,9 +204,25 @@ export default function StudyRoomRecruitList({study}){
       }
     })
     }
+    const formattedMessage = (message) => {
+      return message.split('\n').map((line, index) => (
+          <React.Fragment key={index}>
+              {line}
+              <br />
+          </React.Fragment>
+      ));
+    }
 
     return(
-        <ListItemButton onClick={() => {handleEnterDialogOpen(study.studyId)}}>
+        <ListItemButton sx={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center',
+          cursor: 'default', // 클릭 불가능한 커서 설정
+          '&:hover': {
+            backgroundColor: 'rgba(25, 118, 210, 0.08)', // 호버 시 배경색 변경
+          }
+        }}>
             <ListItem>
               <Stack sx={{width: '100%'}}>
                 <Stack direction="row" spacing={1} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'space-around' }}>
@@ -226,7 +242,7 @@ export default function StudyRoomRecruitList({study}){
                 </Stack>
                     
                 <Stack direction="row" sx={{ marginTop: 1 }}>
-                  <p>{study.description}</p>
+                  <p>{formattedMessage(study.description)}</p>
                 </Stack>
                 
                 <Stack direction="row" spacing={1}>
@@ -244,28 +260,26 @@ export default function StudyRoomRecruitList({study}){
                 </Stack>
                     
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'space-around' }}>
-                  <Stack direction="row" spacing={1} my={1}>
-                    { study.tagList ? (study.tagList.map((tag, tagIndex) => (
+                  <Stack direction="row" spacing={1} my={1} sx={{ maxWidth: '350px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {study.tagList && study.tagList.slice(0, 3).map((tag, tagIndex) => (
                       <Chip key={tag.tagId} label={tag.name} color="primary" size='small' />
-                    ))) : null
-                  }
+                    ))}
+                    {study.tagList && study.tagList.length > 3 && (
+                      <Typography variant="body2" color="textSecondary">...</Typography>
+                    )}
                   </Stack>
                     
                   <Stack direction="row">
-                    <Tooltip title="1:1 대화하기">
-                      <IconButton edge="end" aria-label="1:1 대화"  
-                        onClick={() => {registChat(study.studyLeaderId);}}>
-                        <ChatIcon />
-                      </IconButton>
-                    </Tooltip>
-                    
-                    <Tooltip title="참여신청">
-                      <IconButton edge="end" aria-label="참여신청" 
-                        onClick={() => {handleEnterDialogOpen(study.studyId)}} >
-                        <LoginIcon />
-                      </IconButton>
-                    </Tooltip>
-                    
+                    <Button 
+                      startIcon={<ChatIcon/> } 
+                      onClick={() => {registChat(study.studyLeaderId);}}>
+                        1:1 대화하기
+                    </Button>
+                    <Button 
+                      startIcon={<LoginIcon/> } 
+                      onClick={() => {handleEnterDialogOpen(study.studyId)}} >
+                        참여신청
+                    </Button>
                   </Stack>
                 </div>
               </Stack>

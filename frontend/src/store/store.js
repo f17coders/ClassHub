@@ -231,24 +231,6 @@ let fromMain = createSlice({
 })
 export let { setFromMainTrue, setFromMainFalse } = fromMain.actions
 
-// 스터디룸 모집중, 모집완료 필터링
-let studyroomFilter = createSlice({
-  name: 'studyroomFilter',
-  initialState :{
-    category: 0
-  },
-  reducers:{
-    // 필터 변경
-    changeFilter(state, action) {
-      return {
-        ...state,
-        category: action.payload,
-      }
-    },
-  }
-})
-export let {changeFilter} = studyroomFilter.actions
-
 // 커뮤니티 검색 params
 let commuParams = createSlice({
   name: 'commuParams',
@@ -312,8 +294,7 @@ const persistedReducer = persistReducer(
     user: user.reducer,
     lectureResult: lectureResult.reducer,
     fromMain: fromMain.reducer,
-    commuParams: commuParams.reducer,
-    studyroomFilter: studyroomFilter.reducer
+    commuParams: commuParams.reducer
   })
 );
 
