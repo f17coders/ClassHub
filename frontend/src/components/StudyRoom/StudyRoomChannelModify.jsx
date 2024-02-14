@@ -108,13 +108,13 @@ export default function StudyRoomChannelModify({channelId, studyId, channelModif
                 }
                 
                 <Stack direction="row" spacing={1}>
-                  <Button variant="contained"
+                  <Button variant="outlined"
                       size='small'
                       onClick={() => {modifyChannel(channelId); }}
                       disabled={hasError || isNull}>
                         수정
                     </Button>
-                    <Button variant="contained"
+                    <Button variant="outlined"
                       size='small'
                       color='error'
                       onClick={cancelModification}
