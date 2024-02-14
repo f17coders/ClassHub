@@ -18,7 +18,6 @@
 6. [**FrontEnd**](#6)
 7. [**BackEnd**](#7)
 8. [**팀 소개**](#8)
-9. [**프로젝트 실행순서**](#9)
 
 <div id="1"></div>
 
@@ -68,13 +67,13 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 <div id="4"></div>
 
 ## 💾 DataBase
-### Maria DB
+### Maria DB ERD
 <img src="./readme_assets/lectureDB.png" width="700" alt="lecture" /> 
 <img src="./readme_assets/communityDB.png" width="700" alt="community" /> 
 <img src="./readme_assets/studyDB.png" width="700" alt="study" /> 
 <img src="./readme_assets/memberDB.png" width="500" alt="member" /> 
 
-### Mongo DB 채팅 구조
+### Mongo DB 구조
 <img src="./readme_assets/mongodb1.PNG" width="700" alt="mongodb" /> 
 <img src="./readme_assets/mongodb2.PNG" width="700"  alt="mongodb" /> 
 
@@ -92,7 +91,10 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 
 ## 📲 Back-End
 
+### 성능 최적화
 
+
+### 
 
 <div id="8"></div>
 
@@ -110,7 +112,3 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 |남수진|BackEnd|- DB 설계 <br > - 더미 데이터 생성 <br > - 스터디룸 도메인 개발 <br > - Stomp를 이용한 실시간 채팅 구현 <br > &emsp; - BackEnd: 1대1, 다대다 Stomp 통신 구현 <br > &emsp; - FrontEnd: sockjs, stomp 소켓 통신 구현, 채팅방 ui 구현 <br > - 채팅 알림 구현|
 |김예지|FrontEnd|- Figma를 이용해 프로토타입 구성 <br > - 화면 구현 <br > &emsp; - 전체 화면 구성(Nav, Footer, 메인페이지 등) 구현 <br > &emsp; - 마이페이지 구현 <br > &emsp; - 강의 페이지(목록, 상세페이지 ) 구현 <br > &emsp; - 리뷰 페이지 구현 <br > - 로그인/로그아웃 구현 &emsp; <br > - 로그인 유무에 따른 화면 권한 설정 <br > - 유효성 검사 구현|
 |정유경|FrontEnd| - Figma를 이용해 프로토타입 구성 <br > - 화면 구현 <br > &emsp;- 스터디룸(모집, 입장, 채널) 화면 구현 <br >&emsp; - 스터디룸, 채널 모달 창 구현 <br >&emsp; - 커뮤니티 구현 <br > - BackEnd와 Oauth 통신 연결 <br > - 권한 설정 <br > &emsp;- 로그인 유무에 따른 화면 권한 설정 <br >&emsp; - 사용자 권한에 따른 상호작용 설정 <br > - 유효성 검사 구현|
-
-<div id="9"></div>
-
-## 프로젝트 실행 순서
