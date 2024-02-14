@@ -1,8 +1,6 @@
 <div align="center">
   <br />
-  <a href="https://i10a810.p.ssafy.io" >
     <img src="./readme_assets/MainLogo.png" alt="ClassHub" /> 
-  </a>
   <h1>ClassHub</h1>
 
 ### 🎬[Demo 시연영상](링크 삽입)  🎓 [Classhub](https://i10a810.p.ssafy.io)
@@ -16,10 +14,11 @@
 2. [**주요 기능**](#2)
 3. [**기술 스택**](#3)
 4. [**DataBase**](#4)
-5. [**Front-End**](#5) 
-6. [**Back-End**](#6)
-7. [**Server**](#7)
+5. [**시스템 아키텍처**](#5) 
+6. [**FrontEnd**](#6)
+7. [**BackEnd**](#7)
 8. [**팀 소개**](#8)
+9. [**프로젝트 실행순서**](#9)
 
 <div id="1"></div>
 
@@ -45,8 +44,13 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 ### FrontEnd
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white) ![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
 
+<img alt="Emotion" src="./readme_assets/emotion.png" height="40"> &emsp; <img alt="Swiper" src="./readme_assets/swiper.png" height="40"> &emsp; <img alt="sweetalert2" src="./readme_assets/sweetalert2.png" height="40">
+
 ### BackEnd
 ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white) ![SpringSecurity](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=springsecurity&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens) 
+
+<img alt="jpa" src="./readme_assets/jpa.png" height="30"> &emsp;  <img alt="querydsl" src="./readme_assets/querydsl.png" height="30"> &emsp;
+<img alt="stomp" src="./readme_assets/stomp.png" height="30">
 
 ### DataBase
 
@@ -72,13 +76,35 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 
 <div id="5"></div>
 
-## 📱 Front-End
+## 📂 시스템 아키텍처
+
 <div id="6"></div>
 
-## 📲 Back-End
+## 📱 Front-End
+
 <div id="7"></div>
 
-## 📂 Server
+## 📲 Back-End
+
+
+
 <div id="8"></div>
 
 ## 👪 팀 소개
+|![정승환](https://avatars.githubusercontent.com/u/100360525?v=4)|![김지현](https://avatars.githubusercontent.com/u/31675698?v=4)|![하동준](https://avatars.githubusercontent.com/u/77885587?v=4)|![남수진](https://avatars.githubusercontent.com/u/77006790?v=4)|![김예지](https://avatars.githubusercontent.com/u/139518026?v=4)|![정유경](https://avatars.githubusercontent.com/u/83561356?v=4)|
+|----|----|----|----|----|----|
+|[정승환<br >(팀장)](https://github.com/seunghw2)|[김지현](https://github.com/KimJyun)|[하동준](https://github.com/djh0211)|[남수진](https://github.com/ss0510s)|[김예지](https://github.com/gimezi)|[정유경](https://github.com/YuKyung-Chung)|
+
+
+|이름|역할|개발 내용|
+|----|----|----|
+|정승환|BackEnd||
+|김지현|Infra, BackEnd||
+|하동준|BackEnd||
+|남수진|BackEnd||
+|김예지|FrontEnd||
+|정유경|FrontEnd||
+
+<div id="9"></div>
+
+## 프로젝트 실행 순서
