@@ -58,7 +58,7 @@ export default function PrivateMessageList(){
           display: "none" /* Chrome, Safari, and Opera */,
         },
       }}>
-          <ListSubheader  sx={{ margin: 0, padding: 0 }}>
+          <ListSubheader sx={{ margin: 0, padding: 0 }}>
             <ListItemButton
               alignItems="flex-start"
               onClick={() => setOpen(!open)}
@@ -68,6 +68,9 @@ export default function PrivateMessageList(){
                 pb: 0,
                 width: "100%",
                 color: 'black',
+                '&:hover': {
+                  backgroundColor: 'rgba(25, 118, 210, 0.08)',
+                }
               }}>
                 <Divider/>
               <ListItemText
@@ -96,7 +99,13 @@ export default function PrivateMessageList(){
                 data.map((item, itemIndex) => (
                   <ListItemButton 
                     key={itemIndex}
-                    sx={{ width: '100%', minHeight:'60px' }}
+                    sx={{ 
+                      width: '100%', 
+                      minHeight:'60px',
+                      '&:hover': {
+                        backgroundColor: 'rgba(25, 118, 210, 0.08)',
+                      }
+                     }}
                     // selected={selectedIndex === itemIndex}
                     onClick={(event) => {
                       // handleListItemClick(event, itemIndex);
@@ -110,7 +119,7 @@ export default function PrivateMessageList(){
                         <Avatar sx={{width: 30, height: 30, marginRight: 2}} alt={item.receiver.nickname} src={item.receiver.profileImage}/>
                         <ListItemText primary={item.receiver.nickname}
                         primaryTypographyProps={{ 
-                          fontSize: 15, 
+                          fontSize: 14, 
                           fontWeight: 'medium' 
                         }} />
                       </ListItem>

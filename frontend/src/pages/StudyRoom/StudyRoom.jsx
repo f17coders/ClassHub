@@ -76,6 +76,9 @@ export default function StudyRoom() {
                           borderRadius: '15px',
                           marginX: '1em',
                           height: 56,
+                          '&:hover': {
+                            backgroundColor: 'rgba(25, 118, 210, 0.08)',
+                          }
                         }}
                         >
 
