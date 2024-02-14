@@ -273,7 +273,7 @@ public class CommunityServiceImpl implements CommunityService {
     }
 
     private void checkAuthority(Member member, Community community) {
-        if (!community.getMember().equals(member)) {
+        if (community.getMember().getMemberId() != member.getMemberId()) {
             throw new BaseExceptionHandler(ErrorCode.FORBIDDEN_ERROR);
         }
     }
