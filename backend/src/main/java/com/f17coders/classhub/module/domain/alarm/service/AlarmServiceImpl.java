@@ -11,19 +11,22 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AlarmServiceImpl implements AlarmService{
+public class AlarmServiceImpl implements AlarmService {
 
     private final PersonalChatAlarmRepository personalChatAlarmRepository;
     private final ChannelAlarmRepository channelAlarmRepository;
 
     @Override
-    public PersonalChatAlarm registPersonalChatAlarm(String personalChatId, int memberId, String text) throws BaseExceptionHandler {
+    public PersonalChatAlarm registPersonalChatAlarm(String personalChatId, int memberId,
+        String text) throws BaseExceptionHandler {
 
-        PersonalChatAlarm personalChatAlarm = personalChatAlarmRepository.findPersonalChatAlarmByPersonalChatIdAndMemberId(personalChatId, memberId);
+        PersonalChatAlarm personalChatAlarm = personalChatAlarmRepository.findPersonalChatAlarmByPersonalChatIdAndMemberId(
+            personalChatId, memberId);
 
-        if(personalChatAlarm == null) {
+        if (personalChatAlarm == null) {
 
-            personalChatAlarm = PersonalChatAlarm.createPersonalChatAlarm(personalChatId, memberId, text);
+            personalChatAlarm = PersonalChatAlarm.createPersonalChatAlarm(personalChatId, memberId,
+                text);
 
             personalChatAlarmRepository.save(personalChatAlarm);
         }
@@ -32,10 +35,12 @@ public class AlarmServiceImpl implements AlarmService{
     }
 
     @Override
-    public ChannelAlarm registchannelAlarm(int studyId, String channelId, int memberId, String text) throws BaseExceptionHandler {
-        ChannelAlarm channelAlarm = channelAlarmRepository.findChannelAlarmByChannelIdAndMemberId(channelId, memberId);
+    public ChannelAlarm registchannelAlarm(int studyId, String channelId, int memberId, String text)
+        throws BaseExceptionHandler {
+        ChannelAlarm channelAlarm = channelAlarmRepository.findChannelAlarmByChannelIdAndMemberId(
+            channelId, memberId);
 
-        if(channelAlarm == null) {
+        if (channelAlarm == null) {
             channelAlarm = ChannelAlarm.createChannelAlarm(studyId, channelId, memberId, text);
             channelAlarmRepository.save(channelAlarm);
         }
@@ -44,17 +49,22 @@ public class AlarmServiceImpl implements AlarmService{
     }
 
     @Override
-    public void deletePersonalChatAlarm(String personalChatId, int memberId) throws BaseExceptionHandler {
-        PersonalChatAlarm personalChatAlarm = personalChatAlarmRepository.findPersonalChatAlarmByPersonalChatIdAndMemberId(personalChatId, memberId);
-
-        personalChatAlarmRepository.delete(personalChatAlarm);
+    public void deletePersonalChatAlarm(String personalChatId, int memberId)
+        throws BaseExceptionHandler {
+        PersonalChatAlarm personalChatAlarm = personalChatAlarmRepository.findPersonalChatAlarmByPersonalChatIdAndMemberId(
+            personalChatId, memberId);
+        if (personalChatAlarm != null) {
+            personalChatAlarmRepository.delete(personalChatAlarm);
+        }
     }
 
     @Override
     public void deleteChannelAlarm(String channelId, int memberId) throws BaseExceptionHandler {
-        ChannelAlarm channelAlarm = channelAlarmRepository.findChannelAlarmByChannelIdAndMemberId(channelId, memberId);
-
-        channelAlarmRepository.delete(channelAlarm);
+        ChannelAlarm channelAlarm = channelAlarmRepository.findChannelAlarmByChannelIdAndMemberId(
+            channelId, memberId);
+        if (channelAlarm != null) {
+            channelAlarmRepository.delete(channelAlarm);
+        }
     }
 
     @Override
