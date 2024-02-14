@@ -14,15 +14,15 @@ function MyPageLike() {
   const navigate = useNavigate()
   
   // 페이지네이션 관련
-  const [page, setPage] = useState(0)
+  const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const handleChange = (event, value) => {
-		setPage(value - 1);
+		setPage(value);
 	}
   
   const [lectures, setLectures] = useState([])
   useEffect(() => {
-      axios.get(`https://i10a810.p.ssafy.io/api/members/v1/lectures/like?size=6&page=${page}`, {
+      axios.get(`https://i10a810.p.ssafy.io/api/members/v1/lectures/like?size=6&page=${page - 1}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

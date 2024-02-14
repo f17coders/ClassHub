@@ -1,4 +1,4 @@
-import { Tooltip, Tabs, Tab, Box } from '@mui/material'
+import { Tooltip, Tabs, Tab, Box, Paper } from '@mui/material'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Stack from '@mui/material/Stack'
@@ -58,31 +58,46 @@ function Article({ post }) {
     return purifiedText;
   };
 
+
+  const [hover, setHover] = useState(false)
+  const handleMouseIn = () => { setHover(true) }
+  const handleMouseOut = () => { setHover(false) }
+
   return (
-    <div onClick={() => { navigate(`/community/detail/${post.communityId}`) }}>
-      <h3 style={{ fontWeight: 'bold' }}>{post.title}</h3>
+    <Paper
+      onClick={() => { navigate(`/community/detail/${post.communityId}`) }}
+      onMouseEnter={handleMouseIn}
+      onMouseLeave={handleMouseOut}
+      style={{
+        cursor: hover ? 'pointer' : null,
+        backgroundColor: hover ? 'rgb(240,240,240)' : null,
+        padding: '20px 10px',
+        margin: '10px'
+      }}
+    >
+      <h3 style={{ fontWeight: 'bold', margin: '0' }}>{post.title}</h3>
       <p>{removeHTMLTags(post.content)}</p>
       <div style={{ marginRight: '1em' }}>
         <Tooltip title="작성일자">
-          <div>
-            <TodayIcon /> {post.createdAt}
+          <div style={{ display: 'flex', alignContent: 'center' }}>
+            <TodayIcon /> <span style={{ margin: '0' }}>{post.createdAt}</span>
           </div>
         </Tooltip>
       </div>
-    </div>
+    </Paper>
   )
 }
 
 function MyArticle({ accessToken }) {
   const [articles, setArticles] = useState([])
-  const [page, setPage] = useState(0)
+  const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
   const handleChange = (event, value) => {
     setPage(value)
   }
   useEffect(() => {
     console.log(accessToken)
-    axios.get(`https://i10a810.p.ssafy.io/api/members/v1/communities/my?page=${page}&size=5`, {
+    axios.get(`https://i10a810.p.ssafy.io/api/members/v1/communities/my?page=${page-1}&size=5`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
@@ -102,14 +117,15 @@ function MyArticle({ accessToken }) {
           {articles.map((article, idx) => {
             return (<Article post={article} key={idx} />)
           })}
-        </div>) : (<p>글이 없습니다!</p>)
+          {/* 페이지네이션 */}
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Stack spacing={2}>
+              <Pagination count={totalPages} page={page} onChange={handleChange} />
+            </Stack>
+          </Box>
+        </div>) : (<p>작성한 글이 없습니다!</p>)
       }
-      {/* 페이지네이션 */}
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Stack spacing={2}>
-          <Pagination count={totalPages} page={page} onChange={handleChange} />
-        </Stack>
-      </Box>
+
     </div>
   )
 }
@@ -117,13 +133,13 @@ function MyArticle({ accessToken }) {
 
 function MyComments({ accessToken }) {
   const [articles, setArticles] = useState([])
-  const [page, setPage] = useState(0)
+  const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
   const handleChange = (event, value) => {
     setPage(value)
   }
   useEffect(() => {
-    axios.get(`https://i10a810.p.ssafy.io/api/members/v1/communities/comments?page=${page}&size=5`, {
+    axios.get(`https://i10a810.p.ssafy.io/api/members/v1/communities/comments?page=${page - 1}&size=5`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
@@ -141,27 +157,28 @@ function MyComments({ accessToken }) {
           {articles.map((article, idx) => {
             return (<Article post={article} key={idx} />)
           })}
-        </div>) : (<p>글이 없습니다!</p>)
+          {/* 페이지네이션 */}
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Stack spacing={2}>
+              <Pagination count={totalPages} page={page} onChange={handleChange} />
+            </Stack>
+          </Box>
+        </div>) : (<p>댓글 남긴 글이 없습니다!</p>)
       }
-      {/* 페이지네이션 */}
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Stack spacing={2}>
-          <Pagination count={totalPages} page={page} onChange={handleChange} />
-        </Stack>
-      </Box>
+
     </div>
   )
 }
 
 function MyScrap({ accessToken }) {
   const [articles, setArticles] = useState([])
-  const [page, setPage] = useState(0)
+  const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
   const handleChange = (event, value) => {
     setPage(value)
   }
   useEffect(() => {
-    axios.get(`https://i10a810.p.ssafy.io/api/members/v1/communities/scraps?page=${page}&size=5`, {
+    axios.get(`https://i10a810.p.ssafy.io/api/members/v1/communities/scraps?page=${page - 1}&size=5`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
@@ -179,14 +196,15 @@ function MyScrap({ accessToken }) {
           {articles.map((article, idx) => {
             return (<Article post={article} key={idx} />)
           })}
-        </div>) : (<p>글이 없습니다!</p>)
+          {/* 페이지네이션 */}
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Stack spacing={2}>
+              <Pagination count={totalPages} page={page} onChange={handleChange} />
+            </Stack>
+          </Box>
+        </div>) : (<p>스크랩한 글이 없습니다!</p>)
       }
-      {/* 페이지네이션 */}
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Stack spacing={2}>
-          <Pagination count={totalPages} page={page} onChange={handleChange} />
-        </Stack>
-      </Box>
+
     </div>
   )
 }

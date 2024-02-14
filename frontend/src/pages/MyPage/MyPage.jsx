@@ -83,7 +83,7 @@ function MyPage() {
 					setRecommendLectures(res.data.result.lectureList)
 				})
 		}
-	}, [user])
+	}, [])
 	
 	const updateTag = function() {
 		const pickOne = pickRandom()
@@ -250,6 +250,7 @@ function MyPage() {
 														pagination={true}
 														modules={[EffectCoverflow, Pagination]}
 														className="mySwiper"
+														style={{marginTop:'25px'}}
 													>
 														{
 															recommendLectures.length >= 0 ? (<div>{

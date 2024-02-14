@@ -17,7 +17,7 @@ import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import PersonIcon from '@mui/icons-material/Person'
 import { useParams, useNavigate } from 'react-router-dom'
 import LectureDetailReviews from '../../components/Lecture/LectureDetailReviews'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import Swal from 'sweetalert2'
 import LectureHTML from '../../components/Lecture/LectureHTML'
 
@@ -25,6 +25,7 @@ import { Accordion, Icon, Tooltip, Button } from '@mui/material'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { updateLikeList } from './../../store/userSlice'
 
 // 강의의 상세 내용이 들어가는 페이지 입니다.
 
@@ -34,9 +35,13 @@ function LectureDetail() {
 	// id가져오기
 	const { lectureId } = useParams()
 	const navigate = useNavigate()
+	const dispatch = useDispatch()
 
 	// 로그인 확인용
 	let isLogin = useSelector((state) => state.isLogin)
+
+	// 유저정보
+	let user = useSelector((state) => state.user)
 
 	// 강의 정보 저장할 변수
 	const [lecture, setLecture] = useState(null)
@@ -44,17 +49,27 @@ function LectureDetail() {
 	useEffect(() => {
 		axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0/details/${lectureId}`)
 			.then((response) => {
-				console.log(response.data.result)
 				setLecture(response.data.result)
+				
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.log(err))
 	}, [lectureId]);
 
+	// 강의가 로드 되고나서, 찾기
+	useEffect(() => {
+		if (isLogin && lecture) {
+			if (user.likeList.includes(lecture.lectureId)) {
+					setLike(true)
+			} else if (user.likeList.includes(parseInt(lectureId))) {
+				setLike(true)
+			} 
+		}
+	}, [lecture])
 
 	// 강의 좋아요 + 로그인 확인
 	const [like, setLike] = useState(false)
+
 	const toggleLike = () => {
-		console.log(accessToken)
 		if (isLogin == true) {
 			if (like == false) {
 				axios.post(`https://i10a810.p.ssafy.io/api/lectures/v1/likes/${lecture.lectureId}`, null, {
@@ -62,18 +77,26 @@ function LectureDetail() {
 						Authorization: `Bearer ${accessToken}`
 					}
 				})
-					.then((res) => console.log('좋아요를 눌렀어요'))
-					.catch((err) => console.log(err));
-				setLike(true)
+					.then((res) => {
+						setLike(true)
+						// 현재 있는 좋아요 리스트에 지금 아이디 추가해주자
+						const temp = [...user.likeList, parseInt(lectureId)]
+						dispatch(updateLikeList(temp))
+					})
+					.catch((err) => console.log(err))
+			// 좋아요 해제
 			} else {
 				axios.delete(`https://i10a810.p.ssafy.io/api/lectures/v1/unlikes/${lecture.lectureId}`, {
 					headers: {
 						Authorization: `Bearer ${accessToken}`
 					}
 				})
-					.then((res) => console.log('좋아요 취소'))
+					.then((res) => {
+						setLike(false)
+						const temp = user.likeList.filter((id) => id !== parseInt(lectureId))
+						dispatch(updateLikeList(temp))
+					})
 					.catch((err) => console.log(err))
-				setLike(false)
 			}
 		} else {
 			Swal.fire({

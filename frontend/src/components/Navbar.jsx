@@ -16,6 +16,7 @@ import { logout, deleteAccessToken } from './../store/store'
 import { logoutUser } from './../store/userSlice'
 import Swal from 'sweetalert2'
 import AlarmModal from './AlarmModal'
+
 // navbar
 function NavbarComponent() {
 	// 로그인 체크용
@@ -185,27 +186,28 @@ function NavbarComponent() {
 								Login
 							</Link>
 						) : (
-							<div>
-								<Badge color="primary" variant="dot" sx={{marginRight:2}}>
-									<MailIcon color="black" onClick={openModal} />
-								</Badge>
+							<div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+								<Tooltip title='알림창' sx={{ width: '40px', height: '40px'}}>
+									<IconButton onClick={openModal} >
+										<MailIcon color="black" />
+									</IconButton>
+								</Tooltip>
 								<Link to="/mypage">
 									<IconButton>
 										<img src={user.profileImage} alt="profile" style={{ width: '40px', height: '40px', borderRadius: '70%' }} />
 									</IconButton>
 								</Link>
-								<Tooltip title='Logout' sx={{display: {xs:'none', md:'inline-block'}}}>
+								<Tooltip title='Logout' sx={{display: {xs:'none', md:'inline-block'},  width: '40px', height: '40px'}}>
 									<IconButton onClick={handleLogout}>
 										<LogoutIcon />
 									</IconButton>
 								</Tooltip>
-								<AlarmModal onOpen={showAlarm} onClose={closeModal} />
 							</div>
-							
 						)
 					}
 				</Grid>
 			</Grid>
+			<AlarmModal onOpen={showAlarm} onClose={closeModal} />
 		</Appbar>
 	)
 }
