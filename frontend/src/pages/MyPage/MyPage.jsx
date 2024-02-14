@@ -195,7 +195,10 @@ function MyPage() {
 											<Grid item xs={6} style={{ height: '250px', padding: '10px' }}>
 												<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3px' }}>
 													<p style={{ fontSize: '1.4em', fontWeight: '700', margin: '0px', marginLeft: 5 }}>🎯 목표 직무와 관심 기술</p>
-													<Tooltip title="수정하러가기"><IconButton onClick={() => handleClick(3)}><EditIcon /></IconButton></Tooltip>
+													<Tooltip title="수정하러가기"><IconButton onClick={() => {
+														handleClick(3)
+														navigate(tabItem[3].link)
+													}}><EditIcon /></IconButton></Tooltip>
 												</div>
 												<Paper sx={{ padding: '10px', height: '180px', overflow: 'auto' }}>
 													<p style={{ fontSize: '1.2em', marginTop: '0px', fontWeight:'bold' }}><span style={{ color: 'grey', marginRight: 10 }}>목표 직무 </span>{user.job.name}</p>
