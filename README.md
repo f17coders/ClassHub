@@ -77,6 +77,7 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 <div id="5"></div>
 
 ## 📂 시스템 아키텍처
+<img src="./readme_assets/systemarchitecture.png" width="800"  alt="mongodb" /> 
 
 <div id="6"></div>
 
