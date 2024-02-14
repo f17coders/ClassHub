@@ -50,6 +50,7 @@ function Login() {
 						dispatch(saveUser(tmpUser))
 						navigate('/additionalinfo')
 					} else {
+						console.log(res.data)
 						dispatch(saveUser(tmpUser))
 						dispatch(login())
 						// 로그인에만 좋아요 리스트 받아오기
