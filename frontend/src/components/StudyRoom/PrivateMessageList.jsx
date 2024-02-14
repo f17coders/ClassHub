@@ -52,12 +52,6 @@ export default function PrivateMessageList(){
         // width:"100%",
         position: 'relative',
         overflow: 'auto',
-        // 스크롤바 숨기기
-        "msOverflowStyle": "none", /* IE and Edge */
-        "scrollbarWidth": "none", /* Firefox */
-        "&::-webkit-scrollbar": {
-          display: "none" /* Chrome, Safari, and Opera */,
-        },
       }}>
           <ListSubheader sx={{ margin: 0, padding: 0 }}>
             <ListItemButton
@@ -129,6 +123,5 @@ export default function PrivateMessageList(){
                   </ListItemButton>
                 ))}
             </Box>
-
     )
 }

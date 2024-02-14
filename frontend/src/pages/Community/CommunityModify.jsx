@@ -93,6 +93,9 @@ export default function CommunityModify(){
         .then((response) => {
           // 받아온 데이터를 필요에 맞게 처리합니다.
           setDetailData(response.data.result);
+          setTitle(response.data.result.title);
+          setContent(response.data.result.content);
+          setTagList(response.data.result.tagList.map((tag) => tag.tagId));
           console.log(response.data.result)
         })
         .catch((err) => console.log(err));
@@ -101,7 +104,7 @@ export default function CommunityModify(){
   // 글 수정
   const CommunityPatch = () => {
   // const concatenatedTag = tagList.map(tag => tag.title).join(',');
-  axios.patch(`https://i10a810.p.ssafy.io/api/communities/v1/${communityId}`,{
+  axios.put(`https://i10a810.p.ssafy.io/api/communities/v1/${communityId}`,{
     "title": title,
     "content": content,
     "tagList": tagList
@@ -181,7 +184,7 @@ export default function CommunityModify(){
                             theme="snow" 
                             value={content} 
                             onChange={setContent} 
-                            placeholder = {"수정할 내용을 입력하세요*"}
+                            // placeholder = {"수정할 내용을 입력하세요*"}
                             />
                     </div>
 
