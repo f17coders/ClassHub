@@ -143,7 +143,7 @@ export default function StudyRoomPrivateMessage() {
                     "&::-webkit-scrollbar": {
                     display: "none" /* Chrome, Safari, and Opera */,
                     },
-                    // bgcolor: open ? 'rgba(71, 98, 130, 0.2)' : null, pb: open ? 2 : 0,
+                    marginTop: 2
                 }}>
                     <Divider>{personalChatId == null ? "익명" : personalChat.receiver.nickname} 님과의 채팅을 시작하였습니다.</Divider>
                 {

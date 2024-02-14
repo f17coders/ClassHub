@@ -65,23 +65,19 @@ export default function ParticipatingRoomList({studyId}){
   }, [data]);
 
     return(
-        <Box sx={{
-          backgroundColor: 'white',
-          border: '3px solid rgba(25, 118, 210, 0.12)',
-          borderRadius: '15px',
-          margin: '1em',
-          maxHeight: 250,
-          // width:"100%",
-          position: 'relative',
-          overflow: 'auto',
-          // 스크롤바 숨기기
-          "msOverflowStyle": "none", /* IE and Edge */
-          "scrollbarWidth": "none", /* Firefox */
-          "&::-webkit-scrollbar": {
-            display: "none" /* Chrome, Safari, and Opera */,
-          },
-        }}>
-        <ListSubheader sx={{ margin: 0, padding: 0 }}>
+        <Box sx={{maxHeight: 360,
+                width:"100%",
+                position: 'relative',
+                overflow: 'auto',
+                // 스크롤바 숨기기
+                "msOverflowStyle": "none", /* IE and Edge */
+                "scrollbarWidth": "none", /* Firefox */
+                "&::-webkit-scrollbar": {
+                  display: "none" /* Chrome, Safari, and Opera */,
+                },
+                bgcolor: open ? 'rgba(71, 98, 130, 0.2)' : null, pb: open ? 2 : 0,
+              }}>
+        <ListSubheader>
           <ListItemButton
             alignItems="flex-start"
             onClick={() => setOpen(!open)}
@@ -144,11 +140,7 @@ export default function ParticipatingRoomList({studyId}){
                     src={imagePaths[itemIndex]}
                   />
                   <ListItemText primary={item.title}
-                  primaryTypographyProps={{ 
-                    fontSize: 15, 
-                    fontWeight: 'medium'
-                    }} 
-                  />
+                  primaryTypographyProps={{ fontSize: 12, fontWeight: 'medium' }} />
                 </ListItem>
                 <Divider/>
                   

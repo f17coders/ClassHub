@@ -21,6 +21,17 @@ import StudyRoomChannelModal from '../../components/StudyRoom/StudyRoomChannelMo
 import ParticipatingRoomList from '../../components/StudyRoom/ParticipatingRoomList';
 import StudyRoomChannelChat from '../../components/StudyRoom/StudyRoomChannelChat';
 
+// 스터디 이름 스타일링을 위한 컴포넌트 생성
+const StyledStudyTitle = styled(Typography)(({ theme }) => ({
+  width: "90%",
+  display: 'flex',
+  justifyContent: 'center',
+  py: 1,
+  overflow: 'hidden', // 넘치는 텍스트를 숨김
+  textOverflow: 'ellipsis', // 넘치는 텍스트를 생략 부호로 표시
+  whiteSpace: 'nowrap', // 줄 바꿈 방지
+}));
+
 // 참여중인 스터디 상세 페이지
 export default function StudyRoomParticipating(){
   // 토큰
@@ -338,7 +349,16 @@ export default function StudyRoomParticipating(){
         <Stack>
           <Stack direction="row">
             {/* 스터디 이름 */}
-            <Typography sx={{ width: "90%", display: 'flex', justifyContent: 'center', py: 1 }} variant='h6' fontWeight='bold'>
+            <Typography 
+              sx={{ 
+                width: "90%",
+                display: 'flex', 
+                justifyContent: 'center', 
+                py: 1,
+              }} 
+                variant='h6' 
+                fontWeight='bold'
+              >
               {data.title}
             </Typography>
               {/* 더보기 버튼 */}
