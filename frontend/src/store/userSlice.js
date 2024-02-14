@@ -25,10 +25,17 @@ let user = createSlice({
     // 로그아웃(사용자 정보 null로 다시 바꿔주기)
     logoutUser(state) {
       return null
-    }
+    },
+    // 좋아요 리스트 업데이트하기
+    updateLikeList(state, action) {
+      return {
+        ...state,
+        likeList: action.payload
+      }
+    },
   }
 })
 
-export let { saveUser, changeUserTagList, changeUserJob, logoutUser } = user.actions
+export let { saveUser, changeUserTagList, changeUserJob, logoutUser, updateLikeList } = user.actions
 
 export default user

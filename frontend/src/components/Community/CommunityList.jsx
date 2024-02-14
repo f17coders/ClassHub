@@ -1,4 +1,4 @@
-import {Tooltip, Container, Stack, Button, Divider } from '@mui/material';
+import {Tooltip, Container, Stack, Button, Divider, Chip, Paper } from '@mui/material';
 import { useState } from 'react'
 import {Routes, Route, Link, useNavigate, Outlet} from 'react-router-dom'
 import PersonIcon from '@mui/icons-material/Person';
@@ -21,18 +21,32 @@ export default function CommunityPostList({post}){
     //날짜랑 시간 split
     const dateTime = post.createdAt.split("T").join(" ");
 
+    // 호버용 변수
+    const [hover, setHover] = useState(false)
+    const handleMoustIn = function() {
+      setHover(true)
+    }
+    const handleMoustOut = function() {
+      setHover(false)
+    }    
+
     return(
         <>
             {/* 글 목록 한개 */}
-            <div onClick={() => { navigate(`/community/detail/${post.communityId}`); }}>
+            <div 
+              onClick={() => { navigate(`/community/detail/${post.communityId}`)}}
+              onMouseEnter={handleMoustIn}
+              onMouseLeave={handleMoustOut}
+              style={{
+                cursor: hover ? 'pointer': null
+              }}
+            >
               <h3 style={{fontWeight: 'bold'}}>{post.title}</h3>
               <p>{removeHTMLTags(post.content)}</p>
               {/* 해시태그 */}
               <Stack direction="row" spacing={1}>
                   {post.tagList.map((tag, tagIndex) => (
-                  <Button key={tagIndex} label={tag} size="small" variant="contained" sx={{ borderRadius: '20px', marginRight: '0.5em'}} >
-                      #{tag.name}
-                  </Button>
+                  <Chip key={tagIndex} label={`# ${tag.name}`} size="small" sx={{ borderRadius: '20px', marginRight: '0.5em'}} />
                   ))}
               </Stack>
 
