@@ -154,7 +154,7 @@ public class StudyServiceImpl implements StudyService {
 
         List<StudyReadRes> studyReadResList = studyRepository.findStudyByKeywordFetchJoinLecture(
             keyword, recruitment, pageable);
-        int totalStudy = studyRepository.countStudyByKeyword(keyword); // 전체 목록 개수
+        int totalStudy = studyRepository.countStudyByKeywordAndRecuritment(keyword, recruitment); // 전체 목록 개수
 
         int totalPages = (int) Math.ceil((double) totalStudy / pageable.getPageSize());
 

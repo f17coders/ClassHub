@@ -17,9 +17,6 @@ import java.util.List;
 import static com.f17coders.classhub.module.domain.lecture.QLecture.lecture;
 import static com.f17coders.classhub.module.domain.study.QStudy.study;
 import static com.f17coders.classhub.module.domain.studyMember.QStudyMember.studyMember;
-import static com.querydsl.core.group.GroupBy.groupBy;
-import static com.querydsl.core.types.Projections.list;
-import static com.querydsl.jpa.JPAExpressions.select;
 
 @Repository
 public class StudyRepositoryImpl implements StudyRepositoryCustom {
@@ -91,11 +88,15 @@ public class StudyRepositoryImpl implements StudyRepositoryCustom {
     }
 
     @Override
-    public int countStudyByKeyword(String keyword) {
+    public int countStudyByKeywordAndRecuritment(String keyword, int recuritment) {
+        // 현재 인원을 구하기 위한 서브쿼리
+        SubQueryExpression<Long> subQuery = getCurrentMembers();
+
         return Math.toIntExact(queryFactory
             .select(study.count())
             .from(study)
-            .where(studyTitleOrDescriptionContain(keyword))
+            .where(studyTitleOrDescriptionContain(keyword).and(
+                capacityExpresson(recuritment, subQuery)))
             .fetchFirst());
     }
 

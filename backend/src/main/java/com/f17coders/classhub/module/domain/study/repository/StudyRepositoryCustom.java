@@ -14,7 +14,7 @@ public interface StudyRepositoryCustom {
     List<StudyReadRes> findStudyByKeywordFetchJoinLecture
         (String keyword, int recuritment, Pageable pageable);
 
-    int countStudyByKeyword(String keyword);
+    int countStudyByKeywordAndRecuritment(String keyword, int recuritment);
 
     int findEnterCodeByStudyId(int studyId);
 
