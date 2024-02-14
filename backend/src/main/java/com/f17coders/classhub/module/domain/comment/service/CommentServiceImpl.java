@@ -65,7 +65,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     private void checkAuthority(Member member, Comment comment) {
-        if (comment.getMember() == null || !comment.getMember().equals(member)) {
+        if (comment.getMember() == null || comment.getMember().getMemberId() != member.getMemberId()) {
             throw new BaseExceptionHandler("해당 댓글에 대한 권한이 없습니다.", ErrorCode.FORBIDDEN_ERROR);
         }
     }
