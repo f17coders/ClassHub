@@ -3,7 +3,7 @@
     <img src="./readme_assets/MainLogo.png" alt="ClassHub" /> 
   <h1>ClassHub</h1>
 
-### 🎬[Demo 시연영상](링크 삽입)  🎓 [Classhub](https://i10a810.p.ssafy.io)
+### 🎬[Demo 시연영상](링크 삽입)
 
 </div>
 
@@ -57,7 +57,9 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 ![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white) ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
 
 ### Infra
-![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) ![AWS-EC2](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazonec2&logoColor=white) ![Jenkins](https://img.shields.io/badge/jenkins-%232C5263.svg?style=for-the-badge&logo=jenkins&logoColor=white) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) ![AWS-EC2](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazonec2&logoColor=white) ![Jenkins](https://img.shields.io/badge/jenkins-%232C5263.svg?style=for-the-badge&logo=jenkins&logoColor=white) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white) 
+
+<img alt="google cloud storage" src="./readme_assets/gcs.png" height="40"> <img alt="google big query" src="./readme_assets/bigquery.png" height="40">
 
 ### Collaboration Tool
 ![GitLab](https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white) ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white) ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white) 
@@ -67,7 +69,10 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 
 ## 💾 DataBase
 ### Maria DB
-
+<img src="./readme_assets/lectureDB.png" width="700" alt="lecture" /> 
+<img src="./readme_assets/communityDB.png" width="700" alt="community" /> 
+<img src="./readme_assets/studyDB.png" width="700" alt="study" /> 
+<img src="./readme_assets/memberDB.png" width="500" alt="member" /> 
 
 ### Mongo DB 채팅 구조
 <img src="./readme_assets/mongodb1.PNG" width="700" alt="mongodb" /> 
@@ -99,12 +104,12 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 
 |이름|역할|개발 내용|
 |----|----|----|
-|정승환|BackEnd||
-|김지현|Infra, BackEnd||
-|하동준|BackEnd||
-|남수진|BackEnd||
-|김예지|FrontEnd||
-|정유경|FrontEnd||
+|정승환|BackEnd|- DB 설계  <br >- 강의 사이트 데이터 수집(약 7만개) <br > &emsp; - 데이터 크롤링 <br > &emsp; - 데이터 가공 및 적재 <br > -프로젝트 초기 세팅 <br > - community 도메인 개발 <br > - 회원 도메인 개발 <br > - Spring Security 적용 <br > - redis 적용 <br > &emsp; - 조회수 최적화 |
+|김지현|Infra, BackEnd|- CICD 구축 <br > &emsp; - Jenkins 연결, 파이프라인 작성 <br > &emsp; - gitlab 연결 <br > - 도커 구축 <br > &emsp;  - SpringBoot, react, mongoDB, redis, mariaDB <br > &emsp; - Nginx 구축 <br > &emsp;  &emsp; - Https 적용 <br >&emsp;  &emsp;   -리버스 프록시 설정  |
+|하동준|BackEnd|- DB 설계 <br > - 강의 사이트 데이터 수집(약 7만개) <br > &emsp; - 데이터 크롤링 <br > &emsp; - 데이터 가공 및 적재 <br > - 강의 도메인 개발 <br > - 강의 리뷰에 대한 gpt 적용 <br > - 필터링, 정렬, 검색에 대한 최적화 진행 |
+|남수진|BackEnd|- DB 설계 <br > - 더미 데이터 생성 <br > - 스터디룸 도메인 개발 <br > - Stomp를 이용한 실시간 채팅 구현 <br > &emsp; - BackEnd: 1대1, 다대다 Stomp 통신 구현 <br > &emsp; - FrontEnd: sockjs, stomp 소켓 통신 구현, 채팅방 ui 구현 <br > - 채팅 알림 구현|
+|김예지|FrontEnd|- Figma를 이용해 프로토타입 구성 <br > - 화면 구현 <br > &emsp; - 전체 화면 구성(Nav, Footer, 메인페이지 등) 구현 <br > &emsp; - 마이페이지 구현 <br > &emsp; - 강의 페이지(목록, 상세페이지 ) 구현 <br > &emsp; - 리뷰 페이지 구현 <br > - 로그인/로그아웃 구현 &emsp; <br > - 로그인 유무에 따른 화면 권한 설정 <br > - 유효성 검사 구현|
+|정유경|FrontEnd| - Figma를 이용해 프로토타입 구성 <br > - 화면 구현 <br > &emsp;- 스터디룸(모집, 입장, 채널) 화면 구현 <br >&emsp; - 스터디룸, 채널 모달 창 구현 <br >&emsp; - 커뮤니티 구현 <br > - BackEnd와 Oauth 통신 연결 <br > - 권한 설정 <br > &emsp;- 로그인 유무에 따른 화면 권한 설정 <br >&emsp; - 사용자 권한에 따른 상호작용 설정 <br > - 유효성 검사 구현|
 
 <div id="9"></div>
 
