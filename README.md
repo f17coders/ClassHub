@@ -42,8 +42,10 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 ## 💡 기술 스택
 ### FrontEnd
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white) ![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
-
+<img alt="Html" scr="https://img.shields.io/badge/">
 <img alt="Emotion" src="./readme_assets/emotion.png" height="40"> &emsp; <img alt="Swiper" src="./readme_assets/swiper.png" height="40"> &emsp; <img alt="sweetalert2" src="./readme_assets/sweetalert2.png" height="40">
+
+<img alt="Html" src="https://img.shields.io/badge/spring-%236DB33F.svg?&style=for-the-badge&logo=Spring Security&logoColor=white">
 
 ### BackEnd
 ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white) ![SpringSecurity](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=springsecurity&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens) 
@@ -56,7 +58,8 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 ![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white) ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
 
 ### Infra
-![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) ![AWS-EC2](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazonec2&logoColor=white) ![Jenkins](https://img.shields.io/badge/jenkins-%232C5263.svg?style=for-the-badge&logo=jenkins&logoColor=white) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white) 
+
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) ![AWS-EC2](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazonec2&logoColor=white) ![Jenkins](https://img.shields.io/badge/jenkins-%232C5263.svg?style=for-the-badge&logo=jenkins&logoColor=white) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white) ![GoogleBigQuery](https://img.shields/io/badge/goolge-#669DF6.svg?style=for-the-badge&logo=GoogleBigQuery&logoColor=white)
 
 <img alt="google cloud storage" src="./readme_assets/gcs.png" height="40"> <img alt="google big query" src="./readme_assets/bigquery.png" height="40">
 
@@ -68,12 +71,20 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 
 ## 💾 DataBase
 ### Maria DB ERD
+
+#### 강의
 <img src="./readme_assets/lectureDB.png" width="700" alt="lecture" /> 
+
+#### 커뮤니티
 <img src="./readme_assets/communityDB.png" width="700" alt="community" /> 
+
+#### 스터디룸
 <img src="./readme_assets/studyDB.png" width="700" alt="study" /> 
+
+#### 회원
 <img src="./readme_assets/memberDB.png" width="500" alt="member" /> 
 
-### Mongo DB 구조
+### Mongo DB 구조 - 채팅
 <img src="./readme_assets/mongodb1.PNG" width="700" alt="mongodb" /> 
 <img src="./readme_assets/mongodb2.PNG" width="700"  alt="mongodb" /> 
 
@@ -91,21 +102,47 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 
 ## 📲 Back-End
 
-### 성능 최적화
+### redis 적용
 
+### Stomp를 이용한 채팅 구현
 
-### 
+**Stomp**
+- 실시간 채팅을 위한 웹소켓 통신 프로토콜 중 Stomp 프로토콜 사용하였습니다.
+- pub/sub 구조: 특정 주제에 대해 구독하면, 해당 주제에 대해 발행된 메시지를 구독자에게 전달이 가능하여 다대다 채팅에 용이합니다.
+
+**MongoDB**
+- Document, BSON 데이터 형식으로 저장되어 적은 용량을 사용하고 처리속도가 빠릅니다. 
+- 수평적으로 확장하는데 용이합니다.
+=> 많은 양의 데이터를 Read/Write하기 용이하고, 더 많은 사용자와 데이터를 수용할 수 있습니다.
+
+**Message Broker**
+- Publisher로 부터 전달받은 메시지를 Subscriber에게 메시지를 주고 받게 하는 중간역할을 수행합니다.
+
+**채팅 로직**
+
+<img src="./readme_assets/stomp1.PNG" width="400" alt="stomp" /> 
+
+1. 채팅방 생성 및 구독
+- 개인채팅 : 상대방에게 채팅을 신청하면 채팅방(Topic)을 생성하고, 채팅방(Topic)을 구독(sub)합니다. 상대방이 채팅방에 입장해서 채팅방(Topic)을 구독(Sub)합니다.
+
+  <img src="./readme_assets/stomp2.PNG" width="400" alt="stomp" />
+
+- 단체채팅 : 스터디룸을 생성하면 자동으로 3개의 채팅방(Topic)이 생성되며, 각각의 채팅방에 입장하여 구독(sub)합니다.
+2. 메시지를 송신하면, 서버(메시지 브로커)는 해당 메시지를 전송(pub)합니다. 메시지는 채팅방(Topic)에 대한 메시지 큐로 전달합니다. 메시지는 들어온 순서대로 저장됩니다.
+3. 메시지 브로커는 메시지를 구독 중인 클라이언트에게 전달합니다.
+
+### 강의 조회 성능 최적화
 
 <div id="8"></div>
 
 ## 👪 팀 소개
 |![정승환](https://avatars.githubusercontent.com/u/100360525?v=4)|![김지현](https://avatars.githubusercontent.com/u/31675698?v=4)|![하동준](https://avatars.githubusercontent.com/u/77885587?v=4)|![남수진](https://avatars.githubusercontent.com/u/77006790?v=4)|![김예지](https://avatars.githubusercontent.com/u/139518026?v=4)|![정유경](https://avatars.githubusercontent.com/u/83561356?v=4)|
-|----|----|----|----|----|----|
+|:----:|:----:|:----:|:----:|:----:|:----:|
 |[정승환<br >(팀장)](https://github.com/seunghw2)|[김지현](https://github.com/KimJyun)|[하동준](https://github.com/djh0211)|[남수진](https://github.com/ss0510s)|[김예지](https://github.com/gimezi)|[정유경](https://github.com/YuKyung-Chung)|
 
 
 |이름|역할|개발 내용|
-|----|----|----|
+|:----:|:----:|----|
 |정승환|BackEnd|- DB 설계  <br >- 강의 사이트 데이터 수집(약 7만개) <br > &emsp; - 데이터 크롤링 <br > &emsp; - 데이터 가공 및 적재 <br > -프로젝트 초기 세팅 <br > - community 도메인 개발 <br > - 회원 도메인 개발 <br > - Spring Security 적용 <br > - redis 적용 <br > &emsp; - 조회수 최적화 |
 |김지현|Infra, BackEnd|- CICD 구축 <br > &emsp; - Jenkins 연결, 파이프라인 작성 <br > &emsp; - gitlab 연결 <br > - 도커 구축 <br > &emsp;  - SpringBoot, react, mongoDB, redis, mariaDB <br > &emsp; - Nginx 구축 <br > &emsp;  &emsp; - Https 적용 <br >&emsp;  &emsp;   -리버스 프록시 설정  |
 |하동준|BackEnd|- DB 설계 <br > - 강의 사이트 데이터 수집(약 7만개) <br > &emsp; - 데이터 크롤링 <br > &emsp; - 데이터 가공 및 적재 <br > - 강의 도메인 개발 <br > - 강의 리뷰에 대한 gpt 적용 <br > - 필터링, 정렬, 검색에 대한 최적화 진행 |
