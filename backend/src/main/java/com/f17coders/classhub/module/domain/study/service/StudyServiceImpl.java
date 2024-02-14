@@ -53,7 +53,7 @@ public class StudyServiceImpl implements StudyService {
     @Override
     @Transactional
     public int registerStudy(StudyRegisterReq studyRegisterReq, Member member)
-            throws BaseExceptionHandler {
+        throws BaseExceptionHandler {
 
         String title = studyRegisterReq.title();
         int capacity = studyRegisterReq.capacity();
@@ -111,12 +111,12 @@ public class StudyServiceImpl implements StudyService {
 
             List<Message> messageList = new ArrayList<>();
 
-            if(i == 0) {
+            if (i == 0) {
                 messageList.add(message);
             }
 
             Channel channel = Channel.createChannel(BasicChannelName[i], study.getStudyId(),
-                    messageList, isDeleteList[i]);
+                messageList, isDeleteList[i]);
 
             channelRepository.save(channel);
         }
@@ -127,7 +127,7 @@ public class StudyServiceImpl implements StudyService {
     @Override
     public StudyReadTagRes readStudy(int studyId) throws BaseExceptionHandler {
         StudyReadRes studyReadRes = studyRepository.findStudyByStudyIdFetchJoinLecture(
-                studyId);
+            studyId);
 
         if (studyReadRes == null) {
             throw new BaseExceptionHandler(NOT_FOUND_STUDY_EXCEPTION);
@@ -136,25 +136,25 @@ public class StudyServiceImpl implements StudyService {
         List<TagRes> tagList = tagRepository.findTagByStudyIdFetchJoinStudyTag(studyId);
 
         return StudyReadTagRes.builder()
-                .studyId(studyId)
-                .title(studyReadRes.title())
-                .currentMembers(studyReadRes.currentMembers())
-                .capacity(studyReadRes.capacity())
-                .studyLeaderId(studyReadRes.studyLeaderId())
-                .description(studyReadRes.description())
-                .isPublic(studyReadRes.isPublic())
-                .tagList(tagList)
-                .lecture(studyReadRes.lecture())
-                .build();
+            .studyId(studyId)
+            .title(studyReadRes.title())
+            .currentMembers(studyReadRes.currentMembers())
+            .capacity(studyReadRes.capacity())
+            .studyLeaderId(studyReadRes.studyLeaderId())
+            .description(studyReadRes.description())
+            .isPublic(studyReadRes.isPublic())
+            .tagList(tagList)
+            .lecture(studyReadRes.lecture())
+            .build();
     }
 
     @Override
-    public StudyListRes getStudyList(String keyword, Pageable pageable)
-            throws BaseExceptionHandler {
+    public StudyListRes getStudyList(String keyword, int recruitment, Pageable pageable)
+        throws BaseExceptionHandler {
 
         List<StudyReadRes> studyReadResList = studyRepository.findStudyByKeywordFetchJoinLecture(
-                keyword, pageable);
-        int totalStudy = studyRepository.countStudyByKeyword(keyword); // 전체 목록 개수
+            keyword, recruitment, pageable);
+        int totalStudy = studyRepository.countStudyByKeywordAndRecuritment(keyword, recruitment); // 전체 목록 개수
 
         int totalPages = (int) Math.ceil((double) totalStudy / pageable.getPageSize());
 
@@ -166,30 +166,30 @@ public class StudyServiceImpl implements StudyService {
             int studyId = study.studyId();
 
             studyReadTagResList.add(
-                    StudyReadTagRes.builder()
-                            .studyId(studyId)
-                            .title(study.title())
-                            .currentMembers(study.currentMembers())
-                            .capacity(study.capacity())
-                            .studyLeaderId(study.studyLeaderId())
-                            .description(study.description())
-                            .isPublic(study.isPublic())
-                            .lecture(study.lecture())
-                            .tagList(tagRepository.findTagByStudyIdFetchJoinStudyTag(studyId))
-                            .build()
+                StudyReadTagRes.builder()
+                    .studyId(studyId)
+                    .title(study.title())
+                    .currentMembers(study.currentMembers())
+                    .capacity(study.capacity())
+                    .studyLeaderId(study.studyLeaderId())
+                    .description(study.description())
+                    .isPublic(study.isPublic())
+                    .lecture(study.lecture())
+                    .tagList(tagRepository.findTagByStudyIdFetchJoinStudyTag(studyId))
+                    .build()
             );
         }
 
         return StudyListRes.builder()
-                .studyList(studyReadTagResList)
-                .totalPages(totalPages)
-                .build();
+            .studyList(studyReadTagResList)
+            .totalPages(totalPages)
+            .build();
     }
 
     @Override
     @Transactional
     public void updateStudy(StudyUpdateReq studyUpdateReq, Member member)
-            throws BaseExceptionHandler {
+        throws BaseExceptionHandler {
 
         int studyId = studyUpdateReq.studyId();
         String title = studyUpdateReq.title();
@@ -253,9 +253,10 @@ public class StudyServiceImpl implements StudyService {
 
         List<ChannelDetailListRes> channel = channelRepository.findByStudyId(studyId);
 
-        for(ChannelDetailListRes channelDetailListRes: channel) {
-            if(!channelDetailListRes.isDelete()) {
-                Channel channel1 = channelRepository.findChannelByChannelId(channelDetailListRes.channelId());
+        for (ChannelDetailListRes channelDetailListRes : channel) {
+            if (!channelDetailListRes.isDelete()) {
+                Channel channel1 = channelRepository.findChannelByChannelId(
+                    channelDetailListRes.channelId());
                 channel1.getMessageList().add(message);
                 channelRepository.save(channel1);
                 break;
@@ -315,7 +316,7 @@ public class StudyServiceImpl implements StudyService {
 
     @Override
     public StudyMemberListRes getStudyMemberList(int studyId)
-            throws BaseExceptionHandler {
+        throws BaseExceptionHandler {
 
         Study study = studyRepository.findByStudyId(studyId);
 
@@ -326,7 +327,7 @@ public class StudyServiceImpl implements StudyService {
         Member leader = study.getStudyLeader();
 
         List<MemberStudyInfoRes> memberStudyInfoResList = memberRepository.findMemberFetchJoinStudyMemberByStudyId(
-                studyId);
+            studyId);
 
         MemberStudyInfoRes studyLeader = null;
 
@@ -339,25 +340,33 @@ public class StudyServiceImpl implements StudyService {
         memberStudyInfoResList.remove(studyLeader);
 
         return StudyMemberListRes.builder()
-                .leader(studyLeader)
-                .studyMemberList(memberStudyInfoResList).build();
+            .leader(studyLeader)
+            .studyMemberList(memberStudyInfoResList).build();
     }
 
     private String makeText(Study study, List<Tag> tagList, Member member, Lecture lecture) {
-        String text = "<div style=\"margin-top: 1px; padding: 8px; border-radius: 1.5px; box-shadow: 0px 0px 5px lightgray;\">" +
-                "<h2 style=\"margin-left: 5px; margin-bottom: 8px;\">"+ study.getTitle() +"</h2>" +
-                "<h4 style=\"margin-left: 5px; margin-bottom: 8px;\">스터디장: "+ member.getNickname() +"</h4>" +
-                "<h3 style=\"margin-left: 5px; margin-bottom: 8px;\">"+study.getDescription()+"</h3>" +
+        String text =
+            "<div style=\"margin-top: 1px; padding: 8px; border-radius: 1.5px; box-shadow: 0px 0px 5px lightgray;\">"
+                +
+                "<h2 style=\"margin-left: 5px; margin-bottom: 8px;\">" + study.getTitle() + "</h2>"
+                +
+                "<h4 style=\"margin-left: 5px; margin-bottom: 8px;\">스터디장: " + member.getNickname()
+                + "</h4>" +
+                "<h3 style=\"margin-left: 5px; margin-bottom: 8px;\">" + study.getDescription()
+                + "</h3>" +
                 "<div style=\"display: flex; flex-wrap: wrap; justify-content: flex-start;\">";
 
-        for(Tag t : tagList ) {
-            text += "<span style=\"margin: 5px; background-color: #1976d2; color: white; padding: 5px; border-radius: 3px; width: 20%;\">"+ t.getName()+"</span>";
+        for (Tag t : tagList) {
+            text +=
+                "<span style=\"margin: 5px; background-color: #1976d2; color: white; padding: 5px; border-radius: 3px; width: 20%;\">"
+                    + t.getName() + "</span>";
         }
         text += "</div>" +
-                "<a href=\"" + lecture.getSiteLink() + "\" style=\"color: #1976d2; margin-top: 8px; margin-bottom: 8px; display: block;\">" +
-                lecture.getName() + " 바로가기" +
-                "</a>" +
-                "</div>";
+            "<a href=\"" + lecture.getSiteLink()
+            + "\" style=\"color: #1976d2; margin-top: 8px; margin-bottom: 8px; display: block;\">" +
+            lecture.getName() + " 바로가기" +
+            "</a>" +
+            "</div>";
 
         return text;
     }

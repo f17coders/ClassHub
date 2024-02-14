@@ -12,9 +12,9 @@ public interface StudyRepositoryCustom {
     StudyReadRes findStudyByStudyIdFetchJoinLecture(int studyId);
 
     List<StudyReadRes> findStudyByKeywordFetchJoinLecture
-        (String keyword, Pageable pageable);
+        (String keyword, int recuritment, Pageable pageable);
 
-    int countStudyByKeyword(String keyword);
+    int countStudyByKeywordAndRecuritment(String keyword, int recuritment);
 
     int findEnterCodeByStudyId(int studyId);
 

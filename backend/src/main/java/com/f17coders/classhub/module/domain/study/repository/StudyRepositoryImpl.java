@@ -17,9 +17,6 @@ import java.util.List;
 import static com.f17coders.classhub.module.domain.lecture.QLecture.lecture;
 import static com.f17coders.classhub.module.domain.study.QStudy.study;
 import static com.f17coders.classhub.module.domain.studyMember.QStudyMember.studyMember;
-import static com.querydsl.core.group.GroupBy.groupBy;
-import static com.querydsl.core.types.Projections.list;
-import static com.querydsl.jpa.JPAExpressions.select;
 
 @Repository
 public class StudyRepositoryImpl implements StudyRepositoryCustom {
@@ -57,7 +54,7 @@ public class StudyRepositoryImpl implements StudyRepositoryCustom {
 
 
     @Override
-    public List<StudyReadRes> findStudyByKeywordFetchJoinLecture(String keyword,
+    public List<StudyReadRes> findStudyByKeywordFetchJoinLecture(String keyword, int recuritment,
         Pageable pageable) {
 
         // 현재 인원을 구하기 위한 서브쿼리
@@ -80,7 +77,8 @@ public class StudyRepositoryImpl implements StudyRepositoryCustom {
                 ))
                 .from(study)
                 .leftJoin(study.lecture, lecture)
-                .where(studyTitleOrDescriptionContain(keyword))
+                .where(studyTitleOrDescriptionContain(keyword).and(
+                    capacityExpresson(recuritment, subQuery)))
                 .orderBy(study.createTime.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -90,11 +88,15 @@ public class StudyRepositoryImpl implements StudyRepositoryCustom {
     }
 
     @Override
-    public int countStudyByKeyword(String keyword) {
+    public int countStudyByKeywordAndRecuritment(String keyword, int recuritment) {
+        // 현재 인원을 구하기 위한 서브쿼리
+        SubQueryExpression<Long> subQuery = getCurrentMembers();
+
         return Math.toIntExact(queryFactory
             .select(study.count())
             .from(study)
-            .where(studyTitleOrDescriptionContain(keyword))
+            .where(studyTitleOrDescriptionContain(keyword).and(
+                capacityExpresson(recuritment, subQuery)))
             .fetchFirst());
     }
 
@@ -133,6 +135,18 @@ public class StudyRepositoryImpl implements StudyRepositoryCustom {
         if (keyword != null) {
             return study.title.contains(keyword).or(study.description.contains(keyword))
                 .or(lecture.name.contains(keyword));
+        } else {
+            return null;
+        }
+    }
+
+    private BooleanExpression capacityExpresson(int recuritment,
+        SubQueryExpression<Long> currrentMembers) {
+        // recuritment => 0 전체 1 모집중 2 모집완료
+        if (recuritment == 1) {
+            return study.capacity.gt(currrentMembers);
+        } else if (recuritment == 2) {
+            return study.capacity.loe(currrentMembers);
         } else {
             return null;
         }

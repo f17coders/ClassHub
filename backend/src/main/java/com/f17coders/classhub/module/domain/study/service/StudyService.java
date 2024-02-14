@@ -20,7 +20,7 @@ public interface StudyService {
 
     StudyReadTagRes readStudy(int studyId) throws BaseExceptionHandler, IOException;
 
-    StudyListRes getStudyList(String keyword, Pageable pageable)
+    StudyListRes getStudyList(String keyword, int recruitment, Pageable pageable)
             throws BaseExceptionHandler;
 
     void updateStudy(StudyUpdateReq studyUpdateReq, Member member) throws BaseExceptionHandler;
