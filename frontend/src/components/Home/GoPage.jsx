@@ -11,32 +11,32 @@ function GoPage() {
         { name: '유데미', url: 'https://www.udemy.com/', img: UDEMY },
         { name: '구름에듀', url: 'https://edu.goorm.io/', img: GOORM },
     ]
-    const container = {
-        hidden: { opacity: 1, scale: 0 },
-        visible: {
-            opacity: 1,
-            scale: 1,
-            transition: {
-                delayChildren: 0.3,
-                staggerChildren: 0.2
-            }
-        }
-    };
 
     const item = {
-        hidden: { y: 20, opacity: 0 },
+        hidden: { y: 10, opacity: 0 },
         visible: {
             y: 0,
             opacity: 1
+        },
+        transition: {
+            type: "spring",
+            duration: 1.5,
+            bounce: 0.2
         }
     };
-
+    const container = {
+        transition: {
+            delayChildren: 0.5,
+            staggerChildren: 1, 
+        }
+    }
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '40px 0px' }}>
             <h2>강의 사이트 바로가기</h2>
-            <motion.div
-                initial="hidden"
-                animate="visible"
+            <motion.ol
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false }}
                 variants={container}
                 style={{ display: 'flex', justifyContent: 'center' }}
             >
@@ -53,11 +53,10 @@ function GoPage() {
                                     <p style={{ fontSize: '0.7em' }}>{page.name}</p>
                                 </IconButton>
                             </a>
-
                         </motion.div>
                     ))
                 }
-            </motion.div>
+            </motion.ol>
         </div>
     )
 }

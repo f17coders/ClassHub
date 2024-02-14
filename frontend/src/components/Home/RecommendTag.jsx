@@ -38,9 +38,6 @@ function RecommendTag({tag}) {
                                 type: "spring",
                                 duration: 1.5,
                                 bounce: 0.2
-                                // ease: "linear",
-                                // duration: 2,
-                                // y: { duration: 2 },
                             }}
                             style={{ textAlign: "center", margin: "10px" }}
                         >
