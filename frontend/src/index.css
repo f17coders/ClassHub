@@ -13,12 +13,13 @@ body {
   z-index: 1000000;
 }
 
-/* @font-face {
-  font-family: "nexon-Regular";
-  font-weight: normal;
-  src: url("./fonts/Nexon_Medium.otf") format("truetype");
+/* 스크롤바 수정 */
+::-webkit-scrollbar {
+	width: 8px;
+  height: 8px;
 }
-
-body {
-  font-family: "nexon-Regular";
-} */
+::-webkit-scrollbar-thumb{
+  background: #1d23648f;
+  border: 1px solid #1d23648f;
+  border-radius: 5px;
+}

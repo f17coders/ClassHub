@@ -3,6 +3,8 @@ package com.f17coders.classhub.module.domain.personalChat.repository;
 import com.f17coders.classhub.module.domain.personalChat.PersonalChat;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -20,7 +22,8 @@ public class PersonalChatRepositoryImpl implements PersonalChatCustomRepository 
             Criteria.where("sender.memberId").is(memberId),
             Criteria.where("receiver.memberId").is(memberId)
         );
-        Query query = new Query(criteria);
+        Query query = new Query(criteria)
+            .with(Sort.by(Direction.DESC, "createTime"));
 
         return mongoTemplate.find(query, PersonalChat.class);
     }

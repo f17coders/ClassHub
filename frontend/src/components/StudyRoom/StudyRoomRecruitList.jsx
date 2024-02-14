@@ -29,6 +29,7 @@ export default function StudyRoomRecruitList({study}){
     registPersonalChat(accessToken, receiver).then(personalChatId => {
       setPersonalChatId(personalChatId);
       navigate(`/studyroom/message/${personalChatId}`)
+      window.location.reload();
     });
   }
 

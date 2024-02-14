@@ -14,15 +14,12 @@ function RecommendTag({tag}) {
     const [lectures, setLectures] = useState([])
 
     useEffect(() => {
-        console.log(tag)
         axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0/interest-skills?tagId=${tag.tagId}`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
         })
         .then((res) => {
-            // 왜 비었지...
-            console.log(res.data.result.lectureList)
             setLectures(res.data.result.lectureList)
         })
         .catch((err) => console.log(err))
@@ -41,9 +38,6 @@ function RecommendTag({tag}) {
                                 type: "spring",
                                 duration: 1.5,
                                 bounce: 0.2
-                                // ease: "linear",
-                                // duration: 2,
-                                // y: { duration: 2 },
                             }}
                             style={{ textAlign: "center", margin: "10px" }}
                         >

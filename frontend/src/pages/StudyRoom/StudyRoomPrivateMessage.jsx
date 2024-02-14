@@ -65,13 +65,24 @@ export default function StudyRoomPrivateMessage() {
         };
         setStompClient(client);
     }
-    // 연결
+  
+
+    // 연결 끊기
+    const disconnectChat = () => {
+        if (stompClient !== null) {
+            stompClient.deactivate(); // STOMP 클라이언트 비활성화
+            setStompClient(null); // stompClient 상태 초기화
+            setIsLoading(false); // isLoading 상태를 false로 설정
+            setRecvList([]); // 받은 메시지 목록 초기화
+        }
+    };
 
     useEffect(() =>  {
+        disconnectChat();
         if(personalChatId != null) {
             chatPrivateConnect();
         }
-
+  // 연결
         const fetchData = async () => {
             try {
                 const personalChat = await getPersonalChat(accessToken, personalChatId);
@@ -230,39 +241,37 @@ export default function StudyRoomPrivateMessage() {
                     </React.Fragment>
                     : 
                     <div style={{ width: '100%', marginTop: '10px' }}>
-                        <form noValidate autoComplete="off">
-                          <FormControl size="small" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-                            <OutlinedInput 
-                            multiline
-                            rows={2}
-                            sx={{width: "100%", marginRight: '10px'}} 
-                            placeholder="채팅을 작성해주세요"
-                            value={newMessage}
-                            onChange={(e) => setNewMessage(e.target.value)}
-                            onKeyPress={(e) => handleKeyPress(e)}
-                            />
-                            <Tooltip title="전송">
-                                <IconButton onClick={sendMessage}>
-                                    <SendIcon/>
-                                </IconButton>
-                            </Tooltip>
-                          </FormControl>
-                        </form>
+                        { personalChat.receiver.nickname == "탈퇴한 사용자" ? 
+                                <FormControl size="small" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                                <OutlinedInput 
+                                multiline
+                                rows={2}
+                                readOnly
+                                sx={{width: "100%", marginRight: '10px'}}
+                                placeholder="탈퇴한 사용자와는 더 이상 채팅이 불가능합니다."
+                                value="탈퇴한 사용자와는 더 이상 채팅이 불가능합니다."
+                                />
+                            </FormControl>
+                            : <form noValidate autoComplete="off">
+                                <FormControl size="small" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+                                    <OutlinedInput 
+                                    multiline
+                                    rows={2}
+                                    sx={{width: "100%", marginRight: '10px'}} 
+                                    placeholder="채팅을 작성해주세요"
+                                    value={newMessage}
+                                    onChange={(e) => setNewMessage(e.target.value)}
+                                    onKeyPress={(e) => handleKeyPress(e)}
+                                    />
+                                    <Tooltip title="전송">
+                                        <IconButton onClick={sendMessage}>
+                                            <SendIcon/>
+                                        </IconButton>
+                                    </Tooltip>
+                                </FormControl>
+                            </form>  
+                    }
                     </div>
-                    
-                    // <Box sx={{ width:"100%", height:"10%", display: 'flex', justifyContent:'flex-start', alignItems: 'flex-start' }}>
-                    //     <TextField
-                    //         id="standard-multiline-static"
-                    //         label="채팅을 작성해주세요"
-                    //         multiline
-                    //         rows={2}
-                    //         sx={{flex: 9, marginLeft: 3}}
-                    //         value={newMessage}
-                    //         onChange={(e) => setNewMessage(e.target.value)}
-                    //         onKeyPress={(e) => handleKeyPress(e)}
-                    //     />
-                    //     <Button sx={{mx: 2}} variant="contained" endIcon={<SendIcon />} onClick={sendMessage}></Button>
-                    // </Box>
                 }
                 
                 
