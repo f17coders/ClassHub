@@ -28,9 +28,16 @@ let user = createSlice({
     },
     // 좋아요 리스트 업데이트하기
     updateLikeList(state, action) {
-      return {
-        ...state,
-        likeList: action.payload
+      if (action.payload.length > 0) {
+        return {
+          ...state,
+          likeList: action.payload
+        }
+      } else {
+        return {
+          ...state,
+          likeList: []
+        }
       }
     },
   }

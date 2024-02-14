@@ -75,7 +75,7 @@ function Login() {
 		})
 		.catch((err) => {
 			console.log(err)
-			dispatch(updateLikeList([null]))
+			dispatch(updateLikeList([]))
 		})
 	}
 
