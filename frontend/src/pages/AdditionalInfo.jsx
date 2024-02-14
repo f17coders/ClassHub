@@ -104,8 +104,8 @@ function AdditionalInfo() {
 						headers: {
 							AUTHORIZATION: `Bearer ${accessToken}`}})
 				.then((res) => {
-					// console.log(res)
-					// console.log(interstedSkills.map((skill) => skill.tagId))
+					console.log(res)
+					console.log(interstedSkills.map((skill) => skill.tagId))
 					dispatch(insertUser({tagList: interstedSkills, job: target[0]}))
 					Swal.fire({
 						title: '회원가입 완료',
