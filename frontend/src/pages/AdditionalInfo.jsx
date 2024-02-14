@@ -63,7 +63,7 @@ function AdditionalInfo() {
 		// skill들 중에 newValue와 같은애를 통채로 저장함
 		const selectedSkills = skills.filter((option) => newValue.includes(option.name))
 		//최대 10개 까지만 입력 가능하도록 검사
-		if (selectedSkills.length > 10) {
+		if (selectedSkills.length > 10 | selectedSkills.length < 2) {
 			setSkillError(true);
 		} else {
 			setSkillError(false);
@@ -83,11 +83,10 @@ function AdditionalInfo() {
 			setTargetError(false)
 		}
 	}
-
+	
 	// 전체 유효성 검사
-	const checkValid = function () {
+	const checkValid = async function () {
 		testTargetInput()
-		// let tagPost = interstedSkills.map((skill) => skill.tagId)
 		if (interstedSkills.length < 2 || interstedSkills.length > 10) {
 			setSkillError(true);
 		}
@@ -97,25 +96,30 @@ function AdditionalInfo() {
 				icon: "warning"
 			})
 		} else {
-				axios.post('https://i10a810.p.ssafy.io/api/members/v1',{
+			try {
+				const res = await axios.put(
+					'https://i10a810.p.ssafy.io/api/members/v1',
+					{
 						tagList: interstedSkills.map((skill) => skill.tagId),
 						jobId: target[0].jobId,
-					},{
+					},
+					{
 						headers: {
-							AUTHORIZATION: `Bearer ${accessToken}`}})
-				.then((res) => {
-					console.log(res)
-					console.log(interstedSkills.map((skill) => skill.tagId))
-					dispatch(insertUser({tagList: interstedSkills, job: target[0]}))
-					Swal.fire({
-						title: '회원가입 완료',
-						icon: 'success',
-					}).then((a) => navigate('/'))
-				})
-				.catch((err) => console.log(err))
-			} 
+							AUTHORIZATION: `Bearer ${accessToken}`,
+						},
+					}
+				)
+				dispatch(insertUser({ tagList: interstedSkills, job: target[0] }))
+				Swal.fire({
+					title: '회원가입 완료',
+					icon: 'success',
+				}).then((a) => navigate('/'));
+			} catch (err) {
+				console.log(err);
+			}
 		}
-	
+	}
+
 	// Modal창 스타일
 	return (
 		<Box>
@@ -128,10 +132,10 @@ function AdditionalInfo() {
 					alignItems: "center"
 				}}>
 					<h1>추가 정보</h1>
-					<div style={{ marginTop: '20px', width: '70%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems:'center' }}>
+					<div style={{ marginTop: '20px', width: '70%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
 						{/* 관심기술 */}
 						<div>
-							<div style={{width:"400px"}}>
+							<div style={{ width: "400px" }}>
 								<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
 									<p style={{ fontWeight: 700 }}>관심 기술</p>
 									<p style={{ fontSize: '0.8em' }}>최소 2개, 최대 10개</p>
@@ -171,7 +175,7 @@ function AdditionalInfo() {
 							</div>
 
 							{/* 목표직무 */}
-							<div style={{width:"400px"}}>
+							<div style={{ width: "400px" }}>
 								<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
 									<p style={{ fontWeight: 700 }}>목표 직무</p>
 									<p style={{ fontSize: '0.8em' }}>1개 지정 필수</p>
