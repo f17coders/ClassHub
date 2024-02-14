@@ -65,13 +65,24 @@ export default function StudyRoomPrivateMessage() {
         };
         setStompClient(client);
     }
-    // 연결
+  
+
+    // 연결 끊기
+    const disconnectChat = () => {
+        if (stompClient !== null) {
+            stompClient.deactivate(); // STOMP 클라이언트 비활성화
+            setStompClient(null); // stompClient 상태 초기화
+            setIsLoading(false); // isLoading 상태를 false로 설정
+            setRecvList([]); // 받은 메시지 목록 초기화
+        }
+    };
 
     useEffect(() =>  {
+        disconnectChat();
         if(personalChatId != null) {
             chatPrivateConnect();
         }
-
+  // 연결
         const fetchData = async () => {
             try {
                 const personalChat = await getPersonalChat(accessToken, personalChatId);
