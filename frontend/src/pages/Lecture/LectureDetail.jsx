@@ -20,7 +20,7 @@ import LectureDetailReviews from '../../components/Lecture/LectureDetailReviews'
 import { useSelector, useDispatch } from 'react-redux'
 import Swal from 'sweetalert2'
 import LectureHTML from '../../components/Lecture/LectureHTML'
-
+import LinkIcon from '@mui/icons-material/Link';
 import { Accordion, Icon, Tooltip, Button } from '@mui/material'
 import AccordionSummary from '@mui/material/AccordionSummary'
 import AccordionDetails from '@mui/material/AccordionDetails'
@@ -218,6 +218,8 @@ function LectureDetail() {
 										<div>
 											{/* 내가 산 강의에 추가 */}
 											<Tooltip title='내가 산 강의에 추가하기'><IconButton size='small' onClick={addMyLecture}><AddShoppingCartIcon /></IconButton></Tooltip>
+											{/* 강의 바로가기 */}
+											<Tooltip title='강의 바로가기'><IconButton size='small' onClick={() => window.location.href = (lecture.siteLink)}><LinkIcon /></IconButton></Tooltip>
 										</div>
 									</div>
 								</div>
@@ -229,14 +231,7 @@ function LectureDetail() {
 						<Container sx={{ marginTop: '20px' }}>
 							<h3 style={{ textAlign: 'center' }}>🤖GPT로 리뷰를 요약했어요</h3>
 							<Box>
-								<p style={{ height: '40px', marginTop: '20px', overflow: load ? 'auto' : 'hidden', whiteSpace: load ? 'normal' : 'nowrap' }}>{lecture.gptReview}</p>
-								{
-									load ? null : (
-										<Divider>
-											<Button onClick={addMore}>더 보기</Button>
-										</Divider>
-									)
-								}
+								<p style={{ height: '40px', marginTop: '20px', overflow:'auto' , whiteSpace: 'normal' }}>{lecture.gptReview}</p>
 							</Box>
 						</Container>
 						<Divider variant="middle" sx={{ bgcolor: 'lightgrey', marginTop: '40px' }} />
@@ -350,27 +345,31 @@ function Content1(props) {
 // 커리큘럼
 function Content2(props) {
 	const lecture = props.lecture
-	const curriculum = JSON.parse(lecture.curriculum)
+	const temp = JSON.parse(lecture.curriculum)
+	const curriculum = temp.curriculum
+	useEffect(() => {
+		console.log(curriculum)
+	}, [])
 	return (
 		<Container>
-			<h3>커리큘럼 (총 {lecture.totalTime}시간)</h3>
+			<h3>커리큘럼 { lecture.siteType == 'GOORM' ? null : (<span>(총 {lecture.totalTime}분)</span>)}</h3>
 			{
-				Object.entries(curriculum).map(([section, {item_count, time, items}]) => {
+				curriculum.map((section, idx) => {
 					return (
-						<Accordion key={section}>
+						<Accordion key={idx}>
 							<AccordionSummary
 								expandIcon={<ExpandMoreIcon />}
 								sx={{ backgroundColor: 'rgba(128, 128, 128, 0.1)' }}
 							>
-								<p style={{ margin: '7px' }}><span style={{ fontSize: '1.1em' }}>{section}</span> ({item_count}개의 강의, 총 {time}시간)</p>
+								<p style={{ margin: '7px' }}><span style={{ fontSize: '1.1em' }}>{section.title}</span> <span style={{fontSize:'0.7em'}}>{section.item_count}개의 강의 { lecture.siteType == 'GOORM' || section.time == null ? null : (<span>,총 {section.time}분</span>)}</span></p>
 							</AccordionSummary>
 							<AccordionDetails>
 								{
-									Object.entries(items).map(([section, {time}]) => {
+									section.items.map((item, idx1) => {
 										return (
-											<div key={section} style={{ display: 'flex', justifyContent: 'space-between' }}>
-												<p>{section}</p>
-												<p>{time ? (<>{time}</>) : null}</p>
+											<div key={idx1} style={{ display: 'flex', justifyContent: 'space-between' }}>
+												<p>{item.title}</p>
+												<p>{item.time ? (<>{item.time}</>) : null}</p>
 											</div>
 										)
 									})

@@ -39,16 +39,17 @@ function Lecture() {
 	// 페이지네이션용
 	const [page, setPage] = useState(1)
 	const handleChange = (event, value) => {
-		dispatch(changePage(value - 1))
-		setPage(value);
+		// dispatch(changePage(value - 1))
+		setPage(value - 1);
 	}
 	const [totalPages, setTotalPages] = useState(10)
 
 	// 검색하기
 	useEffect(() => {
 		if (fromMain == false) {
+			setPage(0)
 			setLoading(true)
-			axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?${searchParams.category ? 'category=' + searchParams.category.categoryId : ''}${searchParams.tags.length ? '&tags=' + searchParams.tags.map(tag => tag.tagId).join('%7C%7C') : ''}${searchParams.keyword ? '&keyword=' + searchParams.keyword : ''}${searchParams.level != 'ALL' ? '&level=' + searchParams.level : ''}${searchParams.site ? '&site=' + searchParams.site : ''}&order=${searchParams.order}&page=${searchParams.page}&size=16`)
+			axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?${searchParams.category ? 'category=' + searchParams.category.categoryId : ''}${searchParams.tags.length ? '&tags=' + searchParams.tags.map(tag => tag.tagId).join('%7C%7C') : ''}${searchParams.keyword ? '&keyword=' + searchParams.keyword : ''}${searchParams.level != 'ALL' ? '&level=' + searchParams.level : ''}${searchParams.site ? '&site=' + searchParams.site : ''}&order=${searchParams.order}&page=${page}&size=16`)
 				.then((res) => {
 					console.log(`${res.config.url}으로 요청 보냄`)
 					console.log(res.data)
@@ -61,10 +62,27 @@ function Lecture() {
 		} 
 	}, [searchParams])
 
+	// 검색하면 페이지를 0으로 만들기 위해 페이지눌렀을 때는 따로 빼주자
+	useEffect(() => {
+		if (fromMain == false) {
+			setLoading(true)
+			axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?${searchParams.category ? 'category=' + searchParams.category.categoryId : ''}${searchParams.tags.length ? '&tags=' + searchParams.tags.map(tag => tag.tagId).join('%7C%7C') : ''}${searchParams.keyword ? '&keyword=' + searchParams.keyword : ''}${searchParams.level != 'ALL' ? '&level=' + searchParams.level : ''}${searchParams.site ? '&site=' + searchParams.site : ''}&order=${searchParams.order}&page=${page}&size=16`)
+				.then((res) => {
+					console.log(`${res.config.url}으로 요청 보냄`)
+					console.log(res.data)
+					setTotalPages(res.data.result.totalPages)
+					dispatch(searchResult(res.data.result.lectureList))
+					setLoading(false)
+				}).catch((err) =>
+					console.log(err)
+				)
+		} 
+	}, [page])
+
 
 	// 검색어로 검색하기
 	const searchByKeyword = function () {
-		dispatch(changePage(0))
+		// dispatch(changePage(0))
 		setPage(0)
 		dispatch(changeKeyword(keyword))
 	}

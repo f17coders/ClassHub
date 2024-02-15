@@ -1,5 +1,6 @@
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
+import Paper from '@mui/material/Paper'
 import { useState, useEffect } from 'react'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
@@ -120,13 +121,16 @@ function AdditionalInfo() {
 		}
 	}
 
-	// Modal창 스타일
+	
 	return (
 		<Box>
 			{
-				isLogin ? (<div style={{
+				isLogin ? (<Paper style={{
+					margin: 'auto',
+					marginTop: '10vh',
+					width: '500px',
+					height: '550px',
 					display: 'flex',
-					padding: "70px 0px 100px 0px",
 					flexDirection: 'column',
 					justifyContent: "center",
 					alignItems: "center"
@@ -220,14 +224,14 @@ function AdditionalInfo() {
 							{/* 제출 버튼 */}
 							<Button
 								variant="outlined"
-								style={{ marginTop: '20px' }}
+								style={{ marginTop: '20px', marginLeft:'80%' }}
 								onClick={checkValid}
 							>
 								가입하기
 							</Button>
 						</div>
 					</div>
-				</div>) : null
+				</Paper>) : null
 			}
 
 		</Box>

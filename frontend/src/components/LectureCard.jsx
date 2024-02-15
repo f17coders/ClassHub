@@ -72,6 +72,20 @@ function LectureCard({ lecture }) {
 		}
 	}, [])
 
+	// 난이도 한글로 보여주기
+	const [coLevel, setCoLevel] = useState('')
+	useEffect(() => {
+		if (lecture.level == 'BEGINNER'){
+			setCoLevel('입문')
+		} else if (lecture.level == 'INTERMIDIATE'){
+			setCoLevel('초급')
+		} else if (lecture.level == 'EXPERT'){
+			setCoLevel('중급 이상')
+		} else {
+			setCoLevel('난이도 없음')
+		}
+	}, [])
+
 	// 좋아요 + 로그인 안했으면 로그인 하라 하기
 
 	// 이미 좋아요 한 강의인지?
@@ -286,9 +300,9 @@ function LectureCard({ lecture }) {
 						</div>
 
 						<div style={{ height: '80px' }} onClick={goDetail}>
-							<p>총 {lecture.totalTime}시간<br />{lecture.level}</p>
+							<p>총 {lecture.totalTime}시간<br />{coLevel}</p>
 						</div>
-						<div style={{ height: '40px', overflow: 'hidden' }} onClick={goDetail}>
+						<div style={{ height: '39px', overflow: 'hidden' }} onClick={goDetail}>
 							{
 								lecture.tagList ? (<div>
 									{

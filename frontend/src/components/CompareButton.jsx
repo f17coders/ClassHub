@@ -77,7 +77,7 @@ function CompareButton() {
         fullWidth
         maxWidth='md'
       >
-        <DialogContent>
+        <DialogContent sx={{overflowY:'hidden'}}>
           <Container sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
             <div style={{display:'flex', alignItems: 'center', marginTop: '20px'}}>
               <p style={{ fontSize: '1.7em', fontWeight: '600', margin:0 }}>강의 비교</p>
@@ -88,7 +88,7 @@ function CompareButton() {
               {compareLectures.map((lecture, idx) => (
                 <Grid item xs={4} key={idx}>
                   <div style={{ position: 'relative' }}>
-                    <IconButton onClick={() => dispatch(deleteElement(idx))} sx={{ position: 'absolute', top: -15, right: -10, zIndex: '100' }}>
+                    <IconButton onClick={() => dispatch(deleteElement(idx))} sx={{ position: 'absolute', top: -15, right: -20, zIndex: '100' }}>
                       <HighlightOffIcon />
                     </IconButton>
                     <CompareElement lecture={lecture} />
@@ -99,7 +99,7 @@ function CompareButton() {
               ))}
               {Array(3 - compareLectures.length).fill().map((_, idx) => (
                 <Grid item xs={4} key={idx}>
-                  <Paper sx={{ height: '440px', display: 'flex', alignItems: 'center', flexDirection: 'column', padding: '10px', justifyContent: 'center' }}>
+                  <Paper sx={{ height: '430px', display: 'flex', alignItems: 'center', flexDirection: 'column', padding: '10px', justifyContent: 'center' }}>
                     <Tooltip title="비교하고 싶은 강의를 추가해주세요!">
                       <Link to='/lecture'>
                         <IconButton onClick={goTop}>
