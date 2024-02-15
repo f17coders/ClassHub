@@ -28,7 +28,7 @@ function MyPageLike() {
       },
     })
       .then((res) => {
-        console.log(res.config.url)
+        // console.log(res.config.url)
         setTotalPages(res.data.result.totalPages)
         setLectures(res.data.result.lectureList)
       })

@@ -49,7 +49,7 @@ export default function StudyRoomPrivateMessage() {
             webSocketFactory: () => socket });
 
         client.onConnect = () => { // 연결이 성공하면 수행할 작업
-            console.log("연결 성공")
+            // console.log("연결 성공")
             client.subscribe(`/sub/${personalChatId}`, 
             (res) => {
                 setRecvList(prevRecvList => [...prevRecvList, JSON.parse(res.body)]);
@@ -131,7 +131,7 @@ export default function StudyRoomPrivateMessage() {
 
     const handleKeyPress = (event) => {
         if (event.key === 'Enter' && !event.shiftKey) {
-            console.log(event);
+            // console.log(event);
             // Enter 키가 눌렸고, Shift 키가 눌리지 않았을 때
             event.preventDefault(); // 기본 동작인 폼 제출 방지
             event.stopPropagation();

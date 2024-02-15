@@ -58,7 +58,7 @@ export default function CommunityReplyModify({comment}){
         },
       })
       .then((res) => {
-        console.log(res)
+        // console.log(res)
         MySwal.fire({
           title: "수정되었습니다!",
           text: "댓글 수정이 정상적으로 완료되었습니다.",

@@ -89,7 +89,7 @@ export default function CommunityDetail(){
             },
           })
         .then((response) => {
-            console.log('게시물 삭제 성공')
+            // console.log('게시물 삭제 성공')
             navigate('/community'); //삭제 후 커뮤니티 홈으로 이동
             window.location.reload(); //페이지 새로고침
         })
@@ -104,7 +104,7 @@ export default function CommunityDetail(){
             },
           })
         .then(() => {
-            console.log('좋아요 등록 성공')
+            // console.log('좋아요 등록 성공')
             // window.location.reload(); //페이지 새로고침
         })
         .catch((err) => console.log(err));
@@ -118,7 +118,7 @@ export default function CommunityDetail(){
             },
           })
         .then(() => {
-            console.log('좋아요 취소 성공')
+            // console.log('좋아요 취소 성공')
             // window.location.reload(); //페이지 새로고침
         })
         .catch((err) => console.log(err));
@@ -132,7 +132,7 @@ export default function CommunityDetail(){
             },
           })
         .then(() => {
-            console.log('게시글 스크랩 성공')
+            // console.log('게시글 스크랩 성공')
             // window.location.reload(); //페이지 새로고침
         })
         .catch((err) => console.log(err));
@@ -146,7 +146,7 @@ export default function CommunityDetail(){
             },
           })
         .then(() => {
-            console.log('스크랩 취소 성공')
+            // console.log('스크랩 취소 성공')
             // window.location.reload(); //페이지 새로고침
         })
         .catch((err) => console.log(err));

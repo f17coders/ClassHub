@@ -49,7 +49,7 @@ function LectureDetail() {
 	useEffect(() => {
 		axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0/details/${lectureId}`)
 			.then((response) => {
-				console.log(response)
+				// console.log(response)
 				setLecture(response.data.result)
 			})
 			.catch((err) => console.log(err))
@@ -347,9 +347,7 @@ function Content2(props) {
 	const lecture = props.lecture
 	const temp = JSON.parse(lecture.curriculum)
 	const curriculum = temp.curriculum
-	useEffect(() => {
-		console.log(curriculum)
-	}, [])
+	
 	return (
 		<Container>
 			<h3>커리큘럼 { lecture.siteType == 'GOORM' ? null : (<span>(총 {lecture.totalTime}분)</span>)}</h3>

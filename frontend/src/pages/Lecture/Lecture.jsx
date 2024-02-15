@@ -7,7 +7,6 @@ import Pagination from '@mui/material/Pagination'
 import Stack from '@mui/material/Stack'
 import LectureSearch from './../../components/Lecture/LectureSearch'
 import LectureCard from './../../components/LectureCard'
-import img1 from './../../assets/Lecture/Lecture2.png'
 import CompareButton from './../../components/CompareButton'
 import { useSelector, useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
@@ -49,10 +48,10 @@ function Lecture() {
 		if (fromMain == false) {
 			setPage(0)
 			setLoading(true)
-			axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?${searchParams.category ? 'category=' + searchParams.category.categoryId : ''}${searchParams.tags.length ? '&tags=' + searchParams.tags.map(tag => tag.tagId).join('%7C%7C') : ''}${searchParams.keyword ? '&keyword=' + searchParams.keyword : ''}${searchParams.level != 'ALL' ? '&level=' + searchParams.level : ''}${searchParams.site ? '&site=' + searchParams.site : ''}&order=${searchParams.order}&page=${page}&size=16`)
+			axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?${searchParams.category ? 'category=' + searchParams.category.categoryId : ''}${searchParams.tags.length ? '&tags=' + searchParams.tags.map(tag => tag.tagId).join('%7C%7C') : ''}${searchParams.keyword ? '&keyword=' + searchParams.keyword : ''}${searchParams.level != null ? '&level=' + searchParams.level : ''}${searchParams.site ? '&site=' + searchParams.site : ''}&order=${searchParams.order}&page=${page}&size=16`)
 				.then((res) => {
 					console.log(`${res.config.url}으로 요청 보냄`)
-					console.log(res.data)
+					// console.log(res.data)
 					setTotalPages(res.data.result.totalPages)
 					dispatch(searchResult(res.data.result.lectureList))
 					setLoading(false)
@@ -66,10 +65,10 @@ function Lecture() {
 	useEffect(() => {
 		if (fromMain == false) {
 			setLoading(true)
-			axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?${searchParams.category ? 'category=' + searchParams.category.categoryId : ''}${searchParams.tags.length ? '&tags=' + searchParams.tags.map(tag => tag.tagId).join('%7C%7C') : ''}${searchParams.keyword ? '&keyword=' + searchParams.keyword : ''}${searchParams.level != 'ALL' ? '&level=' + searchParams.level : ''}${searchParams.site ? '&site=' + searchParams.site : ''}&order=${searchParams.order}&page=${page}&size=16`)
+			axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?${searchParams.category ? 'category=' + searchParams.category.categoryId : ''}${searchParams.tags.length ? '&tags=' + searchParams.tags.map(tag => tag.tagId).join('%7C%7C') : ''}${searchParams.keyword ? '&keyword=' + searchParams.keyword : ''}${searchParams.level != null ? '&level=' + searchParams.level : ''}${searchParams.site ? '&site=' + searchParams.site : ''}&order=${searchParams.order}&page=${page}&size=16`)
 				.then((res) => {
-					console.log(`${res.config.url}으로 요청 보냄`)
-					console.log(res.data)
+					// console.log(`${res.config.url}으로 요청 보냄`)
+					// console.log(res.data)
 					setTotalPages(res.data.result.totalPages)
 					dispatch(searchResult(res.data.result.lectureList))
 					setLoading(false)
@@ -149,7 +148,7 @@ function Lecture() {
 											lectureResult.map((item, idx) => {
 												return (
 													<Grid item xs={6} sm={4} md={3} key={idx}>
-														<LectureCard img={img1} lecture={item} />
+														<LectureCard lecture={item} />
 													</Grid>
 												)
 
@@ -163,9 +162,6 @@ function Lecture() {
 								</Grid>
 							)
 						}
-
-
-
 					</Box>
 					{/* 페이지네이션 */}
 					<Box sx={{ display: 'flex', justifyContent: 'center' }}>

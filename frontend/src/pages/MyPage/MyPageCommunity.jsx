@@ -104,14 +104,14 @@ function MyArticle({ accessToken }) {
     setPage(value)
   }
   useEffect(() => {
-    console.log(accessToken)
+    // console.log(accessToken)
     axios.get(`https://i10a810.p.ssafy.io/api/members/v1/communities/my?page=${page-1}&size=5`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
     })
       .then((res) => {
-        console.log(res.data.result)
+        // console.log(res.data.result)
         setArticles(res.data.result.communityList)
         setTotalPages(res.data.result.totalPages)
       })

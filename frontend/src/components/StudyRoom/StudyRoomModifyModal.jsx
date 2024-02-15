@@ -96,7 +96,7 @@ export default function StudyRoomModifyModal({ data, studyModify, studyModifyClo
     if(studyModify){
       axios.get(`https://i10a810.p.ssafy.io/api/tags/v0/lectures`)
       .then((response)=> {
-          console.log(response.data.result.tagList)
+          // console.log(response.data.result.tagList)
           setTagListFromAPI(response.data.result.tagList)
       })
       .catch((err) => console.log(err))
@@ -108,7 +108,7 @@ export default function StudyRoomModifyModal({ data, studyModify, studyModifyClo
     if(studyModify){
       axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?category&tags&keyword&level&site&order&page=0&size=16&sort=string`)
       .then((response)=> {
-          console.log(response.data.result.lectureList)
+          // console.log(response.data.result.lectureList)
           setLectureFromAPI(response.data.result.lectureList)
       })
       .catch((err) => console.log(err))
@@ -158,7 +158,7 @@ export default function StudyRoomModifyModal({ data, studyModify, studyModifyClo
     const handleTagListCheck = (event, newValue) => {
       //newValue는 선택된 옵션을 나타냄
       const selectedTags = newValue.map((option) => option.tagId);
-      console.log(selectedTags)
+      // console.log(selectedTags)
       //최대 10개 까지만 입력 가능하도록 검사
       if(selectedTags.length > 10){
         setTagListError(true);

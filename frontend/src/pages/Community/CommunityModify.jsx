@@ -23,7 +23,7 @@ export default function CommunityModify(){
   useEffect(() => {
     axios.get(`https://i10a810.p.ssafy.io/api/tags/v0/communities`)
     .then((response)=> {
-        console.log(response.data.result.tagList)
+        // console.log(response.data.result.tagList)
         setTagListFromAPI(response.data.result.tagList)
     })
     .catch((err) => console.log(err))
@@ -64,7 +64,7 @@ export default function CommunityModify(){
   const handleTagListCheck = (event, newValue) => {
     //newValue는 선택된 옵션을 나타냄
     const selectedTags = newValue.map((option) => option.tagId);
-    console.log(selectedTags)
+    // console.log(selectedTags)
     //최대 10개 까지만 입력 가능하도록 검사
     if(selectedTags.length > 10){
       setTagListError(true);
@@ -96,7 +96,7 @@ export default function CommunityModify(){
           setTitle(response.data.result.title);
           setContent(response.data.result.content);
           setTagList(response.data.result.tagList.map((tag) => tag.tagId));
-          console.log(response.data.result)
+          // console.log(response.data.result)
         })
         .catch((err) => console.log(err));
     }, [communityId]);
@@ -114,10 +114,10 @@ export default function CommunityModify(){
     },
   })
   .then(()=> {
-    console.log('게시물 수정완료')
-    console.log('communityId' + communityId)
-    console.log(title)
-    console.log(content)
+    // console.log('게시물 수정완료')
+    // console.log('communityId' + communityId)
+    // console.log(title)
+    // console.log(content)
     navigate('/community') //글 등록 후 커뮤니티 페이지로 이
   })
   .catch((err) => console.log(err))
