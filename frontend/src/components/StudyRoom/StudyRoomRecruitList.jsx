@@ -222,7 +222,8 @@ export default function StudyRoomRecruitList({study}){
           cursor: 'default', // 클릭 불가능한 커서 설정
           '&:hover': {
             backgroundColor: 'rgba(25, 118, 210, 0.08)', // 호버 시 배경색 변경
-          }
+          },
+          padding: 1
         }}>
             <ListItem>
               <Stack sx={{width: '100%'}}>
