@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { ListItemButton, ListItem, Stack, Chip, Tooltip, Button, IconButton, Typography, Dialog, DialogActions, DialogTitle } from '@mui/material';
+import { Box, ListItemButton, ListItem, Stack, Chip, Tooltip, Button, IconButton, Typography, Dialog, DialogActions, DialogTitle } from '@mui/material';
 import ChatIcon from '@mui/icons-material/Chat';
 import LoginIcon from '@mui/icons-material/Login';
 import LockIcon from '@mui/icons-material/Lock';
@@ -215,7 +215,7 @@ export default function StudyRoomRecruitList({study}){
     }
 
     return(
-        <ListItemButton sx={{ 
+        <Box sx={{ 
           display: 'flex', 
           justifyContent: 'center', 
           alignItems: 'center',
@@ -285,6 +285,6 @@ export default function StudyRoomRecruitList({study}){
                 </div>
               </Stack>
             </ListItem>
-        </ListItemButton>
+        </Box>
     )
 }
