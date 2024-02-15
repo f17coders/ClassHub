@@ -3,6 +3,8 @@
     <img src="./readme_assets/MainLogo.png" alt="ClassHub" /> 
 
 ### 🎬[Demo 시연영상](링크 삽입)
+💡삼성 청년 SW 아카데미💡     
+📆2024.01.08 ~ 2024.02.16📆
 <hr >
 
 <h3>강의 정보, 리뷰, 커뮤니티를 한 곳에서 관리하며, 스터디 그룹을 구성하여 사용자의 학습 경험을 향상시키는 통합 플랫폼</h3>
@@ -18,9 +20,8 @@
 |**3**|[**기술 스택**](#3)
 |**4**|[**DataBase**](#4)
 |**5**|[**시스템 아키텍처**](#5) 
-|**6**|[**FrontEnd**](#6)
-|**7**|[**BackEnd**](#7)
-|**8**|[**팀 소개**](#8)
+|**6**|[**기술 소개**](#6)
+|**7**|[**팀 소개**](#7)
 
 <div id="1"></div>
 
@@ -43,7 +44,7 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 
 ## 🔍 기술 스택
 ### FrontEnd
-![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white) ![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white) ![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white) ![Framer](https://img.shields.io/badge/Framer-black?style=for-the-badge&logo=framer&logoColor=blue)
 
 <img src="https://skillicons.dev/icons?i=emotion" />   <img src="https://cms-assets.tutsplus.com/uploads/users/780/posts/39427/image-upload/68747470733a2f2f6769746875622e7375726d6f6e2e6d652f696d616765732f636f6d6d6f6e2f7377697065722d6c6f676f2e737667.svg" height="50">
 <img alt="sweetalert2" src="./readme_assets/sweetalert2.png" height="40">
@@ -91,18 +92,14 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 <div id="5"></div>
 
 ## 📂 시스템 아키텍처
-<img src="./readme_assets/systemarchitecture.png" width="800"  alt="mongodb" /> 
+<img src="./readme_assets/systemarchitecture.png" width="900"  alt="System Architecture" /> 
 
 <div id="6"></div>
 
-## 📱 Front-End
+## 📱 기술 소개
 
-<div id="7"></div>
-
-## 📲 Back-End
-
-### redis 적용
-...
+### Redux 적용
+> ...
 
 ### Stomp를 이용한 채팅 구현
 > 스터디룸에서 1:1, 다:다 채팅을 구현하기 위해 Stomp 프로토콜과 MongoDB를 사용하여 소켓 통신을 구현하였습니다.
@@ -134,10 +131,14 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 2. 메시지를 송신(pub)하면, 서버(메시지 브로커)는 해당 메시지를 채팅방(Topic)에 대한 메시지 큐로 전달합니다. 메시지는 들어온 순서대로 저장됩니다.
 3. 메시지 브로커는 메시지를 구독 중인 클라이언트에게 전달합니다.
 
+### redis 적용
+...
+
+
 ### 강의 조회 성능 최적화
 ...
 
-<div id="8"></div>
+<div id="7"></div>
 
 ## 👪 팀 소개
 |![정승환](https://avatars.githubusercontent.com/u/100360525?v=4)|![김지현](https://avatars.githubusercontent.com/u/31675698?v=4)|![하동준](https://avatars.githubusercontent.com/u/77885587?v=4)|![남수진](https://avatars.githubusercontent.com/u/77006790?v=4)|![김예지](https://avatars.githubusercontent.com/u/139518026?v=4)|![정유경](https://avatars.githubusercontent.com/u/83561356?v=4)|
@@ -147,9 +148,9 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 
 |<center>이름</center>|<center>역할</center>|<center>개발 내용</center>|
 |:----:|:----:|----|
-|정승환|BackEnd|- DB 설계  <br >- 강의 사이트 데이터 수집(약 7만개) <br > &emsp; - 데이터 크롤링 <br > &emsp; - 데이터 가공 및 적재 <br > -프로젝트 초기 세팅 <br > - community 도메인 개발 <br > - 회원 도메인 개발 <br > - Spring Security 적용 <br > - redis 적용 <br > &emsp; - 조회수 최적화 |
+|정승환|BackEnd|- DB 설계  <br >- 강의 사이트 데이터 수집(약 7만개) <br > &emsp; - 데이터 크롤링 <br > &emsp; - 데이터 가공 및 적재 <br > -프로젝트 초기 세팅 <br > - 'JPA', 'QueryDSL'을 사용해 API 개발 <br > &emsp; - community 도메인 개발 <br > &emsp; - 회원, 마이페이지 도메인 개발 <br > - Spring Security 적용 <br > - 'redis' 적용 ( Nginx, Spring ) <br > &emsp; - 조회수 최적화 성공 |
 |김지현|Infra, BackEnd|- CICD 구축 <br > &emsp; - Jenkins 연결, 파이프라인 작성 <br > &emsp; - gitlab 연결 <br > - 도커 구축 <br > &emsp;  - SpringBoot, react, mongoDB, redis, mariaDB <br > &emsp; - Nginx 구축 <br > &emsp;  &emsp; - Https 적용 <br >&emsp;  &emsp;   -리버스 프록시 설정  |
-|하동준|BackEnd|- DB 설계 <br > - 강의 사이트 데이터 수집(약 7만개) <br > &emsp; - 데이터 크롤링 <br > &emsp; - 데이터 가공 및 적재 <br > - 강의 도메인 개발 <br > - 강의 리뷰에 대한 gpt 적용 <br > - 필터링, 정렬, 검색에 대한 최적화 진행 |
-|남수진|BackEnd|- DB 설계 <br > - 더미 데이터 생성 <br > - 스터디룸 도메인 개발 <br > - Stomp를 이용한 실시간 채팅 구현 <br > &emsp; - BackEnd: 1대1, 다대다 Stomp 통신 구현 <br > &emsp; - FrontEnd: sockjs, stomp 소켓 통신 구현, 채팅방 ui 구현 <br > - 채팅 알림 구현|
-|김예지|FrontEnd|- Figma를 이용해 프로토타입 구성 <br > - 화면 구현 <br > &emsp; - 전체 화면 구성(Nav, Footer, 메인페이지 등) 구현 <br > &emsp; - 마이페이지 구현 <br > &emsp; - 강의 페이지(목록, 상세페이지 ) 구현 <br > &emsp; - 리뷰 페이지 구현 <br > - 로그인/로그아웃 구현 &emsp; <br > - 로그인 유무에 따른 화면 권한 설정 <br > - 유효성 검사 구현|
+|하동준|BackEnd|- DB 설계 <br > - 강의 사이트 데이터 수집(약 7만개) <br > &emsp; - 데이터 크롤링 <br > &emsp; - 데이터 가공 및 적재 <br > - 'JPA', 'QueryDSL'을 사용해 API 개발<br > &emsp; - 강의 도메인 개발 <br > &emsp; - 강의 리뷰에 대한 gpt 적용 <br > - 필터링, 정렬, 검색에 대한 최적화 진행 |
+|남수진|BackEnd|- DB 설계 <br > - 'JPA', 'QueryDSL'을 사용해 API 개발 <br > &emsp; - 스터디룸 도메인 개발 <br > - Stomp를 이용한 실시간 채팅 구현 <br >  &emsp; - MongoDB 구축 <br >  &emsp; - Nginx 적용 <br> &emsp; - BackEnd: 1대1, 다대다 Stomp 통신 구현 <br > &emsp; - FrontEnd: sockjs, stomp 소켓 통신 구현, 채팅방 ui 구현 <br > - 채팅 알림 구현|
+|김예지|FrontEnd|- Figma를 이용해 프로토타입 구성 <br > - 화면 구현 <br > &emsp; - 전체 화면 구성(Nav, Footer, 메인페이지 등) 구현 <br > &emsp; - 마이페이지 구현 <br > &emsp; - 강의 페이지(목록, 상세페이지 ) 구현 <br > &emsp; - 리뷰 페이지 구현 <br > - 로그인/로그아웃 구현 <br > - 'Redux', 'React-Query'를 이용한 상태관리 &emsp;<br > - 권한 설정 <br > &emsp;- 로그인 유무에 따른 화면 권한 설정 <br >&emsp; - 사용자 권한에 따른 상호작용 설정 <br > - 유효성 검사 구현 |
 |정유경|FrontEnd| - Figma를 이용해 프로토타입 구성 <br > - 화면 구현 <br > &emsp;- 스터디룸(모집, 입장, 채널) 화면 구현 <br >&emsp; - 스터디룸, 채널 모달 창 구현 <br >&emsp; - 커뮤니티 구현 <br > - BackEnd와 Oauth 통신 연결 <br > - 권한 설정 <br > &emsp;- 로그인 유무에 따른 화면 권한 설정 <br >&emsp; - 사용자 권한에 따른 상호작용 설정 <br > - 유효성 검사 구현|
