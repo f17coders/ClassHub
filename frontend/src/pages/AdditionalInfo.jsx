@@ -128,6 +128,7 @@ function AdditionalInfo() {
 				isLogin ? (<Paper style={{
 					margin: 'auto',
 					marginTop: '10vh',
+					marginBottom: '20vh',
 					width: '500px',
 					height: '550px',
 					display: 'flex',
@@ -224,7 +225,7 @@ function AdditionalInfo() {
 							{/* 제출 버튼 */}
 							<Button
 								variant="outlined"
-								style={{ marginTop: '20px', marginLeft:'80%' }}
+								style={{ marginTop: '20px', marginLeft:'75%', width:'25%' }}
 								onClick={checkValid}
 							>
 								가입하기

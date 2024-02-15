@@ -108,16 +108,17 @@ function Login() {
 			style={{
 				margin: 'auto',
 				marginTop: '10vh',
-				width: '400px',
-				height: '450px',
+				marginBottom: '20vh',
+				width: '500px',
+				height: '550px',
 				display: 'flex',
 				flexDirection: 'column',
 				justifyContent: "center",
 				alignItems: "center"
       }}>
-        <img src={MainLogo} alt="MainLogo" style={{ width: '60%' }} />
+        <img src={MainLogo} alt="MainLogo" style={{ width: '55%' }} />
         <p>서비스 이용을 위해 로그인/회원가입을 해주세요</p>
-        <div style={{ display: 'flex', flexDirection: 'column', marginTop: '30px', width: '20%', justifyContent: 'space-around', alignItems: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', marginTop: '50px', width: '20%', justifyContent: 'space-around', alignItems: 'center' }}>
 					<Paper 
 					onMouseEnter={hoverInKakao}
 					onMouseLeave={hoverOutKakao}
