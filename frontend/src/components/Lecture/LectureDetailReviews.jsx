@@ -235,7 +235,7 @@ function CreateReview({ lecture }) {
         const result = res.data.result
         if (result.isBuyed) {
           if (result.isExist) {
-            console.log(res.data)
+            // console.log(res.data)
             // 내 강의 + 씀
             setWrote(true)
             setBuy(true)
@@ -306,7 +306,7 @@ function CreateReview({ lecture }) {
         headers: { Authorization: `Bearer ${accessToken}` }
       })
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           if (res.data.status == 500) {
             Swal.fire({
               title: "이미 작성했습니다",

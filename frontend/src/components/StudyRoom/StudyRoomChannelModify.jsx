@@ -47,7 +47,7 @@ export default function StudyRoomChannelModify({channelId, studyId, channelModif
               },
             })
           .then((response)=> {
-              console.log(response.data.result)
+              // console.log(response.data.result)
               channelModifyClose();
               // 수정 완료 alert 띄우기
               handleModifyDialogOpen();

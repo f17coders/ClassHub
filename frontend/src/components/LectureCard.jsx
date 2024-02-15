@@ -125,7 +125,7 @@ function LectureCard({ lecture }) {
 	const [like, setLike] = useState(false)
 
 	const toggleLike = () => {
-		console.log(accessToken)
+		// console.log(accessToken)
 		if (isLogin == true) {
 			if (like == false) {
 				axios.post(`https://i10a810.p.ssafy.io/api/lectures/v1/likes/${lecture.lectureId}`, null, {

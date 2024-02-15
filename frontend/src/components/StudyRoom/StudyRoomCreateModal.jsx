@@ -74,7 +74,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
         },
       })
       .then((res) => {
-        console.log(res)
+        // console.log(res)
         onRegisterSuccess()
         // window.location.reload(); //페이지 새로고침
       })
@@ -86,7 +86,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
       if(studyCreate){
         axios.get(`https://i10a810.p.ssafy.io/api/tags/v0/lectures`)
         .then((response)=> {
-            console.log(response.data.result.tagList)
+            // console.log(response.data.result.tagList)
             setTagListFromAPI(response.data.result.tagList)
         })
         .catch((err) => console.log(err))
@@ -98,7 +98,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
       if(studyCreate && keyword !== ''){
         axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?order=ranking&page=0&size=20&keyword=${keyword}`)
         .then((response)=> {
-            console.log(response.data.result.lectureList)
+            // console.log(response.data.result.lectureList)
             setLectureFromAPI(response.data.result.lectureList)
         })
         .catch((err) => console.log(err))
@@ -148,7 +148,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
     const handleTagListCheck = (event, newValue) => {
       //newValue는 선택된 옵션을 나타냄
       const selectedTags = newValue.map((option) => option.tagId);
-      console.log(selectedTags)
+      // console.log(selectedTags)
       //최대 10개 까지만 입력 가능하도록 검사
       if(selectedTags.length > 10){
         setTagListError(true);
@@ -164,7 +164,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
     const handleLectureIdCheck = (event, newLecture) => {
       //newValue는 선택된 옵션을 나타냄
       const selectedLecture = newLecture.lectureId;
-      console.log(selectedLecture)
+      // console.log(selectedLecture)
 
       if(selectedLecture.length === 0){
         setLectureIdError(true);

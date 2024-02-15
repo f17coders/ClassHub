@@ -33,7 +33,7 @@ function LectureSearch() {
 			axios.get('https://i10a810.p.ssafy.io/api/tags/v0/lectures')
 				.then((res) => {
 					let tmp = res.data.result.tagList
-					setTags(tmp.slice(10))
+					setTags(tmp)
 					// 앞에 10개는 추천 태그
 					setRecommendTags(tmp.slice(0, 10))
 					// 이름만 뽑아서 저장
@@ -90,16 +90,6 @@ function LectureSearch() {
 		setAdd(!add)
 	}
 
-	// 호버 버튼용변수들(레벨)
-	const handleLevelButtonClick = (value) => {
-		if (selectedButtons.includes(value)) {
-			dispatch(changeLevel('ALL'))
-			setSelectedButtons(selectedButtons.filter((btn) => btn !== value))
-		} else {
-			dispatch(changeLevel(value))
-			setSelectedButtons([...selectedButtons, value])
-		}
-	}
 
 	// 호버 버튼용변수들(사이트)
 	const handleSiteButtonClick = (value) => {
@@ -113,7 +103,6 @@ function LectureSearch() {
 	};
 
 	// (해시태그 이외의) 버튼들
-	const levels = ['입문', '초급', '중급이상', '모든 수준']
 	const sites = ['인프런', '유데미', '구름 에듀']
 
 	// 정렬(sort)
@@ -123,17 +112,19 @@ function LectureSearch() {
 		dispatch(changeOrder(event.target.value))
 	}
 
-	//  토글버튼용
-	const [alignment, setAlignment] = useState('모든 수준')
+	//  토글버튼용(난이도)
+	const [alignment, setAlignment] = useState(null)
   const handleAlignment = (event, newAlignment) => {
-		if (newAlignment == '모든수준') {
-			dispatch(changeLevel('ALL'))
-		} else {
-			dispatch(changeLevel(newAlignment))
-		}
+		dispatch(changeLevel(newAlignment))
     setAlignment(newAlignment)
   }
 
+	// 토글버튼용(사이트)
+	const [alignment2, setAlignment2] = useState(null)
+  const handleAlignment2 = (event, newAlignment) => {
+		dispatch(changeSite(newAlignment))
+    setAlignment2(newAlignment)
+  }
 
 	return (
 		<div>
@@ -260,29 +251,24 @@ function LectureSearch() {
 								<ToggleButton value='초급' size='large' sx={{ color:'black'}}>초급</ToggleButton>
 								<ToggleButton value='중급 이상' size='large' sx={{ color:'black'}}>중급 이상</ToggleButton>
 								<ToggleButton value='모든 수준' size='large' sx={{ color:'black'}}>모든 수준</ToggleButton>
-								{/* {
-									levels.map((item, idx) => {
-										return (
-											<ToggleButton
-												key={idx}
-												value={item}
-												selected={selectedButtons.includes(item)}
-												onChange={() => handleLevelButtonClick(item)}
-												color='primary'
-												size='large'
-												sx={{ margin: '4px', height: '35px' }}
-											>
-												{item}
-											</ToggleButton>
-										)
-									})
-								} */}
 							</ToggleButtonGroup>
 						</Grid>
 						<Divider orientation="vertical" variant="middle" flexItem />
 						<Grid item style={{ marginLeft: '5px' }}>
 							{/* 사이트 */}
-							{
+							<ToggleButtonGroup
+								value={alignment2}
+								exclusive
+								onChange={handleAlignment2}
+								size="small" 
+								color="primary"
+								sx={{ margin: '4px', height: '35px' }}
+							>
+								<ToggleButton value='인프런' size='large' sx={{ color:'black'}}>인프런</ToggleButton>
+								<ToggleButton value='유데미' size='large' sx={{ color:'black'}}>유데미</ToggleButton>
+								<ToggleButton value='구름 에듀' size='large' sx={{ color:'black'}}>구름 에듀</ToggleButton>
+							</ToggleButtonGroup>
+							{/* {
 								sites.map((item, idx) => {
 									return (
 										<ToggleButton
@@ -298,7 +284,7 @@ function LectureSearch() {
 										</ToggleButton>
 									)
 								})
-							}
+							} */}
 						</Grid>
 					</Grid>
 				</Grid>

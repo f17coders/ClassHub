@@ -52,7 +52,7 @@ function MyPage() {
 	const pickRandom = function() {
 		const temp = [user.job].concat(user.tagList)
 		const picked = temp[Math.floor(Math.random() * temp.length)]
-		console.log(picked)
+		// console.log(picked)
 		// 선택된 요소의 인덱스 찾기
 		const pickedIndex = temp.findIndex(item => item === picked)
 		return {

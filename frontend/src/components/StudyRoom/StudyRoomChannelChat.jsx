@@ -48,7 +48,7 @@ export default function StudyRoomPrivateMessage({channel}) {
                 setRecvList(prevRecvList => [...prevRecvList, JSON.parse(res.body)]);
             });
             setIsLoading(false);
-            console.log(`${channel.name} 연결 성공`)
+            // console.log(`${channel.name} 연결 성공`)
         };
 
         client.activate(); // 클라이언트 활성화
