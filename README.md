@@ -61,7 +61,7 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 
 ### Infra
 
-![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) ![AWS-EC2](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazonec2&logoColor=white) ![Jenkins](https://img.shields.io/badge/jenkins-%232C5263.svg?style=for-the-badge&logo=jenkins&logoColor=white) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white) ![GoogleBigQuery](https://img.shields.io/badge/Google%20BigQuery-669DF6.svg?style=for-the-badge&logo=Google-BigQuery&logoColor=white) ![GoogleCloudStorage](https://img.shields.io/badge/Google%20Cloud%20Storage-AECBFA.svg?style=for-the-badge&logo=Google-Cloud-Storage&logoColor=black)
+![AWS](https://img.shields.io/badge/AMAZONE_AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white) ![AWS-EC2](https://img.shields.io/badge/AWS_EC2-%23FF9900.svg?style=for-the-badge&logo=amazonec2&logoColor=white) ![Jenkins](https://img.shields.io/badge/jenkins-%232C5263.svg?style=for-the-badge&logo=jenkins&logoColor=white) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white) ![GoogleBigQuery](https://img.shields.io/badge/Google%20BigQuery-669DF6.svg?style=for-the-badge&logo=Google-BigQuery&logoColor=white) ![GoogleCloudStorage](https://img.shields.io/badge/Google%20Cloud%20Storage-AECBFA.svg?style=for-the-badge&logo=Google-Cloud-Storage&logoColor=black)
 
 ### Collaboration Tool
 ![GitLab](https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white) ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white) ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white) 
@@ -99,10 +99,19 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 ## 📱 기술 소개
 
 ### Redux 적용
-> ...
+> User 와 같은 데이터를 체계적으로 관리하기 위해, 중앙화된 데이터 처리를 통해 상태 관리를 할 수 있는 Redux를 도입했습니다.
+
+**Redux**
+
+<img src="./readme_assets/redux.PNG" width="600">
+
+- 컴포넌트 간 데이터 공유를 용이하게 하여, 애플리케이션의 상태를 효율적으로 관리하였습니다.
+- 새로고침하면 데이터가 손실되는 이슈가 있어, Redux-persist를 도입하여 데이터를 관리하였습니다.
+- 사용자가 입력한 정보, 설정, 애플리케이션 상태 등을 보존하여 사용자 경험을 향상시켰습니다.
 
 ### Stomp를 이용한 채팅 구현
 > 스터디룸에서 1:1, 다:다 채팅을 구현하기 위해 Stomp 프로토콜과 MongoDB를 사용하여 소켓 통신을 구현하였습니다.
+
 **Stomp**
 - 텍스트 기반 메시지 프로토콜로, pub/sub구조로 되어있어 메시징 처리를 간편하게 할 수 있습니다.
 - pub/sub 구조: 특정 주제에 대해 구독하면, 해당 주제에 대해 발행된 메시지를 구독자에게 전달이 가능하여 다대다 채팅에 용이합니다.
@@ -132,11 +141,55 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 3. 메시지 브로커는 메시지를 구독 중인 클라이언트에게 전달합니다.
 
 ### redis 적용
-...
+> 게시글을 읽는 요청이 들어올 때마다 mariaDB의 viewCount 칼럼을 +1로 업데이트하는 것은 비효율적이라 판단하여, 성능향상을 위해 redis를 활용한 캐싱을 적용하였습니다.
+
+**redis**
+- 메모리에 저장되기 때문에 대기시간을 낮추고, 처리량을 높일 수 있습니다.
+- "Write-Back" 전략: 데이터를 캐시에 모아서 일정 주기 배치 작업을 통해 DB에 반영하기 때문에 쓰기 쿼리 비용과 부하를 줄일 수 있습니다.
+
+**로직**
+1. 게시글 읽기 요청이 들어오면, 조회수를 redis(Cache Store)에 저장합니다.
+2. 1시간에 한 번씩 스케줄링을 통해 DB 업데이트를 진행하여, Maria DB에 반영합니다.
 
 
 ### 강의 조회 성능 최적화
-...
+**문제점**
+- 약 7만개의 강의에 대해 필터링, 정렬, 페이징 등을 수행하는 데 많은 시간이 소요되었습니다.
+  - 강의에 대한 검색, 필터링, 정렬, 페이징은 Querydsl을 통해 하나의 쿼리로 구성됩니다. 검색 기능은 lecture테이블의 name(강의명), instructor(강사명) 에 대해 contains(mariadb : %like%) 를 활용하였기 때문에 10초 이상의 시간이 소요되었습니다.
+- lecture 테이블의 칼럼들 외에 별점 등 실시간 계산되어 서비스에 사용되는 값들이 다수 존재하엿습니다.
+
+
+**해결방안**
+1. 해당 값들이 정렬 및 페이징에 사용되었기 때문에 join의 편리성을 위해 redis가 아닌 별도의 요약 테이블(lecture_summary) 을 두고 1시간에 한번씩 스케쥴링을 통해 테이블을 갱신(delete/insert into select) 하였습니다.
+2. lecture테이블의 review_count 칼럼을 1시간에 한번씩 스케쥴링을 통해 update하였습니다.
+- lecture 테이블 외 계산이 필요한 컬럼들
+  - combinedRating: 실제 강의 사이트와 우리 서비스의 리뷰 별점을 통합하며 서비스 상에 표시되는 별점입니다.
+
+    |우리 서비스의 리뷰 별점 개수|우리서비스 별점 가중치| 외부 사이트 별점 가중치|
+    |----|----|----|
+    |10개 미만|0.2|0.8|
+    |10개 이상|0.5|0.5|
+
+  - combinedRatingCount: 실제 강의 사이트 리뷰 개수 + 우리 서비스의 리뷰 개수
+  - lectureLikeCount: 우리 서비스의 사용자들이 해당 강의를 찜한 개수
+  - weight: 추천순 정렬을 위해 계산되는 값입니다.    
+  ```
+    실제 강의 사이트 수강생 수 * 0.4 + combined_rating * 0.35 + lecture_like_count * 0.15 + combined_rating_count * 0.1
+  ```
+
+3. MariaDB에서는 match() against(.. in boolean mode) 조건을 통해 Full-Text Index 를 활용한 Full-Text Search 를 지원합니다. 하지만 JPA는 해당 메서드를 기본 지원하지 않았기 때문에 FunctionContributor 를 extends하고 match() against(.. in boolean mode)를 사용자 정의 함수로 생성하여 인덱스를 활용한 효율적인 검색이 가능했습니다.
+
+
+**(7만건의 강의 대상) 기능별 API 전송 속도**
+
+|description|속도(단위: ms)|
+|----|:----:|
+|별점순으로 강의 정렬 후 1페이지 쿼리|122|
+|추천순으로 강의 정렬 후 1페이지 쿼리|133|
+|가격순으로 강의 정렬 후 1페이지 쿼리|88|
+|태그 포함 모든 필터링 요소 적용 후 1페이지 쿼리|1426|
+|필터링 미 적용 후 검색어 기반 쿼리|1266|
+|필터링 적용 후 검색어 기반 쿼리|1602|
 
 <div id="7"></div>
 
@@ -150,7 +203,7 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 |:----:|:----:|----|
 |정승환|BackEnd|- DB 설계  <br >- 강의 사이트 데이터 수집(약 7만개) <br > &emsp; - 데이터 크롤링 <br > &emsp; - 데이터 가공 및 적재 <br > -프로젝트 초기 세팅 <br > - 'JPA', 'QueryDSL'을 사용해 API 개발 <br > &emsp; - community 도메인 개발 <br > &emsp; - 회원, 마이페이지 도메인 개발 <br > - Spring Security 적용 <br > - 'redis' 적용 ( Nginx, Spring ) <br > &emsp; - 조회수 최적화 성공 |
 |김지현|Infra, BackEnd|- CICD 구축 <br > &emsp; - Jenkins 연결, 파이프라인 작성 <br > &emsp; - gitlab 연결 <br > - 도커 구축 <br > &emsp;  - SpringBoot, react, mongoDB, redis, mariaDB <br > &emsp; - Nginx 구축 <br > &emsp;  &emsp; - Https 적용 <br >&emsp;  &emsp;   -리버스 프록시 설정  |
-|하동준|BackEnd|- DB 설계 <br > - 강의 사이트 데이터 수집(약 7만개) <br > &emsp; - 데이터 크롤링 <br > &emsp; - 데이터 가공 및 적재 <br > - 'JPA', 'QueryDSL'을 사용해 API 개발<br > &emsp; - 강의 도메인 개발 <br > &emsp; - 강의 리뷰에 대한 gpt 적용 <br > - 필터링, 정렬, 검색에 대한 최적화 진행 |
+|하동준|BackEnd|- DB 설계 <br > - 강의 사이트 데이터 수집(약 7만개) <br > &emsp; - 데이터 크롤링 <br > &emsp; - 데이터 가공 및 적재 <br > - 'JPA', 'QueryDSL'을 사용해 API 개발<br > &emsp; - 강의 도메인 개발 <br > &emsp; - 리뷰 도메인 개발 <br > - 강의 리뷰에 대한 gpt 적용 <br > - 필터링, 정렬, 검색에 대한 최적화 진행 |
 |남수진|BackEnd|- DB 설계 <br > - 'JPA', 'QueryDSL'을 사용해 API 개발 <br > &emsp; - 스터디룸 도메인 개발 <br > - Stomp를 이용한 실시간 채팅 구현 <br >  &emsp; - MongoDB 구축 <br >  &emsp; - Nginx 적용 <br> &emsp; - BackEnd: 1대1, 다대다 Stomp 통신 구현 <br > &emsp; - FrontEnd: sockjs, stomp 소켓 통신 구현, 채팅방 ui 구현 <br > - 채팅 알림 구현|
 |김예지|FrontEnd|- Figma를 이용해 프로토타입 구성 <br > - 화면 구현 <br > &emsp; - 전체 화면 구성(Nav, Footer, 메인페이지 등) 구현 <br > &emsp; - 마이페이지 구현 <br > &emsp; - 강의 페이지(목록, 상세페이지 ) 구현 <br > &emsp; - 리뷰 페이지 구현 <br > - 로그인/로그아웃 구현 <br > - 'Redux', 'React-Query'를 이용한 상태관리 &emsp;<br > - 권한 설정 <br > &emsp;- 로그인 유무에 따른 화면 권한 설정 <br >&emsp; - 사용자 권한에 따른 상호작용 설정 <br > - 유효성 검사 구현 |
 |정유경|FrontEnd| - Figma를 이용해 프로토타입 구성 <br > - 화면 구현 <br > &emsp;- 스터디룸(모집, 입장, 채널) 화면 구현 <br >&emsp; - 스터디룸, 채널 모달 창 구현 <br >&emsp; - 커뮤니티 구현 <br > - BackEnd와 Oauth 통신 연결 <br > - 권한 설정 <br > &emsp;- 로그인 유무에 따른 화면 권한 설정 <br >&emsp; - 사용자 권한에 따른 상호작용 설정 <br > - 유효성 검사 구현|
