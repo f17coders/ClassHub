@@ -657,3 +657,4 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/gradle
+/src/main/resources/META-INF/services/org.hibernate.boot.model.FunctionContributor

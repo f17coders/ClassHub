@@ -86,7 +86,8 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 					lecture.gptReview,
 					lecture.descriptionSummary,
 					lecture.summary,
-					lecture.descriptionDetail.prepend("https://storage.googleapis.com/classhub/data/description_detail/")
+					lecture.descriptionDetail.prepend(
+						"https://storage.googleapis.com/classhub/data/description_detail/")
 				))
 			.from(lecture)
 			.innerJoin(lectureSummary)
@@ -123,6 +124,12 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 			.from(lecture)
 			.innerJoin(lectureSummary)
 			.on(lecture.lectureId.eq(lectureSummary.lectureId))
+//			.where(
+//				Expressions.numberTemplate(Double.class, "function('match_against',{0},{1})",
+//					lecture.name, keyword + "*").gt(0).or(Expressions.numberTemplate(Double.class,
+//					"function('match_against',{0},{1})",
+//					lecture.instructor, keyword + "*").gt(0))
+//			)
 			.where(searchCond(categoryId, tags, keyword, level, site))
 			.orderBy(orderExpression(order))
 			.offset(pageable.getOffset())
@@ -176,7 +183,6 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 	}
 
 
-
 	@Override
 	public List<LectureListDetailLectureLikeCountRes> findLecturesByMemberJoinLectureBuy(
 		int memberId,
@@ -192,8 +198,8 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 						"COALESCE({0}, 'https://contents.kyobobook.co.kr/sih/fit-in/458x0/pdt/9791187395027.jpg')",
 						lecture.image).as("image"),
 					lecture.level,
-						lectureSummary.combinedRating,
-						lectureSummary.combinedRatingCount,
+					lectureSummary.combinedRating,
+					lectureSummary.combinedRatingCount,
 					lecture.priceOriginal,
 					lecture.priceSale,
 					lecture.descriptionSummary,
@@ -323,20 +329,21 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 			.where(lecture.lectureId.in(lectureIds))
 			.fetch();
 
-
-
 		return lectureListJobResList;
 	}
 
 	private OrderSpecifier<?>[] orderExpression(String order) {
 		if (order.equals("ranking")) {
-			return new OrderSpecifier[] {lectureSummary.combinedRating.desc(), lectureSummary.combinedRatingCount.desc()};
+			return new OrderSpecifier[]{lectureSummary.combinedRating.desc(),
+				lectureSummary.combinedRatingCount.desc()};
 		} else if (order.equals("highest-price")) {
-			return new OrderSpecifier[] {lecture.priceSale.desc(), lectureSummary.combinedRating.desc()};
+			return new OrderSpecifier[]{lecture.priceSale.desc(),
+				lectureSummary.combinedRating.desc()};
 		} else if (order.equals("lowest-price")) {
-			return new OrderSpecifier[] {lecture.priceSale.asc(), lectureSummary.combinedRating.desc()};
+			return new OrderSpecifier[]{lecture.priceSale.asc(),
+				lectureSummary.combinedRating.desc()};
 		} else {
-			return new OrderSpecifier[] {lectureSummary.weight.desc()
+			return new OrderSpecifier[]{lectureSummary.weight.desc()
 			};
 		}
 
@@ -348,8 +355,17 @@ public class LectureRepositoryImpl implements LectureRepositoryCustom {
 	}
 
 	private BooleanExpression keywordLike(String keyword) {
-		return StringUtils.hasText(keyword) ? lecture.name.startsWith(keyword)
-			.or(lecture.instructor.startsWith(keyword)) : null;
+
+		BooleanExpression expression = Expressions.numberTemplate(Double.class,
+			"function('match_against',{0},{1})",
+			lecture.name, keyword + "*").gt(0).or(Expressions.numberTemplate(Double.class,
+			"function('match_against',{0},{1})",
+			lecture.instructor, keyword + "*").gt(0));
+
+		return StringUtils.hasText(keyword) ? expression : null;
+
+//		return StringUtils.hasText(keyword) ? lecture.name.contains(keyword)
+//			.or(lecture.instructor.contains(keyword)) : null;
 	}
 
 	private BooleanExpression levelEq(String level) {
