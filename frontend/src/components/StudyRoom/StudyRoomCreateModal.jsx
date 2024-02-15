@@ -43,6 +43,10 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
     const [tagList, setTagList] = useState([]); //스터디 태그
     const [tagListFromAPI, setTagListFromAPI] = useState([]); //API에서 가져온 스터디 태그 저장
     const [lectureFromAPI, setLectureFromAPI] = useState([]); //API에서 가져온 목표강의 리스트 저장
+    const [keyword, setKeyword] = useState([]);
+    const handleKeywordChange = (event) => {
+      setKeyword(event.target.value);
+    }
 
     // 유효성 검사 변수
     const [titleError, setTitleError] = useState(false);
@@ -91,15 +95,15 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
 
     // 목표강의 리스트 가져오기
 	  useEffect(() => {
-      if(studyCreate){
-        axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?category&tags&keyword&level&site&order&page=0&size=16&sort=string`)
+      if(studyCreate && keyword !== ''){
+        axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?order=ranking&page=0&size=20&keyword=${keyword}`)
         .then((response)=> {
             console.log(response.data.result.lectureList)
             setLectureFromAPI(response.data.result.lectureList)
         })
         .catch((err) => console.log(err))
       }
-    }, [studyCreate])
+    }, [studyCreate, keyword])
     
     // 스터디명 유효성 검사
     const handleTitleCheck = (event) => {
@@ -419,6 +423,7 @@ export default function StudyRoomCreateModal({ studyCreate, studyCreateClose, on
                               <TextField
                                 {...value}
                                 placeholder="목표강의를 연결하세요"
+                                onChange={handleKeywordChange} // 키워드 입력창이 변경될 때마다 핸들러 호출
                               />
                             )}
                             freeSolo

@@ -195,7 +195,7 @@ export default function CommunityReply({detailData}){
                             >
                               {singleComment.memberNickname}
                             </Typography>
-                             — {singleComment.createdAt}
+                             — {singleComment.createdAt.split("T").join(" ")}
                           </React.Fragment>
                           }
                         />
