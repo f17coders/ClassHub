@@ -278,8 +278,9 @@ public class StudyServiceImpl implements StudyService {
         if (study.getStudyLeader().getMemberId() != memberId) {
             throw new BaseExceptionHandler(FORBIDDEN_ERROR_LEADER);
         }
-
+        
         studyRepository.delete(study);
+        channelRepository.deleteByStudyId(studyId);// 채널 삭제
     }
 
     @Override
