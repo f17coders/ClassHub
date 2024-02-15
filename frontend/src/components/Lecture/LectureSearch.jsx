@@ -3,6 +3,7 @@ import TextField from '@mui/material/TextField'
 import SearchIcon from '@mui/icons-material/Search'
 import IconButton from '@mui/material/IconButton'
 import ToggleButton from '@mui/material/ToggleButton'
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import Grid from '@mui/material/Grid'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
@@ -122,6 +123,17 @@ function LectureSearch() {
 		dispatch(changeOrder(event.target.value))
 	}
 
+	//  토글버튼용
+	const [alignment, setAlignment] = useState('모든 수준')
+  const handleAlignment = (event, newAlignment) => {
+		if (newAlignment == '모든수준') {
+			dispatch(changeLevel('ALL'))
+		} else {
+			dispatch(changeLevel(newAlignment))
+		}
+    setAlignment(newAlignment)
+  }
+
 
 	return (
 		<div>
@@ -154,7 +166,7 @@ function LectureSearch() {
 											onChange={() => handleButtonClick(item)}
 											color='primary'
 											size='large'
-											sx={{ margin: '4px', height: '35px' }}
+											sx={{ margin: '4px', height: '35px', color:'black' }}
 										>
 											# {item.name}
 										</ToggleButton>
@@ -184,7 +196,7 @@ function LectureSearch() {
 						</Grid>
 						<Grid item style={{ marginLeft: '40px' }}>
 							{
-								recommendTags.slice(0, 4).map((item, idx) => {
+								recommendTags.slice(0, 3).map((item, idx) => {
 									return (
 										<ToggleButton
 											key={idx}
@@ -193,7 +205,7 @@ function LectureSearch() {
 											onChange={() => handleButtonClick(item)}
 											color='primary'
 											size='large'
-											sx={{ margin: '4px', height: '35px' }}
+											sx={{ margin: '4px', height: '35px', color:'black' }}
 										>
 											#{item.name}
 										</ToggleButton>
@@ -216,7 +228,7 @@ function LectureSearch() {
 												onChange={() => handleButtonClick(item)}
 												color='primary'
 												size='large'
-												sx={{ margin: '4px', height: '35px' }}
+												sx={{ margin: '4px', height: '35px', color:'black' }}
 											>
 												#{item.name}
 											</ToggleButton>
@@ -236,23 +248,36 @@ function LectureSearch() {
 					<Grid container>
 						<Grid item sx={{marginRight:'5px'}}>
 							{/* 난이도 */}
-							{
-								levels.map((item, idx) => {
-									return (
-										<ToggleButton
-											key={idx}
-											value="item"
-											selected={selectedButtons.includes(item)}
-											onChange={() => handleLevelButtonClick(item)}
-											color='primary'
-											size='large'
-											sx={{ margin: '4px', height: '35px' }}
-										>
-											{item}
-										</ToggleButton>
-									)
-								})
-							}
+							<ToggleButtonGroup
+								value={alignment}
+								exclusive
+								onChange={handleAlignment}
+								size="small" 
+								color="primary"
+								sx={{ margin: '4px', height: '35px' }}
+							>
+								<ToggleButton value='입문' size='large' sx={{ color:'black'}}>입문</ToggleButton>
+								<ToggleButton value='초급' size='large' sx={{ color:'black'}}>초급</ToggleButton>
+								<ToggleButton value='중급 이상' size='large' sx={{ color:'black'}}>중급 이상</ToggleButton>
+								<ToggleButton value='모든 수준' size='large' sx={{ color:'black'}}>모든 수준</ToggleButton>
+								{/* {
+									levels.map((item, idx) => {
+										return (
+											<ToggleButton
+												key={idx}
+												value={item}
+												selected={selectedButtons.includes(item)}
+												onChange={() => handleLevelButtonClick(item)}
+												color='primary'
+												size='large'
+												sx={{ margin: '4px', height: '35px' }}
+											>
+												{item}
+											</ToggleButton>
+										)
+									})
+								} */}
+							</ToggleButtonGroup>
 						</Grid>
 						<Divider orientation="vertical" variant="middle" flexItem />
 						<Grid item style={{ marginLeft: '5px' }}>
@@ -267,7 +292,7 @@ function LectureSearch() {
 											onChange={() => handleSiteButtonClick(item)}
 											color='primary'
 											size='large'
-											sx={{ margin: '4px', height: '35px' }}
+											sx={{ margin: '4px', height: '35px', color:'black' }}
 										>
 											{item}
 										</ToggleButton>

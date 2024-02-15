@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
-import {Pagination, Stack, Box} from '@mui/material'
+import { Pagination, Stack, Box } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -20,24 +20,24 @@ function MyPageLecture() {
         Authorization: `Bearer ${accessToken}`,
       },
     })
-    .then((res) => {
-      console.log(res.data)
-      setLectures(res.data.result.lectureList)
-    })
-    .catch((err) => console.log(err))
+      .then((res) => {
+        console.log(res.data)
+        setLectures(res.data.result.lectureList)
+      })
+      .catch((err) => console.log(err))
   }, [])
 
 
   // 페이지네이션 관련
   const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
+  const [totalPages, setTotalPages] = useState(0)
   const handleChange = (event, value) => {
-		setPage(value)
-	}
+    setPage(value)
+  }
 
 
-  return(
-    <div style={{position:'relative', height:'70%'}}>
+  return (
+    <div style={{ position: 'relative', height: '70%' }}>
       <h2>내가 수강중인 강의</h2>
       <div>
         {
@@ -46,22 +46,25 @@ function MyPageLecture() {
               lectures.map((lecture, idx) => {
                 return (
                   <Grid item xs={4} key={idx}>
-                    <LectureCard lecture={lecture}/>
+                    <LectureCard lecture={lecture} />
                   </Grid>
                 )
               })
             }
-          </Grid>) :(<div style={{position:'absolute', top:'50%', left:'40%', display:'flex', flexDirection:'column',justifyContent:'center'}}>
-            <p >찜한 강의가 없습니다!</p>
+          </Grid>) : (<div style={{ position: 'absolute', top: '50%', left: '40%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <p>수강중인 강의가 없습니다!</p>
             <Button variant="outlined" onClick={() => navigate('/lecture')}>강의 둘러보러 가기</Button>
           </div>)
         }
       </div>
-      <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-						<Stack spacing={2}>
-							<Pagination count={totalPages} page={page} onChange={handleChange} />
-						</Stack>
-					</Box>
+      {
+        totalPages > 0 ? (<Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Stack spacing={2}>
+            <Pagination count={totalPages} page={page} onChange={handleChange} />
+          </Stack>
+        </Box>) : null
+      }
+
     </div>
   )
 }
