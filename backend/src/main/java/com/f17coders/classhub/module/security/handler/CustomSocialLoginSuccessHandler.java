@@ -38,7 +38,7 @@ public class CustomSocialLoginSuccessHandler extends SimpleUrlAuthenticationSucc
         claim.put("memberId", authentication.getName());
         claim.put("roles", roles);
 
-        String accessToken = jwtUtil.generateToken(claim, 30);
+        String accessToken = jwtUtil.generateToken(claim, 24);
 
         response.getWriter().println(authentication.getName() + "LOGIN SUCCESS");
         String frontPage = UriComponentsBuilder.fromUriString(REACT_DOMAIN + "/login")

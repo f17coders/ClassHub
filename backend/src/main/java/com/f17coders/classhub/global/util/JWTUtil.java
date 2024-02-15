@@ -16,7 +16,7 @@ public class JWTUtil {
     @Value(value = "${key.jwt.secret}")
     private String jwtKey;
 
-    public String generateToken(Map<String, Object> valueMap, int days) {
+    public String generateToken(Map<String, Object> valueMap, int hours) {
         Map<String, Object> headers = new HashMap<>();
         headers.put("typ", "JWT");
         headers.put("alg", "HS256");
@@ -25,8 +25,8 @@ public class JWTUtil {
         Map<String, Object> payloads = new HashMap<>();
         payloads.putAll(valueMap);
 
-        // 유효 시간 (단위: DAY)
-        int time = (24 * 60) * days;
+        // 유효 시간 (단위: Hour)
+        int time = 60 * hours;
 
         String jwtStr = Jwts.builder()      // 시크릿 키(jwtKey)를 사용해 토큰을 서명
                 .setHeader(headers)
