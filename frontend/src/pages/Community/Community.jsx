@@ -40,9 +40,10 @@ function Community() {
       },
     })
     .then((response)=> {
-        // console.log(response.config.url)
+        // console.log(response.data.result)
         setArticles(response.data.result.communityList)   // 조회한 글 저장
         setAlignList(alignList)
+        setTotalPages(response.data.result.totalPages)
     })
     .catch((err) => console.log(err))
   }, [currentPage, alignList, commuParams]) //현재 페이지가 변경되거나 정렬조건 바꼈을 때 실행
