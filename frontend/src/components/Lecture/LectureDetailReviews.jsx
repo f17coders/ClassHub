@@ -150,22 +150,24 @@ function LectureDetailReviews({ lecture }) {
             isLogin == true ? (
               <div>
                 <CreateReview lecture={lecture} />
+                {
+                  review1.map((item, idx) => (
+                    <div key={idx} style={{ margin: '15px 0px' }}>
+                      {/* 우리사이트에서 가는거는 from을 1로 설정해서 주기 -> 확인용 */}
+                      <LectureReview review={item} from={1} />
+                    </div>
+                  ))
+                }
+                {
+                  page1 + 1 == totalPage1 ? (null) : (<div>{
+                      review1.length == 0 ? (<p style={{textAlign:"center", paddingRight:'20px'}}>다른 회원의 리뷰가 없습니다</p>) : (<Button variant="outlined" onClick={setNextPage1} sx={{ width: '90%' }}>더 보기</Button>)
+                    }</div>)
+                }
               </div>
-            ) : null
+            ) : (<p style={{textAlign:"center", paddingRight:'20px'}}>ClassHub의 리뷰는 로그인 후 조회 가능합니다.</p>)
           }
-          {
-            review1.map((item, idx) => (
-              <div key={idx} style={{ margin: '15px 0px' }}>
-                {/* 우리사이트에서 가는거는 from을 1로 설정해서 주기 -> 확인용 */}
-                <LectureReview review={item} from={1} />
-              </div>
-            ))
-          }
-          {
-            page1 + 1 == totalPage1 ? (null) : (<div>{
-                review1.length == 0 ? (<p style={{textAlign:"center", paddingRight:'20px'}}>다른 회원의 리뷰가 없습니다</p>) : (<Button variant="outlined" onClick={setNextPage1} sx={{ width: '90%' }}>더 보기</Button>)
-              }</div>)
-          }
+          
+          
         </div>
       </div>
       <div style={{ width: '50%' }}>
