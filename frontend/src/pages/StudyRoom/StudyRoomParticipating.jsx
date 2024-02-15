@@ -56,7 +56,7 @@ export default function StudyRoomParticipating(){
       },
     })
     .then((response)=> {
-        console.log(response.data.result)
+        // console.log(response.data.result)
         setChannels(response.data.result)
         readChannel(response.data.result[0].channelId);
     })
@@ -72,7 +72,7 @@ export default function StudyRoomParticipating(){
       },
     })
     .then((response)=> {
-        console.log(response.data.result)
+        // console.log(response.data.result)
         setData(response.data.result)
     })
     .catch((err) => console.log(err))
@@ -85,7 +85,7 @@ export default function StudyRoomParticipating(){
       },
     })
     .then((response) => {
-      console.log(response.data.result)
+      // console.log(response.data.result)
       setSelectChannel(response.data.result);
     })
   }
@@ -94,7 +94,7 @@ export default function StudyRoomParticipating(){
   const handleListItemClick = (event, index, channelId) => {
     setSelectedIndex(index);
     readChannel(channelId);
-    console.log(channelId);
+    // console.log(channelId);
   };
 
   //StudyRoomChannelModal이 열렸는지 여부 관리하는 state
@@ -102,7 +102,7 @@ export default function StudyRoomParticipating(){
 
   //모달 열릴 때 실행되는 콜백 함수
   const channelModalOpen = () => {
-    console.log('채널명 편집 모달 오픈');
+    // console.log('채널명 편집 모달 오픈');
     setStudyRoomChannel(true);
   }
   //닫힐 때 실행되는 콜백 함수
@@ -114,7 +114,7 @@ export default function StudyRoomParticipating(){
   const [participatingMember, setParticipatingMember] = useState(false);
   // 모달 열릴 때 실행되는 콜백 함수
   const participatingMemberOpen = () => {
-    console.log('참여중인 멤버 보기 오픈');
+    // console.log('참여중인 멤버 보기 오픈');
     setParticipatingMember(true);
   }
   // ParticipatingMemberModal이 닫힐 때 실행되는 콜백 함수
@@ -129,7 +129,7 @@ export default function StudyRoomParticipating(){
 
   // StudyRoomModifyModal이 열릴 때 실행되는 콜백 함수
   const studyModifyOpen = () => {
-    console.log('수정 모달 오픈')
+    // console.log('수정 모달 오픈')
     SetStudyModify(true);
     setModifySuccess(false); //모달 열릴때마다 초기화
   };

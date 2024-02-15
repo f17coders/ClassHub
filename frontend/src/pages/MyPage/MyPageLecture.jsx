@@ -21,7 +21,7 @@ function MyPageLecture() {
       },
     })
       .then((res) => {
-        console.log(res.data)
+        // console.log(res.data)
         setLectures(res.data.result.lectureList)
       })
       .catch((err) => console.log(err))

@@ -26,19 +26,6 @@ function Search() {
 		dispatch(goInitialExceptKeyword())
 		// 강의 페이지로 가자
 		navigate(`/lecture`)
-
-		// axios.get(`https://i10a810.p.ssafy.io/api/lectures/v0?&keyword=${keyword}&order=ranking&page=0&size=16&level=ALL`)	
-		// .then((res) => {
-		// 	// 키워드를 저장하고
-		// 	dispatch(changeKeyword(keyword))
-		// 	// 다른건 초기화 해주면서
-		// 	dispatch(goInitialExceptKeyword())
-		// 	dispatch(searchResult(res.data.result.lectureList))
-		// 	// 강의 페이지로 가자
-		// 	navigate(`/lecture`)
-		// }).catch((err) =>
-		// 	console.log(err)
-		// )
 	}
 
 	const enterKeyPress = (event) => {

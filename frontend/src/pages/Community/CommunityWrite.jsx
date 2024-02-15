@@ -23,7 +23,7 @@ export default function CommunityWrite(){
   useEffect(() => {
     axios.get(`https://i10a810.p.ssafy.io/api/tags/v0/communities`)
     .then((response)=> {
-        console.log(response.data.result.tagList)
+        // console.log(response.data.result.tagList)
         setTagListFromAPI(response.data.result.tagList)
     })
     .catch((err) => console.log(err))
@@ -63,7 +63,7 @@ export default function CommunityWrite(){
   const handleTagListCheck = (event, newValue) => {
     //newValue는 선택된 옵션을 나타냄
     const selectedTags = newValue.map((option) => option.tagId);
-    console.log(selectedTags)
+    // console.log(selectedTags)
     //최대 10개 까지만 입력 가능하도록 검사
     if(selectedTags.length > 10){
       setTagListError(true);
@@ -107,9 +107,9 @@ export default function CommunityWrite(){
         },
       })
       .then((res)=> {
-        console.log(res)
-        console.log('게시물 등록완료')
-        console.log(tagList)
+        // console.log(res)
+        // console.log('게시물 등록완료')
+        // console.log(tagList)
         navigate('/community') //글 등록 후 커뮤니티 페이지로 이동
       })
       .catch((err) => console.log(err))

@@ -69,7 +69,7 @@ export default function CommunityReply({detailData}){
           },
         })
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           // console.log(profileImage)
           // 등록 확인 dialog
           MySwal.fire({

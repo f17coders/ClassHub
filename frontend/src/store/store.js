@@ -61,7 +61,7 @@ let searchParams = createSlice({
     category: null,
     tags: [],
     keyword: null,
-    level: 'ALL',
+    level: null,
     site: null,
     order: 'ranking',
     page: 0,
@@ -73,7 +73,7 @@ let searchParams = createSlice({
         ...state,
         category: null,
         tags: [],
-        level: 'ALL',
+        level: null,
         site: null,
         order: 'ranking',
         page: 0,
@@ -137,7 +137,7 @@ let searchParams = createSlice({
           level: 'EXPERT'
         }
       }
-      if (action.payload == '모든 수준') {
+      if (action.payload == '모든수준') {
         return {
           ...state,
           level: 'ALL'
@@ -145,7 +145,7 @@ let searchParams = createSlice({
       } else {
         return {
           ...state,
-          level: 'ALL'
+          level: null
         }
       }
     },

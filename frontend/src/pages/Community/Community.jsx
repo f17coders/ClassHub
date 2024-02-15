@@ -40,7 +40,7 @@ function Community() {
       },
     })
     .then((response)=> {
-        console.log(response.config.url)
+        // console.log(response.config.url)
         setArticles(response.data.result.communityList)   // 조회한 글 저장
         setAlignList(alignList)
     })

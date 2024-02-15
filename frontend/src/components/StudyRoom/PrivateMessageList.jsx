@@ -37,7 +37,7 @@ export default function PrivateMessageList(){
       })
       .then((res) => {
         setData(res.data.result)
-        console.log(res.data)
+        // console.log(res.data)
       })
       .catch((err) => console.log(err))
     },[])
