@@ -42,16 +42,15 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 ## 💡 기술 스택
 ### FrontEnd
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white) ![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
-<img alt="Html" scr="https://img.shields.io/badge/">
-<img alt="Emotion" src="./readme_assets/emotion.png" height="40"> &emsp; <img alt="Swiper" src="./readme_assets/swiper.png" height="40"> &emsp; <img alt="sweetalert2" src="./readme_assets/sweetalert2.png" height="40">
 
-<img alt="Html" src="https://img.shields.io/badge/spring-%236DB33F.svg?&style=for-the-badge&logo=Spring Security&logoColor=white">
+<img src="https://skillicons.dev/icons?i=emotion" />   <img src="https://cms-assets.tutsplus.com/uploads/users/780/posts/39427/image-upload/68747470733a2f2f6769746875622e7375726d6f6e2e6d652f696d616765732f636f6d6d6f6e2f7377697065722d6c6f676f2e737667.svg" height="50">
+<img alt="sweetalert2" src="./readme_assets/sweetalert2.png" height="40">
 
 ### BackEnd
-![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white) ![SpringSecurity](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=springsecurity&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens) 
+![Spring](https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white) ![SpringSecurity](https://img.shields.io/badge/Spring%20Security-6DB33F.svg?style=for-the-badge&logo=Spring-Security&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens) 
 
-<img alt="jpa" src="./readme_assets/jpa.png" height="30"> &emsp;  <img alt="querydsl" src="./readme_assets/querydsl.png" height="30"> &emsp;
-<img alt="stomp" src="./readme_assets/stomp.png" height="30">
+<img alt="jpa" src="./readme_assets/jpa.png" height="40"> <img alt="querydsl" src="./readme_assets/querydsl.png" height="40" style="border-radius: 2px">
+<img alt="stomp" src="./readme_assets/stomp.png" height="40">
 
 ### DataBase
 
@@ -59,9 +58,7 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 
 ### Infra
 
-![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) ![AWS-EC2](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazonec2&logoColor=white) ![Jenkins](https://img.shields.io/badge/jenkins-%232C5263.svg?style=for-the-badge&logo=jenkins&logoColor=white) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white) ![GoogleBigQuery](https://img.shields/io/badge/goolge-#669DF6.svg?style=for-the-badge&logo=GoogleBigQuery&logoColor=white)
-
-<img alt="google cloud storage" src="./readme_assets/gcs.png" height="40"> <img alt="google big query" src="./readme_assets/bigquery.png" height="40">
+![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) ![AWS-EC2](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazonec2&logoColor=white) ![Jenkins](https://img.shields.io/badge/jenkins-%232C5263.svg?style=for-the-badge&logo=jenkins&logoColor=white) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white) ![GoogleBigQuery](https://img.shields.io/badge/Google%20BigQuery-669DF6.svg?style=for-the-badge&logo=Google-BigQuery&logoColor=white) ![GoogleCloudStorage](https://img.shields.io/badge/Google%20Cloud%20Storage-AECBFA.svg?style=for-the-badge&logo=Google-Cloud-Storage&logoColor=black)
 
 ### Collaboration Tool
 ![GitLab](https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white) ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white) ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white) 
