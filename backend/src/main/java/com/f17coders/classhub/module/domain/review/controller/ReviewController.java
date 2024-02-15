@@ -43,7 +43,7 @@ public class ReviewController {
 	private final MemberRepository memberRepository;
 
 	@Operation(summary = "우리 사이트 리뷰 조회")
-	@GetMapping("/v0/{lectureId}/classhub")
+	@GetMapping("/v1/{lectureId}/classhub")
 	public ResponseEntity<BaseResponse<ReviewListRes>> getReviewList(
 		@PathVariable("lectureId") int lectureId,
 		@RequestParam(value = "order", required = false) String order,
