@@ -5,13 +5,13 @@
 ### 🎬[Demo 시연영상](링크 삽입)
 <hr >
 
-**강의 정보, 리뷰, 커뮤니티를 한 곳에서 관리하며, 스터디 그룹을 구성하여 사용자의 학습 경험을 향상시키는 통합 플랫폼**
+<h3>강의 정보, 리뷰, 커뮤니티를 한 곳에서 관리하며, 스터디 그룹을 구성하여 사용자의 학습 경험을 향상시키는 통합 플랫폼</h3>
 
 </div>
 
 
 ## 목차
-|No|목차|
+|<center>No</center>|<center>내용</center>|
 |:----:|:----:|
 |**1**|[**프로젝트 개요**](#1)
 |**2**|[**주요 기능**](#2)
@@ -27,8 +27,7 @@
 ## 💡 프로젝트 개요
 ```
 IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인에서 온라인으로 변화함에 따라, 온라인 강의의 수요가 높아졌습니다. 
-그러나 너무 많은 IT 강의 플랫폼으로 인해 정보의 파편화가 발생하고, 
-학습자들이 스터디 그룹을 구성하거나 학습 경험을 공유하는 공간이 부족하여 사용자들에게 불편함을 주고 있습니다.
+그러나 너무 많은 IT 강의 플랫폼으로 인해 정보의 파편화가 발생하고, 학습자들이 스터디 그룹을 구성하거나 학습 경험을 공유하는 공간이 부족하여 사용자들에게 불편함을 주고 있습니다.
 이를 해결하고자 사용자들에게 편의성과 효율성을 제공하는 서비스를 개발하고자 이 프로젝트를 기획하게 되었습니다.
 ```
 <div id="2"></div>
@@ -41,7 +40,7 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 
 <div id="3"></div>
 
-## 💡 기술 스택
+## 🔍 기술 스택
 ### FrontEnd
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white) ![Redux](https://img.shields.io/badge/redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E) ![MUI](https://img.shields.io/badge/MUI-%230081CB.svg?style=for-the-badge&logo=mui&logoColor=white)
 
@@ -143,7 +142,7 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 |[정승환<br >(팀장)](https://github.com/seunghw2)|[김지현](https://github.com/KimJyun)|[하동준](https://github.com/djh0211)|[남수진](https://github.com/ss0510s)|[김예지](https://github.com/gimezi)|[정유경](https://github.com/YuKyung-Chung)|
 
 
-|이름|역할|개발 내용|
+|<center>이름</center>|<center>역할</center>|<center>개발 내용</center>|
 |:----:|:----:|----|
 |정승환|BackEnd|- DB 설계  <br >- 강의 사이트 데이터 수집(약 7만개) <br > &emsp; - 데이터 크롤링 <br > &emsp; - 데이터 가공 및 적재 <br > -프로젝트 초기 세팅 <br > - community 도메인 개발 <br > - 회원 도메인 개발 <br > - Spring Security 적용 <br > - redis 적용 <br > &emsp; - 조회수 최적화 |
 |김지현|Infra, BackEnd|- CICD 구축 <br > &emsp; - Jenkins 연결, 파이프라인 작성 <br > &emsp; - gitlab 연결 <br > - 도커 구축 <br > &emsp;  - SpringBoot, react, mongoDB, redis, mariaDB <br > &emsp; - Nginx 구축 <br > &emsp;  &emsp; - Https 적용 <br >&emsp;  &emsp;   -리버스 프록시 설정  |
