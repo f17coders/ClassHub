@@ -9,8 +9,8 @@ import axios from 'axios'
 import { useSelector } from 'react-redux'
 import { motion } from 'framer-motion'
 import { Divider } from '@mui/material'
-import img1 from './../assets/banner/5.jpg'
-import recommend from './../assets/banner/recommend.jpg'
+import img1 from './../assets/banner/5.png'
+import recommend from './../assets/banner/recommend.png'
 
 function Home() {
 	// 로그인 확인용
@@ -38,7 +38,7 @@ function Home() {
 
 			{
 				isLogin ? (
-					<div style={{ margin: 'auto', textAlign: 'center', height: '65vh', position:'relative' }}>
+					<div style={{ margin: 'auto', textAlign: 'center', height: '65vh', position:'relative', fontFamily:'GangwonEduPowerExtraBoldA' }}>
 						<motion.img
 						initial={{ opacity: 0, y: 40 }}
 						whileInView={{ opacity: 1, y: 0 }}
@@ -90,8 +90,7 @@ function Home() {
 						</motion.div>
 					</div>
 				) : (
-				
-					<div style={{ margin: 'auto', textAlign: 'center', height: '65vh', position:'relative' }}>
+					<div style={{ margin: 'auto', textAlign: 'center', height: '65vh', position:'relative', fontFamily:'GangwonEduPowerExtraBoldA' }}>
 					<motion.img
 					initial={{ opacity: 0, y: 40 }}
 					whileInView={{ opacity: 1, y: 0 }}

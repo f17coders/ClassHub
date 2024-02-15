@@ -138,7 +138,7 @@ function MyPage() {
 		textDecoration: 'none',
 		color: 'black',
 		fontSize: '1.35em',
-		transition: 'font-size 0.3s ease'
+		transition: 'font-size 0.5s ease'
 	}
 
 	// 마이페이지 메뉴 요소들

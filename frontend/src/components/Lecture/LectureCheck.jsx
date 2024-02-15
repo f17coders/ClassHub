@@ -55,6 +55,7 @@ function LectureCheck() {
 		<div style={{marginTop:'20px'}}>
 			<ToggleButtonGroup
 				orientation="vertical"
+				color="primary"
 				value={view}
 				exclusive
 				onChange={handleChange}
@@ -66,7 +67,7 @@ function LectureCheck() {
 							key={idx} 
 							value={category.categoryName}
 							size="small" 
-							sx={{border:'none', fontSize:'0.9em'}} 
+							sx={{border:'none', fontSize:'1em',color:'black'}} 
 							onClick={() => searchCategory(category)}
 						>
 							{category.categoryName}

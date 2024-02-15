@@ -61,6 +61,7 @@ function LectureDetailReviews({ lecture }) {
   const [review1, setReview1] = useState([])
   const [page1, setPage1] = useState(0)
   const [totalPage1, setTotalPage1] = useState(null)
+
   useEffect(() => {
     axios.get(`https://i10a810.p.ssafy.io/api/reviews/v0/1/classhub?page=${page1}&size=4&order=${order1}`, {
       headers: {
@@ -74,6 +75,8 @@ function LectureDetailReviews({ lecture }) {
       })
       .catch((err) => console.log(err))
   }, [page1, order1])
+
+   
   const setNextPage1 = function () {
     let nextPage = page1 + 1
     setPage1(nextPage)
@@ -83,6 +86,7 @@ function LectureDetailReviews({ lecture }) {
   const [review2, setReview2] = useState([])
   const [page2, setPage2] = useState(0)
   const [totalPage2, setTotalPage2] = useState(null)
+
   useEffect(() => {
     //&order=${order2} 뒤에 이게 빠진듯
     axios.get(`https://i10a810.p.ssafy.io/api/reviews/v0/${lecture.lectureId}/site?page=${page2}&size=4&order=${order2}`)
@@ -93,6 +97,7 @@ function LectureDetailReviews({ lecture }) {
       })
       .catch((err) => console.log(err))
   }, [page2, order2])
+
   const setNextPage2 = function () {
     let nextPage = page2 + 1
     setPage2(nextPage)
@@ -156,7 +161,7 @@ function LectureDetailReviews({ lecture }) {
           }
           {
             page1 + 1 == totalPage1 ? (null) : (<div>{
-                review1.length == 0 ? (<p>작성된 리뷰가 없습니다</p>) : (<Button variant="outlined" onClick={setNextPage1} sx={{ width: '90%' }}>더 보기</Button>)
+                review1.length == 0 ? (<p style={{textAlign:"center", paddingRight:'20px'}}>다른 회원의 리뷰가 없습니다</p>) : (<Button variant="outlined" onClick={setNextPage1} sx={{ width: '90%' }}>더 보기</Button>)
               }</div>)
           }
         </div>
@@ -230,11 +235,12 @@ function CreateReview({ lecture }) {
         const result = res.data.result
         if (result.isBuyed) {
           if (result.isExist) {
+            console.log(res.data)
             // 내 강의 + 씀
             setWrote(true)
             setBuy(true)
-            setRate(result.score)
-            setReview(result.content)
+            setRate(result.reviewRes.score)
+            setReview(result.reviewRes.content)
           } else if (result.isExist == false) {
             // 내 강의 + 안 씀
             setBuy(true)
@@ -361,7 +367,7 @@ function CreateReview({ lecture }) {
     justifyContent: 'center',
     zIndex: 999,
     boxShadow: '0 0 5px rgba(0, 0, 0, 0.1)',
-    transform: isHover ? 'scale(1.03)' : 'none',
+    transform: isHover ? 'scale(1.02)' : 'none',
     transition: 'transform 0.5s ease',
   }
   return (

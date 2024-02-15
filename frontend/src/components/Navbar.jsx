@@ -109,7 +109,7 @@ function NavbarComponent() {
 				<Grid item xs={8} sx={{ display: 'flex', alignItems: 'center', height:'65px' }}>
 					<Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center' }}>
 						<Link to='/'>
-							<img src={MainLogo} alt='HOME' style={{ width: '200px', marginRight: '20px' }}></img>
+							<img src={MainLogo} alt='HOME' style={{ width: '200px', marginRight: '20px', marginTop:'5px' }}></img>
 						</Link>
 						{
 							navItem.map((item, idx) => (

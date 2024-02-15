@@ -103,14 +103,19 @@ function Login() {
 
   return (
     <Box>
-      <div style={{
-				marginTop: '10%',
+      <Paper 
+			elevation={3}
+			style={{
+				margin: 'auto',
+				marginTop: '10vh',
+				width: '400px',
+				height: '450px',
 				display: 'flex',
-        flexDirection: 'column',
-        justifyContent: "center",
-        alignItems: "center"
+				flexDirection: 'column',
+				justifyContent: "center",
+				alignItems: "center"
       }}>
-        <img src={MainLogo} alt="MainLogo" style={{ width: '15%' }} />
+        <img src={MainLogo} alt="MainLogo" style={{ width: '60%' }} />
         <p>서비스 이용을 위해 로그인/회원가입을 해주세요</p>
         <div style={{ display: 'flex', flexDirection: 'column', marginTop: '30px', width: '20%', justifyContent: 'space-around', alignItems: 'center' }}>
 					<Paper 
@@ -132,7 +137,7 @@ function Login() {
 						<p style={{fontSize:'1.1em', marginLeft:'10px'}}>카카오로 로그인하기</p>
 					</Paper>
         </div>
-      </div>
+      </Paper>
     </Box>
   )
 }
