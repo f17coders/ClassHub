@@ -64,7 +64,7 @@ function LectureDetailReviews({ lecture }) {
 
   useEffect(() => {
     if (isLogin) {
-      axios.get(`https://i10a810.p.ssafy.io/api/reviews/v1/1/classhub?page=${page1}&size=4&order=${order1}`, {
+      axios.get(`https://i10a810.p.ssafy.io/api/reviews/v1/${lecture.lectureId}/classhub?page=${page1}&size=4&order=${order1}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
