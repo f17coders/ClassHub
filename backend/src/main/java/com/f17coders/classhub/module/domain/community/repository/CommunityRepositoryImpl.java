@@ -81,7 +81,7 @@ public class CommunityRepositoryImpl implements CommunityRepositoryCustom {
     public Long countPageByKeywordAndTagIdListJoinCommunityTagJoinTag(List<Integer> tagIdList,
         String keyword) {
         return queryFactory
-            .select(community.count())
+            .select(community.countDistinct())
             .from(community)
             .leftJoin(community.communityTagList, communityTag)
             .leftJoin(communityTag.tag, tag)
