@@ -63,7 +63,8 @@ function LectureDetailReviews({ lecture }) {
   const [totalPage1, setTotalPage1] = useState(null)
 
   useEffect(() => {
-    axios.get(`https://i10a810.p.ssafy.io/api/reviews/v0/1/classhub?page=${page1}&size=4&order=${order1}`, {
+    if (isLogin) {
+      axios.get(`https://i10a810.p.ssafy.io/api/reviews/v1/1/classhub?page=${page1}&size=4&order=${order1}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
       }
@@ -74,6 +75,7 @@ function LectureDetailReviews({ lecture }) {
         setTotalPage1(res.data.result.totalPages)
       })
       .catch((err) => console.log(err))
+    }
   }, [page1, order1])
 
    
