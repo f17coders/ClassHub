@@ -26,7 +26,7 @@ import {createTheme, ThemeProvider} from '@mui/material'
 const theme = createTheme({
   typography: {
     fontFamily: 'inherit'
-  }
+  },
 })
 
 function App() {
@@ -34,7 +34,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Navbar/>
-      <div style={{minHeight: '550px'}}>
+      <div style={{minHeight: ''}}>
         <Routes>
           <Route path='/' Component={Home} />
           <Route path='/lecture' element={<Lecture/>}/>
