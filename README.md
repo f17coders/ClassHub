@@ -22,6 +22,7 @@
 |**5**|[**시스템 아키텍처**](#5) 
 |**6**|[**기술 소개**](#6)
 |**7**|[**팀 소개**](#7)
+[**8**][**directory 구조**](#8)
 
 <div id="1"></div>
 
@@ -72,8 +73,12 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 
 <img alt="강의 상세정보" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/a6d54aab56f0492bd6dc0f3f53879194/lectureDetail.gif">
 
+
 **강의 리뷰**
+
+
 <img alt="강의 리뷰" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/bb6f0f82d8ac717ad972ebb756159215/lectureReview.gif">
+
 
 ### 커뮤니티
 
@@ -276,3 +281,202 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 |남수진|BackEnd|- DB 설계 <br > - 'JPA', 'QueryDSL'을 사용해 API 개발 <br > &emsp; - 스터디룸 도메인 개발 <br > - Stomp를 이용한 실시간 채팅 구현 <br >  &emsp; - MongoDB 구축 <br >  &emsp; - Nginx 적용 <br> &emsp; - BackEnd: 1대1, 다대다 Stomp 통신 구현 <br > &emsp; - FrontEnd: sockjs, stomp 소켓 통신 구현, 채팅방 ui 구현 <br > - 채팅 알림 구현|
 |김예지|FrontEnd|- Figma를 이용해 프로토타입 구성 <br > - 화면 구현 <br > &emsp; - 전체 화면 구성(Nav, Footer, 메인페이지 등) 구현 <br > &emsp; - 마이페이지 구현 <br > &emsp; - 강의 페이지(목록, 상세페이지 ) 구현 <br > &emsp; - 리뷰 페이지 구현 <br > - 로그인/로그아웃 구현 <br > - 'Redux', 'React-Query'를 이용한 상태관리 &emsp;<br > - 권한 설정 <br > &emsp;- 로그인 유무에 따른 화면 권한 설정 <br >&emsp; - 사용자 권한에 따른 상호작용 설정 <br > - 유효성 검사 구현 |
 |정유경|FrontEnd| - Figma를 이용해 프로토타입 구성 <br > - 화면 구현 <br > &emsp;- 스터디룸(모집, 입장, 채널) 화면 구현 <br >&emsp; - 스터디룸, 채널 모달 창 구현 <br >&emsp; - 커뮤니티 구현 <br > - BackEnd와 Oauth 통신 연결 <br > - 권한 설정 <br > &emsp;- 로그인 유무에 따른 화면 권한 설정 <br >&emsp; - 사용자 권한에 따른 상호작용 설정 <br > - 유효성 검사 구현|
+
+
+<div id="8"></div>
+
+## directory 구조
+
+### FrontEnd
+```bash
+-frontend
+  └─src
+      ├─assets
+      │  ├─banner
+      │  ├─Help
+      │  ├─Lecture
+      │  ├─Login
+      │  ├─ProfileIamge
+      │  └─sites
+      ├─common
+      ├─components
+      │  ├─Community
+      │  ├─Home
+      │  ├─Lecture
+      │  └─StudyRoom
+      ├─fonts
+      ├─pages
+      │  ├─Community
+      │  ├─Lecture
+      │  ├─MyPage
+      │  └─StudyRoom
+      └─store
+
+```
+
+|directory|description|
+|:---:|----|
+|assets|정적 자원 저장 폴더|
+|common|공통 js 폴더|
+|components|page에 들어가는 component 폴더|
+|pages|라우팅을 수행하는 폴더|
+
+
+### BackEnd
+```bash
+-backend
+  ├─gradle
+  │  └─wrapper
+  └─src
+      ├─main
+      │  └─java
+      │      └─com
+      │          └─f17coders
+      │              └─classhub
+      │                  ├─global
+      │                  │  ├─api
+      │                  │  │  └─response
+      │                  │  ├─config
+      │                  │  │  ├─hibernate
+      │                  │  │  ├─jpa
+      │                  │  │  ├─mongo
+      │                  │  │  ├─queryDsl
+      │                  │  │  ├─redis
+      │                  │  │  ├─s3
+      │                  │  │  ├─security
+      │                  │  │  ├─socket
+      │                  │  │  └─swagger
+      │                  │  ├─exception
+      │                  │  │  └─code
+      │                  │  └─util
+      │                  └─module
+      │                      ├─domain
+      │                      │  ├─alarm
+      │                      │  │  ├─controller
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─category
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  └─resource
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─channel
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  ├─request
+      │                      │  │  │  └─response
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─comment
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  ├─request
+      │                      │  │  │  └─response
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─community
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  ├─request
+      │                      │  │  │  └─response
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─communityLike
+      │                      │  │  └─repository
+      │                      │  ├─communityScrap
+      │                      │  │  └─repository
+      │                      │  ├─communityTag
+      │                      │  │  └─repository
+      │                      │  ├─job
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  └─response
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─lecture
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  └─response
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─lectureBuy
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─lectureLike
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─lectureSummary
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─lectureTag
+      │                      │  ├─member
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  ├─request
+      │                      │  │  │  └─response
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─memberTag
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─message
+      │                      │  │  ├─dto
+      │                      │  │  │  └─request
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─personalChat
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  ├─reponse
+      │                      │  │  │  └─request
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─review
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  ├─request
+      │                      │  │  │  └─response
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─study
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  ├─request
+      │                      │  │  │  └─response
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─studyMember
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─studyTag
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  └─tag
+      │                      │      ├─controller
+      │                      │      ├─dto
+      │                      │      │  └─response
+      │                      │      ├─repository
+      │                      │      └─service
+      │                      └─security
+      │                          ├─dto
+      │                          ├─exception
+      │                          ├─filter
+      │                          └─handler
+      └─test
+          └─java
+              └─com
+                  └─f17coders
+                      └─classhub
+
+```
+
+|directory|description|
+|:---:|----|
+|global/excetion|예외처리 관련 폴더|
+|global/util|util 폴더|
+|global/api|response 폴더|
+|global/config|설정 관련 폴더|
+|module/domain|도메인별 API 폴더|
+|module/security|security 관련 폴더|
+
