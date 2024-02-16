@@ -15,15 +15,15 @@
 ## 목차
 |<center>No</center>|<center>내용</center>|
 |:----:|:----:|
-|**1**|[**프로젝트 개요**](#1)
-|**2**|[**주요 기능**](#2)
-|**3**|[**기술 스택**](#3)
-|**4**|[**DataBase**](#4)
-|**5**|[**시스템 아키텍처**](#5) 
-|**6**|[**기술 소개**](#6)
-|**7**|[**팀 소개**](#7)
+|**1**|[**💡 프로젝트 개요**](#💡-프로젝트-개요)
+|**2**|[**🗒 주요 기능**](#🗒-주요-기능)
+|**3**|[**🔍 기술 스택**](#🔍-기술-스택)
+|**4**|[**💾 DataBase**](#💾-DataBase)
+|**5**|[**📂 시스템 아키텍처**](#📂-시스템-아키텍처) 
+|**6**|[**📱 기술 소개**](#📱-기술-소개)
+|**7**|[**👪 팀 소개**](#👪-팀-소개)
+|**8**|[**🗂️ Directory 구조**](#🗂️-Directory-구조)
 
-<div id="1"></div>
 
 ## 💡 프로젝트 개요
 ```
@@ -32,7 +32,6 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 학습자들이 스터디 그룹을 구성하거나 학습 경험을 공유하는 공간이 부족하여 사용자들에게 불편함을 주고 있습니다.
 이를 해결하고자 사용자들에게 편의성과 효율성을 제공하는 서비스를 개발하고자 이 프로젝트를 기획하게 되었습니다.
 ```
-<div id="2"></div>
 
 ## 🗒 주요 기능
 - **강의 검색 및 비교**: 다양한 강의 정보를 검색하고, 사용자가 원하는 기준에 따라 강의들을 비교할 수 있습니다.
@@ -40,7 +39,79 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 - **커뮤니티 서비스**: 학습 경험을 공유하고, 학습에 관련된 다양한 토론을 할 수 있는 커뮤니티를 제공합니다.
 - **스터디 그룹 구성**: 같은 학습 목표를 가진 사용자들과 함께 스터디 그룹을 만들고, 공동 학습을 진행하는 기능을 제공합니다.
 
-<div id="3"></div>
+### 메인 화면
+
+<img alt="메인화면" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/c36c0db473218318ac9cbaa490085c27/main.gif" >
+
+### 회원
+
+**로그인**
+
+<img alt="로그인" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/7d48f73dcfa4c75041a852aa128c0113/login.gif">
+
+**로그인시 추가정보 입력**
+
+<img alt="추가정보" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/2d5763d8e27493bc68fea4412bd36fb7/additional.gif">
+
+**마이페이지**
+
+<img alt="마이페이지" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/9c4fe66b2512d70f34528555909edf11/mypage.gif">
+
+### 강의
+
+**강의 목록**
+
+<img alt="강의목록" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/bcaa9d43d9c5408da3f88f1029e8f7b6/lecture.gif">
+
+**강의 비교**
+
+<img alt="강의비교" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/c3a44e682b7c89321341f89237d4a6b7/afterLogin.gif">
+
+**강의 상세정보**
+
+<img alt="강의 상세정보" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/a6d54aab56f0492bd6dc0f3f53879194/lectureDetail.gif">
+
+
+**강의 리뷰**
+
+
+<img alt="강의 리뷰" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/bb6f0f82d8ac717ad972ebb756159215/lectureReview.gif">
+
+
+### 커뮤니티
+
+**커뮤니티**
+
+<img alt="커뮤니티" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/20200064f22160d93fafb2434e352704/community.gif">
+
+**커뮤니티 글 작성**
+
+<img alt="커뮤니티 crudy" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/53fadfc564a9ef9bc4a7fa3137837b79/communityCRUD.gif">
+
+
+### 스터디룸
+
+**스터디룸 생성**
+
+<img alt="" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/5e3cdbac017547f7e51fcca55879ab57/studyCreate.gif">
+
+
+**스터디룸 멤버조회**
+
+<img alt="스터디룸 멤버조회" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/825cfc1b9404a53aabddeffa510f799c/studyAdditional.gif">
+
+**스터디룸 초대코드 입장**
+
+<img alt="스터디룸 초대코드" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/5c966f59f9b915598dd0b195354f081f/studyroomInvite.gif">
+
+**스터디룸 채팅**
+
+<img alt="스터디룸 채팅" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/cd567534a60ba4d4bccf3b4cdea0355e/studyChatting.gif">
+
+**스터디룸 알림**
+
+<img alt="스터디룸 알림" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/937a3be7af2d522a09ce88595fd00724/chattingAlert.gif">
+
 
 ## 🔍 기술 스택
 ### FrontEnd
@@ -67,7 +138,6 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 ![GitLab](https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white) ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white) ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white) 
 
 
-<div id="4"></div>
 
 ## 💾 DataBase
 ### Maria DB ERD
@@ -89,12 +159,11 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 <img src="./readme_assets/mongodb2.PNG" width="700"  alt="mongodb" /> 
 
 
-<div id="5"></div>
 
 ## 📂 시스템 아키텍처
 <img src="./readme_assets/systemarchitecture.png" width="900"  alt="System Architecture" /> 
 
-<div id="6"></div>
+
 
 ## 📱 기술 소개
 
@@ -191,7 +260,6 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 |필터링 미 적용 후 검색어 기반 쿼리|1266|
 |필터링 적용 후 검색어 기반 쿼리|1602|
 
-<div id="7"></div>
 
 ## 👪 팀 소개
 |![정승환](https://avatars.githubusercontent.com/u/100360525?v=4)|![김지현](https://avatars.githubusercontent.com/u/31675698?v=4)|![하동준](https://avatars.githubusercontent.com/u/77885587?v=4)|![남수진](https://avatars.githubusercontent.com/u/77006790?v=4)|![김예지](https://avatars.githubusercontent.com/u/139518026?v=4)|![정유경](https://avatars.githubusercontent.com/u/83561356?v=4)|
@@ -207,3 +275,200 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 |남수진|BackEnd|- DB 설계 <br > - 'JPA', 'QueryDSL'을 사용해 API 개발 <br > &emsp; - 스터디룸 도메인 개발 <br > - Stomp를 이용한 실시간 채팅 구현 <br >  &emsp; - MongoDB 구축 <br >  &emsp; - Nginx 적용 <br> &emsp; - BackEnd: 1대1, 다대다 Stomp 통신 구현 <br > &emsp; - FrontEnd: sockjs, stomp 소켓 통신 구현, 채팅방 ui 구현 <br > - 채팅 알림 구현|
 |김예지|FrontEnd|- Figma를 이용해 프로토타입 구성 <br > - 화면 구현 <br > &emsp; - 전체 화면 구성(Nav, Footer, 메인페이지 등) 구현 <br > &emsp; - 마이페이지 구현 <br > &emsp; - 강의 페이지(목록, 상세페이지 ) 구현 <br > &emsp; - 리뷰 페이지 구현 <br > - 로그인/로그아웃 구현 <br > - 'Redux', 'React-Query'를 이용한 상태관리 &emsp;<br > - 권한 설정 <br > &emsp;- 로그인 유무에 따른 화면 권한 설정 <br >&emsp; - 사용자 권한에 따른 상호작용 설정 <br > - 유효성 검사 구현 |
 |정유경|FrontEnd| - Figma를 이용해 프로토타입 구성 <br > - 화면 구현 <br > &emsp;- 스터디룸(모집, 입장, 채널) 화면 구현 <br >&emsp; - 스터디룸, 채널 모달 창 구현 <br >&emsp; - 커뮤니티 구현 <br > - BackEnd와 Oauth 통신 연결 <br > - 권한 설정 <br > &emsp;- 로그인 유무에 따른 화면 권한 설정 <br >&emsp; - 사용자 권한에 따른 상호작용 설정 <br > - 유효성 검사 구현|
+
+
+## 🗂️ Directory 구조
+
+### FrontEnd
+```bash
+-frontend
+  └─src
+      ├─assets
+      │  ├─banner
+      │  ├─Help
+      │  ├─Lecture
+      │  ├─Login
+      │  ├─ProfileIamge
+      │  └─sites
+      ├─common
+      ├─components
+      │  ├─Community
+      │  ├─Home
+      │  ├─Lecture
+      │  └─StudyRoom
+      ├─fonts
+      ├─pages
+      │  ├─Community
+      │  ├─Lecture
+      │  ├─MyPage
+      │  └─StudyRoom
+      └─store
+
+```
+
+|directory|description|
+|:---:|----|
+|assets|정적 자원 저장 폴더|
+|common|공통 js 폴더|
+|components|page에 들어가는 component 폴더|
+|pages|라우팅을 수행하는 폴더|
+
+
+### BackEnd
+```bash
+-backend
+  ├─gradle
+  │  └─wrapper
+  └─src
+      ├─main
+      │  └─java
+      │      └─com
+      │          └─f17coders
+      │              └─classhub
+      │                  ├─global
+      │                  │  ├─api
+      │                  │  │  └─response
+      │                  │  ├─config
+      │                  │  │  ├─hibernate
+      │                  │  │  ├─jpa
+      │                  │  │  ├─mongo
+      │                  │  │  ├─queryDsl
+      │                  │  │  ├─redis
+      │                  │  │  ├─s3
+      │                  │  │  ├─security
+      │                  │  │  ├─socket
+      │                  │  │  └─swagger
+      │                  │  ├─exception
+      │                  │  │  └─code
+      │                  │  └─util
+      │                  └─module
+      │                      ├─domain
+      │                      │  ├─alarm
+      │                      │  │  ├─controller
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─category
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  └─resource
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─channel
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  ├─request
+      │                      │  │  │  └─response
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─comment
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  ├─request
+      │                      │  │  │  └─response
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─community
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  ├─request
+      │                      │  │  │  └─response
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─communityLike
+      │                      │  │  └─repository
+      │                      │  ├─communityScrap
+      │                      │  │  └─repository
+      │                      │  ├─communityTag
+      │                      │  │  └─repository
+      │                      │  ├─job
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  └─response
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─lecture
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  └─response
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─lectureBuy
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─lectureLike
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─lectureSummary
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─lectureTag
+      │                      │  ├─member
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  ├─request
+      │                      │  │  │  └─response
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─memberTag
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─message
+      │                      │  │  ├─dto
+      │                      │  │  │  └─request
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─personalChat
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  ├─reponse
+      │                      │  │  │  └─request
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─review
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  ├─request
+      │                      │  │  │  └─response
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─study
+      │                      │  │  ├─controller
+      │                      │  │  ├─dto
+      │                      │  │  │  ├─request
+      │                      │  │  │  └─response
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─studyMember
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  ├─studyTag
+      │                      │  │  ├─repository
+      │                      │  │  └─service
+      │                      │  └─tag
+      │                      │      ├─controller
+      │                      │      ├─dto
+      │                      │      │  └─response
+      │                      │      ├─repository
+      │                      │      └─service
+      │                      └─security
+      │                          ├─dto
+      │                          ├─exception
+      │                          ├─filter
+      │                          └─handler
+      └─test
+          └─java
+              └─com
+                  └─f17coders
+                      └─classhub
+
+```
+
+|directory|description|
+|:---:|----|
+|global/excetion|예외처리 관련 폴더|
+|global/util|util 폴더|
+|global/api|response 폴더|
+|global/config|설정 관련 폴더|
+|module/domain|도메인별 API 폴더|
+|module/security|security 관련 폴더|
+
