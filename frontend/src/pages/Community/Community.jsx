@@ -34,7 +34,7 @@ function Community() {
 
   // 전체 글 조회
 	useEffect(() => {
-    axios.get(`https://i10a810.p.ssafy.io/api/communities/v0?page=${currentPage-1}&size=${itemsPerPage}&sort=${alignList}${commuParams.keyword ? '&keyword=' + commuParams.keyword : ''}${commuParams.tags.length ? '&tags=' + commuParams.tags.map(tag => tag.tagId).join('%7C%7C') : ''}`, {
+    axios.get(`https://i10a810.p.ssafy.io/api/communities/v0?page=${currentPage-1}&size=${itemsPerPage}&sort=${alignList}${commuParams.keyword ? '&keyword=' + commuParams.keyword : ''}${commuParams.tags.length ? '&tags=' + commuParams.tags.map(tag => tag.tagId).join('%7C') : ''}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

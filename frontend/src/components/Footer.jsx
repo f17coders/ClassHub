@@ -6,8 +6,8 @@ import Grid from '@mui/material/Grid'
 
 function Footer() {
     return (
-        <div>
-            <AppBar position="static" style={{marginTop: "100px", backgroundColor:'#1d2364', height:'180px'}}>
+        <div style={{ height:'18vh', marginTop:'20vh'}}>
+            <AppBar position="static" style={{ backgroundColor:'#1d2364'}}>
                 <Grid container color="inherit" style={{marginTop:'30px'}}>
                     <Grid item xs={1}></Grid>
                     <Grid item xs={9}>
