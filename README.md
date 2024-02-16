@@ -40,12 +40,74 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 - **커뮤니티 서비스**: 학습 경험을 공유하고, 학습에 관련된 다양한 토론을 할 수 있는 커뮤니티를 제공합니다.
 - **스터디 그룹 구성**: 같은 학습 목표를 가진 사용자들과 함께 스터디 그룹을 만들고, 공동 학습을 진행하는 기능을 제공합니다.
 
-### 시연 GIF
-
-**메인 화면**
+### 메인 화면
 
 <img alt="메인화면" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/c36c0db473218318ac9cbaa490085c27/main.gif" >
 
+### 회원
+
+**로그인**
+
+<img alt="로그인" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/7d48f73dcfa4c75041a852aa128c0113/login.gif">
+
+**로그인시 추가정보 입력**
+
+<img alt="추가정보" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/2d5763d8e27493bc68fea4412bd36fb7/additional.gif">
+
+**마이페이지**
+
+<img alt="마이페이지" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/9c4fe66b2512d70f34528555909edf11/mypage.gif">
+
+### 강의
+
+**강의 목록**
+
+<img alt="강의목록" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/bcaa9d43d9c5408da3f88f1029e8f7b6/lecture.gif">
+
+**강의 비교**
+
+<img alt="강의비교" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/c3a44e682b7c89321341f89237d4a6b7/afterLogin.gif">
+
+**강의 상세정보**
+
+<img alt="강의 상세정보" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/a6d54aab56f0492bd6dc0f3f53879194/lectureDetail.gif">
+
+**강의 리뷰**
+<img alt="강의 리뷰" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/bb6f0f82d8ac717ad972ebb756159215/lectureReview.gif">
+
+### 커뮤니티
+
+**커뮤니티**
+
+<img alt="커뮤니티" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/20200064f22160d93fafb2434e352704/community.gif">
+
+**커뮤니티 글 작성**
+
+<img alt="커뮤니티 crudy" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/53fadfc564a9ef9bc4a7fa3137837b79/communityCRUD.gif">
+
+
+### 스터디룸
+
+**스터디룸 생성**
+
+<img alt="" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/5e3cdbac017547f7e51fcca55879ab57/studyCreate.gif">
+
+
+**스터디룸 멤버조회**
+
+<img alt="스터디룸 멤버조회" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/825cfc1b9404a53aabddeffa510f799c/studyAdditional.gif">
+
+**스터디룸 초대코드 입장**
+
+<img alt="스터디룸 초대코드" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/5c966f59f9b915598dd0b195354f081f/studyroomInvite.gif">
+
+**스터디룸 채팅**
+
+<img alt="스터디룸 채팅" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/cd567534a60ba4d4bccf3b4cdea0355e/studyChatting.gif">
+
+**스터디룸 알림**
+
+<img alt="스터디룸 알림" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/937a3be7af2d522a09ce88595fd00724/chattingAlert.gif">
 
 <div id="3"></div>
 
