@@ -15,16 +15,15 @@
 ## 목차
 |<center>No</center>|<center>내용</center>|
 |:----:|:----:|
-|**1**|[**프로젝트 개요**](#id1)
-|**2**|[**주요 기능**](#id2)
-|**3**|[**기술 스택**](#id3)
-|**4**|[**DataBase**](#id4)
-|**5**|[**시스템 아키텍처**](#id5) 
-|**6**|[**기술 소개**](#id6)
-|**7**|[**팀 소개**](#id7)
-|**8**|[**directory 구조**](#id8)
+|**1**|[**💡 프로젝트 개요**](#💡-프로젝트-개요)
+|**2**|[**🗒 주요 기능**](#🗒-주요-기능)
+|**3**|[**🔍 기술 스택**](#🔍-기술-스택)
+|**4**|[**💾 DataBase**](#💾-DataBase)
+|**5**|[**📂 시스템 아키텍처**](#📂-시스템-아키텍처) 
+|**6**|[**📱 기술 소개**](#📱-기술-소개)
+|**7**|[**👪 팀 소개**](#👪-팀-소개)
+|**8**|[**🗂️ Directory 구조**](#🗂️-Directory-구조)
 
-<div id="id1"></div>
 
 ## 💡 프로젝트 개요
 ```
@@ -33,7 +32,6 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 학습자들이 스터디 그룹을 구성하거나 학습 경험을 공유하는 공간이 부족하여 사용자들에게 불편함을 주고 있습니다.
 이를 해결하고자 사용자들에게 편의성과 효율성을 제공하는 서비스를 개발하고자 이 프로젝트를 기획하게 되었습니다.
 ```
-<div id="id2"></div>
 
 ## 🗒 주요 기능
 - **강의 검색 및 비교**: 다양한 강의 정보를 검색하고, 사용자가 원하는 기준에 따라 강의들을 비교할 수 있습니다.
@@ -114,7 +112,6 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 
 <img alt="스터디룸 알림" src="https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A810/uploads/937a3be7af2d522a09ce88595fd00724/chattingAlert.gif">
 
-<div id="id3"></div>
 
 ## 🔍 기술 스택
 ### FrontEnd
@@ -141,7 +138,6 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 ![GitLab](https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white) ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white) ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white) 
 
 
-<div id="id4"></div>
 
 ## 💾 DataBase
 ### Maria DB ERD
@@ -163,12 +159,11 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 <img src="./readme_assets/mongodb2.PNG" width="700"  alt="mongodb" /> 
 
 
-<div id="id5"></div>
 
 ## 📂 시스템 아키텍처
 <img src="./readme_assets/systemarchitecture.png" width="900"  alt="System Architecture" /> 
 
-<div id="id6"></div>
+
 
 ## 📱 기술 소개
 
@@ -265,7 +260,6 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 |필터링 미 적용 후 검색어 기반 쿼리|1266|
 |필터링 적용 후 검색어 기반 쿼리|1602|
 
-<div id="id7"></div>
 
 ## 👪 팀 소개
 |![정승환](https://avatars.githubusercontent.com/u/100360525?v=4)|![김지현](https://avatars.githubusercontent.com/u/31675698?v=4)|![하동준](https://avatars.githubusercontent.com/u/77885587?v=4)|![남수진](https://avatars.githubusercontent.com/u/77006790?v=4)|![김예지](https://avatars.githubusercontent.com/u/139518026?v=4)|![정유경](https://avatars.githubusercontent.com/u/83561356?v=4)|
@@ -283,9 +277,7 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 |정유경|FrontEnd| - Figma를 이용해 프로토타입 구성 <br > - 화면 구현 <br > &emsp;- 스터디룸(모집, 입장, 채널) 화면 구현 <br >&emsp; - 스터디룸, 채널 모달 창 구현 <br >&emsp; - 커뮤니티 구현 <br > - BackEnd와 Oauth 통신 연결 <br > - 권한 설정 <br > &emsp;- 로그인 유무에 따른 화면 권한 설정 <br >&emsp; - 사용자 권한에 따른 상호작용 설정 <br > - 유효성 검사 구현|
 
 
-<div id="id8"></div>
-
-## directory 구조
+## 🗂️ Directory 구조
 
 ### FrontEnd
 ```bash
