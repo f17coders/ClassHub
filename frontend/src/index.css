@@ -1,0 +1,33 @@
+@font-face {
+  font-family: "Pretendard-Regular";
+  font-weight: normal;
+  src: url("./fonts/Pretendard-Regular.otf") format("truetype");
+}
+
+body {
+  font-family: "Pretendard-Regular";
+  margin:0;
+  height:100%;
+}  
+
+.my-swal {
+  z-index: 1000000;
+}
+
+/* 스크롤바 수정 */
+::-webkit-scrollbar {
+	width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb{
+  background: #1d23648f;
+  border: 1px solid #1d23648f;
+  border-radius: 5px;
+}
+
+@font-face {
+  font-family: 'GangwonEduPowerExtraBoldA';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEduPowerExtraBoldA.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}

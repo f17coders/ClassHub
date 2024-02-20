@@ -1,0 +1,17 @@
+# cd dev
+# vi ./rr.py
+
+# nohup python3 ./rr.py 1 > ./recrawl_nohup.txt &
+
+
+
+# rm list/parted/*
+# gsutil cp gs://classhub/data/udemy/list/list_parted.zip ./list/parted/
+# unzip ./list/parted/list_parted.zip -d ./list/parted/
+# vi ./recrawl_price.py
+
+# nohup python3 ./recrawl_price.py 1 > ./recrawl_nohup.txt &
+
+cd dev
+zip ./price_9.zip ./page/p_*
+gsutil cp ./price_9.zip gs://classhub/data/udemy/price/
