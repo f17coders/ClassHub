@@ -2,7 +2,7 @@
   <br />
     <img src="./readme_assets/MainLogo.png" alt="ClassHub" /> 
 
-### 🎬[Demo 시연영상](링크 삽입)
+### 🎬[Demo 시연영상](https://youtu.be/-OebDDxU9fI)
 💡삼성 청년 SW 아카데미💡     
 📆2024.01.08 ~ 2024.02.16📆
 <hr >
