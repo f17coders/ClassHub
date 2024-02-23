@@ -17,12 +17,12 @@
 |:----:|:----:|
 |**1**|[**💡 프로젝트 개요**](#1)
 |**2**|[**🗒 주요 기능**](#2)
-|**3**|[**🔍 기술 스택**](#🔍-기술-스택)
-|**4**|[**💾 DataBase**](#💾-DataBase)
-|**5**|[**📂 시스템 아키텍처**](#📂-시스템-아키텍처) 
-|**6**|[**📱 기술 소개**](#📱-기술-소개)
-|**7**|[**👪 팀 소개**](#👪-팀-소개)
-|**8**|[**🗂️ Directory 구조**](#🗂️-Directory-구조)
+|**3**|[**🔍 기술 스택**](#3)
+|**4**|[**💾 DataBase**](#4)
+|**5**|[**📂 시스템 아키텍처**](#5) 
+|**6**|[**📱 기술 소개**](#6)
+|**7**|[**👪 팀 소개**](#7)
+|**8**|[**🗂️ Directory 구조**](#8)
 
 
 <div id="1"></div>
@@ -34,6 +34,8 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 학습자들이 스터디 그룹을 구성하거나 학습 경험을 공유하는 공간이 부족하여 사용자들에게 불편함을 주고 있습니다.
 이를 해결하고자 사용자들에게 편의성과 효율성을 제공하는 서비스를 개발하고자 이 프로젝트를 기획하게 되었습니다.
 ```
+
+<div id="2"></div>
 
 ## 🗒 주요 기능
 - **강의 검색 및 비교**: 다양한 강의 정보를 검색하고, 사용자가 원하는 기준에 따라 강의들을 비교할 수 있습니다.
@@ -114,7 +116,7 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 
 <img alt="스터디룸 알림" src="https://github.com/ss0510s/ClassHub/assets/77006790/582da234-480e-46ca-9480-dbd20b02c8d7">
 
-<div id="2"></div>
+<div id="3"></div>
 
 ## 🔍 기술 스택
 ### FrontEnd
@@ -140,7 +142,7 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 ### Collaboration Tool
 ![GitLab](https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white) ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white) ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white) 
 
-
+<div id="4"></div>
 
 ## 💾 DataBase
 ### Maria DB ERD
@@ -161,12 +163,12 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 <img src="./readme_assets/mongodb1.PNG" width="700" alt="mongodb" /> 
 <img src="./readme_assets/mongodb2.PNG" width="700"  alt="mongodb" /> 
 
-
+<div id="5"></div>
 
 ## 📂 시스템 아키텍처
 <img src="./readme_assets/systemarchitecture.png" width="900"  alt="System Architecture" /> 
 
-
+<div id="6"></div>
 
 ## 📱 기술 소개
 
@@ -263,6 +265,7 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 |필터링 미 적용 후 검색어 기반 쿼리|1266|
 |필터링 적용 후 검색어 기반 쿼리|1602|
 
+<div id="7"></div>
 
 ## 👪 팀 소개
 |![정승환](https://avatars.githubusercontent.com/u/100360525?v=4)|![김지현](https://avatars.githubusercontent.com/u/31675698?v=4)|![하동준](https://avatars.githubusercontent.com/u/77885587?v=4)|![남수진](https://avatars.githubusercontent.com/u/77006790?v=4)|![김예지](https://avatars.githubusercontent.com/u/139518026?v=4)|![정유경](https://avatars.githubusercontent.com/u/83561356?v=4)|
@@ -279,6 +282,7 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 |김예지|FrontEnd|- Figma를 이용해 프로토타입 구성 <br > - 화면 구현 <br > &emsp; - 전체 화면 구성(Nav, Footer, 메인페이지 등) 구현 <br > &emsp; - 마이페이지 구현 <br > &emsp; - 강의 페이지(목록, 상세페이지 ) 구현 <br > &emsp; - 리뷰 페이지 구현 <br > - 로그인/로그아웃 구현 <br > - 'Redux', 'React-Query'를 이용한 상태관리 &emsp;<br > - 권한 설정 <br > &emsp;- 로그인 유무에 따른 화면 권한 설정 <br >&emsp; - 사용자 권한에 따른 상호작용 설정 <br > - 유효성 검사 구현|- 강의 검색에서 검색 인수가 매우 많고, 검색 가능한 컴포넌트가 나뉘어져 있어서 중앙에서 검색 인수를 관리해줄 리덕스를 이용하고, 검색하는 axios요청은 기능 당 하나의 컴포넌트에서만 진행해서 중복 호출을 막았습니다.<br >- 소셜로그인을 이용하고 추가 정보를 위한 api가 나뉘어져 있어서 비동기적 처리에 어려움이 많았습니다.<br >- Redux를 이용했을 때, 새로고침하면 없어지는 것을 처리하기 위해서 redux-persist를 적용하였습니다 <br >- 여러가지 예외 처리와 유효성 검사를 하며 비동기적 프로그램의 흐름에 대해 이해할 수 있었습니다 <br >- 사용자가 한 번에 서비스를 이해하고 활용할 수 있도록 UI / UX적인 디자인을 생각해볼 수 있는 기회였습니다|
 |정유경|FrontEnd| - Figma를 이용해 프로토타입 구성 <br > - 화면 구현 <br > &emsp;- 스터디룸(모집, 입장, 채널) 화면 구현 <br >&emsp; - 스터디룸, 채널 모달 창 구현 <br >&emsp; - 커뮤니티 구현 <br > - BackEnd와 Oauth 통신 연결 <br > - 권한 설정 <br > &emsp;- 로그인 유무에 따른 화면 권한 설정 <br >&emsp; - 사용자 권한에 따른 상호작용 설정 <br > - 유효성 검사 구현|<br > - 컴포넌트 성능 최적화: 기능 단위로 컴포넌트를 나누고 불필요한 리렌더링을 방지하기 위해 노력했습니다. useEffect와 같은 React 훅을 활용하여 비동기 작업을 수행하고 그 결과를 상태로 업데이트할 수 있었습니다. <br > - 비동기 처리와 데이터 효율성: async/await와 같은 비동기 방식을 활용하여 데이터 흐름을 파악하고 관리하는 것이 어려웠습니다.<br > - 상태 관리 라이브러리의 활용: Redux와 같은 상태 관리 라이브러리의 동작 방식을 공부하고 프로젝트에 적용함으로써, 상태 업데이트와 데이터 흐름을 명확하게 이해하는 데 도움이 되었습니다. 이를 통해 코드의 유지보수성을 향상시키고 개발 과정을 더욱 효율적으로 관리할 수 있었습니다. <br >- 서버 사이드 렌더링과 통신 구현: 백엔드와의 통신 및 OAuth와 같은 인증 시스템을 구현하는 과정에서 서버 사이드 렌더링된 통신을 경험함으로써, 프론트엔드와 백엔드 간의 협업과 데이터 흐름을 더 잘 이해할 수 있었습니다.|
 
+<div id="8"></div>
 
 ## 🗂️ Directory 구조
 
