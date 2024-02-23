@@ -15,16 +15,18 @@
 ## 목차
 |<center>No</center>|<center>내용</center>|
 |:----:|:----:|
-|**1**|[**💡 프로젝트 개요**](#💡-프로젝트-개요)
-|**2**|[**🗒 주요 기능**](#🗒-주요-기능)
-|**3**|[**🔍 기술 스택**](#🔍-기술-스택)
-|**4**|[**💾 DataBase**](#💾-DataBase)
-|**5**|[**📂 시스템 아키텍처**](#📂-시스템-아키텍처) 
-|**6**|[**📱 기술 소개**](#📱-기술-소개)
-|**7**|[**👪 팀 소개**](#👪-팀-소개)
-|**8**|[**🗂️ Directory 구조**](#🗂️-Directory-구조)
+|**1**|[**💡 프로젝트 개요**](#1)
+|**2**|[**🗒 주요 기능**](#2)
+|**3**|[**🔍 기술 스택**](#3)
+|**4**|[**💾 DataBase**](#4)
+|**5**|[**📂 시스템 아키텍처**](#5) 
+|**6**|[**📱 기술 소개**](#6)
+|**7**|[**👪 팀 소개**](#7)
+|**8**|[**🗂️ Directory 구조**](#8)
 
 
+<div id="1"></div>
+  
 ## 💡 프로젝트 개요
 ```
 IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인에서 온라인으로 변화함에 따라, 온라인 강의의 수요가 높아졌습니다. 
@@ -32,6 +34,8 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 학습자들이 스터디 그룹을 구성하거나 학습 경험을 공유하는 공간이 부족하여 사용자들에게 불편함을 주고 있습니다.
 이를 해결하고자 사용자들에게 편의성과 효율성을 제공하는 서비스를 개발하고자 이 프로젝트를 기획하게 되었습니다.
 ```
+
+<div id="2"></div>
 
 ## 🗒 주요 기능
 - **강의 검색 및 비교**: 다양한 강의 정보를 검색하고, 사용자가 원하는 기준에 따라 강의들을 비교할 수 있습니다.
@@ -41,77 +45,78 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 
 ### 메인 화면
 
-<img alt="메인화면" src="https://private-user-images.githubusercontent.com/77006790/306108540-c8c29dca-e190-413c-a622-81075072bcb8.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDgzOTQ0MDEsIm5iZiI6MTcwODM5NDEwMSwicGF0aCI6Ii83NzAwNjc5MC8zMDYxMDg1NDAtYzhjMjlkY2EtZTE5MC00MTNjLWE2MjItODEwNzUwNzJiY2I4LmdpZj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAyMjAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMjIwVDAxNTUwMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTIyYzczMmQwYzFhM2FiZTg0Y2FiNjllZDIzZDdiYTM1NWRlOGNkMDAzNTM2YjJiOWZjN2I4ZjY2N2FjNGQyYzcmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.jlJuYvbHR-fxsDcPXbtQWbFmHNTq7qWBEG1F0Mdk-8c" >
+<img alt="메인화면" src="https://github.com/ss0510s/ClassHub/assets/77006790/c8c29dca-e190-413c-a622-81075072bcb8" >
 
 ### 회원
 
 **로그인**
 
-<img alt="로그인" src="https://private-user-images.githubusercontent.com/77006790/306108538-08062f8c-0110-4b97-be65-38310f8fd21f.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDgzOTQ0MDEsIm5iZiI6MTcwODM5NDEwMSwicGF0aCI6Ii83NzAwNjc5MC8zMDYxMDg1MzgtMDgwNjJmOGMtMDExMC00Yjk3LWJlNjUtMzgzMTBmOGZkMjFmLmdpZj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAyMjAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMjIwVDAxNTUwMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWYwMGY0OWZkNjkwZjRmN2ZhMGVkYTcwY2QwYWNjMDdkMDlmMWQ1N2VjN2RjMzk2ZmI2NWU5YTcxYTkxOGEzMmUmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.w2JSQkKvbesqxFKi8t2qSD_pcNR-sqPlrtbXSSPjqWM">
+<img alt="로그인" src="https://github.com/ss0510s/ClassHub/assets/77006790/08062f8c-0110-4b97-be65-38310f8fd21f">
 
 **로그인시 추가정보 입력**
 
-<img alt="추가정보" src="https://private-user-images.githubusercontent.com/77006790/306108555-14bf354f-e26d-4a91-aac7-c2a53c116d68.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDgzOTQ0MDEsIm5iZiI6MTcwODM5NDEwMSwicGF0aCI6Ii83NzAwNjc5MC8zMDYxMDg1NTUtMTRiZjM1NGYtZTI2ZC00YTkxLWFhYzctYzJhNTNjMTE2ZDY4LmdpZj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAyMjAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMjIwVDAxNTUwMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWUxNzRmNDYxNGNkYWRlYTQ2YTQ3ZjUyN2I4ZDUwYWVjMmM5NTFlMjQ1MTcwM2YxNWY1ZjI2Y2ZiYjNmMTdkMDcmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.EmF_PXv9G3qvqW8V7re4I3skpYe31I6Nys3i04WLYX8">
+<img alt="추가정보" src="https://github.com/ss0510s/ClassHub/assets/77006790/14bf354f-e26d-4a91-aac7-c2a53c116d68">
 
 **마이페이지**
 
-<img alt="마이페이지" src="https://private-user-images.githubusercontent.com/77006790/306108543-18720be4-ec5e-4f97-95a5-3bd51bdfe191.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDgzOTQ0MDEsIm5iZiI6MTcwODM5NDEwMSwicGF0aCI6Ii83NzAwNjc5MC8zMDYxMDg1NDMtMTg3MjBiZTQtZWM1ZS00Zjk3LTk1YTUtM2JkNTFiZGZlMTkxLmdpZj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAyMjAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMjIwVDAxNTUwMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWJkNjRlNDRlODVhMjE3NGU1YTkyZWU1MjEzOGZhMGJiOTZlZTllMmEwN2I5YTA5MmIzMzM4NTc4MTA3MWI3M2EmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.6z_srMYlwuQW3E8MZgI4CgdFhPFTCwrk412Z_KQFqGE">
+<img alt="마이페이지" src="https://github.com/ss0510s/ClassHub/assets/77006790/18720be4-ec5e-4f97-95a5-3bd51bdfe191">
 
 ### 강의
 
 **강의 목록**
 
-<img alt="강의목록" src="https://private-user-images.githubusercontent.com/77006790/306108527-f0cfd6e2-f300-42e3-b015-1ae33836367c.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDgzOTQ0MDEsIm5iZiI6MTcwODM5NDEwMSwicGF0aCI6Ii83NzAwNjc5MC8zMDYxMDg1MjctZjBjZmQ2ZTItZjMwMC00MmUzLWIwMTUtMWFlMzM4MzYzNjdjLmdpZj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAyMjAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMjIwVDAxNTUwMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTY2NzVlZjM0NTkzYzk0ZjZkODFkZTg4YmU2YTcyMzNhMzM2YjUxNTZiMjFhNmMwNzM5ZTZhM2ViYmYxZWUwYTcmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.QXaX-wRcNAAqMUku8Kpqwl9kE58hVT9hNTPxjPx2Igw">
+<img alt="강의목록" src="https://github.com/ss0510s/ClassHub/assets/77006790/f0cfd6e2-f300-42e3-b015-1ae33836367c">
 
 **강의 비교**
 
-<img alt="강의비교" src="https://private-user-images.githubusercontent.com/77006790/306108558-6ff2af94-5d99-4906-bcfb-d2702b877aab.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDgzOTQ0MDEsIm5iZiI6MTcwODM5NDEwMSwicGF0aCI6Ii83NzAwNjc5MC8zMDYxMDg1NTgtNmZmMmFmOTQtNWQ5OS00OTA2LWJjZmItZDI3MDJiODc3YWFiLmdpZj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAyMjAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMjIwVDAxNTUwMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTE4YTA1NTI1NDg2ODQzNTgxNDEzNjAwNWRiOGQ0N2ZkZmFlMDUwY2RkMjJkZWRlOTA1NzhkMWI0MjZmOTk1YjAmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.y4mv5J1FzIKqWLBomVEeV_KQEI1HXe7dglmjM2VotfY">
+<img alt="강의비교" src="https://github.com/ss0510s/ClassHub/assets/77006790/6ff2af94-5d99-4906-bcfb-d2702b877aab">
 
 **강의 상세정보**
 
-<img alt="강의 상세정보" src="https://private-user-images.githubusercontent.com/77006790/306108530-23f1ae04-b56b-4716-8492-cabe6d1f2293.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDgzOTQ0MDEsIm5iZiI6MTcwODM5NDEwMSwicGF0aCI6Ii83NzAwNjc5MC8zMDYxMDg1MzAtMjNmMWFlMDQtYjU2Yi00NzE2LTg0OTItY2FiZTZkMWYyMjkzLmdpZj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAyMjAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMjIwVDAxNTUwMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPWI2NTE4YTY5MjUxYTZjMGUzOGUwODBkZGVlZTVhNjY5MjQyNDdmMzdiZGI4Mjk0MGFhY2M1NmVlYmU1YmVjZDUmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.1iUPdSk3MW14AvLK78T3ddgEe2Uq4FdZ2WINwUPgIJM">
+<img alt="강의 상세정보" src="https://github.com/ss0510s/ClassHub/assets/77006790/23f1ae04-b56b-4716-8492-cabe6d1f2293">
 
 
 **강의 리뷰**
 
 
-<img alt="강의 리뷰" src="https://private-user-images.githubusercontent.com/77006790/306108535-5efc5dad-b4c1-45df-bdee-2293ba67f56d.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDgzOTQ0MDEsIm5iZiI6MTcwODM5NDEwMSwicGF0aCI6Ii83NzAwNjc5MC8zMDYxMDg1MzUtNWVmYzVkYWQtYjRjMS00NWRmLWJkZWUtMjI5M2JhNjdmNTZkLmdpZj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAyMjAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMjIwVDAxNTUwMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTJkZjk2NDMzYmZlZjY2ZGNkYzE5OTRlZTczYmVhYWI1MDU0YjY4YTBlZmMwNTRiOGM3NGQ5NGQ5ZTk0M2RkNmMmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0._JtCsLus7gHRCD8XFn5mukRcKRfb6NjCQy3CSmHTRWI">
+<img alt="강의 리뷰" src="https://github.com/ss0510s/ClassHub/assets/77006790/5efc5dad-b4c1-45df-bdee-2293ba67f56d">
 
 
 ### 커뮤니티
 
 **커뮤니티**
 
-<img alt="커뮤니티" src="https://private-user-images.githubusercontent.com/77006790/306108522-a6e3c6a2-4aff-473f-965b-cb446c154ee2.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDgzOTQ0MDEsIm5iZiI6MTcwODM5NDEwMSwicGF0aCI6Ii83NzAwNjc5MC8zMDYxMDg1MjItYTZlM2M2YTItNGFmZi00NzNmLTk2NWItY2I0NDZjMTU0ZWUyLmdpZj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAyMjAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMjIwVDAxNTUwMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTkwNjBjY2NlZmFmMDZlN2Y0NWY0NDE1Y2UxYmIzZmI0ZTdkODg0ZWE1NWU4NDUzOTZmMTAzODkyZmY0MGM5NDMmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.gQhLPA_l0LYj4FfaxRQgip8Jf-yDdQEmWEYsUMlcbi4">
+<img alt="커뮤니티" src="https://github.com/ss0510s/ClassHub/assets/77006790/a6e3c6a2-4aff-473f-965b-cb446c154ee2">
 
 **커뮤니티 글 작성**
 
-<img alt="커뮤니티 crudy" src="https://private-user-images.githubusercontent.com/77006790/306108526-fa17053b-5ba1-4a0a-8aa3-da555031cfd0.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDgzOTQ0MDEsIm5iZiI6MTcwODM5NDEwMSwicGF0aCI6Ii83NzAwNjc5MC8zMDYxMDg1MjYtZmExNzA1M2ItNWJhMS00YTBhLThhYTMtZGE1NTUwMzFjZmQwLmdpZj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAyMjAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMjIwVDAxNTUwMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTNhZmRmMDcyYzZiNDNlZmU4YjJjOGJlYmY3OWViNzk5ZjNlZWVlZGM3NGU1YjFlYzJhMmQ1NjQ1NGNkMTRlZGUmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.OTCMdkn69SWtmKGmF1g9knbLJyfRVB7W_mEGmKT2kmY">
+<img alt="커뮤니티 crudy" src="https://github.com/ss0510s/ClassHub/assets/77006790/fa17053b-5ba1-4a0a-8aa3-da555031cfd0">
 
 
 ### 스터디룸
 
 **스터디룸 생성**
 
-<img alt="스터디룸 생성" src="https://private-user-images.githubusercontent.com/77006790/306108551-13fe1191-625d-46cc-b9aa-0e8676ace352.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDgzOTQ0MDEsIm5iZiI6MTcwODM5NDEwMSwicGF0aCI6Ii83NzAwNjc5MC8zMDYxMDg1NTEtMTNmZTExOTEtNjI1ZC00NmNjLWI5YWEtMGU4Njc2YWNlMzUyLmdpZj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAyMjAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMjIwVDAxNTUwMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTc0ZThkNWI4Yzg3OTUyYjg2ZGNiODgyYWE5ODk0YTM0Y2MyMDJlNjQyZDA0ZGZhZDZiZWQ4YWJjZjFjMjY5N2UmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.mZWc0Tj5bBgHsJo-lNkDi_lP7lzcWu0Eq9grEE-mi50">
+<img alt="스터디룸 생성" src="https://github.com/ss0510s/ClassHub/assets/77006790/13fe1191-625d-46cc-b9aa-0e8676ace352">
 
 
 **스터디룸 멤버조회**
 
-<img alt="스터디룸 멤버조회" src="https://private-user-images.githubusercontent.com/77006790/306108546-7e24d528-9d60-4e73-bc1c-cdebfae24d9f.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDgzOTQ0MDEsIm5iZiI6MTcwODM5NDEwMSwicGF0aCI6Ii83NzAwNjc5MC8zMDYxMDg1NDYtN2UyNGQ1MjgtOWQ2MC00ZTczLWJjMWMtY2RlYmZhZTI0ZDlmLmdpZj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAyMjAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMjIwVDAxNTUwMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTVhZGUxMzNlNTQ3YjRiZGZhN2U0YWE1MTJhMzRjMjg3Y2ZjNTY5YjEzNjdiNjJiMzc0NjNkZDc3YjllODI3ZTMmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.ezi2edvBR7gBOopEbKQ4D-0ZlIbV4vxR2YLvOCXZIEY">
+<img alt="스터디룸 멤버조회" src="https://github.com/ss0510s/ClassHub/assets/77006790/7e24d528-9d60-4e73-bc1c-cdebfae24d9f">
 
 **스터디룸 초대코드 입장**
 
-<img alt="스터디룸 초대코드" src="https://private-user-images.githubusercontent.com/77006790/306108552-b0f9b735-69fc-4cd2-8f4c-71612b855ca9.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDgzOTQ0MDEsIm5iZiI6MTcwODM5NDEwMSwicGF0aCI6Ii83NzAwNjc5MC8zMDYxMDg1NTItYjBmOWI3MzUtNjlmYy00Y2QyLThmNGMtNzE2MTJiODU1Y2E5LmdpZj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAyMjAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMjIwVDAxNTUwMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTRjY2VhMTJmMDdmMTMzZjlkMjgyYjg3MDMxZDVkMzczZmNmYmQyNDlhYzNmMGEyZmMxZTQ2MGU2Y2IyYjhkMDkmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.z91N8JsI5kunhqYPW6_bQLJBN3WYhVyGQ5XaiAgE9NMf">
+<img alt="스터디룸 초대코드" src="https://github.com/ss0510s/ClassHub/assets/77006790/b0f9b735-69fc-4cd2-8f4c-71612b855ca9">
 
 **스터디룸 채팅**
 
-<img alt="스터디룸 채팅" src="https://private-user-images.githubusercontent.com/77006790/306108550-a839a20e-cd85-4472-b47a-1d5b1bbfacd6.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDgzOTQ0MDEsIm5iZiI6MTcwODM5NDEwMSwicGF0aCI6Ii83NzAwNjc5MC8zMDYxMDg1NTAtYTgzOWEyMGUtY2Q4NS00NDcyLWI0N2EtMWQ1YjFiYmZhY2Q2LmdpZj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAyMjAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMjIwVDAxNTUwMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTcyNDZjMjU3NWFlN2NlMDI5OTE5NTc3ZWU2MWVlMmI4ZWNhOTdiMDA4NjZmMmQ1MTRmNzJmM2NkN2I1NjE4MmImWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.7CpMyVq-ZIP4Z0O2IXPcpkP6EkKoAERaj_hL6zYDKZk">
+<img alt="스터디룸 채팅" src="https://github.com/ss0510s/ClassHub/assets/77006790/a839a20e-cd85-4472-b47a-1d5b1bbfacd6">
 
 **스터디룸 알림**
 
-<img alt="스터디룸 알림" src="https://private-user-images.githubusercontent.com/77006790/306108561-582da234-480e-46ca-9480-dbd20b02c8d7.gif?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MDgzOTQ0MDEsIm5iZiI6MTcwODM5NDEwMSwicGF0aCI6Ii83NzAwNjc5MC8zMDYxMDg1NjEtNTgyZGEyMzQtNDgwZS00NmNhLTk0ODAtZGJkMjBiMDJjOGQ3LmdpZj9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDAyMjAlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwMjIwVDAxNTUwMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTI0ZTMwYTQ4OGViOTllOWFlZGEwNWYzMzI5NTIyNmUxNGIxZGEyMDA2YmVkNGViYjliZjI4Y2U1ZjY2MTc2ODcmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.iB8CIWn3-vSePeX-ondH_F8jHwr3Z2zs0Tt8adZKxkI">
+<img alt="스터디룸 알림" src="https://github.com/ss0510s/ClassHub/assets/77006790/582da234-480e-46ca-9480-dbd20b02c8d7">
 
+<div id="3"></div>
 
 ## 🔍 기술 스택
 ### FrontEnd
@@ -137,7 +142,7 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 ### Collaboration Tool
 ![GitLab](https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white) ![Git](https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white) ![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white) ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white) 
 
-
+<div id="4"></div>
 
 ## 💾 DataBase
 ### Maria DB ERD
@@ -158,12 +163,12 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 <img src="./readme_assets/mongodb1.PNG" width="700" alt="mongodb" /> 
 <img src="./readme_assets/mongodb2.PNG" width="700"  alt="mongodb" /> 
 
-
+<div id="5"></div>
 
 ## 📂 시스템 아키텍처
 <img src="./readme_assets/systemarchitecture.png" width="900"  alt="System Architecture" /> 
 
-
+<div id="6"></div>
 
 ## 📱 기술 소개
 
@@ -260,6 +265,7 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 |필터링 미 적용 후 검색어 기반 쿼리|1266|
 |필터링 적용 후 검색어 기반 쿼리|1602|
 
+<div id="7"></div>
 
 ## 👪 팀 소개
 |![정승환](https://avatars.githubusercontent.com/u/100360525?v=4)|![김지현](https://avatars.githubusercontent.com/u/31675698?v=4)|![하동준](https://avatars.githubusercontent.com/u/77885587?v=4)|![남수진](https://avatars.githubusercontent.com/u/77006790?v=4)|![김예지](https://avatars.githubusercontent.com/u/139518026?v=4)|![정유경](https://avatars.githubusercontent.com/u/83561356?v=4)|
@@ -276,6 +282,7 @@ IT 교육시장 규모가 증가하고 기술 학습 트렌드가 오프라인�
 |김예지|FrontEnd|- Figma를 이용해 프로토타입 구성 <br > - 화면 구현 <br > &emsp; - 전체 화면 구성(Nav, Footer, 메인페이지 등) 구현 <br > &emsp; - 마이페이지 구현 <br > &emsp; - 강의 페이지(목록, 상세페이지 ) 구현 <br > &emsp; - 리뷰 페이지 구현 <br > - 로그인/로그아웃 구현 <br > - 'Redux', 'React-Query'를 이용한 상태관리 &emsp;<br > - 권한 설정 <br > &emsp;- 로그인 유무에 따른 화면 권한 설정 <br >&emsp; - 사용자 권한에 따른 상호작용 설정 <br > - 유효성 검사 구현|- 강의 검색에서 검색 인수가 매우 많고, 검색 가능한 컴포넌트가 나뉘어져 있어서 중앙에서 검색 인수를 관리해줄 리덕스를 이용하고, 검색하는 axios요청은 기능 당 하나의 컴포넌트에서만 진행해서 중복 호출을 막았습니다.<br >- 소셜로그인을 이용하고 추가 정보를 위한 api가 나뉘어져 있어서 비동기적 처리에 어려움이 많았습니다.<br >- Redux를 이용했을 때, 새로고침하면 없어지는 것을 처리하기 위해서 redux-persist를 적용하였습니다 <br >- 여러가지 예외 처리와 유효성 검사를 하며 비동기적 프로그램의 흐름에 대해 이해할 수 있었습니다 <br >- 사용자가 한 번에 서비스를 이해하고 활용할 수 있도록 UI / UX적인 디자인을 생각해볼 수 있는 기회였습니다|
 |정유경|FrontEnd| - Figma를 이용해 프로토타입 구성 <br > - 화면 구현 <br > &emsp;- 스터디룸(모집, 입장, 채널) 화면 구현 <br >&emsp; - 스터디룸, 채널 모달 창 구현 <br >&emsp; - 커뮤니티 구현 <br > - BackEnd와 Oauth 통신 연결 <br > - 권한 설정 <br > &emsp;- 로그인 유무에 따른 화면 권한 설정 <br >&emsp; - 사용자 권한에 따른 상호작용 설정 <br > - 유효성 검사 구현|<br > - 컴포넌트 성능 최적화: 기능 단위로 컴포넌트를 나누고 불필요한 리렌더링을 방지하기 위해 노력했습니다. useEffect와 같은 React 훅을 활용하여 비동기 작업을 수행하고 그 결과를 상태로 업데이트할 수 있었습니다. <br > - 비동기 처리와 데이터 효율성: async/await와 같은 비동기 방식을 활용하여 데이터 흐름을 파악하고 관리하는 것이 어려웠습니다.<br > - 상태 관리 라이브러리의 활용: Redux와 같은 상태 관리 라이브러리의 동작 방식을 공부하고 프로젝트에 적용함으로써, 상태 업데이트와 데이터 흐름을 명확하게 이해하는 데 도움이 되었습니다. 이를 통해 코드의 유지보수성을 향상시키고 개발 과정을 더욱 효율적으로 관리할 수 있었습니다. <br >- 서버 사이드 렌더링과 통신 구현: 백엔드와의 통신 및 OAuth와 같은 인증 시스템을 구현하는 과정에서 서버 사이드 렌더링된 통신을 경험함으로써, 프론트엔드와 백엔드 간의 협업과 데이터 흐름을 더 잘 이해할 수 있었습니다.|
 
+<div id="8"></div>
 
 ## 🗂️ Directory 구조
 
